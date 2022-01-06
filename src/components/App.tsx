@@ -1,11 +1,9 @@
 import React from 'react'
 import TextInput from './TextInput'
 
-class App extends React.Component {
-  render() {
-    return <TextInput initText='put' />
-  }
+function App() {
+  return (
+    <TextInput initText='輸入' />
+  );
 }
-
-//輸出App元件
-export default App
+export default App; //輸出App函式
