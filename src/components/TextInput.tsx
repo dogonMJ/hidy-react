@@ -1,6 +1,5 @@
 import React from 'react'
 import TextShow from './TextShow'
-import PropTypes from 'prop-types';
 
 const { useState } = React;
 
@@ -9,7 +8,7 @@ type Props = {
 }
 
 const TextInput = (props: Props) => {
-  const [text, setText] = useState('')
+  const [text, setText] = useState<string>('')
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
     if (e.target instanceof HTMLInputElement) {
       setText(e.target.value)
@@ -26,8 +25,6 @@ const TextInput = (props: Props) => {
     </div>
   )
 }
-TextInput.propTypes = {
-  initText: PropTypes.string.isRequired
-}
+
 // //匯出TextInput模組
 export default TextInput

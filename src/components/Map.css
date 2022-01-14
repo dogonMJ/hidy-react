@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+html{
+  padding: 0;
+  margin:0;
+}
+body{
+  padding: 0;
+  margin:0;
+}
+.mapContainer { 
+  height: 95vh; 
+  width: 100%;
+  font-family: 'Rubik', sans-serif;
+}
+.mousePos {
+  position: absolute; 
+  left:12px;
+  padding: 0px 4px;
+  z-index:1000 ; 
+  background-color: rgba(255, 255, 255, 0.7);
+}
+.dateTimePicker{
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 9999 ;
+  border:none;
+  background-color: #3f4458;
+  color: #fff;
+  font-size: large;
+  text-align: center;
+  font-family: 'Rubik', sans-serif;
+}
+.flatpickr-calendar {
+  left: -5px;
+  font-family: 'Rubik', sans-serif;
+}
+.flatpickr-time input{
+  font-family: 'Rubik', sans-serif;
+}
+.flatpickr-time input.flatpickr-hour{
+  font-weight: normal;
+}
