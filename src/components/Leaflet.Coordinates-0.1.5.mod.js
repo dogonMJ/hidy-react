@@ -1,3 +1,5 @@
+/* modified from Leaflet.Coordinates 0.1.5 https://github.com/MrMufflon/Leaflet.Coordinates */
+
 import * as L from 'leaflet'
 L.Control.Coordinates = L.Control.extend({
 	options: {
@@ -120,7 +122,9 @@ L.Control.Coordinates = L.Control.extend({
 				marker.on("click", this._clearMarker, this);
 			}
 			var ll = new L.LatLng(y, x);
-			marker.setLatLng(ll);
+			console.log(ll)
+			if (ll > 180)
+				marker.setLatLng(ll);
 			marker.addTo(this._map);
 			if (this.options.centerUserCoordinates) {
 				this._map.setView(ll, this._map.getZoom());

@@ -7,405 +7,219 @@ import './Leaflet.Coordinates-0.1.5.mod.js' //manually replace _ordinateLabel to
 import 'leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css'
 import './Map.css'
 // import Urls from './Urlchange'
-import { MapContainer, TileLayer, LayersControl, ZoomControl, useMap, ScaleControl } from 'react-leaflet'
+import { MapContainer, TileLayer, LayersControl, ZoomControl, ScaleControl, useMapEvent, Marker, Popup, useMap } from 'react-leaflet'
 // @ts-ignore
-import { BingLayer } from 'react-leaflet-bing-v2'
+import { BingLayer } from 'react-leaflet-bing-v2' //not yet ts version
 
-//not yet ts version
 const { BaseLayer, Overlay } = LayersControl;
 declare const L: any;
-// L.Control.Coordinates = L.Control.extend({
-//   options: {
-//     position: 'bottomright',
-//     //decimals used if not using DMS or labelFormatter functions
-//     decimals: 4,
-//     //decimalseperator used if not using DMS or labelFormatter functions
-//     decimalSeperator: ".",
-//     //label templates for usage if no labelFormatter function is defined
-//     labelTemplateLat: "Lat: {y}",
-//     labelTemplateLng: "Lng: {x}",
-//     //label formatter functions
-//     labelFormatterLat: undefined,
-//     labelFormatterLng: undefined,
-//     labelFormatterBoth: undefined,
-//     //switch on/off input fields on click
-//     enableUserInput: true,
-//     //use Degree-Minute-Second
-//     useDMS: false,
-//     useDM: false,
-//     //if true lat-lng instead of lng-lat label ordering is used
-//     useLatLngOrder: false,
-//     //if true user given coordinates are centered directly
-//     centerUserCoordinates: false,
-//     //leaflet marker type
-//     markerType: L.marker,
-//     //leaflet marker properties
-//     markerProps: {}
-//   },
 
-//   onAdd: function (map: any) {
-//     this._map = map;
-
-//     var className = 'leaflet-control-coordinates',
-//       container = this._container = L.DomUtil.create('div', className),
-//       options = this.options;
-
-//     //label containers
-//     this._labelcontainer = L.DomUtil.create("div", "uiElement label", container);
-//     this._label = L.DomUtil.create("span", "labelFirst", this._labelcontainer);
-
-
-//     //input containers
-//     this._inputcontainer = L.DomUtil.create("div", "uiElement input uiHidden", container);
-//     var xSpan, ySpan;
-//     if (options.useLatLngOrder) {
-//       ySpan = L.DomUtil.create("span", "", this._inputcontainer);
-//       this._inputY = this._createInput("inputY", this._inputcontainer);
-//       xSpan = L.DomUtil.create("span", "", this._inputcontainer);
-//       this._inputX = this._createInput("inputX", this._inputcontainer);
-//     } else {
-//       xSpan = L.DomUtil.create("span", "", this._inputcontainer);
-//       this._inputX = this._createInput("inputX", this._inputcontainer);
-//       ySpan = L.DomUtil.create("span", "", this._inputcontainer);
-//       this._inputY = this._createInput("inputY", this._inputcontainer);
-//     }
-//     xSpan.innerHTML = options.labelTemplateLng.replace("{x}", "");
-//     ySpan.innerHTML = options.labelTemplateLat.replace("{y}", "");
-
-//     L.DomEvent.on(this._inputX, 'keyup', this._handleKeypress, this);
-//     L.DomEvent.on(this._inputY, 'keyup', this._handleKeypress, this);
-
-//     //connect to mouseevents
-//     map.on("mousemove", this._update, this);
-//     map.on('dragstart', this.collapse, this);
-
-//     map.whenReady(this._update, this);
-
-//     this._showsCoordinates = true;
-//     //wether or not to show inputs on click
-//     if (options.enableUserInput) {
-//       L.DomEvent.addListener(this._container, "click", this._switchUI, this);
-//     }
-
-//     return container;
-//   },
-
-//   /**
-//    *	Creates an input HTML element in given container with given classname
-//    */
-//   _createInput: function (classname: string, container: any) {
-//     var input = L.DomUtil.create("input", classname, container);
-//     input.type = "text";
-//     L.DomEvent.disableClickPropagation(input);
-//     return input;
-//   },
-
-//   _clearMarker: function () {
-//     this._map.removeLayer(this._marker);
-//   },
-
-//   /**
-//    *	Called onkeyup of input fields
-//    */
-//   _handleKeypress: function (e: any) {
-//     switch (e.keyCode) {
-//       case 27: //Esc
-//         this.collapse();
-//         break;
-//       case 13: //Enter
-//         this._handleSubmit();
-//         this.collapse();
-//         break;
-//       default: //All keys
-//         this._handleSubmit();
-//         break;
-//     }
-//   },
-
-//   /**
-//    *	Called on each keyup except ESC
-//    */
-//   _handleSubmit: function () {
-//     var x = L.NumberFormatter.createValidNumber(this._inputX.value, this.options.decimalSeperator);
-//     var y = L.NumberFormatter.createValidNumber(this._inputY.value, this.options.decimalSeperator);
-//     if (x !== undefined && y !== undefined) {
-//       var marker = this._marker;
-//       if (!marker) {
-//         marker = this._marker = this._createNewMarker();
-//         marker.on("click", this._clearMarker, this);
-//       }
-//       var ll = new L.LatLng(y, x);
-//       marker.setLatLng(ll);
-//       marker.addTo(this._map);
-//       if (this.options.centerUserCoordinates) {
-//         this._map.setView(ll, this._map.getZoom());
-//       }
-//     }
-//   },
-
-//   /**
-//    *	Shows inputs fields
-//    */
-//   expand: function () {
-//     this._showsCoordinates = false;
-
-//     this._map.off("mousemove", this._update, this);
-
-//     L.DomEvent.addListener(this._container, "mousemove", L.DomEvent.stop);
-//     L.DomEvent.removeListener(this._container, "click", this._switchUI, this);
-
-//     L.DomUtil.addClass(this._labelcontainer, "uiHidden");
-//     L.DomUtil.removeClass(this._inputcontainer, "uiHidden");
-//   },
-
-//   /**
-//    *	Creates the label according to given options and formatters
-//    */
-//   _createCoordinateLabel: function (ll: any) {
-//     var opts = this.options,
-//       x, y;
-//     if (opts.customLabelFcn) {
-//       return opts.customLabelFcn(ll, opts);
-//     }
-//     if (opts.labelFormatterLng) { // labelFormatterLng replaced by MJ
-//       x = opts.labelFormatterLng(ll.lng);
-//     } else {
-//       x = L.Util.template(opts.labelTemplateLng, {
-//         x: this._getNumber(ll.lng, opts)
-//       });
-//     }
-//     if (opts.labelFormatterLat) {
-//       y = opts.labelFormatterLat(ll.lat);
-//     } else {
-//       y = L.Util.template(opts.labelTemplateLat, {
-//         y: this._getNumber(ll.lat, opts)
-//       });
-//     }
-//     if (opts.labelFormatterBoth) {
-//       const res = opts.labelFormatterBoth(ll.lat, ll.lng);
-//       return res
-//     }
-//     if (opts.useLatLngOrder) {
-//       return y + " " + x;
-//     }
-//     return x + " " + y;
-//   },
-
-//   /**
-//    *	Returns a Number according to options (DMS or decimal)
-//    */
-//   _getNumber: function (n: number, opts: any) {
-//     var res;
-//     if (opts.useDMS) {
-//       res = L.NumberFormatter.toDMS(n);
-//     } else if (opts.useDM) {
-//       res = L.NumberFormatter.toDM(n);
-//     }
-//     else {
-//       res = L.NumberFormatter.round(n, opts.decimals, opts.decimalSeperator);
-//     }
-//     return res;
-//   },
-
-//   /**
-//    *	Shows coordinate labels after user input has ended. Also
-//    *	displays a marker with popup at the last input position.
-//    */
-//   collapse: function () {
-//     if (!this._showsCoordinates) {
-//       this._map.on("mousemove", this._update, this);
-//       this._showsCoordinates = true;
-//       var opts = this.options;
-//       L.DomEvent.addListener(this._container, "click", this._switchUI, this);
-//       L.DomEvent.removeListener(this._container, "mousemove", L.DomEvent.stop);
-
-//       L.DomUtil.addClass(this._inputcontainer, "uiHidden");
-//       L.DomUtil.removeClass(this._labelcontainer, "uiHidden");
-
-//       if (this._marker) {
-//         var m = this._createNewMarker(),
-//           ll = this._marker.getLatLng();
-//         m.setLatLng(ll);
-
-//         var container = L.DomUtil.create("div", "");
-//         var label = L.DomUtil.create("div", "", container);
-//         label.innerHTML = this._createCoordinateLabel(ll); //replace _createCoordinateLabel by MJ
-
-//         var close = L.DomUtil.create("a", "", container);
-//         close.innerHTML = "Remove";
-//         close.href = "#";
-//         var stop = L.DomEvent.stopPropagation;
-
-//         L.DomEvent
-//           .on(close, 'click', stop)
-//           .on(close, 'mousedown', stop)
-//           .on(close, 'dblclick', stop)
-//           .on(close, 'click', L.DomEvent.preventDefault)
-//           .on(close, 'click', function (this: any) {
-//             this._map.removeLayer(m);
-//           }, this);
-
-//         m.bindPopup(container);
-//         m.addTo(this._map);
-//         this._map.removeLayer(this._marker);
-//         this._marker = null;
-//       }
-//     }
-//   },
-
-//   /**
-//    *	Click callback for UI
-//    */
-//   _switchUI: function (evt: any) {
-//     L.DomEvent.stop(evt);
-//     L.DomEvent.stopPropagation(evt);
-//     L.DomEvent.preventDefault(evt);
-//     if (this._showsCoordinates) {
-//       //show textfields
-//       this.expand();
-//     } else {
-//       //show coordinates
-//       this.collapse();
-//     }
-//   },
-
-//   onRemove: function (map: any) {
-//     map.off("mousemove", this._update, this);
-//   },
-
-//   /**
-//    *	Mousemove callback function updating labels and input elements
-//    */
-//   _update: function (evt: any) {
-//     var pos = evt.latlng,
-//       opts = this.options;
-//     if (pos) {
-//       pos = pos.wrap();
-//       this._currentPos = pos;
-//       this._inputY.value = L.NumberFormatter.round(pos.lat, opts.decimals, opts.decimalSeperator);
-//       this._inputX.value = L.NumberFormatter.round(pos.lng, opts.decimals, opts.decimalSeperator);
-//       this._label.innerHTML = this._createCoordinateLabel(pos);
-//     }
-//   },
-
-//   _createNewMarker: function () {
-//     return this.options.markerType(null, this.options.markerProps);
-//   }
-
-// });
-
-//constructor registration
-// L.control.coordinates = function (options: any) {
-//   return new L.Control.Coordinates(options);
-// };
-
-// //map init hook
-// L.Map.mergeOptions({
-//   coordinateControl: false
-// });
-
-// L.Map.addInitHook(function (this: any) {
-//   if (this.options.coordinateControl) {
-//     this.coordinateControl = new L.Control.Coordinates();
-//     this.addControl(this.coordinateControl);
-//   }
-// });
-// L.NumberFormatter = {
-//   round: function (num: number | string, dec: any, sep: any) {
-//     var res = L.Util.formatNum(num, dec) + "",
-//       numbers = res.split(".");
-//     if (numbers[1]) {
-//       var d = dec - numbers[1].length;
-//       for (; d > 0; d--) {
-//         numbers[1] += "0";
-//       }
-//       res = numbers.join(sep || ".");
-//     }
-//     return res;
-//   },
-
-//   toDMS: function (deg: number) {
-//     var d = Math.floor(Math.abs(deg));
-//     var minfloat = (Math.abs(deg) - d) * 60;
-//     var m: number | string = Math.floor(minfloat);
-//     var secfloat = (minfloat - m) * 60;
-//     var s: number | string = Math.round(secfloat);
-//     if (s == 60) {
-//       m++;
-//       s = "00";
-//     }
-//     if (m == 60) {
-//       d++;
-//       m = "00";
-//     }
-//     if (s < 10) {
-//       s = "0" + s;
-//     }
-//     if (m < 10) {
-//       m = "0" + m;
-//     }
-//     var dir = "";
-//     if (deg < 0) {
-//       dir = "-";
-//     }
-//     return ("" + dir + d + "&deg; " + m + "' " + s + "''");
-//   },
-
-//   toDM: function (deg: number) {
-//     var d = Math.floor(Math.abs(deg));
-//     var m: number | string = Math.round((Math.abs(deg) - d) * 60 * 100) / 100;
-//     if (m == 60) {
-//       d++;
-//       m = "00";
-//     }
-//     if (m < 10) {
-//       m = "0" + m;
-//     }
-//     var dir = "";
-//     if (deg < 0) {
-//       dir = "-";
-//     }
-//     return ("" + dir + d + "&deg; " + m + "' ");
-//   },
-
-//   createValidNumber: function (num: any, sep: string) {
-//     if (num && num.length > 0) {
-//       var numbers = num.split(sep || ".");
-//       try {
-//         var numRes = Number(numbers.join("."));
-//         if (isNaN(numRes)) {
-//           return undefined;
-//         }
-//         return numRes;
-//       } catch (e) {
-//         return undefined;
-//       }
-//     }
-//     return undefined;
-//   }
-// };
-
-const mouseCoordinates = (map: object) => {
-  var greenIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-  L.control.coordinates({
-    enableUserInput: true,
-    useLatLngOrder: true,
-    markerProps: { icon: greenIcon },
-    labelFormatterBoth: function (lat: number, lon: number) {
-      const DMS = L.NumberFormatter.toDMS(lat) + ", " + L.NumberFormatter.toDMS(lon)
-      const DM = L.NumberFormatter.toDM(lat) + ", " + L.NumberFormatter.toDM(lon)
-      const D4 = lat.toFixed(4) + ", " + lon.toFixed(4)
-      return `latitude, longitude<br/>${D4}<br/>${DM}<br/>${DMS}`
-    },
-  }).addTo(map)
+interface coords {
+  lat: number,
+  lng: number
 }
+const formatLonLat = (degree: number) => {
+  const deg = Number(degree)
+  const d = Math.trunc(deg);
+  const minfloat = Math.abs(deg - d) * 60;
+  const m = Math.floor(minfloat);
+  const s = Math.round((minfloat - m) * 60);
+  const m4 = minfloat.toFixed(2).padStart(5, '0')
+  const min = m.toString().padStart(2, '0')
+  const sec = s.toString().padStart(2, '0')
+  return [deg.toFixed(5), m4, d.toString(), min, sec]
+}
+const FormatCoordinate = (props: { position: coords }) => {
+  const lat = props.position.lat
+  let lon = props.position.lng
+  const mutiple = Math.floor(lon / 360)
+  if (mutiple > 0) {
+    lon = lon - 360 * mutiple
+  } else if (mutiple < 0) {
+    lon = lon + 360 * Math.abs(mutiple)
+  }
+  if (lon > 180) { lon -= 360 }
+
+  const [latD5, latM4, latD, latM, latS] = [...formatLonLat(lat)]
+  const [lonD5, lonM4, lonD, lonM, lonS] = [...formatLonLat(lon)]
+  return (
+    <tbody>
+      <tr >
+        <td>Latitude</td>
+        <td>,</td>
+        <td>Longitude{"\u00A0"}</td>
+      </tr>
+      <tr>
+        <td>{latD + "\u00B0" + latM + "'" + latS + '"'}</td>
+        <td>,</td>
+        <td>{lonD + "\u00B0" + lonM + "'" + lonS + '"'}</td>
+      </tr>
+      <tr>
+        <td>{latD + "\u00B0" + latM4 + "'"}</td>
+        <td>, </td>
+        <td>{lonD + "\u00B0" + lonM4 + "'"}</td>
+      </tr>
+      <tr>
+        <td>{latD5 + "\u00B0"}</td>
+        <td>, </td>
+        <td>{lonD5 + "\u00B0"}</td>
+      </tr>
+    </tbody>
+  )
+}
+const greenIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+const blueIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+const marker = (markerLat: number, markerLon: number, icon: L.Icon, key?: number, onclick?: any) => {
+
+  if (key !== undefined) {
+    return (
+      <Marker key={key} position={[markerLat, markerLon]} icon={greenIcon} >
+        <Popup>
+          <table className="popupMarker">
+            <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
+          </table>
+          <button className='markerRemoveBtn' onClick={onclick} data-idx={key}>remove</button>
+        </Popup>
+      </Marker>
+    )
+  } else {
+    return (
+      <Marker position={[markerLat, markerLon]} icon={icon}  >
+        <Popup>
+          <table className="popupMarker">
+            <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
+          </table>
+        </Popup>
+      </Marker>
+    )
+  }
+
+}
+const MoveableMarker = (props: { position: coords }) => {
+  const markerLat = props.position.lat
+  const markerLon = props.position.lng
+  let markerLon2;
+  if (markerLon <= 121) {//地圖中線
+    markerLon2 = markerLon + 360
+  } else {
+    markerLon2 = markerLon - 360
+  }
+  return (
+    <>
+      {marker(markerLat, markerLon, blueIcon)}
+      {marker(markerLat, markerLon2, blueIcon)}
+    </>
+  )
+}
+const CoordinatesInput = (props: { active: boolean }) => {
+  const map = useMap();
+  const [markerLat, setMarkerLat] = useState<number>(map.getCenter().lat)
+  const [markerLon, setMarkerLon] = useState<number>(map.getCenter().lng)
+  const [markers, setMarkers] = useState<Array<Array<number>>>([[0, 0]])
+  const handleChangeLat = (evt: any) => {
+    setMarkerLat(Number(evt.target.value))
+  }
+  const handleChangeLon = (evt: any) => {
+    setMarkerLon(Number(evt.target.value))
+  }
+  const addMarker = () => {
+    let markerLon2;
+    if (markerLon <= 121) { //中線
+      markerLon2 = markerLon + 360
+      setMarkers([...markers, [markerLat, markerLon], [markerLat, markerLon2]])
+    } else {
+      markerLon2 = markerLon - 360
+      setMarkers([...markers, [markerLat, markerLon], [markerLat, markerLon2]])
+    }
+  }
+  const removeMarker = (evt: any) => {
+    const idx = evt.target.dataset.idx
+    markers.splice(idx, 1)
+    setMarkers([...markers])
+  }
+  const flyTo = () => {
+    map.flyTo([markerLat, markerLon])
+  }
+  if (props.active) {
+    return (
+      <>
+        <table className="coordInput">
+          <thead>
+            <tr>
+              <td colSpan={2}>Input Coordinates</td>
+              <td>
+                <button onClick={addMarker}>Add Marker</button>
+                <button onClick={flyTo}>Fly To</button>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="number" placeholder="Latitude" value={markerLat} onChange={handleChangeLat} /></td>
+              <td>,</td>
+              <td><input type="number" placeholder="Longitude" value={markerLon} onChange={handleChangeLon} /></td>
+            </tr>
+          </tbody>
+        </table>
+        <MoveableMarker position={{ lat: markerLat, lng: markerLon }} />
+        {
+          markers.map((pos, idx) => {
+            return (
+              marker(pos[0], pos[1], greenIcon, idx, removeMarker)
+              // <Marker key={idx} position={[pos[0], pos[1]]} icon={greenIcon} >
+              //   <Popup>
+              //     <table className="popupMarker">
+              //       <FormatCoordinate position={{ lat: pos[0], lng: pos[1] }} />
+              //     </table>
+              //     <button onClick={removeMarker} data-idx={idx}>remove</button>
+              //   </Popup>
+              // </Marker>
+            )
+          })
+        }
+      </>
+    )
+  } else {
+    return (
+      <></>
+    )
+  }
+
+}
+const MouseCoordinates = (props: { inputStatus: any }) => {
+  const [active, setActive] = useState<boolean>(true);
+  const [coords, setCoords] = useState<coords>({ lat: 0, lng: 0 });
+
+  useMapEvent('mousemove', (evt) => {
+    setCoords(evt.latlng)
+  })
+  const toggleInput = () => {
+    setActive(!active)
+    props.inputStatus(active)
+  }
+  return (
+    <>
+      <table className="mousePos" onClick={toggleInput}>
+        <FormatCoordinate position={coords} />
+      </table>
+    </>
+  )
+}
+
 interface Urls {
   urlRoot: string
   urlDate: Date
@@ -434,8 +248,6 @@ const LeafletMap = () => {
   const d = new Date()
   const utc = Math.floor((d.getTime() + d.getTimezoneOffset() * 60 * 1000) / (60 * 1000 * 10)) * (60 * 1000 * 10)
   const [datetime, setDatetime] = useState(new Date(utc));
-  const center: [number, number] = [23.5, 121];
-  const zoom: number = 7
   const bing_key = 'AtxhFL61gkrGg34Rd6hUnrZbAYu3s_fpbocD79mi7w3YEWzY0SoK2wD0HJJlgg4I'
   const baseMaps = useMemo(
     () => (
@@ -459,6 +271,10 @@ const LeafletMap = () => {
     )
     , []
   )
+  const [inputActive, setInputActive] = useState<boolean>(false)
+  const coordInputStauts = (inputStatus: any) => {
+    setInputActive(inputStatus)
+  }
   return (
     <>
       <Flatpickr
@@ -476,13 +292,15 @@ const LeafletMap = () => {
       />
       <MapContainer
         className='mapContainer'
-        center={center}
-        zoom={zoom}
+        center={[23.5, 121]}
+        zoom={7}
+        minZoom={2}
         zoomControl={false}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
-        whenCreated={mouseCoordinates}
       >
+        <CoordinatesInput active={inputActive} />
         <ScaleControl imperial={false} />
+        <MouseCoordinates inputStatus={coordInputStauts} />
         {baseMaps}
         <LayersControl>
           <BaseLayer name='Close'>
