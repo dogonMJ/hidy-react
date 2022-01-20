@@ -1,18 +1,16 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef, useMemo, EventHandler, ChangeEvent } from "react";
 import "flatpickr/dist/themes/dark.css";
 import Flatpickr from "react-flatpickr";
 import "leaflet/dist/leaflet.css";
-import "leaflet";
-import './Leaflet.Coordinates-0.1.5.mod.js' //manually replace _ordinateLabel to _createCoordinateLabel
-import 'leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css'
+import L, { LatLng, LatLngBoundsLiteral, LatLngExpression, layerGroup } from "leaflet";
 import './Map.css'
 // import Urls from './Urlchange'
-import { MapContainer, TileLayer, LayersControl, ZoomControl, ScaleControl, useMapEvent, Marker, Popup, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, LayersControl, ZoomControl, ScaleControl, useMapEvent, Marker, Popup, useMap, LayerGroup } from 'react-leaflet'
 // @ts-ignore
 import { BingLayer } from 'react-leaflet-bing-v2' //not yet ts version
+import { FunctionExpression } from "typescript";
 
 const { BaseLayer, Overlay } = LayersControl;
-declare const L: any;
 
 interface coords {
   lat: number,
@@ -83,72 +81,81 @@ const blueIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
-const marker = (markerLat: number, markerLon: number, icon: L.Icon, key?: number, onclick?: any) => {
-
-  if (key !== undefined) {
-    return (
-      <Marker key={key} position={[markerLat, markerLon]} icon={greenIcon} >
-        <Popup>
-          <table className="popupMarker">
-            <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
-          </table>
-          <button className='markerRemoveBtn' onClick={onclick} data-idx={key}>remove</button>
-        </Popup>
-      </Marker>
-    )
-  } else {
-    return (
-      <Marker position={[markerLat, markerLon]} icon={icon}  >
-        <Popup>
-          <table className="popupMarker">
-            <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
-          </table>
-        </Popup>
-      </Marker>
-    )
+const marker = (markerCoord: (number | null)[], icon: L.Icon, key?: number, onclick?: any) => {
+  const [markerLat, markerLon] = [...markerCoord]
+  if (markerLat !== null && markerLon !== null) {
+    if (key !== undefined) {
+      return (
+        <Marker key={key} position={[markerLat, markerLon]} icon={greenIcon} >
+          <Popup>
+            <table className="popupMarker">
+              <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
+            </table>
+            <button className='markerRemoveBtn' onClick={onclick} data-idx={key}>remove</button>
+          </Popup>
+        </Marker>
+      )
+    } else {
+      return (
+        <Marker position={[markerLat, markerLon]} icon={icon}  >
+          <Popup>
+            <table className="popupMarker">
+              <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
+            </table>
+          </Popup>
+        </Marker>
+      )
+    }
   }
-
 }
-const MoveableMarker = (props: { position: coords }) => {
+const MoveableMarker = (props: { position: coords, centerLon: number }) => {
   const markerLat = props.position.lat
   const markerLon = props.position.lng
   let markerLon2;
-  if (markerLon <= 121) {//地圖中線
+  if (markerLon <= props.centerLon) {//地圖中線
     markerLon2 = markerLon + 360
   } else {
     markerLon2 = markerLon - 360
   }
   return (
     <>
-      {marker(markerLat, markerLon, blueIcon)}
-      {marker(markerLat, markerLon2, blueIcon)}
+      {marker([markerLat, markerLon], blueIcon)}
+      {marker([markerLat, markerLon2], blueIcon)}
     </>
   )
 }
 const CoordinatesInput = (props: { active: boolean }) => {
   const map = useMap();
+  const boundCenter: any = map.options.center
   const [markerLat, setMarkerLat] = useState<number>(map.getCenter().lat)
   const [markerLon, setMarkerLon] = useState<number>(map.getCenter().lng)
-  const [markers, setMarkers] = useState<Array<Array<number>>>([[0, 0]])
-  const handleChangeLat = (evt: any) => {
-    setMarkerLat(Number(evt.target.value))
-  }
-  const handleChangeLon = (evt: any) => {
-    setMarkerLon(Number(evt.target.value))
-  }
-  const addMarker = () => {
-    let markerLon2;
-    if (markerLon <= 121) { //中線
-      markerLon2 = markerLon + 360
-      setMarkers([...markers, [markerLat, markerLon], [markerLat, markerLon2]])
+  const [markers, setMarkers] = useState<Array<Array<number | null>>>([[null, null]])
+  const handleChange = (evt: ChangeEvent) => {
+    const target = evt.target as HTMLInputElement
+    if (target.placeholder === 'Latitude') {
+      setMarkerLat(Number(target.value))
     } else {
-      markerLon2 = markerLon - 360
-      setMarkers([...markers, [markerLat, markerLon], [markerLat, markerLon2]])
+      setMarkerLon(Number(target.value))
     }
   }
-  const removeMarker = (evt: any) => {
-    const idx = evt.target.dataset.idx
-    markers.splice(idx, 1)
+  const addMarkerBtn = () => {
+    let markerLon2: number;
+    if (markerLon <= boundCenter[1]) { //中線
+      markerLon2 = markerLon + 360
+    } else {
+      markerLon2 = markerLon - 360
+    }
+    setMarkers([...markers, [markerLat, markerLon], [markerLat, markerLon2]])
+  }
+  const removeMarker = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    const target = evt.target as HTMLButtonElement
+    const idx = Number(target.dataset.idx)
+    if (idx % 2 === 0) {
+      // idx=0 is [null,null]
+      markers.splice(idx - 1, 2)
+    } else {
+      markers.splice(idx, 2)
+    }
     setMarkers([...markers])
   }
   const flyTo = () => {
@@ -162,34 +169,22 @@ const CoordinatesInput = (props: { active: boolean }) => {
             <tr>
               <td colSpan={2}>Input Coordinates</td>
               <td>
-                <button onClick={addMarker}>Add Marker</button>
+                <button onClick={addMarkerBtn}>Add Marker</button>
                 <button onClick={flyTo}>Fly To</button>
               </td>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><input type="number" placeholder="Latitude" value={markerLat} onChange={handleChangeLat} /></td>
+              <td><input type="number" placeholder="Latitude" value={markerLat} onChange={handleChange} /></td>
               <td>,</td>
-              <td><input type="number" placeholder="Longitude" value={markerLon} onChange={handleChangeLon} /></td>
+              <td><input type="number" placeholder="Longitude" value={markerLon} onChange={handleChange} /></td>
             </tr>
           </tbody>
         </table>
-        <MoveableMarker position={{ lat: markerLat, lng: markerLon }} />
+        <MoveableMarker position={{ lat: markerLat, lng: markerLon }} centerLon={boundCenter[1]} />
         {
-          markers.map((pos, idx) => {
-            return (
-              marker(pos[0], pos[1], greenIcon, idx, removeMarker)
-              // <Marker key={idx} position={[pos[0], pos[1]]} icon={greenIcon} >
-              //   <Popup>
-              //     <table className="popupMarker">
-              //       <FormatCoordinate position={{ lat: pos[0], lng: pos[1] }} />
-              //     </table>
-              //     <button onClick={removeMarker} data-idx={idx}>remove</button>
-              //   </Popup>
-              // </Marker>
-            )
-          })
+          markers.map((pos, idx) => marker(pos, greenIcon, idx, removeMarker))
         }
       </>
     )
@@ -200,7 +195,7 @@ const CoordinatesInput = (props: { active: boolean }) => {
   }
 
 }
-const MouseCoordinates = (props: { inputStatus: any }) => {
+const MouseCoordinates = (props: { inputStatus: Function }) => {
   const [active, setActive] = useState<boolean>(true);
   const [coords, setCoords] = useState<coords>({ lat: 0, lng: 0 });
 
@@ -272,7 +267,7 @@ const LeafletMap = () => {
     , []
   )
   const [inputActive, setInputActive] = useState<boolean>(false)
-  const coordInputStauts = (inputStatus: any) => {
+  const coordInputStauts = (inputStatus: boolean) => {
     setInputActive(inputStatus)
   }
   return (

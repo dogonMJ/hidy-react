@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TextInput from './TextInput'
 import Map from './Map'
 function App() {
