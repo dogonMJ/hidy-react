@@ -7,38 +7,18 @@ import "leaflet/dist/leaflet.css";
 import './Map.css'
 // @ts-ignore
 import { BingLayer } from 'react-leaflet-bing-v2' //not yet ts version
-import { RootState } from "../store/store"
-import ProcUrls from './Urlchange'
-import { CoordinatesInput, MouseCoordinates } from './MapPosition'
+import { RootState } from "store/store"
+import ProcUrls from 'components/Map/Urlchange'
+import { CoordinatesInput, MouseCoordinates } from 'components/MapPosition'
 const { BaseLayer } = LayersControl;
 
 const LeafletMap = () => {
   const d = new Date()
   const utc = Math.floor((d.getTime() + d.getTimezoneOffset() * 60 * 1000) / (60 * 1000 * 10)) * (60 * 1000 * 10)
   const [datetime, setDatetime] = useState(new Date(utc));
+  const [isswhowindow ,sei] useState<boolean>(fasle)
   const bing_key = 'AtxhFL61gkrGg34Rd6hUnrZbAYu3s_fpbocD79mi7w3YEWzY0SoK2wD0HJJlgg4I'
-  const baseMaps = useMemo(
-    () => (
-      // 避免重複渲染
-      <>
-        <LayersControl position='topright'>
-          <BaseLayer name='Open Street Map'>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-          </BaseLayer>
-          <BaseLayer name='Bing Map' checked>
-            <BingLayer
-              bingkey={bing_key}
-              type="Aerial"
-            />
-          </BaseLayer>
-        </LayersControl>
-      </>
-    )
-    , []
-  )
+  
   const inputStat = useSelector((state: RootState) => state.inputActive.active);
   return (
     <>
@@ -67,6 +47,8 @@ const LeafletMap = () => {
         <ScaleControl imperial={false} />
         {/* <MouseCoordinates inputStatus={coordInputStauts} /> */}
         <MouseCoordinates />
+        {isㄊㄟ}
+        {movable && <}
         {baseMaps}
         <LayersControl>
           <BaseLayer name='Close'>

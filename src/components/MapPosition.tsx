@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { RootState } from "../store/store"
 import { inputActiveSlice } from "../store/slice/mapSlice";
+import { coor } from 'types';
 
 const greenIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
@@ -23,96 +24,9 @@ const blueIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
-interface coords {
-  lat: number,
-  lng: number
-}
-interface markerSet {
-  markerCoord: (number | null)[],
-  icon: L.Icon,
-  id?: number,
-  onclick?: any,
-}
-const formatLonLat = (degree: number) => {
-  const deg = Number(degree)
-  const d = Math.trunc(deg);
-  const minfloat = Math.abs(deg - d) * 60;
-  const m = Math.floor(minfloat);
-  const s = Math.round((minfloat - m) * 60);
-  const m4 = minfloat.toFixed(2).padStart(5, '0')
-  const min = m.toString().padStart(2, '0')
-  const sec = s.toString().padStart(2, '0')
-  return [deg.toFixed(5), m4, d.toString(), min, sec]
-}
 
-const FormatCoordinate = (props: { position: coords }) => {
-  const lat = props.position.lat
-  let lon = props.position.lng
-  const mutiple = Math.floor(lon / 360)
-  if (mutiple > 0) {
-    lon = lon - 360 * mutiple
-  } else if (mutiple < 0) {
-    lon = lon + 360 * Math.abs(mutiple)
-  }
-  if (lon > 180) { lon -= 360 }
 
-  const [latD5, latM4, latD, latM, latS] = [...formatLonLat(lat)]
-  const [lonD5, lonM4, lonD, lonM, lonS] = [...formatLonLat(lon)]
-  return (
-    <tbody>
-      <tr >
-        <td>Latitude</td>
-        <td>,</td>
-        <td>Longitude{"\u00A0"}</td>
-      </tr>
-      <tr>
-        <td>{latD + "\u00B0" + latM + "'" + latS + '"'}</td>
-        <td>,</td>
-        <td>{lonD + "\u00B0" + lonM + "'" + lonS + '"'}</td>
-      </tr>
-      <tr>
-        <td>{latD + "\u00B0" + latM4 + "'"}</td>
-        <td>, </td>
-        <td>{lonD + "\u00B0" + lonM4 + "'"}</td>
-      </tr>
-      <tr>
-        <td>{latD5 + "\u00B0"}</td>
-        <td>, </td>
-        <td>{lonD5 + "\u00B0"}</td>
-      </tr>
-    </tbody>
-  )
-}
-const MarkerSet = (props: markerSet) => {
-  const [markerLat, markerLon] = [...props.markerCoord]
-  if (markerLat !== null && markerLon !== null) {
-    if (props.id !== undefined) {
-      return (
-        <Marker position={[markerLat, markerLon]} icon={greenIcon} >
-          <Popup>
-            <table className="popupMarker">
-              <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
-            </table>
-            <button className='markerRemoveBtn' onClick={props.onclick} data-idx={props.id}>remove</button>
-          </Popup>
-        </Marker>
-      )
-    } else {
-      return (
-        <Marker position={[markerLat, markerLon]} icon={props.icon}  >
-          <Popup>
-            <table className="popupMarker">
-              <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
-            </table>
-          </Popup>
-        </Marker>
-      )
-    }
-  } else {
-    return <></>
-  }
-}
-const MoveableMarker = (props: { position: coords, centerLon: number }) => {
+const MoveableMarker = (props: { position: coor, centerLon: number }) => {
   const markerLat = props.position.lat
   const markerLon = props.position.lng
   let markerLon2;
@@ -152,7 +66,7 @@ const CoordinatesInput = (props: { active: boolean }) => {
     }
     setMarkers([...markers, [markerLat, markerLon], [markerLat, markerLon2]])
   }
-  const removeMarker = (evt: React.MouseEvent<HTMLButtonElement>) => {
+  const removeMarker = (evt: React.MouseEvent<HTMLButtonElement>): void => {
     const target = evt.target as HTMLButtonElement
     const idx = Number(target.dataset.idx)
     if (idx % 2 === 0) {
@@ -190,7 +104,7 @@ const CoordinatesInput = (props: { active: boolean }) => {
         <MoveableMarker position={{ lat: markerLat, lng: markerLon }} centerLon={boundCenter[1]} />
         {
           markers.map((pos, idx) => <MarkerSet key={idx} markerCoord={pos} icon={greenIcon} id={idx} onclick={removeMarker} />)
-        }
+        } 
       </>
     )
   } else {
@@ -202,7 +116,7 @@ const CoordinatesInput = (props: { active: boolean }) => {
 const MouseCoordinates = () => {
   const dispatch = useDispatch()
   const inputActiveState = useSelector((state: RootState) => state.inputActive)
-  const [coords, setCoords] = useState<coords>({ lat: 0, lng: 0 });
+  const [coords, setCoords] = useState<coor>({ lat: 0, lng: 0 });
   useMapEvent('mousemove', (evt) => {
     setCoords(evt.latlng)
   })
