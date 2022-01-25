@@ -1,16 +1,16 @@
 import React from "react";
 import TextInput from './TextInput'
 import Map from './Map'
+import { store } from '../store/store';
+import { Provider } from 'react-redux';
 function App() {
-  // const [datetime, setDatetime] = useState(new Date());
-  // console.log(datetime)
   return (
-    <div>
-
-      <TextInput initText='輸入' />
-      <Map />
-
-    </div>
+    <>
+      <Provider store={store}>
+        <TextInput initText='輸入' />
+        <Map />
+      </Provider>
+    </>
   );
 }
-export default App; //輸出App函式
+export default App; 

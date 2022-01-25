@@ -64,9 +64,7 @@ body{
 .flatpickr-time input.flatpickr-hour{
   font-weight: normal;
 }
-.baseMap > .leaflet-control-layers-toggle {
-  background-color: red;
-}
+
 .leaflet-control-layers-toggle:after{ 
   content:"your text"; 
   color:#000 ;
