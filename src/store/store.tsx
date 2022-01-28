@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { inputActiveSlice } from "./slice/mapSlice";
+import { coordInputSlice } from "./slice/mapSlice";
 
 export const store = configureStore({
   reducer: {
-    [inputActiveSlice.name]: inputActiveSlice.reducer,
+    [coordInputSlice.name]: coordInputSlice.reducer,
   },
 });
 

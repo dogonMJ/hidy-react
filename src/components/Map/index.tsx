@@ -1,25 +1,27 @@
-import { useState, useMemo, } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { MapContainer, TileLayer, LayersControl, ZoomControl, ScaleControl } from 'react-leaflet'
+import { MapContainer, ZoomControl, ScaleControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
-import './Map.css'
-// @ts-ignore
-import { BingLayer } from 'react-leaflet-bing-v2' //not yet ts version
+import 'css/Map.css'
 import { RootState } from "store/store"
-import ProcUrls from 'components/Map/Urlchange'
-import { CoordinatesInput, MouseCoordinates } from 'components/MapPosition'
-const { BaseLayer } = LayersControl;
+import CoordinatesInput from "components/CoordinatesInput"
+import MouseCoordinates from "components/MouseCoordinates";
+import MyBaseLayers from "components/Baselayers";
+import APILayers from "components/APIlayers";
+import MoveableMarker from "components/MoveableMarker";
+import PinnedMarker from "components/PinnedMarker";
 
 const LeafletMap = () => {
   const d = new Date()
   const utc = Math.floor((d.getTime() + d.getTimezoneOffset() * 60 * 1000) / (60 * 1000 * 10)) * (60 * 1000 * 10)
   const [datetime, setDatetime] = useState(new Date(utc));
-  const [isswhowindow ,sei] useState<boolean>(fasle)
-  const bing_key = 'AtxhFL61gkrGg34Rd6hUnrZbAYu3s_fpbocD79mi7w3YEWzY0SoK2wD0HJJlgg4I'
-  
-  const inputStat = useSelector((state: RootState) => state.inputActive.active);
+  // const [isswhowindow ,sei] useState<boolean>(fasle)
+  const inputStat = useSelector((state: RootState) => state.coordInput.active);
+  const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
+  const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
+  const mapCenter: number = 121
   return (
     <>
       <Flatpickr
@@ -37,7 +39,7 @@ const LeafletMap = () => {
       />
       <MapContainer
         className='mapContainer'
-        center={[23.5, 121]}
+        center={[23.5, mapCenter]}
         zoom={7}
         minZoom={2}
         zoomControl={false}
@@ -45,30 +47,14 @@ const LeafletMap = () => {
       >
         <CoordinatesInput active={inputStat} />
         <ScaleControl imperial={false} />
-        {/* <MouseCoordinates inputStatus={coordInputStauts} /> */}
         <MouseCoordinates />
+        <MyBaseLayers />
+        <APILayers datetime={datetime} />
+        {/* 
         {isㄊㄟ}
-        {movable && <}
-        {baseMaps}
-        <LayersControl>
-          <BaseLayer name='Close'>
-            <TileLayer url='' />
-          </BaseLayer>
-          <BaseLayer name='Sea Surface Temperature'>
-            <ProcUrls
-              urlRoot="https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/GHRSST_L4_MUR_Sea_Surface_Temperature/default/"
-              urlDate={datetime}
-              urlEnd="/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png"
-            />
-          </BaseLayer>
-          <BaseLayer name='Sea Surface Temperature Anomalies'>
-            <ProcUrls
-              urlRoot="https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies/default/"
-              urlDate={datetime}
-              urlEnd="/GoogleMapsCompatible_Level7/{z}/{y}/{x}.png"
-            />
-          </BaseLayer>
-        </LayersControl>
+        */}
+        {inputStat && <MoveableMarker position={{ lat: inputLat, lng: inputLon }} centerLon={mapCenter} />}
+        {inputStat && <PinnedMarker />}
         <ZoomControl position="topright" />
       </MapContainer>
     </>
