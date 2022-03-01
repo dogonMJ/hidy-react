@@ -1,7 +1,8 @@
 import L from "leaflet";
 import { Marker, Popup } from 'react-leaflet'
-import formatCoordinate from 'components/FormatCoordinate'
-
+import FormatCoordinate from 'components/FormatCoordinate'
+import { RootState } from "../../store/store"
+import { useSelector } from "react-redux";
 interface markerSet {
   markerCoord: (number | null)[],
   id?: number,
@@ -25,16 +26,14 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 const MarkerSet = (props: markerSet) => {
+  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [markerLat, markerLon] = [...props.markerCoord]
   if (markerLat !== null && markerLon !== null) {
     if (props.id !== undefined) {
       return (
         <Marker position={[markerLat, markerLon]} icon={greenIcon} >
           <Popup>
-            {/* <table className="popupMarker"> 
-            <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />     
-            </table> */}
-            {formatCoordinate({ lat: markerLat, lng: markerLon }, 'latlon-dms')}
+            <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
             <br />
             <button className='markerRemoveBtn' onClick={props.onclick} data-idx={props.id}>remove</button>
           </Popup>
@@ -44,10 +43,7 @@ const MarkerSet = (props: markerSet) => {
       return (
         <Marker position={[markerLat, markerLon]} icon={blueIcon}  >
           <Popup>
-            {/* <table className="popupMarker">
-            <FormatCoordinate position={{ lat: markerLat, lng: markerLon }} />
-            </table> */}
-            {formatCoordinate({ lat: markerLat, lng: markerLon }, 'latlon-dms')}
+            <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
           </Popup>
         </Marker>
       )

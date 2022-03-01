@@ -1,10 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface Format {
+  [key: string]: string
+}
+const formatOrder: Format = {
+  'latlon-dd': 'latlon-dm',
+  'latlon-dm': 'latlon-dms',
+  'latlon-dms': 'latlon-dd',
+};
+
 export interface inputstate {
   active: boolean
   inputLat: number
   inputLon: number
   markers: Array<Array<number | null>>//[(number | null)[]]
+  latlonformat: string
 }
 export const coordInputSlice = createSlice({
   name: "coordInput",
@@ -13,6 +23,7 @@ export const coordInputSlice = createSlice({
     inputLat: 23.5,
     inputLon: 121,
     markers: [[null, null]],
+    latlonformat: 'latlon-dd',
   } as inputstate,
   reducers: {
     switchActive: (state, action: PayloadAction<boolean>) => {
@@ -26,6 +37,9 @@ export const coordInputSlice = createSlice({
     },
     changeMarkers: (state, action: PayloadAction<Array<Array<number | null>>>) => {
       state.markers = action.payload
-    }
+    },
+    switchFormat: (state, action: PayloadAction<string>) => {
+      state.latlonformat = formatOrder[action.payload]
+    },
   },
 });

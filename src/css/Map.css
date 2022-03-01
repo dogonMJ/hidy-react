@@ -3,10 +3,18 @@
 html{
   padding: 0;
   margin:0;
+  font-family: 'Rubik', sans-serif;
 }
 body{
   padding: 0;
   margin:0;
+  font-family: 'Rubik', sans-serif;
+}
+button {
+  font-family: 'Rubik', sans-serif;
+}
+input {
+  font-family: 'Rubik', sans-serif;
 }
 .mapContainer { 
   height: 100vh; 
@@ -31,14 +39,14 @@ body{
   padding: 0px 4px;
   z-index:1000 ; 
   background-color: rgba(255, 255, 255, 0.7);
-  font-family: 'Roboto Mono', monospace;
+  /* font-family: 'Roboto Mono', monospace; */
 }
-.coordInput button {
+/* .coordInput button {
   font-family: 'Roboto Mono', monospace;
 }
 .popupMarker {
   font-family: 'Roboto Mono', monospace;
-}
+} */
 .markerRemoveBtn{
   margin-left: 30px;
 }
@@ -69,4 +77,10 @@ body{
   content:"your text"; 
   color:#000 ;
 
+}
+
+.APIlayers{
+  position: absolute; 
+  z-index:1000 ; 
+  color:red;
 }

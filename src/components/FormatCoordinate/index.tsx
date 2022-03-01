@@ -1,4 +1,11 @@
 import { coor } from 'types'
+const sign = (degree: number, direction: string) => {
+  if (degree < 0) {
+    return direction[0]
+  } else {
+    return direction[1]
+  }
+}
 const formatLonLat = (degree: number) => {
   const deg = Number(degree)
   const d = Math.trunc(deg);
@@ -8,34 +15,28 @@ const formatLonLat = (degree: number) => {
   const m4 = minfloat.toFixed(2).padStart(5, '0')
   const min = m.toString().padStart(2, '0')
   const sec = s.toString().padStart(2, '0')
-  return [deg.toFixed(5), m4, d.toString(), min, sec]
+  return [m4, Math.abs(d).toString(), min, sec]
 }
 
-const toDMS = (degree: number) => {
-  const [D5, M4, D, M, S] = [...formatLonLat(degree)]
-  return `${D}\u00B0${M}'${S}"`
+const toDMS = (degree: number, direction: string) => {
+  const dir = sign(degree, direction)
+  const [M4, D, M, S] = [...formatLonLat(degree)]
+  return `${D}\u00B0${M}'${S}"${dir}`
 }
-const toDM = (degree: number) => {
-  const [D5, M4, D] = [...formatLonLat(degree)]
-  return `${D}\u00B0${M4}'`
+const toDM = (degree: number, direction: string) => {
+  const dir = sign(degree, direction)
+  const [M4, D] = [...formatLonLat(degree)]
+  return `${D}\u00B0${M4}'${dir}`
 }
 const toDD = (degree: number) => {
   const D = Number(degree).toFixed(5)
   return `${D}\u00B0`
 }
 
-interface Format {
-  [key: string]: string
-}
-const formatOrder: Format = {
-  'latlon-dd': 'latlon-dm',
-  'latlon-dm': 'latlon-dms',
-  'latlon-dms': 'latlon-dd',
-};
 
-const formatCoordinate = (coords: coor, format: string) => {
-  const lat = coords.lat
-  let lon = coords.lng
+const FormatCoordinate = (props: { coords: coor, format: string }) => {
+  const lat = props.coords.lat
+  let lon = props.coords.lng
   const mutiple = Math.floor(lon / 360)
   if (mutiple >= 0) {
     lon = lon - 360 * mutiple
@@ -44,16 +45,16 @@ const formatCoordinate = (coords: coor, format: string) => {
   }
   if (lon > 180) { lon -= 360 }
 
-  switch (format) {
+  switch (props.format) {
     case 'latlon-dd':
-      return `${toDD(lat)}, ${toDD(lon)}`
+      return <span>{toDD(lat)}, {toDD(lon)}</span>
     case 'latlon-dms':
-      return `${toDMS(lat)}, ${toDMS(lon)}`
+      return <span>{toDMS(lat, 'SN')}, {toDMS(lon, 'WE')}</span>
     case 'latlon-dm':
-      return `${toDM(lat)}, ${toDM(lon)}`
+      return <span>{toDM(lat, 'SN')}, {toDM(lon, 'WE')}</span>
     default:
-      return `${toDD(lat)}, ${toDD(lon)}`
+      return <span>{toDD(lat)}, {toDD(lon)}</span>
   }
 }
 
-export default formatCoordinate;
+export default FormatCoordinate;

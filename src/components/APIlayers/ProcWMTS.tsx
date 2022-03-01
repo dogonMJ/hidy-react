@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useMap } from 'react-leaflet'
 import L from 'leaflet'
-import wmsList from './WMSList.json'
+import wmtsList from './WMTSList.json'
 /*
 PROCESS NASA GIBS URL
 WMS Capabilities:
@@ -15,7 +15,7 @@ interface Urls {
 
 const timeDuration = (time: Date, duration: string) => {
   if (duration === 'P1D') {
-    return time.toISOString().split('T')[0] + "T00:00:00Z"
+    return time.toISOString().split('T')[0]
   } else if (duration === 'PT10M') {
     return time.toISOString().substring(0, 15) + "0:00Z"
   } else {
@@ -23,26 +23,17 @@ const timeDuration = (time: Date, duration: string) => {
   }
 }
 
-const ProcGibsUrls = (props: Urls) => {
+const ProcWMTS = (props: Urls) => {
   const map: L.Map = useMap()
   let url: string;
-  let params: object;
   let time: string;
   let id: string | null;
 
   if (props.Identifier) {
-    const api = wmsList[props.Identifier as keyof typeof wmsList]
+    const api = wmtsList[props.Identifier as keyof typeof wmtsList]
     time = timeDuration(props.Time, api.duration) //props.Time.toISOString().split('T')[0] + "T00:00:00Z"
     id = props.Identifier + time
-    url = api.url
-    params = {
-      layers: api.layers,
-      format: api.format,
-      request: api.request,
-      styles: api.styles,
-      transparent: api.transparent,
-      time: time
-    }
+    url = `${api.url}/${api.identifier}/${api.style}/${time}/${api.tileMatrixSet}/{z}/{y}/{x}.${api.formatExt}`
   } else {
     id = null
   }
@@ -67,21 +58,18 @@ const ProcGibsUrls = (props: Urls) => {
       }
 
       if (props.Identifier) {
-        const newLayer = L.tileLayer.wms(url, params)
+        const newLayer = L.tileLayer(url)
         newLayer.addTo(group.current)
         props.cache.setItem(id, newLayer)
       }
     }
-    // ref.current.setUrl(url)
   });
 
   // 1.更改url
   return (
     <>
-      {/* 2.渲染DOM */}
-      {/* <TileLayer ref={ref} url={url} zIndex={650} /> */}
     </>
   )
 }
 
-export default ProcGibsUrls
+export default ProcWMTS

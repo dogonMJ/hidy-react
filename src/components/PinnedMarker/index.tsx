@@ -3,7 +3,6 @@ import { RootState } from "../../store/store"
 import MarkerSet from "components/MarkerSet"
 import { coordInputSlice } from "store/slice/mapSlice";
 
-
 const PinnedMarker = () => {
   const dispatch = useDispatch()
   const markers = useSelector((state: RootState) => state.coordInput.markers)
@@ -19,7 +18,6 @@ const PinnedMarker = () => {
     }
     dispatch(coordInputSlice.actions.changeMarkers(markerList));
   }
-
   return (
     <>
       {markers.map((pos, idx) => <MarkerSet key={idx} markerCoord={pos} id={idx} onclick={removeMarker} />)}

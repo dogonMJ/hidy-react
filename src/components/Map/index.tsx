@@ -6,17 +6,49 @@ import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
 import { RootState } from "store/store"
+
 import CoordinatesInput from "components/CoordinatesInput"
 import MouseCoordinates from "components/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
 import APILayers from "components/APIlayers";
 import MoveableMarker from "components/MoveableMarker";
 import PinnedMarker from "components/PinnedMarker";
+import 'leaflet'
+// @ts-ignore
+import 'leaflet-measure/'
+import 'leaflet-measure/dist/leaflet-measure.css';
+// @ts-ignore
+import Cache from 'cachai';
 
+declare const L: any;
+// const MeasureControl = withLeaflet(MeasureControlDefault);
+const cache = new Cache(400)
+const addLeafletMeasureControl = (map: L.Map) => {
+  const measureControl = new L.Control.Measure({
+    position: 'topright',
+    lineColor: 'blue',
+    primaryLengthUnit: 'kilometers',
+    secondaryLengthUnit: 'nauticalmiles',
+    primaryAreaUnit: 'acres',
+    secondaryAreaUnit: 'hectares',
+    units: {
+      nauticalmiles: {
+        factor: 1 / 1852,
+        display: 'nm',
+        decimals: 1
+      },
+      sqkilometers: {
+        factor: 1 / 1000000,
+        display: 'km\u00B2',
+        decimals: 1
+      }
+    }
+  });
+  measureControl.addTo(map);
+}
 const LeafletMap = () => {
   const d = new Date()
-  const utc = Math.floor((d.getTime() + d.getTimezoneOffset() * 60 * 1000) / (60 * 1000 * 10)) * (60 * 1000 * 10)
-  const [datetime, setDatetime] = useState(new Date(utc));
+  const [datetime, setDatetime] = useState(d);//new Date(utc)
   // const [isswhowindow ,sei] useState<boolean>(fasle)
   const inputStat = useSelector((state: RootState) => state.coordInput.active);
   const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
@@ -30,9 +62,9 @@ const LeafletMap = () => {
         value={datetime}
         onChange={([datetime]) => setDatetime(datetime)}
         options={{
-          maxDate: new Date(utc),
+          maxDate: d,
           time_24hr: true,
-          allowInput: true,
+          allowInput: false,
           minuteIncrement: 10,
           weekNumbers: true,
         }}
@@ -44,12 +76,14 @@ const LeafletMap = () => {
         minZoom={2}
         zoomControl={false}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
+        whenCreated={(map) => addLeafletMeasureControl(map)}
       >
         <CoordinatesInput active={inputStat} />
+        <APILayers datetime={datetime} cache={cache} />
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <MyBaseLayers />
-        <APILayers datetime={datetime} />
+
         {/* 
         {isㄊㄟ}
         */}
