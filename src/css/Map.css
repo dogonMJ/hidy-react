@@ -84,3 +84,13 @@ input {
   z-index:1000 ; 
   color:red;
 }
+
+.button{
+  position: absolute; 
+  z-index:1000 ; 
+  background-color: white;
+}
+.langBtn{
+  width:45px;
+  height:25px;
+}

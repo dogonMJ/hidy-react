@@ -30,5 +30,41 @@
   "addMarker": "Add Marker",
   "coordHeader": "Input Coordinates",
   "coordFormat": "Format",
-  "coordInput": "Show Markers"
+  "coordInput": "Show Markers",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "remove": "Remove",
+  "CWBsites": {
+    "cwb": "Central Weather Bureau Data",
+    "sea": "Sea Surface Condition",
+    "weather": "Current Conditions",
+    "radar": "Radar",
+    "airtemp": "Air Temperature",
+    "seatemp": "Sea Temperature",
+    "airpres": "Air Pressure",
+    "wavehgt": "Wave Height",
+    "wavedir": "Wave Direction",
+    "waveprd": "Wave Period",
+    "winddir": "Wind Direction",
+    "windspd": "Wind Speed",
+    "maxwspd": "Max. Wind Speed",
+    "currdir": "Current Direction",
+    "currspd": "Current Speed",
+    "tidehgt": "Tide Height",
+    "tidelvl": "Tide Level",
+    "Rhumd": "Relative Humidity",
+    "airtemp_H_day": "Highest, Day",
+    "airtemp_L_day": "Lowest, Day",
+    "prec_day": "Accumulated Rainfall, Day",
+    "maxwindspd_hour": "Gust, Hour",
+    "BS": "BS"
+  },
+  "APIlayers": {
+    "api": "External Data",
+    "": "Close",
+    "GHRSST_L4_MUR_Sea_Surface_Temperature": "Sea Surface Temperature",
+    "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "Sea Surface Temperature Anomalies",
+    "MODIS_Aqua_CorrectedReflectance_TrueColor": "TrueColor",
+    "Himawari_AHI_Band3_Red_Visible_1km": "Red Visible"
+  }
 }

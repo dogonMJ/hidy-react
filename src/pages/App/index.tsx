@@ -9,7 +9,6 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <SwitchLang />
         <Map />
       </Provider>
     </>

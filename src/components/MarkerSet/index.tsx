@@ -3,6 +3,7 @@ import { Marker, Popup } from 'react-leaflet'
 import FormatCoordinate from 'components/FormatCoordinate'
 import { RootState } from "../../store/store"
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 interface markerSet {
   markerCoord: (number | null)[],
   id?: number,
@@ -26,6 +27,7 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 const MarkerSet = (props: markerSet) => {
+  const { t } = useTranslation();
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [markerLat, markerLon] = [...props.markerCoord]
   if (markerLat !== null && markerLon !== null) {
@@ -35,7 +37,7 @@ const MarkerSet = (props: markerSet) => {
           <Popup>
             <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
             <br />
-            <button className='markerRemoveBtn' onClick={props.onclick} data-idx={props.id}>remove</button>
+            <button className='markerRemoveBtn' onClick={props.onclick} data-idx={props.id}>{t('remove')}</button>
           </Popup>
         </Marker>
       )

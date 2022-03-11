@@ -1,28 +1,30 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store"
+import { coordInputSlice } from "../../store/slice/mapSlice";
 import { MapContainer, ZoomControl, ScaleControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
-import { RootState } from "store/store"
 
 import CoordinatesInput from "components/CoordinatesInput"
 import MouseCoordinates from "components/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
-import APILayers from "components/APIlayers";
 import MoveableMarker from "components/MoveableMarker";
 import PinnedMarker from "components/PinnedMarker";
+import SwitchLang from 'components/SwitchLang';
+import DataPanel from "components/DataPanel";
+
+
 import 'leaflet'
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
-// @ts-ignore
-import Cache from 'cachai';
 
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
-const cache = new Cache(400)
+// const cache = new Cache(400)
 const addLeafletMeasureControl = (map: L.Map) => {
   const measureControl = new L.Control.Measure({
     position: 'topright',
@@ -47,8 +49,10 @@ const addLeafletMeasureControl = (map: L.Map) => {
   measureControl.addTo(map);
 }
 const LeafletMap = () => {
+  const dispatch = useDispatch()
   const d = new Date()
-  const [datetime, setDatetime] = useState(d);//new Date(utc)
+  // const [datetime, setDatetime] = useState(d);//new Date(utc)
+  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   // const [isswhowindow ,sei] useState<boolean>(fasle)
   const inputStat = useSelector((state: RootState) => state.coordInput.active);
   const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
@@ -59,8 +63,11 @@ const LeafletMap = () => {
       <Flatpickr
         className='dateTimePicker'
         data-enable-time
-        value={datetime}
-        onChange={([datetime]) => setDatetime(datetime)}
+        value={Date.parse(datetime)}
+        // onChange={([datetime]) => setDatetime(datetime)}
+        onChange={([datetime]) => {
+          return dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))
+        }}
         options={{
           maxDate: d,
           time_24hr: true,
@@ -74,22 +81,21 @@ const LeafletMap = () => {
         center={[23.5, mapCenter]}
         zoom={7}
         minZoom={2}
+        maxZoom={18}
         zoomControl={false}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => addLeafletMeasureControl(map)}
       >
         <CoordinatesInput active={inputStat} />
-        <APILayers datetime={datetime} cache={cache} />
+        {/* <APILayers datetime={datetime} cache={cache} /> */}
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <MyBaseLayers />
-
-        {/* 
-        {isㄊㄟ}
-        */}
         {inputStat && <MoveableMarker position={{ lat: inputLat, lng: inputLon }} centerLon={mapCenter} />}
         {inputStat && <PinnedMarker />}
         <ZoomControl position="topright" />
+        <DataPanel />
+        <SwitchLang />
       </MapContainer>
     </>
   )

@@ -30,5 +30,41 @@
   "addMarker": "新增標記",
   "coordHeader": "輸入座標",
   "coordFormat": "切換格式",
-  "coordInput": "顯示標記"
+  "coordInput": "顯示標記",
+  "latitude": "緯度",
+  "longitude": "經度",
+  "remove": "移除",
+  "CWBsites": {
+    "cwb": "中央氣象局資料",
+    "sea": "即時海況",
+    "weather": "目前天氣",
+    "radar": "雷達回波",
+    "airtemp": "氣溫",
+    "seatemp": "海溫",
+    "airpres": "測站氣壓",
+    "wavehgt": "浪高",
+    "wavedir": "浪向",
+    "waveprd": "波浪週期",
+    "winddir": "風向",
+    "windspd": "風力",
+    "maxwspd": "最大風速",
+    "currdir": "流向",
+    "currspd": "流速",
+    "tidehgt": "潮高",
+    "tidelvl": "潮位",
+    "Rhumd": "相對溼度",
+    "airtemp_H_day": "日最高溫",
+    "airtemp_L_day": "日最低溫",
+    "prec_day": "日累積雨量",
+    "maxwindspd_hour": "時陣風",
+    "BS": "級"
+  },
+  "APIlayers": {
+    "api": "介接圖層",
+    "": "關閉",
+    "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
+    "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度異常",
+    "MODIS_Aqua_CorrectedReflectance_TrueColor": "真實色彩",
+    "Himawari_AHI_Band3_Red_Visible_1km": "可見紅光"
+  }
 }

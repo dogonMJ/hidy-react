@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useMap } from "react-leaflet"
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store"
@@ -49,9 +48,9 @@ const CoordinatesInput = (props: { active: boolean }) => {
           </thead>
           <tbody>
             <tr>
-              <td><input type="number" placeholder="Latitude" value={inputLat} onChange={handleChange} /></td>
+              <td><input type="number" placeholder={t("latitude")} value={inputLat} onChange={handleChange} /></td>
               <td>,</td>
-              <td><input type="number" placeholder="Longitude" value={inputLon} onChange={handleChange} /></td>
+              <td><input type="number" placeholder={t("longitude")} value={inputLon} onChange={handleChange} /></td>
             </tr>
           </tbody>
         </table>

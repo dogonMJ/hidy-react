@@ -9,17 +9,17 @@ https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?SERVICE=WMS&REQUEST=Ge
 */
 interface Urls {
   Identifier: string;
-  Time: Date;
+  Time: string;
   cache: any;
 }
 
-const timeDuration = (time: Date, duration: string) => {
+const timeDuration = (time: string, duration: string) => {
   if (duration === 'P1D') {
-    return time.toISOString().split('T')[0]
+    return time.split('T')[0]
   } else if (duration === 'PT10M') {
-    return time.toISOString().substring(0, 15) + "0:00Z"
+    return time.substring(0, 15) + "0:00Z"
   } else {
-    return time.toISOString()
+    return time
   }
 }
 
@@ -31,7 +31,7 @@ const ProcWMTS = (props: Urls) => {
 
   if (props.Identifier) {
     const api = wmtsList[props.Identifier as keyof typeof wmtsList]
-    time = timeDuration(props.Time, api.duration) //props.Time.toISOString().split('T')[0] + "T00:00:00Z"
+    time = timeDuration(props.Time, api.duration)
     id = props.Identifier + time
     url = `${api.url}/${api.identifier}/${api.style}/${time}/${api.tileMatrixSet}/{z}/{y}/{x}.${api.formatExt}`
   } else {
