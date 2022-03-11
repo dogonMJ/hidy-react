@@ -1,4 +1,4 @@
-import { useState } from "react";
+import 'leaflet'
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store"
 import { coordInputSlice } from "../../store/slice/mapSlice";
@@ -16,15 +16,12 @@ import PinnedMarker from "components/PinnedMarker";
 import SwitchLang from 'components/SwitchLang';
 import DataPanel from "components/DataPanel";
 
-
-import 'leaflet'
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
 
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
-// const cache = new Cache(400)
 const addLeafletMeasureControl = (map: L.Map) => {
   const measureControl = new L.Control.Measure({
     position: 'topright',
@@ -51,9 +48,7 @@ const addLeafletMeasureControl = (map: L.Map) => {
 const LeafletMap = () => {
   const dispatch = useDispatch()
   const d = new Date()
-  // const [datetime, setDatetime] = useState(d);//new Date(utc)
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  // const [isswhowindow ,sei] useState<boolean>(fasle)
   const inputStat = useSelector((state: RootState) => state.coordInput.active);
   const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
   const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
@@ -64,10 +59,7 @@ const LeafletMap = () => {
         className='dateTimePicker'
         data-enable-time
         value={Date.parse(datetime)}
-        // onChange={([datetime]) => setDatetime(datetime)}
-        onChange={([datetime]) => {
-          return dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))
-        }}
+        onChange={([datetime]) => dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))}
         options={{
           maxDate: d,
           time_24hr: true,
@@ -87,7 +79,6 @@ const LeafletMap = () => {
         whenCreated={(map) => addLeafletMeasureControl(map)}
       >
         <CoordinatesInput active={inputStat} />
-        {/* <APILayers datetime={datetime} cache={cache} /> */}
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <MyBaseLayers />
