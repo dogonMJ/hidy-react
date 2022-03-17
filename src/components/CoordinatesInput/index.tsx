@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store"
 import { coordInputSlice } from "../../store/slice/mapSlice";
 import { useTranslation } from "react-i18next";
+import { TextField, IconButton, Paper } from '@mui/material';
+import { GpsFixed, AddLocationAlt } from '@mui/icons-material';
 
-const CoordinatesInput = (props: { active: boolean }) => {
+const CoordinatesInput = () => {
   const map = useMap();
   const { t } = useTranslation();
   const dispatch = useDispatch()
@@ -15,7 +17,7 @@ const CoordinatesInput = (props: { active: boolean }) => {
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.target as HTMLInputElement
-    if (target.placeholder === 'Latitude') {
+    if (target.id === 'lat') {
       dispatch(coordInputSlice.actions.changeLat(Number(target.value)));
     } else {
       dispatch(coordInputSlice.actions.changeLon(Number(target.value)));
@@ -33,34 +35,79 @@ const CoordinatesInput = (props: { active: boolean }) => {
   const flyTo = () => {
     map.flyTo([inputLat, inputLon])
   }
-  if (props.active) {
-    return (
-      <>
-        <table className="coordInput">
-          <thead>
-            <tr>
-              <td colSpan={2}>{t('coordHeader')}</td>
-              <td>
-                <button onClick={addMarkerBtn}>{t('addMarker')}</button>
-                <button onClick={flyTo}>{t('centerOnLocation')}</button>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><input type="number" placeholder={t("latitude")} value={inputLat} onChange={handleChange} /></td>
-              <td>,</td>
-              <td><input type="number" placeholder={t("longitude")} value={inputLon} onChange={handleChange} /></td>
-            </tr>
-          </tbody>
-        </table>
-      </>
-    )
-  } else {
-    return (
-      <></>
-    )
-  }
+
+  const styles = {
+    textField: {
+      width: 'auto',
+    },
+    input: {
+      fontFamily: 'Monospace',
+      fontSize: '10px',
+      height: '1.9rem'
+    },
+    inputLabel: {
+      fontSize: '15px',
+    },
+  };
+  return (
+    <Paper className="mousePos coordInput">
+      <table >
+        <thead>
+          <tr>
+            <td>{t('coordHeader')}</td>
+            <td>
+              <IconButton aria-label="addMarker" onClick={addMarkerBtn} style={{ float: 'right' }} size="small" >
+                <AddLocationAlt style={{ fontSize: '20px' }} />
+              </IconButton>
+              <IconButton aria-label="centerOnLocation" onClick={flyTo} style={{ float: 'right' }} size="small">
+                <GpsFixed sx={{ fontSize: '19px' }} />
+              </IconButton>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <TextField
+                id="lat"
+                type="number"
+                size="small"
+                style={styles.textField}
+                label={t("latitude")}
+                value={inputLat}
+                onChange={handleChange}
+                InputProps={{
+                  style: styles.input
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                  style: styles.inputLabel
+                }}
+              />
+            </td>
+            <td>
+              <TextField
+                id="lon"
+                type="number"
+                size="small"
+                style={styles.textField}
+                label={t("longitude")}
+                value={inputLon}
+                onChange={handleChange}
+                InputProps={{
+                  style: styles.input
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                  style: styles.inputLabel
+                }}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </Paper>
+  )
 }
 
 export default CoordinatesInput

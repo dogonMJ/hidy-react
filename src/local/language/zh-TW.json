@@ -27,13 +27,11 @@
   "sqmiles": "平方英里",
   "decPoint": ".",
   "thousandsSep": ",",
-  "addMarker": "新增標記",
   "coordHeader": "輸入座標",
-  "coordFormat": "切換格式",
-  "coordInput": "顯示標記",
   "latitude": "緯度",
   "longitude": "經度",
   "remove": "移除",
+  "dataPanel": "資料圖層",
   "CWBsites": {
     "cwb": "中央氣象局資料",
     "sea": "即時海況",
@@ -60,11 +58,17 @@
     "BS": "級"
   },
   "APIlayers": {
-    "api": "介接圖層",
+    "api": "衛星資料",
     "": "關閉",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度異常",
     "MODIS_Aqua_CorrectedReflectance_TrueColor": "真實色彩",
     "Himawari_AHI_Band3_Red_Visible_1km": "可見紅光"
+  },
+  "Animated": {
+    "animated": "流速動畫",
+    "close": "關閉",
+    "msla": "海表地轉流速(海平面為基準)",
+    "madt": "海表地轉流速"
   }
 }

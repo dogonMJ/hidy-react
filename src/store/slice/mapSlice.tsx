@@ -8,6 +8,7 @@ const formatOrder: Format = {
   'latlon-dm': 'latlon-dms',
   'latlon-dms': 'latlon-dd',
 };
+
 const d = new Date()
 export interface inputstate {
   active: boolean
@@ -16,6 +17,7 @@ export interface inputstate {
   markers: Array<Array<number | null>>//[(number | null)[]]
   latlonformat: string
   datetime: string
+  animateIdent: string
 }
 export const coordInputSlice = createSlice({
   name: "coordInput",
@@ -26,6 +28,7 @@ export const coordInputSlice = createSlice({
     markers: [[null, null]],
     latlonformat: 'latlon-dd',
     datetime: d.toISOString(),
+    animateIdent: "close",
   } as inputstate,
   reducers: {
     switchActive: (state, action: PayloadAction<boolean>) => {
@@ -45,6 +48,9 @@ export const coordInputSlice = createSlice({
     },
     changeDatetime: (state, action: PayloadAction<string>) => {
       state.datetime = action.payload
-    }
+    },
+    animateIdentifier: (state, action: PayloadAction<string>) => {
+      state.animateIdent = action.payload
+    },
   },
 });

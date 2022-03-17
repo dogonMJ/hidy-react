@@ -4,6 +4,8 @@ import FormatCoordinate from 'components/FormatCoordinate'
 import { RootState } from "../../store/store"
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { Button, Stack } from '@mui/material';
+
 interface markerSet {
   markerCoord: (number | null)[],
   id?: number,
@@ -26,6 +28,7 @@ const blueIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
+
 const MarkerSet = (props: markerSet) => {
   const { t } = useTranslation();
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
@@ -35,15 +38,22 @@ const MarkerSet = (props: markerSet) => {
       return (
         <Marker position={[markerLat, markerLon]} icon={greenIcon} >
           <Popup>
-            <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
-            <br />
-            <button className='markerRemoveBtn' onClick={props.onclick} data-idx={props.id}>{t('remove')}</button>
+            <Stack>
+              <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
+              <Button
+                size="small"
+                style={{ padding: 0, height: '1rem', marginTop: '5px' }}
+                onClick={props.onclick}
+                data-idx={props.id}>
+                {t('remove')}
+              </Button>
+            </Stack>
           </Popup>
         </Marker>
       )
     } else {
       return (
-        <Marker position={[markerLat, markerLon]} icon={blueIcon}  >
+        <Marker position={[markerLat, markerLon]} icon={blueIcon} >
           <Popup>
             <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
           </Popup>

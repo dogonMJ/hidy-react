@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, Checkbox, ListItem } from '@mui/material';
-import CwbSeaSites from 'components/CWB/CwbSeaSites';
-import CwbWeatherSites from 'components/CWB/CwbWeatherSites';
-import CwbRadar from 'components/CWB/CwbRadar';
+import CwbSeaSites from 'components/DataPanel/CWB/CwbSeaSites';
+import CwbWeatherSites from 'components/DataPanel/CWB/CwbWeatherSites';
+import CwbRadar from 'components/DataPanel/CWB/CwbRadar';
 
 const optionList = ['sea', 'weather', 'radar']
 const ToggleCWB = () => {

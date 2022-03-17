@@ -1,6 +1,5 @@
 import { ImageOverlay } from "react-leaflet";
 import { useEffect, useState } from "react";
-import Cookies from 'js-cookie'
 
 const imgList = Array.from(Array(13), (e, i) => i + 10)
 const urlList: string[] = []

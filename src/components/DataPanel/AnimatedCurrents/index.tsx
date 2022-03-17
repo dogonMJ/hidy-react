@@ -1,28 +1,27 @@
-import { useState } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { coordInputSlice } from "store/slice/mapSlice";
+import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store"
 import { List, ListItemButton, ListItemText, RadioGroup, ListItem, FormControlLabel, Radio } from '@mui/material';
-import ProcWMTS from './ProcWMTS'
 
-const optionList = ["", "GHRSST_L4_MUR_Sea_Surface_Temperature",
-  "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor", "Himawari_AHI_Band3_Red_Visible_1km"]
-const APILayers = (props: { cache: any }) => {
+const optionList = ["close", "madt", "msla"]
+const AnimatedCurrents = () => {
   const { t } = useTranslation()
-  const [identifier, setIdentifier] = useState<string>("");
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const dispatch = useDispatch()
+  const identifier = useSelector((state: RootState) => state.coordInput.animateIdent);
 
-  const cache = props.cache
   const handleToggle = (value: string) => () => {
-    setIdentifier(value)
+    dispatch(coordInputSlice.actions.animateIdentifier(value))
   };
+
   return (
     <>
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
+          aria-labelledby="animatedCurrents-group-label"
           defaultValue="close"
-          name="radio-buttons-group"
+          name="animatedCurrents-group"
         >
           {optionList.map((value) => {
             const labelId = `checkbox-list-label-${value}`;
@@ -37,20 +36,19 @@ const APILayers = (props: { cache: any }) => {
                     control={<Radio />}
                     label=""
                     checked={identifier === value} />
-                  <ListItemText id={labelId} primary={t(`APIlayers.${value}`)} />
+                  <ListItemText id={labelId} primary={t(`Animated.${value}`)} />
                 </ListItemButton>
               </ListItem>
             );
           })}
         </RadioGroup>
       </List>
-      <ProcWMTS
-        Identifier={identifier}
-        Time={datetime}
-        cache={cache}
-      />
+      {/* 
+      place in Map because viewport problem
+      {identifier !== "close" && <AnimatedLayers indetifier={identifier} />} 
+      */}
     </>
   )
 }
 
-export default APILayers
+export default AnimatedCurrents

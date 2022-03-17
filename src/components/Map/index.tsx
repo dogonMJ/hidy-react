@@ -1,21 +1,18 @@
 import 'leaflet'
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store"
-import { coordInputSlice } from "../../store/slice/mapSlice";
+import { RootState } from "store/store"
+import { coordInputSlice } from "store/slice/mapSlice";
 import { MapContainer, ZoomControl, ScaleControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
 
-import CoordinatesInput from "components/CoordinatesInput"
 import MouseCoordinates from "components/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
-import MoveableMarker from "components/MoveableMarker";
-import PinnedMarker from "components/PinnedMarker";
 import SwitchLang from 'components/SwitchLang';
 import DataPanel from "components/DataPanel";
-
+import AnimatedLayers from "components/DataPanel/AnimatedCurrents/AnimatedLayers";
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
@@ -49,10 +46,7 @@ const LeafletMap = () => {
   const dispatch = useDispatch()
   const d = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  const inputStat = useSelector((state: RootState) => state.coordInput.active);
-  const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
-  const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
-  const mapCenter: number = 121
+  const identifier = useSelector((state: RootState) => state.coordInput.animateIdent);
   return (
     <>
       <Flatpickr
@@ -69,8 +63,9 @@ const LeafletMap = () => {
         }}
       />
       <MapContainer
+        id='mapContainer'
         className='mapContainer'
-        center={[23.5, mapCenter]}
+        center={[23.5, 121]}
         zoom={7}
         minZoom={2}
         maxZoom={18}
@@ -78,13 +73,11 @@ const LeafletMap = () => {
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => addLeafletMeasureControl(map)}
       >
-        <CoordinatesInput active={inputStat} />
+        {identifier !== "close" && <AnimatedLayers indetifier={identifier} />}
+        <MyBaseLayers />
+        <ZoomControl position="topright" />
         <ScaleControl imperial={false} />
         <MouseCoordinates />
-        <MyBaseLayers />
-        {inputStat && <MoveableMarker position={{ lat: inputLat, lng: inputLon }} centerLon={mapCenter} />}
-        {inputStat && <PinnedMarker />}
-        <ZoomControl position="topright" />
         <DataPanel />
         <SwitchLang />
       </MapContainer>

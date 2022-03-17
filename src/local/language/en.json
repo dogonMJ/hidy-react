@@ -27,13 +27,11 @@
   "sqmiles": "Sq Miles",
   "decPoint": ".",
   "thousandsSep": ",",
-  "addMarker": "Add Marker",
   "coordHeader": "Input Coordinates",
-  "coordFormat": "Format",
-  "coordInput": "Show Markers",
   "latitude": "Latitude",
   "longitude": "Longitude",
   "remove": "Remove",
+  "dataPanel": "Data Layers",
   "CWBsites": {
     "cwb": "Central Weather Bureau Data",
     "sea": "Sea Surface Condition",
@@ -60,11 +58,17 @@
     "BS": "BS"
   },
   "APIlayers": {
-    "api": "External Data",
+    "api": "Satellite Data",
     "": "Close",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "Sea Surface Temperature",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "Sea Surface Temperature Anomalies",
     "MODIS_Aqua_CorrectedReflectance_TrueColor": "TrueColor",
     "Himawari_AHI_Band3_Red_Visible_1km": "Red Visible"
+  },
+  "Animated": {
+    "animated": "Animated",
+    "close": "close",
+    "msla": "Surface Geostrophic Sea Water Velocity Assuming Sea Level For Geoid",
+    "madt": "Surface Geostrophic Sea Water Velocity"
   }
 }

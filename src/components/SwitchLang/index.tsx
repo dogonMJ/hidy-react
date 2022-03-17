@@ -1,9 +1,7 @@
 
 import { useState } from 'react';
-import Stack from '@mui/material/Stack';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import Paper from '@mui/material/Paper';
 
 import { useTranslation } from "react-i18next";
 
