@@ -33,7 +33,10 @@
   "remove": "移除",
   "dataPanel": "資料圖層",
   "CWBsites": {
-    "cwb": "中央氣象局資料",
+    "cwbdata": "中央氣象局資料",
+    "cwb": "中央氣象局",
+    "cwbopendata": "中央氣象局開放資料平台",
+    "sitelang": "C",
     "sea": "即時海況",
     "weather": "目前天氣",
     "radar": "雷達回波",
@@ -59,7 +62,7 @@
   },
   "APIlayers": {
     "api": "衛星資料",
-    "": "關閉",
+    "close": "關閉",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度異常",
     "MODIS_Aqua_CorrectedReflectance_TrueColor": "真實色彩",
@@ -69,6 +72,29 @@
     "animated": "流速動畫",
     "close": "關閉",
     "msla": "海表地轉流速(海平面為基準)",
-    "madt": "海表地轉流速"
+    "madt": "海表地轉流速",
+    "info": "使用0日延時初步地圖產品，並非最終地圖產品。"
+  },
+  "DataInfo": {
+    "close": "關閉圖層",
+    "source": "資料來源",
+    "productID": "產品編號",
+    "spatialRes": "空間解析度",
+    "temporalRes": "時間解析度",
+    "temporalRange": "時間範圍",
+    "updateFreq": "更新頻率",
+    "timezone": "時區",
+    "others": "其他資訊",
+    "more": "更多資訊",
+    "daily": "每日",
+    "hourly": "每小時",
+    "instant": "瞬時",
+    "hr": "小時",
+    "min": "分鐘",
+    "km": "公里",
+    "m": "公尺",
+    "cwbRadar": "中央氣象局雷達回波",
+    "cwbOpenData": "中央氣象局資料開放平台",
+    "madtDes": "使用"
   }
 }

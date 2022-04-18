@@ -20,45 +20,45 @@ const processUnknown = (data: string | undefined) => {
 const PopupTemplate = (props: { weatherData: any, station: Station }) => {
   const weatherData = props.weatherData
   const station = props.station
-  const weatherElements = weatherData[station.stationID].weatherElements
-  const datatime = weatherData[station.stationID].dataTime
+  const weatherElements = weatherData[station.StationID].WeatherElements
+  const datatime = weatherData[station.StationID].DateTime
 
-  const link = "https://www.cwb.gov.tw/V8/C/M/OBS_Marine_plot.html?MID=" + station.stationID
+  const link = "https://www.cwb.gov.tw/V8/C/M/OBS_Marine_plot.html?MID=" + station.StationID
   const { t } = useTranslation()
   return (
     <table>
       <caption>
-        <a href={link} target="_blank" rel="noreferrer noopenner" title={station.stationID}>{station.stationName} {station.stationNameEN}</a><br />
+        <a href={link} target="_blank" rel="noreferrer noopenner" title={station.StationID}>{station.StationName} {station.StationNameEN}</a><br />
         {datatime.substring(0, 19).replace('T', ' ')} <br />
-        {station.stationLatitude} N, {station.stationLongitude} E
+        {station.StationLatitude} N, {station.StationLongitude} E
       </caption>
       <tbody>
         <tr>
-          <td>{t('CWBsites.airtemp')}: {processUnknown(weatherElements.temperature)} &deg;C</td>
-          <td>{t('CWBsites.seatemp')}: {processUnknown(weatherElements.seaTemperature)} &deg;C</td>
-          <td>{t('CWBsites.airpres')}: {processUnknown(weatherElements.stationPressure)} &#13169;</td>
+          <td>{t('CWBsites.airtemp')}: {processUnknown(weatherElements.Temperature)} &deg;C</td>
+          <td>{t('CWBsites.seatemp')}: {processUnknown(weatherElements.SeaTemperature)} &deg;C</td>
+          <td>{t('CWBsites.airpres')}: {processUnknown(weatherElements.StationPressure)} &#13169;</td>
         </tr>
         <tr>
-          <td>{t('CWBsites.wavehgt')}: {processUnknown(weatherElements.waveHeight)} m</td>
-          <td>{t('CWBsites.wavedir')}: {processUnknown(weatherElements.waveDirection)}</td>
-          <td>{t('CWBsites.waveprd')}: {processUnknown(weatherElements.wavePeriod)} s</td>
+          <td>{t('CWBsites.wavehgt')}: {processUnknown(weatherElements.WaveHeight)} m</td>
+          <td>{t('CWBsites.wavedir')}: {processUnknown(weatherElements.WaveDirection)}</td>
+          <td>{t('CWBsites.waveprd')}: {processUnknown(weatherElements.WavePeriod)} s</td>
         </tr>
         <tr>
-          <td>{t('CWBsites.winddir')}: {weatherElements.hasOwnProperty('primaryAnemometer') ? processUnknown(weatherElements.primaryAnemometer.windDirection) : <i>NA</i>}</td>
-          <td>{t('CWBsites.windspd')}: {weatherElements.hasOwnProperty('primaryAnemometer') ? processUnknown(weatherElements.primaryAnemometer.windScale) : <i>NA</i>}{t('CWBsites.BS')}
-            {weatherElements.hasOwnProperty('primaryAnemometer') ? processUnknown(weatherElements.primaryAnemometer.windSpeed) : <i>NA</i>} m/s
+          <td>{t('CWBsites.winddir')}: {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindDirection) : <i>NA</i>}</td>
+          <td>{t('CWBsites.windspd')}: {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindScale) : <i>NA</i>}{t('CWBsites.BS')}
+            {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindSpeed) : <i>NA</i>} m/s
           </td>
-          <td>{t('CWBsites.maxwspd')}: {weatherElements.hasOwnProperty('primaryAnemometer') ? processUnknown(weatherElements.primaryAnemometer.maximumWindScale) : <i>NA</i>}{t('CWBsites.BS')}
-            {weatherElements.hasOwnProperty('primaryAnemometer') ? processUnknown(weatherElements.primaryAnemometer.maximumWindSpeed) : <i>NA</i>} m/s</td>
+          <td>{t('CWBsites.maxwspd')}: {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.MaximumWindScale) : <i>NA</i>}{t('CWBsites.BS')}
+            {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.MaximumWindSpeed) : <i>NA</i>} m/s</td>
         </tr>
         <tr>
-          <td>{t('CWBsites.currdir')}: {weatherElements.hasOwnProperty('seaCurrents') ? processUnknown(weatherElements.seaCurrents.layer[0].currentDirection) : <i>NA</i>}</td>
-          <td>{t('CWBsites.currspd')}: {weatherElements.hasOwnProperty('seaCurrents') ? processUnknown(weatherElements.seaCurrents.layer[0].currentSpeed) : <i>NA</i>} m/s</td>
-          <td>{t('CWBsites.currspd')}: {weatherElements.hasOwnProperty('seaCurrents') ? processUnknown(weatherElements.seaCurrents.layer[0].currentSpeedInKnots) : <i>NA</i>} kt</td>
+          <td>{t('CWBsites.currdir')}: {weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentDirection) : <i>NA</i>}</td>
+          <td>{t('CWBsites.currspd')}: {weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentSpeed) : <i>NA</i>} m/s</td>
+          <td>{t('CWBsites.currspd')}: {weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentSpeedInKnots) : <i>NA</i>} kt</td>
         </tr>
         <tr>
-          <td>{t('CWBsites.tidehgt')}: {processUnknown(weatherElements.tideHeight)} m</td>
-          <td>{t('CWBsites.tidelvl')}: {processUnknown(weatherElements.tideLevel)}</td>
+          <td>{t('CWBsites.tidehgt')}: {processUnknown(weatherElements.TideHeight)} m</td>
+          <td>{t('CWBsites.tidelvl')}: {processUnknown(weatherElements.TideLevel)}</td>
           <td></td>
         </tr>
       </tbody>

@@ -104,7 +104,6 @@ var Windy = function (params) {
             }
             grid[j] = row;
         }
-
         function interpolate(λ, φ) {
             var i = floorMod(λ - λ0, 360) / Δλ;  // calculate longitude index in wrapped range [0, 360)
             var j = (φ0 - φ) / Δφ;                 // calculate latitude index in direction +90 to -90

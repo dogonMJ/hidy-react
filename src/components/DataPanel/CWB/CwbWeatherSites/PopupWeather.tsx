@@ -22,14 +22,14 @@ const processUnknown = (data: string | undefined) => {
   }
 }
 const PopupTemplate = (props: { weatherData: any, stationId: string }) => {
+  const { t } = useTranslation()
   const weatherData = props.weatherData
   const stationId = props.stationId
   const weatherElements: Station = {}
   weatherData.weatherElement.forEach((element: Element) => {
     weatherElements[element.elementName] = element.elementValue
   })
-  const link = "https://www.cwb.gov.tw/V8/C/W/OBS_Station.html?ID=" + stationId.slice(0, -1)
-  const { t } = useTranslation()
+  const link = "https://www.cwb.gov.tw/V8/" + t('CWBsites.sitelang') + "/W/OBS_Station.html?ID=" + stationId.slice(0, -1)
   return (
     <table>
       <caption>

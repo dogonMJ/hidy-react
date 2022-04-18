@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { useMapEvent } from 'react-leaflet'
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store"
-import { coordInputSlice } from "../../store/slice/mapSlice";
-import { useTranslation } from "react-i18next";
+import { RootState } from "store/store"
+import { coordInputSlice } from "store/slice/mapSlice";
 import { coor } from 'types';
-import CoordinatesInput from "components/CoordinatesInput"
+import CoordinatesInput from "components/MouseCoordinates/CoordinatesInput"
 import FormatCoordinate from "components/FormatCoordinate";
-import PinnedMarker from "components/PinnedMarker";
-import MoveableMarker from "components/MoveableMarker";
+import PinnedMarker from "components/MouseCoordinates/PinnedMarker";
+import MoveableMarker from "components/MouseCoordinates/MoveableMarker";
 import { IconButton, Paper } from '@mui/material';
 import { LocationOff, LocationOn, SyncAlt } from '@mui/icons-material';
 
 const MouseCoordinates = () => {
-  const { t } = useTranslation();
   const dispatch = useDispatch()
   const inputActiveState = useSelector((state: RootState) => state.coordInput.active)
   const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)

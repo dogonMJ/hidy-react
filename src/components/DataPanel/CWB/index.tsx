@@ -4,6 +4,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText, Checkbox, ListItem } 
 import CwbSeaSites from 'components/DataPanel/CWB/CwbSeaSites';
 import CwbWeatherSites from 'components/DataPanel/CWB/CwbWeatherSites';
 import CwbRadar from 'components/DataPanel/CWB/CwbRadar';
+import InfoButton from "components/DataPanel/InfoButton";
 
 const optionList = ['sea', 'weather', 'radar']
 const ToggleCWB = () => {
@@ -42,6 +43,7 @@ const ToggleCWB = () => {
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={t(`CWBsites.${value}`)} />
               </ListItemButton>
+              <InfoButton dataId={value} />
             </ListItem>
           );
         })}

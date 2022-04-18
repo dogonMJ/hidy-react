@@ -1,7 +1,10 @@
-import { useEffect, useRef } from "react";
-import { useMap } from 'react-leaflet'
+import { useEffect, useRef, useState } from "react";
+import { LayerGroup } from 'react-leaflet'
 import L from 'leaflet'
 import wmtsList from './WMTSList.json'
+import TileLayerCanvas from './TileLayerCanvas'
+import ShowData from './ShowData'
+
 /*
 PROCESS NASA GIBS URL
 WMS Capabilities:
@@ -23,53 +26,41 @@ const timeDuration = (time: string, duration: string) => {
   }
 }
 
-const ProcWMTS = (props: Urls) => {
-  const map: L.Map = useMap()
-  let url: string;
-  let time: string;
-  let id: string | null;
+const urls: string[] = []
 
-  if (props.Identifier) {
-    const api = wmtsList[props.Identifier as keyof typeof wmtsList]
-    time = timeDuration(props.Time, api.duration)
-    id = props.Identifier + time
-    url = `${api.url}/${api.identifier}/${api.style}/${time}/${api.tileMatrixSet}/{z}/{y}/{x}.${api.formatExt}`
-  } else {
-    id = null
+const ProcWMTS = (props: Urls) => {
+  const ref = useRef<L.LayerGroup>(null)
+  const [layerId, setLayerId] = useState<number | null>(null)
+  const api = wmtsList[props.Identifier as keyof typeof wmtsList]
+  const time = timeDuration(props.Time, api.duration)
+  const currentUrl = `${api.url}/${api.identifier}/${api.style}/${time}/${api.tileMatrixSet}/{z}/{y}/{x}.${api.formatExt}`
+
+  if (!urls.includes(currentUrl)) {
+    urls.push(currentUrl)
   }
-  const layer = props.cache.getItem(id)
-  const group = useRef<L.LayerGroup>(L.layerGroup().addTo(map))
+
   useEffect(() => {
-    // 3. 觸發side effect，TileLayer執行setUrl method，重繪
-    // setUrl: Updates the layer's URL template and redraws it
-    if (layer) {
-      group.current.eachLayer((layers: any) => {
-        if (layers === layer) {
-          layers.setOpacity(1)
+    if (ref.current) {
+      ref.current.eachLayer((layer: any) => {
+        if (layer._url === currentUrl && ref.current) {
+          setLayerId(ref.current.getLayerId(layer))
+          layer.setOpacity(1)
         } else {
-          layers.setOpacity(0)
+          layer.setOpacity(0)
         }
       })
-    } else {
-      if (group.current.getLayers().length > 0) {
-        group.current.eachLayer((layers: any) => {
-          layers.setOpacity(0)
-        })
-      }
-
-      if (props.Identifier) {
-        const newLayer = L.tileLayer(url)
-        newLayer.addTo(group.current)
-        props.cache.setItem(id, newLayer)
-      }
     }
   });
 
-  // 1.更改url
   return (
     <>
+      <LayerGroup ref={ref}>
+        {urls.map((url) => {
+          return < TileLayerCanvas key={url} url={url} opacity={0} />
+        })}
+      </LayerGroup>
+      <ShowData layergroup={ref.current} layerId={layerId} identifier={props.Identifier} />
     </>
   )
 }
-
 export default ProcWMTS

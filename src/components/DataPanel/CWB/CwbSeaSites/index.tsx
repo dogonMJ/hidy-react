@@ -18,16 +18,16 @@ interface Station {
   [key: string]: string
 }
 interface StationObsTime {
-  dataTime: string
+  DateTime: string
 }
 interface SiteData {
-  station: Station
-  stationObsTimes: {
-    stationObsTime: StationObsTime[]
+  Station: Station
+  StationObsTimes: {
+    StationObsTime: StationObsTime[]
   }
 }
 interface SiteInfo {
-  station: Station
+  Station: Station
 }
 
 const icon = new L.divIcon({
@@ -47,12 +47,12 @@ const CwbSeaSites = () => {
       .then((response) => response.json())
       .then((data) => {
         const weatherData = {} as DataArray;
-        data.records.seaSurfaceObs.location.forEach((location: SiteData) => {
-          const { stationID } = location.station;
-          const stationData = location.stationObsTimes.stationObsTime;
-          const dataTime = stationData.map((stationObsTime: StationObsTime) => new Date(stationObsTime.dataTime).getTime());
+        data.Records.SeaSurfaceObs.Location.forEach((Location: SiteData) => {
+          const { StationID } = Location.Station;
+          const stationData = Location.StationObsTimes.StationObsTime;
+          const dataTime = stationData.map((StationObsTime: StationObsTime) => new Date(StationObsTime.DateTime).getTime());
           const idxLatestTime = dataTime.indexOf(Math.max(...dataTime)); // 取最近時間點資料
-          weatherData[stationID] = stationData[idxLatestTime];
+          weatherData[StationID] = stationData[idxLatestTime];
         })
         return weatherData
       })
@@ -63,14 +63,14 @@ const CwbSeaSites = () => {
       .then((response) => response.json())
       .then((data) => {
         const stationInfo = {} as DataArray;
-        data.cwbdata.resources.resource.data.seaSurfaceObs.location.forEach((location: SiteInfo) => {
-          const { stationID, stationLatitude, stationLongitude, stationName, stationNameEN } = location.station;
-          stationInfo[stationID] = {
-            stationID,
-            stationLatitude,
-            stationLongitude,
-            stationName,
-            stationNameEN,
+        data.cwbdata.Resources.Resource.Data.SeaSurfaceObs.Location.forEach((location: SiteInfo) => {
+          const { StationID, StationLatitude, StationLongitude, StationName, StationNameEN } = location.Station;
+          stationInfo[StationID] = {
+            StationID,
+            StationLatitude,
+            StationLongitude,
+            StationName,
+            StationNameEN,
           };
         })
         return stationInfo
@@ -94,7 +94,7 @@ const CwbSeaSites = () => {
       <MarkerClusterGroup>
         {
           Object.values(weatherElement.siteInfo).map((station: any, idx: number) =>
-            <Marker key={idx} position={[Number(station.stationLatitude), Number(station.stationLongitude)]} icon={icon}>
+            <Marker key={idx} position={[Number(station.StationLatitude), Number(station.StationLongitude)]} icon={icon}>
               <Popup >
                 <PopupTemplate weatherData={weatherElement.siteData} station={station} />
               </Popup>

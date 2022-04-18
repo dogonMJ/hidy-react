@@ -12,11 +12,12 @@ import MouseCoordinates from "components/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
 import SwitchLang from 'components/SwitchLang';
 import DataPanel from "components/DataPanel";
-import AnimatedLayers from "components/DataPanel/AnimatedCurrents/AnimatedLayers";
+import LayerLegend from 'components/LayerLegend';
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
 
+// import Ano from 'components/DataPanel/APIlayers/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
 const addLeafletMeasureControl = (map: L.Map) => {
@@ -46,7 +47,6 @@ const LeafletMap = () => {
   const dispatch = useDispatch()
   const d = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  const identifier = useSelector((state: RootState) => state.coordInput.animateIdent);
   return (
     <>
       <Flatpickr
@@ -62,6 +62,8 @@ const LeafletMap = () => {
           weekNumbers: true,
         }}
       />
+      {/* <img src={Ano} alt="legend" style={{ position: 'absolute', zIndex: 1000, bottom: 25, left: 5, backgroundColor: 'rgba(255,255,255,0.7)' }} /> */}
+      <LayerLegend />
       <MapContainer
         id='mapContainer'
         className='mapContainer'
@@ -70,10 +72,11 @@ const LeafletMap = () => {
         minZoom={2}
         maxZoom={18}
         zoomControl={false}
+        preferCanvas={true}
+        renderer={L.canvas()}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => addLeafletMeasureControl(map)}
       >
-        {identifier !== "close" && <AnimatedLayers indetifier={identifier} />}
         <MyBaseLayers />
         <ZoomControl position="topright" />
         <ScaleControl imperial={false} />

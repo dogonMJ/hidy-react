@@ -18,6 +18,7 @@ export interface inputstate {
   latlonformat: string
   datetime: string
   animateIdent: string
+  layerIdent: string
 }
 export const coordInputSlice = createSlice({
   name: "coordInput",
@@ -29,6 +30,7 @@ export const coordInputSlice = createSlice({
     latlonformat: 'latlon-dd',
     datetime: d.toISOString(),
     animateIdent: "close",
+    layerIdent: "close"
   } as inputstate,
   reducers: {
     switchActive: (state, action: PayloadAction<boolean>) => {
@@ -52,5 +54,8 @@ export const coordInputSlice = createSlice({
     animateIdentifier: (state, action: PayloadAction<string>) => {
       state.animateIdent = action.payload
     },
-  },
+    layerIdentifier: (state, action: PayloadAction<string>) => {
+      state.layerIdent = action.payload
+    },
+  }
 });

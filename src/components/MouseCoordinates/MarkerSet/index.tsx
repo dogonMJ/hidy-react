@@ -1,7 +1,7 @@
 import L from "leaflet";
 import { Marker, Popup } from 'react-leaflet'
 import FormatCoordinate from 'components/FormatCoordinate'
-import { RootState } from "../../store/store"
+import { RootState } from "store/store"
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button, Stack } from '@mui/material';

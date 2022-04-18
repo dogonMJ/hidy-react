@@ -54,7 +54,7 @@ const DataPanel = () => {
         <ListItemIcon>
           B
         </ListItemIcon>
-        <ListItemText primary={t('CWBsites.cwb')} />
+        <ListItemText primary={t('CWBsites.cwbdata')} />
         {openCwb ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={openCwb} timeout="auto">

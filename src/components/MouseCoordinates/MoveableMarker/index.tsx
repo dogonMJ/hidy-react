@@ -1,5 +1,5 @@
 import { coor } from 'types';
-import MarkerSet from "components/MarkerSet";
+import MarkerSet from "components/MouseCoordinates/MarkerSet";
 
 const MoveableMarker = (props: { position: coor, centerLon: number }) => {
   const markerLat = props.position.lat

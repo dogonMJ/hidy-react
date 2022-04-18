@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store"
-import MarkerSet from "components/MarkerSet"
+import { RootState } from "store/store"
+import MarkerSet from "components/MouseCoordinates/MarkerSet"
 import { coordInputSlice } from "store/slice/mapSlice";
 
 const PinnedMarker = () => {

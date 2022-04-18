@@ -73,3 +73,11 @@ input {
   width:45px;
   height:25px;
 }
+
+.infoMark {
+  transform: rotate(180deg);
+}
+
+.infoButton {
+  white-space: pre-line;
+}

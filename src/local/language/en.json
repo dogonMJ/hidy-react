@@ -33,9 +33,12 @@
   "remove": "Remove",
   "dataPanel": "Data Layers",
   "CWBsites": {
-    "cwb": "Central Weather Bureau Data",
-    "sea": "Sea Surface Condition",
-    "weather": "Current Conditions",
+    "cwbdata": "Central Weather Bureau Data",
+    "cwb": "Central Weather Bureau",
+    "cwbopendata": "Central Weather Bureau Open Weather Data",
+    "sitelang": "E",
+    "sea": "Current Sea Surface Condition",
+    "weather": "Current Weather Conditions",
     "radar": "Radar",
     "airtemp": "Air Temperature",
     "seatemp": "Sea Temperature",
@@ -59,16 +62,36 @@
   },
   "APIlayers": {
     "api": "Satellite Data",
-    "": "Close",
+    "close": "Close",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "Sea Surface Temperature",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "Sea Surface Temperature Anomalies",
-    "MODIS_Aqua_CorrectedReflectance_TrueColor": "TrueColor",
+    "MODIS_Aqua_CorrectedReflectance_TrueColor": "True Color",
     "Himawari_AHI_Band3_Red_Visible_1km": "Red Visible"
   },
   "Animated": {
     "animated": "Animated",
-    "close": "close",
+    "close": "Close",
     "msla": "Surface Geostrophic Sea Water Velocity Assuming Sea Level For Geoid",
-    "madt": "Surface Geostrophic Sea Water Velocity"
+    "madt": "Surface Geostrophic Sea Water Velocity",
+    "info": "Using 0-day delay preliminary map product, NOT final map product."
+  },
+  "DataInfo": {
+    "close": "Close Layers",
+    "source": "Data Source",
+    "productID": "Product ID",
+    "spatialRes": "Spatial Resolution",
+    "temporalRes": "Temporal Resolution",
+    "temporalRange": "Temporal Range",
+    "updateFreq": "Update Frequency",
+    "timezone": "Time Zone",
+    "others": "Description",
+    "more": "More Information",
+    "daily": "Daily",
+    "hourly": "Hourly",
+    "instant": "Instantaneous",
+    "hr": "hr",
+    "min": "min",
+    "m": "m",
+    "km": "km"
   }
 }
