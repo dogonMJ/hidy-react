@@ -13,7 +13,6 @@ const AnimatedCurrents = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const identifier = useSelector((state: RootState) => state.coordInput.animateIdent);
-
   const handleToggle = (value: string) => () => {
     dispatch(coordInputSlice.actions.animateIdentifier(value))
   };

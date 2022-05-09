@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/store"
 import { coordInputSlice } from "store/slice/mapSlice";
 import { List, ListItemButton, ListItemText, RadioGroup, ListItem, FormControlLabel, Radio } from '@mui/material';
-import ProcWMTS from './ProcWMTS'
+import ProcWMS from './ProcWMS'
 import InfoButton from "components/DataPanel/InfoButton";
 
 const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature",
-  "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor", "Himawari_AHI_Band3_Red_Visible_1km"]
+  "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor", "sla", "adt", "CHL"]
 const APILayers = (props: { cache: any }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -38,7 +38,8 @@ const APILayers = (props: { cache: any }) => {
                     value={value}
                     control={<Radio />}
                     label=""
-                    checked={identifier === value} />
+                    checked={identifier === value}
+                  />
                   <ListItemText id={labelId} primary={t(`APIlayers.${value}`)} />
                 </ListItemButton>
                 <InfoButton dataId={value} />
@@ -49,7 +50,7 @@ const APILayers = (props: { cache: any }) => {
       </List>
       {
         identifier !== "close" &&
-        <ProcWMTS
+        <ProcWMS
           Identifier={identifier}
           Time={datetime}
           cache={cache}

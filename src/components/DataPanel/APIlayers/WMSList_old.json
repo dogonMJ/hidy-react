@@ -1,0 +1,56 @@
+{
+  "dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt": {
+    "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt?",
+    "layers": "CHL",
+    "format": "image/png",
+    "request": "GetMap",
+    "styles": "boxfill/occam",
+    "transparent": true,
+    "duration": "P1D"
+  },
+  "GHRSST_L4_MUR_Sea_Surface_Temperature": {
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?",
+    "layers": "GHRSST_L4_MUR_Sea_Surface_Temperature",
+    "format": "image/png",
+    "request": "GetMap",
+    "styles": "default",
+    "transparent": true,
+    "duration": "P1D"
+  },
+  "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": {
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?",
+    "layers": "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
+    "format": "image/png",
+    "request": "GetMap",
+    "styles": "default",
+    "transparent": true,
+    "duration": "P1D"
+  },
+  "MODIS_Aqua_CorrectedReflectance_TrueColor": {
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?",
+    "layers": "MODIS_Aqua_CorrectedReflectance_TrueColor",
+    "format": "image/png",
+    "request": "GetMap",
+    "styles": "default",
+    "transparent": true,
+    "duration": "P1D"
+  },
+  "Himawari_AHI_Band13_Clean_Infrared": {
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?",
+    "layers": "Himawari_AHI_Band13_Clean_Infrared",
+    "format": "image/png",
+    "request": "GetMap",
+    "styles": "default",
+    "transparent": true,
+    "duration": "PT10M"
+  },
+  "close": {
+    "url": "",
+    "layers": "",
+    "format": "",
+    "request": "",
+    "styles": "",
+    "transparent": true,
+    "duration": ""
+  }
+}

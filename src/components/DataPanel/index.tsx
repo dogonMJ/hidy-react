@@ -5,6 +5,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import ToggleCWB from 'components/DataPanel/CWB';
 import APILayers from 'components/DataPanel/APIlayers'
 import AnimatedCurrents from 'components/DataPanel/AnimatedCurrents';
+import SatelliteData from 'components/DataPanel/SatelliteData';
 // @ts-ignore
 import Cache from 'cachai';
 const cache = new Cache(400)
@@ -14,6 +15,7 @@ const DataPanel = () => {
   const [openApi, setOpenApi] = useState(false);
   const [openCwb, setOpenCwb] = useState(false);
   const [openCur, setOpenCur] = useState(false);
+  const [openSat, setOpenSat] = useState(false);
 
   const handleClick = (value: string) => () => {
     switch (value) {
@@ -26,11 +28,14 @@ const DataPanel = () => {
       case 'Cur':
         setOpenCur(!openCur);
         break
+      case 'Sat':
+        setOpenSat(!openSat);
+        break
     }
   };
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', zIndex: 1000 }}
+      sx={{ width: '100%', maxWidth: 360, maxHeight: '85%', bgcolor: 'background.paper', zIndex: 1000, overflow: 'auto' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -70,6 +75,17 @@ const DataPanel = () => {
       </ListItemButton>
       <Collapse in={openCur} timeout="auto">
         <AnimatedCurrents />
+      </Collapse>
+
+      <ListItemButton onClick={handleClick('Sat')}>
+        <ListItemIcon>
+          D
+        </ListItemIcon>
+        <ListItemText primary={t('CWBsites.cwbdata')} />
+        {openSat ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={openSat} timeout="auto">
+        <SatelliteData />
       </Collapse>
     </List>
   )

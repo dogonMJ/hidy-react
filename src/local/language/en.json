@@ -66,7 +66,13 @@
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "Sea Surface Temperature",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "Sea Surface Temperature Anomalies",
     "MODIS_Aqua_CorrectedReflectance_TrueColor": "True Color",
-    "Himawari_AHI_Band3_Red_Visible_1km": "Red Visible"
+    "Himawari_AHI_Band3_Red_Visible_1km": "Red Visible",
+    "sla": "Sea surface height above sea level",
+    "slaOthers": "Altimeter satellite gridded Sea Level Anomalies (SLA, i.e. sea surface height above sea level) computed with respect to a twenty-year (1993, 2012) mean.\nThe gridded SLA is estimated by Optimal Interpolation, merging the measurement from the different altimeter missions available.",
+    "adt": "Sea surface height above geoid",
+    "adtOthers": "The Absolute Dynamic Topography (ADT, i.e. sea surface height above geoid) is the instantaneous height above the Geoid.\nADT products were derived from SLA data.",
+    "CHL": "Ocean chlorophyll-a mass concentration (NRT)",
+    "chlOthers": "Products were interpolated based on a multi sensors/algorithms approach to provide the best estimate.\nThis NRT product provided one day after satellite acquisition."
   },
   "Animated": {
     "animated": "Animated",

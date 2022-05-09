@@ -15,7 +15,7 @@ const InfoList = (props: { dataId: string }) => {
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" rel="noreferrer">Global Imagery Browse Services (GIBS)</a><br />
-          {t('DataInfo.productID')}: GHRSST_L4_MUR_Sea_Surface_Temperature<br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature</a><br />
           {t('DataInfo.spatialRes')}: 1 {t('DataInfo.km')}<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.temporalRange')}: 2002-06-01 ~ <br />
@@ -30,7 +30,7 @@ const InfoList = (props: { dataId: string }) => {
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" rel="noreferrer">Global Imagery Browse Services (GIBS)</a><br />
-          {t('DataInfo.productID')}: GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies<br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature</a><br />
           {t('DataInfo.spatialRes')}: 1 {t('DataInfo.km')}<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.temporalRange')}: 2002-07-23 ~ <br />
@@ -45,7 +45,7 @@ const InfoList = (props: { dataId: string }) => {
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" rel="noreferrer">Global Imagery Browse Services (GIBS)</a><br />
-          {t('DataInfo.productID')}: MODIS_Aqua_CorrectedReflectance_TrueColor<br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature</a><br />
           {t('DataInfo.spatialRes')}: 250 {t('DataInfo.m')}<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.temporalRange')}: 2002-07-03 ~ <br />
@@ -53,6 +53,48 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: <br />
           <i>We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS),</i><br />
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
+        </Typography>
+      )
+    case 'sla':
+      return (
+        <Typography sx={{ p: 2 }}>
+          <b>{t(`APIlayers.${props.dataId}`)}</b><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00149" rel="noreferrer">SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046</a><br />
+          {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
+          {t('DataInfo.temporalRange')}: 2019-12-01 ~ <br />
+          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
+          {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 11:30 (UTC+8)<br />
+          {t('DataInfo.others')}: <br />
+          <span style={{ whiteSpace: 'pre-wrap' }}>{t('APIlayers.slaOthers')}</span>
+        </Typography >
+      )
+    case 'adt':
+      return (
+        <Typography sx={{ p: 2 }}>
+          <b>{t(`APIlayers.${props.dataId}`)}</b><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00149" rel="noreferrer">SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046</a><br />
+          {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
+          {t('DataInfo.temporalRange')}: 2019-12-01 ~ <br />
+          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
+          {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 11:30 (UTC+8)<br />
+          {t('DataInfo.others')}: <br />
+          <span style={{ whiteSpace: 'pre-wrap' }}>{t('APIlayers.adtOthers')}</span>
+        </Typography>
+      )
+    case 'chl':
+      return (
+        <Typography sx={{ p: 2 }}>
+          <b>{t(`APIlayers.${props.dataId}`)}</b><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00099" rel="noreferrer">OCEANCOLOUR_GLO_CHL_L4_NRT_OBSERVATIONS_009_033</a><br />
+          {t('DataInfo.spatialRes')}: 4{t('DataInfo.km')} × 4{t('DataInfo.km')}<br />
+          {t('DataInfo.temporalRange')}: 2021-07-01 ~ <br />
+          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
+          {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 20:00 (UTC+8)<br />
+          {t('DataInfo.others')}: <br />
+          <span style={{ whiteSpace: 'pre-wrap' }}>{t('APIlayers.chlOthers')}</span>
         </Typography>
       )
     case 'Himawari_AHI_Band3_Red_Visible_1km':
@@ -76,7 +118,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00149" rel="noreferrer">SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046</a><br />
           {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
-          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC), {t('DataInfo.instant')}<br />
+          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 10:00 (UTC+8)<br />
           {t('DataInfo.others')}: <br />
           <a target="_blank" href="https://catalogue.marine.copernicus.eu/documents/PUM/CMEMS-SL-PUM-008-032-068.pdf" rel="noreferrer">{t('Animated.info')}</a><br />
@@ -92,7 +134,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00149" rel="noreferrer">SEALEVEL_GLO_PHY_L4_NRT_OBSERVATIONS_008_046</a><br />
           {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
-          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC), {t('DataInfo.instant')}<br />
+          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 10:00 (UTC+8)<br />
           {t('DataInfo.others')}: <br />
           <a target="_blank" href="https://catalogue.marine.copernicus.eu/documents/PUM/CMEMS-SL-PUM-008-032-068.pdf" rel="noreferrer">{t('Animated.info')}</a><br />

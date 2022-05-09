@@ -6,11 +6,10 @@ import { createLayerComponent } from "@react-leaflet/core";
 import L from "leaflet";
 //@ts-ignore
 import "tilelayer-canvas";
-
+import "./wmslayer-canvas"
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer
-  const instance = layer.canvas(props.url, { ...props });
-
+  const instance = (props.type === 'wmts') ? layer.canvas(props.url, { ...props.params }) : layer.wms.canvas2D(props.url, { ...props.params });
   return { instance, context };
 };
 
@@ -28,5 +27,4 @@ const updateLayer = (instance: any, props: any, prevProps: any) => {
 };
 
 const TilelayerCanvas = createLayerComponent(createLayer, updateLayer);
-
 export default TilelayerCanvas;

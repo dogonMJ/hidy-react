@@ -37,3 +37,21 @@ const InfoButton = (props: { dataId: string }) => {
 }
 
 export default InfoButton
+/*
+useEffect(() => {
+  const csw = 'https://cmems-catalog-ro.cls.fr/geonetwork/srv/eng/csw-MYOCEAN-CORE-PRODUCTS?service=CSW&request=GetRecordById&version=2.0.2&outputSchema=http://www.isotc211.org/2005/gmd&ElementSetName=full&id=42182941-ac81-4090-9761-f650f5583884'
+  const fetchData = async () => {
+    const result = await fetch(csw)
+      .then((response) => response.text())
+      .then((textResponse) => {
+        const DOMParse = new DOMParser();
+        const xmlDoc = DOMParse.parseFromString(textResponse, 'text/xml');
+        return xmlDoc
+      })
+    const zzz = result.getElementsByTagName("gco:DateTime")[0].innerHTML
+    console.log()
+    setData(zzz);
+  };
+  fetchData();
+}, [])
+*/

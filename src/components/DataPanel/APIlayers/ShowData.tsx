@@ -1,5 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react"
 import { useMap, useMapEvents } from 'react-leaflet'
+import { useSelector } from "react-redux"
+import { RootState } from "store/store"
 import L from 'leaflet'
 import { coor } from 'types';
 import DataToolTip from "components/DataToolTip"
@@ -39,36 +41,79 @@ const getPixelColor = (map: L.Map, latlng: L.LatLng, layerGroup: any, layerId: n
   return imgData
 }
 
+const getNASAData = (map: any, latlng: L.LatLng, layergroup: L.LayerGroup | null, layerId: number | null, colorBar: any, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>) => {
+  const pixelRGB = getPixelColor(map, latlng, layergroup, layerId)
+  const pixelColor = rgbaToHex(pixelRGB[0], pixelRGB[1], pixelRGB[2])
+  const barColor = colorBar.maps[0].entries.colors
+  const bartips = colorBar.maps[0].legend.tooltips
+  const index = barColor.indexOf(pixelColor)
+  setBartip(bartips[index])
+}
+const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, identifier: string, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>) => {
+  const bbox = `${latlng.lat - 0.02},${latlng.lng - 0.02},${latlng.lat + 0.02},${latlng.lng + 0.02}`
+  const imgTime = datetime.split('T')[0] + 'T00:00:00.000Z'
+  const param = new URLSearchParams({
+    request: 'GetFeatureInfo',
+    service: 'WMS',
+    version: '1.3.0',
+    layers: identifier,
+    crs: 'EPSG:4326',
+    styles: "boxfill/rainbow",
+    bbox: bbox, //'13462700.917811524,2504688.542848655,13775786.985667607,2817774.6107047372',
+    width: '101',
+    height: '101',
+    query_layers: identifier,
+    i: '50',
+    j: '50',
+    info_format: 'text/xml',
+    time: imgTime
+  })
+  await fetch(baseUrl + param.toString())
+    .then((response) => response.text())
+    .then((text) => (new window.DOMParser()).parseFromString(text, "text/xml").documentElement)
+    .then((doc) => {
+      return doc.getElementsByTagName('value')[0].childNodes[0].nodeValue
+    })
+    .then((value) => {
+      setBartip(value)
+    })
+}
 const ShowData = (props: { layergroup: L.LayerGroup | null, layerId: number | null, identifier: string }) => {
   const map: any = useMap()
-  const [bartip, setBartip] = useState<string | undefined>()
+  const [bartip, setBartip] = useState<string | undefined | null>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
+  const [unit, setUnit] = useState<string>('')
+  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   let colorBar: any;
-  let unit: string = '';
-  switch (props.identifier) {
-    case "GHRSST_L4_MUR_Sea_Surface_Temperature":
-      colorBar = seaSurfTempColor
-      unit = '\u00B0C'
-      break;
-    case "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies":
-      colorBar = seaSurfTempAnoColor
-      unit = '\u00B0C'
-      break;
-    default: colorBar = null
-      break;
-  }
-
+  let baseUrl: string;
   useMapEvents({
     mousedown: (e) => {
-      if (colorBar) {
-        const pixelRGB = getPixelColor(map, e.latlng, props.layergroup, props.layerId)
-        const pixelColor = rgbaToHex(pixelRGB[0], pixelRGB[1], pixelRGB[2])
-        const barColor = colorBar.maps[0].entries.colors
-        const bartips = colorBar.maps[0].legend.tooltips
-        const index = barColor.indexOf(pixelColor)
-        setBartip(bartips[index])
-      }
       setPosition(e.latlng)
+      switch (props.identifier) {
+        case "GHRSST_L4_MUR_Sea_Surface_Temperature":
+          colorBar = seaSurfTempColor
+          setUnit('\u00B0C')
+          getNASAData(map, e.latlng, props.layergroup, props.layerId, colorBar, setBartip)
+          break;
+        case "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies":
+          colorBar = seaSurfTempAnoColor
+          setUnit('\u00B0C')
+          getNASAData(map, e.latlng, props.layergroup, props.layerId, colorBar, setBartip)
+          break;
+        case 'sla':
+        case 'adt':
+          setUnit('m')
+          baseUrl = "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4?"
+          getWMSData(baseUrl, e.latlng, datetime, props.identifier, setBartip)
+          break
+        case 'CHL':
+          setUnit('mg/m\u00B2')
+          baseUrl = "https://nrt.cmems-du.eu/thredds/wms/dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt?"
+          getWMSData(baseUrl, e.latlng, datetime, props.identifier, setBartip)
+          break
+        default: colorBar = null
+          break;
+      }
     }
   })
 

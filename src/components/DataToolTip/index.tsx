@@ -10,8 +10,17 @@ interface CircleStyles {
   opacity: number
   zIndex?: number
   stroke?: boolean
+  color?: string
+  fillColor?: string
 }
-
+const pointStyle = {
+  stroke: true,
+  color: "black",
+  weight: 1,
+  fill: true,
+  fillColor: "white",
+  fillOpacity: 1
+}
 const DataToolTip = (props: { position: coor, content: any }) => {
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [circleStyle, setCircleStyle] = useState<CircleStyles>({ fill: false, opacity: 0, stroke: false, zIndex: 1000 })
@@ -25,8 +34,9 @@ const DataToolTip = (props: { position: coor, content: any }) => {
     }
   }
   return (
-    <CircleMarker center={props.position} radius={10} eventHandlers={handleCircleMarker} pathOptions={circleStyle}>
-      <Circle center={props.position} />
+
+    <CircleMarker center={props.position} radius={5} eventHandlers={handleCircleMarker} pathOptions={circleStyle}>
+      <CircleMarker center={props.position} radius={3} pathOptions={pointStyle} />
       <Tooltip pane={'tooltipPane'} >
         <FormatCoordinate coords={props.position} format={latlonFormat} /><br />
         <span style={{ whiteSpace: 'pre-line' }}>{props.content}</span>

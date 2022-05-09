@@ -7,7 +7,7 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
-
+import { useEffect, useRef, useState } from "react";
 import MouseCoordinates from "components/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
 import SwitchLang from 'components/SwitchLang';
@@ -17,16 +17,16 @@ import LayerLegend from 'components/LayerLegend';
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
 
-// import Ano from 'components/DataPanel/APIlayers/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
+
 const addLeafletMeasureControl = (map: L.Map) => {
   const measureControl = new L.Control.Measure({
     position: 'topright',
     lineColor: 'blue',
     primaryLengthUnit: 'kilometers',
     secondaryLengthUnit: 'nauticalmiles',
-    primaryAreaUnit: 'acres',
+    primaryAreaUnit: 'sqkilometers',
     secondaryAreaUnit: 'hectares',
     units: {
       nauticalmiles: {
@@ -62,7 +62,6 @@ const LeafletMap = () => {
           weekNumbers: true,
         }}
       />
-      {/* <img src={Ano} alt="legend" style={{ position: 'absolute', zIndex: 1000, bottom: 25, left: 5, backgroundColor: 'rgba(255,255,255,0.7)' }} /> */}
       <LayerLegend />
       <MapContainer
         id='mapContainer'

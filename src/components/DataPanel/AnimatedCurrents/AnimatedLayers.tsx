@@ -36,9 +36,7 @@ const AnimatedLayers = (props: { indetifier: string }) => {
   const identifier = props.indetifier
   const date = changeDate(datetime)
   const url = createUrl(identifier, date)
-  console.log(identifier)
-
-  const loadWindy = (jsonUrl: string) => {
+  const loadWindy = async (jsonUrl: string) => {
     if (windy.current) {
       windy.current.stop()
     }
@@ -47,9 +45,8 @@ const AnimatedLayers = (props: { indetifier: string }) => {
     const mapView = map.getBounds()
     canvas.width = mapSize.x
     canvas.height = mapSize.y
-
     fetch(jsonUrl)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((json) => {
         sessionStorage['jsonData'] = JSON.stringify(json);
         windy.current = Windy({ canvas: canvas, data: json })
@@ -60,6 +57,7 @@ const AnimatedLayers = (props: { indetifier: string }) => {
           [[mapView.getWest(), mapView.getSouth()], [mapView.getEast(), mapView.getNorth()]]
         );
       })
+      .catch((e) => { })
   }
 
   const adjustXY = (boundOrigin: L.Bounds, origin: L.Point) => {
