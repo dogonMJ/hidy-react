@@ -1,5 +1,5 @@
 import React from "react";
-import Map from 'components/Map';
+import Map from 'layout/Map';
 import { store } from 'store/store';
 import { Provider } from 'react-redux';
 import "css/Map.css"

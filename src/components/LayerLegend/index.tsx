@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 
-import SeaTempAno from 'components/DataPanel/APIlayers/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
-import SeaTemp from 'components/DataPanel/APIlayers/colorbar_GHRSST_Sea_Surface_Temperature.png'
+import SeaTempAno from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
+import SeaTemp from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature.png'
 
 const LayerLegend = () => {
   const layerIdentifier = useSelector((state: RootState) => state.coordInput.layerIdent);
