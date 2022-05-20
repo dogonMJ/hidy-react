@@ -20,7 +20,7 @@ const formatLonLat = (degree: number) => {
 
 const toDMS = (degree: number, direction: string) => {
   const dir = sign(degree, direction)
-  const [M4, D, M, S] = [...formatLonLat(degree)]
+  const [, D, M, S] = [...formatLonLat(degree)]
   return `${D}\u00B0${M}'${S}"${dir}`
 }
 const toDM = (degree: number, direction: string) => {

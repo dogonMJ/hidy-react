@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tooltip, CircleMarker, Circle } from 'react-leaflet'
+import { Tooltip, CircleMarker } from 'react-leaflet'
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { coor } from 'types';
@@ -27,12 +27,8 @@ const DataToolTip = (props: { position: coor, content: any }) => {
   const [circleStyle, setCircleStyle] = useState<CircleStyles>({ fill: false, opacity: 0, stroke: false, zIndex: 1000 })
 
   const handleCircleMarker = {
-    mouseover: () => {
-      setCircleStyle({ fill: true, opacity: 1 })
-    },
-    mouseout: () => {
-      setCircleStyle({ fill: false, opacity: 0 })
-    }
+    mouseover: () => setCircleStyle({ fill: true, opacity: 1 }),
+    mouseout: () => setCircleStyle({ fill: false, opacity: 0 })
   }
   return (
     <CircleMarker center={props.position} radius={5} eventHandlers={handleCircleMarker} pathOptions={circleStyle}>

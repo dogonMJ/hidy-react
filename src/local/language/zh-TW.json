@@ -33,7 +33,7 @@
   "remove": "移除",
   "dataPanel": "資料圖層",
   "CWBsites": {
-    "cwbdata": "中央氣象局資料",
+    "title": "中央氣象局資料",
     "cwb": "中央氣象局",
     "cwbopendata": "中央氣象局開放資料平台",
     "sitelang": "C",
@@ -61,7 +61,7 @@
     "BS": "級"
   },
   "APIlayers": {
-    "api": "衛星資料",
+    "title": "衛星資料",
     "close": "關閉",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度異常",
@@ -72,14 +72,18 @@
     "adt": "相對大地水準面海表面高",
     "adtOthers": "相對大地水準面海表面高又稱絕對海水面動力地形(ADT, i.e. sea surface height above geoid)。\nADT衍生自SLA資料。",
     "CHL": "海洋葉綠素-a濃度(近即時)",
-    "chlOthers": "本產品由多種資料及演算法內插估計。\n此近即時資料於獲取衛星資料一日後發布。"
+    "chlOthers": "本產品由多種資料及演算法內插估計。\n此近即時資料於獲取衛星資料一日後發布。",
+    "allOthers": "若圖層未出現可能是來源尚未更新，請查看其他日期或是稍等數小時。"
   },
   "Animated": {
-    "animated": "流速動畫",
+    "title": "流速動畫",
     "close": "關閉",
     "msla": "海表地轉流速(海平面為基準)",
     "madt": "海表地轉流速",
     "info": "使用0日延時初步地圖產品，並非最終地圖產品。"
+  },
+  "SatData": {
+    "title": "再處理衛星資料"
   },
   "DataInfo": {
     "close": "關閉圖層",

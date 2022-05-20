@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState, Fragment } from 'react';
 import { useTranslation } from "react-i18next";
-import { List, ListSubheader, ListItemButton, ListItemIcon, ListItemText, Collapse, } from '@mui/material';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { List, ListSubheader, Collapse, } from '@mui/material';
 import { useMap } from 'react-leaflet';
 import ToggleCWB from 'layout/DataPanel/CWB';
 import APILayers from 'layout/DataPanel/APIlayers'
@@ -14,6 +13,9 @@ const cache = new Cache(400)
 interface OnOff {
   [key: string]: boolean
 }
+interface ItemList {
+  [key: string]: JSX.Element
+}
 const DataPanel = () => {
   const map = useMap()
   const { t } = useTranslation()
@@ -23,34 +25,14 @@ const DataPanel = () => {
   const mouseLeave = () => {
     map.scrollWheelZoom.enable()
   };
-  const [openApi, setOpenApi] = useState(false);
-  const [openCwb, setOpenCwb] = useState(false);
-  const [openCur, setOpenCur] = useState(false);
-  const [openSat, setOpenSat] = useState(false);
-  const itemList = ['Api', 'Cwb', 'Cur', 'Sat']
-  const onOff: OnOff = {
-    Api: false,
-    Cwb: false,
-    Cur: false,
-    Sat: false,
+  const itemList: ItemList = {
+    APIlayers: <APILayers cache={cache} />,
+    CWBsites: <ToggleCWB />,
+    Animated: <AnimatedCurrents />,
+    SatData: <SatelliteData />
   }
+  const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)
-  // const handleClick = (value: string) => () => {
-  //   switch (value) {
-  //     case 'Api':
-  //       setOpenApi(!openApi);
-  //       break
-  //     case 'Cwb':
-  //       setOpenCwb(!openCwb);
-  //       break
-  //     case 'Cur':
-  //       setOpenCur(!openCur);
-  //       break
-  //     case 'Sat':
-  //       setOpenSat(!openSat);
-  //       break
-  //   }
-  // };
   const handleClick = (item: string) => () => {
     openSwitch[item] = !openSwitch[item]
     setOpenSwitch({ ...openSwitch })
@@ -72,61 +54,23 @@ const DataPanel = () => {
       onMouseLeave={mouseLeave}
     >
       {
-        itemList.map((item) => {
+        Object.keys(itemList).map((item) => {
           return (
-            < DataPanelItem
-              key={`item-${item}`}
-              icon={item}
-              handleClick={handleClick}
-              open={openSwitch[item]}
-              item={item} />
+            <Fragment key={`item-${item}`}>
+              < DataPanelItem
+                // icon={item}
+                handleClick={handleClick(item)}
+                open={openSwitch[item]}
+                text={t(`${item}.title`)} />
+              <Collapse
+                in={openSwitch[item]}
+                timeout="auto" >
+                {itemList[item]}
+              </Collapse>
+            </Fragment>
           )
         })
       }
-      {/*
-      <ListItemButton onClick={handleClick('Api')}>
-        <ListItemIcon>
-          A
-        </ListItemIcon>
-        <ListItemText primary={t('APIlayers.api')} />
-        {openApi ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={openApi} timeout="auto" >
-        <APILayers cache={cache} />
-      </Collapse>
-
-      <ListItemButton onClick={handleClick('Cwb')}>
-        <ListItemIcon>
-          B
-        </ListItemIcon>
-        <ListItemText primary={t('CWBsites.cwbdata')} />
-        {openCwb ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={openCwb} timeout="auto">
-        <ToggleCWB />
-      </Collapse>
- 
-      <ListItemButton onClick={handleClick('Cur')}>
-        <ListItemIcon>
-          C
-        </ListItemIcon>
-        <ListItemText primary={t('Animated.animated')} />
-        {openCur ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={openCur} timeout="auto">
-        <AnimatedCurrents />
-      </Collapse>
-
-      <ListItemButton onClick={handleClick('Sat')}>
-        <ListItemIcon>
-          D
-        </ListItemIcon>
-        <ListItemText primary={t('CWBsites.cwbdata')} />
-        {openSat ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={openSat} timeout="auto">
-        <SatelliteData />
-      </Collapse> */}
     </List>
   )
 }

@@ -33,7 +33,7 @@
   "remove": "Remove",
   "dataPanel": "Data Layers",
   "CWBsites": {
-    "cwbdata": "Central Weather Bureau Data",
+    "title": "Central Weather Bureau Data",
     "cwb": "Central Weather Bureau",
     "cwbopendata": "Central Weather Bureau Open Weather Data",
     "sitelang": "E",
@@ -61,7 +61,7 @@
     "BS": "BS"
   },
   "APIlayers": {
-    "api": "Satellite Data",
+    "title": "Satellite Data",
     "close": "Close",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "Sea Surface Temperature",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "Sea Surface Temperature Anomalies",
@@ -72,14 +72,18 @@
     "adt": "Sea surface height above geoid",
     "adtOthers": "The Absolute Dynamic Topography (ADT, i.e. sea surface height above geoid) is the instantaneous height above the Geoid.\nADT products were derived from SLA data.",
     "CHL": "Ocean chlorophyll-a mass concentration (NRT)",
-    "chlOthers": "Products were interpolated based on a multi sensors/algorithms approach to provide the best estimate.\nThis NRT product provided one day after satellite acquisition."
+    "chlOthers": "Products were interpolated based on a multi sensors/algorithms approach to provide the best estimate.\nThis NRT product provided one day after satellite acquisition.",
+    "allOthers": "Due to the schedule, the images might update later by the provider. Please select another date or wait for a few hours."
   },
   "Animated": {
-    "animated": "Animated",
+    "title": "Animated",
     "close": "Close",
     "msla": "Surface Geostrophic Sea Water Velocity Assuming Sea Level For Geoid",
     "madt": "Surface Geostrophic Sea Water Velocity",
     "info": "Using 0-day delay preliminary map product, NOT final map product."
+  },
+  "SatData": {
+    "title": "Reprocessed Satellite Data"
   },
   "DataInfo": {
     "close": "Close Layers",

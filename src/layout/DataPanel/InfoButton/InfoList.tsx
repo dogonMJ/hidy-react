@@ -21,6 +21,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 2002-06-01 ~ <br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.others')}: <br />
+          {t('APIlayers.allOthers')}<br />
           <i>We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS),</i><br />
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
         </Typography>
@@ -36,6 +37,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 2002-07-23 ~ <br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.others')}: <br />
+          {t('APIlayers.allOthers')}<br />
           <i>We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS),</i><br />
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
         </Typography>
@@ -51,6 +53,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 2002-07-03 ~ <br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.others')}: <br />
+          {t('APIlayers.allOthers')}<br />
           <i>We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS),</i><br />
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
         </Typography>
@@ -66,6 +69,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 11:30 (UTC+8)<br />
           {t('DataInfo.others')}: <br />
+          {t('APIlayers.allOthers')}<br />
           <span style={{ whiteSpace: 'pre-wrap' }}>{t('APIlayers.slaOthers')}</span>
         </Typography >
       )
@@ -80,6 +84,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 11:30 (UTC+8)<br />
           {t('DataInfo.others')}: <br />
+          {t('APIlayers.allOthers')}<br />
           <span style={{ whiteSpace: 'pre-wrap' }}>{t('APIlayers.adtOthers')}</span>
         </Typography>
       )
@@ -94,6 +99,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 20:00 (UTC+8)<br />
           {t('DataInfo.others')}: <br />
+          {t('APIlayers.allOthers')}<br />
           <span style={{ whiteSpace: 'pre-wrap' }}>{t('APIlayers.chlOthers')}</span>
         </Typography>
       )
