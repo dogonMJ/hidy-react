@@ -1,6 +1,7 @@
 import { useState, Fragment } from 'react';
 import { useTranslation } from "react-i18next";
-import { List, ListSubheader, Collapse, } from '@mui/material';
+import { List, ListSubheader, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useMap } from 'react-leaflet';
 import ToggleCWB from 'layout/DataPanel/CWB';
 import APILayers from 'layout/DataPanel/APIlayers'
@@ -16,15 +17,20 @@ interface OnOff {
 interface ItemList {
   [key: string]: JSX.Element
 }
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'space-between',
+}));
+
 const DataPanel = () => {
   const map = useMap()
   const { t } = useTranslation()
-  const mouseEnter = () => {
-    map.scrollWheelZoom.disable()
-  };
-  const mouseLeave = () => {
-    map.scrollWheelZoom.enable()
-  };
+
   const itemList: ItemList = {
     APIlayers: <APILayers cache={cache} />,
     CWBsites: <ToggleCWB />,
@@ -33,45 +39,90 @@ const DataPanel = () => {
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)
+  const [open, setOpen] = useState(false);
+
+  const mouseEnter = () => map.scrollWheelZoom.disable()
+  const mouseLeave = () => map.scrollWheelZoom.enable()
+  const handleDrawerOpen = () => setOpen(true)
+  const handleDrawerClose = () => setOpen(false)
   const handleClick = (item: string) => () => {
     openSwitch[item] = !openSwitch[item]
     setOpenSwitch({ ...openSwitch })
   }
 
   return (
-    <List
-      sx={{
-        width: '100%', maxWidth: 360, maxHeight: '85%', bgcolor: 'background.paper', zIndex: 1000, overflow: 'auto',
-      }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
+    <>
+      <Button
+        onClick={handleDrawerOpen}
+        endIcon={<ChevronRight />}
+        variant="contained"
+        sx={{
+          zIndex: 1000,
+          margin: '5px',
+          background: 'white',
+          color: 'black',
+          ":hover": {
+            background: '#e0e0e0',
+          },
+        }}
+      >
+        {t('dataPanel')}
+      </Button>
+      <Drawer
+        anchor='left'
+        open={open}
+        variant="persistent"
+        ModalProps={{ keepMounted: true, }}
+        PaperProps={{
+          sx: {
+            maxHeight: 'calc(100% - 113px)',
+            height: 'auto',
+            marginLeft: '0px'
+          }
+        }}
+      >
+        <DrawerHeader>
           {t('dataPanel')}
-        </ListSubheader>
-      }
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
-    >
-      {
-        Object.keys(itemList).map((item) => {
-          return (
-            <Fragment key={`item-${item}`}>
-              < DataPanelItem
-                // icon={item}
-                handleClick={handleClick(item)}
-                open={openSwitch[item]}
-                text={t(`${item}.title`)} />
-              <Collapse
-                in={openSwitch[item]}
-                timeout="auto" >
-                {itemList[item]}
-              </Collapse>
-            </Fragment>
-          )
-        })
-      }
-    </List>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeft />
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List
+          sx={{
+            bgcolor: 'background.paper', overflow: 'auto',
+          }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+          // subheader={
+          //   <ListSubheader component="div" id="nested-list-subheader">
+          //     {t('dataPanel')}
+          //   </ListSubheader>
+          // }
+          onMouseEnter={mouseEnter}
+          onMouseLeave={mouseLeave}
+        >
+          {
+            Object.keys(itemList).map((item) => {
+              return (
+                <Fragment key={`item-${item}`}>
+                  < DataPanelItem
+                    // icon={item}
+                    handleClick={handleClick(item)}
+                    open={openSwitch[item]}
+                    text={t(`${item}.title`)} />
+                  <Collapse
+                    in={openSwitch[item]}
+                    timeout="auto" >
+                    {itemList[item]}
+                  </Collapse>
+                </Fragment>
+              )
+            })
+          }
+        </List>
+      </Drawer>
+    </>
   )
 }
 

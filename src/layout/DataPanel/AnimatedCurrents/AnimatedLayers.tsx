@@ -1,11 +1,15 @@
 import { useMap, useMapEvents } from 'react-leaflet';
 import { useRef, useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
-import { RootState } from "store/store"
-import { coor } from 'types';
 import Windy from './kuo_olmodwindy_color.js'
-import DataToolTip from 'layout/DataToolTip';
+import DataToolTip from 'components/DataToolTip';
 
+interface ToolTip {
+  lat: number | null
+  lng: number | null
+  north: number | null
+  east: number | null
+  composite: string | null
+}
 const createUrl = (indetifier: string, date: string) => {
   return `https://odbgo.oc.ntu.edu.tw/odbargo/static/data/json/${indetifier}/${date}.json`
 }
@@ -20,26 +24,16 @@ const changeDate = (datetime: string) => {
     return datetime.split('T')[0].replace(/\D/g, '')
   }
 }
-interface CurrentSpd {
-  north: number | null
-  east: number | null
-  composite: string | null
-}
-const AnimatedLayers = (props: { indetifier: string }) => {
+
+const AnimatedLayers = (props: { indetifier: string, time: string }) => {
   const canvasRef = useRef<any>(null)
   const windy = useRef<any>()
   const map = useMap()
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  const [left, setLeft] = useState<number>(0)
-  const [top, setTop] = useState<number>(0)
-  const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
-  // const [east, setEast] = useState<number | null>(null)
-  // const [north, setNorth] = useState<number | null>(null)
-  // const [currentSpd, setCurrentSpd] = useState<string | null>(null)
-  const [currentSpd, setCurrentSpd] = useState<CurrentSpd>({ north: null, east: null, composite: null })
+  const [topLeft, setTopLeft] = useState({ top: 0, left: 0 })
+  const [toolTip, setToolTip] = useState<ToolTip>({ lat: null, lng: null, north: null, east: null, composite: null })
 
   const identifier = props.indetifier
-  const date = changeDate(datetime)
+  const date = changeDate(props.time)
   const url = createUrl(identifier, date)
   const loadWindy = async (jsonUrl: string) => {
     if (windy.current) {
@@ -67,14 +61,17 @@ const AnimatedLayers = (props: { indetifier: string }) => {
 
   const adjustXY = (boundOrigin: L.Bounds, origin: L.Point) => {
     if (boundOrigin.min) {
-      setLeft(boundOrigin.min?.x - origin.x)
-      setTop(boundOrigin.min.y - origin.y)
+      setTopLeft({ top: boundOrigin.min.y - origin.y, left: boundOrigin.min?.x - origin.x })
     }
   }
-
   useEffect(() => {
     adjustXY(map.getPixelBounds(), map.getPixelOrigin())
+    console.log('effect1')
+  }, [])
+  useEffect(() => {
+    // adjustXY(map.getPixelBounds(), map.getPixelOrigin())
     loadWindy(url)
+    console.log('effect2')
   }, [url])
 
   useMapEvents({
@@ -97,25 +94,24 @@ const AnimatedLayers = (props: { indetifier: string }) => {
         const east = jsonData[0].data[i] //ugos, ugosa
         const north = jsonData[1].data[i] //vgos, vgosa
         const composite = Math.sqrt(Math.pow(east, 2) + Math.pow(north, 2)).toFixed(2)
-        setCurrentSpd({ north: north, east: east, composite: composite })
+        setToolTip({ lat: e.latlng.lat, lng: e.latlng.lng, north: north, east: east, composite: composite })
       } else {
-        setCurrentSpd({ north: null, east: null, composite: null })
+        setToolTip({ lat: null, lng: null, north: null, east: null, composite: null })
       }
-      setPosition(e.latlng)
     }
   });
 
   return (
     <>
       {
-        currentSpd.east && currentSpd.north && currentSpd.composite &&
+        toolTip.east && toolTip.north && toolTip.composite && toolTip.lat && toolTip.lng &&
         <DataToolTip
-          position={position}
+          position={{ lat: toolTip.lat, lng: toolTip.lng }}
           content={
-            `${currentSpd.composite} m/s \n${currentSpd.east} m/s → \n${currentSpd.north} m/s ↑`
+            `${toolTip.composite} m/s \n${toolTip.east} m/s → \n${toolTip.north} m/s ↑`
           } />
       }
-      <canvas ref={canvasRef} style={{ left: left, top: top }} />
+      <canvas ref={canvasRef} style={{ left: topLeft.left, top: topLeft.top }} />
     </>
   )
 }

@@ -10,9 +10,9 @@ import 'css/Map.css'
 import { useEffect, useRef, useState } from "react";
 import MouseCoordinates from "layout/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
-import SwitchLang from 'components/SwitchLang';
 import DataPanel from "layout/DataPanel";
 import LayerLegend from 'components/LayerLegend';
+import { LanguageControl } from 'components/LanguageControl'
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
@@ -45,7 +45,7 @@ const addLeafletMeasureControl = (map: L.Map) => {
 }
 const LeafletMap = () => {
   const dispatch = useDispatch()
-  const d = new Date()
+  const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   return (
     <>
@@ -55,7 +55,7 @@ const LeafletMap = () => {
         value={Date.parse(datetime)}
         onChange={([datetime]) => dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))}
         options={{
-          maxDate: d,
+          maxDate: timeNow,
           time_24hr: true,
           allowInput: false,
           minuteIncrement: 10,
@@ -77,12 +77,12 @@ const LeafletMap = () => {
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => addLeafletMeasureControl(map)}
       >
+        <LanguageControl position='topright' />
         <MyBaseLayers />
         <ZoomControl position="topright" />
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <DataPanel />
-        <SwitchLang />
       </MapContainer>
     </>
   )

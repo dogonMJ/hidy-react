@@ -11,6 +11,7 @@ const optionList = ["close", "madt", "msla"]
 const AnimatedCurrents = () => {
   const dispatch = useDispatch()
   const identifier = useSelector((state: RootState) => state.coordInput.animateIdent);
+  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const handleToggle = (value: string) => () => {
     dispatch(coordInputSlice.actions.animateIdentifier(value))
   };
@@ -25,7 +26,10 @@ const AnimatedCurrents = () => {
       />
       <RenderIf isTrue={identifier !== 'close'}>
         <Pane name="canvas" style={{ zIndex: 400 }}>
-          <AnimatedLayers indetifier={identifier} />
+          <AnimatedLayers
+            indetifier={identifier}
+            time={datetime}
+          />
         </Pane>
       </RenderIf>
     </>

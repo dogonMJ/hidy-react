@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "store/store"
 import L from 'leaflet'
 import { coor } from 'types';
-import DataToolTip from "layout/DataToolTip"
+import DataToolTip from "components/DataToolTip"
 import seaSurfTempColor from 'assets/jsons/GHRSST_Sea_Surface_Temperature.json'
 import seaSurfTempAnoColor from 'assets/jsons/GHRSST_Sea_Surface_Temperature_Anomalies.json'
 import { RenderIf } from "components/RenderIf/RenderIf"
