@@ -19,6 +19,8 @@ export interface inputstate {
   datetime: string
   animateIdent: string
   layerIdent: string
+  depthMeterValue: number
+  elevations: number[]
 }
 export const coordInputSlice = createSlice({
   name: "coordInput",
@@ -31,6 +33,8 @@ export const coordInputSlice = createSlice({
     datetime: d.toISOString(),
     animateIdent: "close",
     layerIdent: "close",
+    depthMeterValue: 49,
+    elevations: [0]
   } as inputstate,
   reducers: {
     switchActive: (state, action: PayloadAction<boolean>) => {
@@ -56,6 +60,12 @@ export const coordInputSlice = createSlice({
     },
     layerIdentifier: (state, action: PayloadAction<string>) => {
       state.layerIdent = action.payload
+    },
+    depthMeterValue: (state, action: PayloadAction<number>) => {
+      state.depthMeterValue = action.payload
+    },
+    elevations: (state, action: PayloadAction<number[]>) => {
+      state.elevations = action.payload
     },
   }
 });

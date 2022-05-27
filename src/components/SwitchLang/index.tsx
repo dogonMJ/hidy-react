@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import TranslateIcon from '@mui/icons-material/Translate';
 import { useTranslation } from "react-i18next";
-import { Button } from '@mui/material';
 
 const SwitchLang = () => {
   const { i18n, t } = useTranslation();

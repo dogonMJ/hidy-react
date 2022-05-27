@@ -1,12 +1,14 @@
 import { List, RadioGroup, ListItemButton, FormControlLabel, ListItemText, ListItem, Radio } from '@mui/material';
 import InfoButton from "layout/DataPanel/InfoButton";
 import { useTranslation } from "react-i18next";
+
 interface Props {
   identifier: any
   handelClick: any
   group: string
   optionList: string[]
 }
+
 export const DataPanelRadioList = (props: Props) => {
   const { t } = useTranslation()
   const {

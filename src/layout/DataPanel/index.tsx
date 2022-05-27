@@ -1,6 +1,6 @@
 import { useState, Fragment } from 'react';
 import { useTranslation } from "react-i18next";
-import { List, ListSubheader, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
+import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useMap } from 'react-leaflet';
 import ToggleCWB from 'layout/DataPanel/CWB';
@@ -30,7 +30,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const DataPanel = () => {
   const map = useMap()
   const { t } = useTranslation()
-
   const itemList: ItemList = {
     APIlayers: <APILayers cache={cache} />,
     CWBsites: <ToggleCWB />,

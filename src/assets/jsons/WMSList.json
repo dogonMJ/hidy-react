@@ -58,5 +58,15 @@
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous"
+  },
+  "3dinst_thetao": {
+    "type": "wms",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-thetao",
+    "identifier": "thetao",
+    "duration": "P6H",
+    "style": "boxfill/rainbow",
+    "format": "image/png",
+    "transparent": true,
+    "crossOrigin": "anonymous"
   }
 }

@@ -11,9 +11,10 @@ WMS Capabilities:
 https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0
 */
 interface Urls {
-  Identifier: string;
-  Time: string;
-  cache: any;
+  Identifier: string
+  Time: string
+  cache: any
+  elevation: number
 }
 interface Api {
   type: string
@@ -26,6 +27,7 @@ interface Api {
   crossOrigin?: string
   tileMatrixSet?: string
   formatExt?: string
+  elevation?: number
 }
 interface Params {
   key: string
@@ -36,6 +38,7 @@ interface Params {
   format?: Api['format']
   transparent?: Api['transparent']
   time?: string
+  elevation?: number
 }
 interface TileProp {
   url: Api['url']
@@ -43,57 +46,74 @@ interface TileProp {
   type: Api['type']
 }
 
+const roundHour = (hour: string) => {
+  const remainder = Number(hour) % 6
+  return remainder === 0 ? hour : (Number(hour) - remainder).toString().padStart(2, '0')
+}
+
 const timeDuration = (time: string, duration: string) => {
-  if (duration === 'P1D') {
-    return time.split('T')[0]
-  } else if (duration === 'PT10M') {
-    return time.substring(0, 15) + "0:00Z"
-  } else {
-    return time
+  switch (duration) {
+    case 'P1D':
+      return time.split('T')[0]
+    case 'PT10M':
+      return time.substring(0, 15) + "0:00Z"
+    case 'P6H':
+      const date = new Date(time)
+      const hour = date.getHours().toString().padStart(2, '0')
+      const HH = roundHour(hour)
+      return `${time.split('T')[0]}T${HH}`
+    default:
+      return time
   }
 }
 
-const procProps = (api: Api, time: string, key: string): [string, Params] => {
-  let url;
-  let params;
-  if (api.type === 'wmts') {
-    url = `${api.url}/${api.identifier}/${api.style}/${time}/${api.tileMatrixSet}/{z}/{y}/{x}.${api.formatExt}`
-    params = {
+const propsWMTS = (api: Api, time: string, key: string) => {
+  return {
+    type: api.type,
+    url: `${api.url}/${api.identifier}/${api.style}/${time}/${api.tileMatrixSet}/{z}/{y}/{x}.${api.formatExt}`,
+    params: {
       key: key,
       crossOrigin: api.crossOrigin,
       opacity: 0,
-    }
-  } else {
-    url = api.url
-    params = {
+    },
+  }
+}
+const propsWMS = (api: Api, time: string, key: string, elevation: number) => {
+  return {
+    type: api.type,
+    url: api.url,
+    params: {
+      time: time,
       key: key,
+      elevation: elevation,
       crossOrigin: api.crossOrigin,
       layers: api.identifier,
       styles: api.style,
       format: api.format,
-      time: time + 'T00:00:00.000Z',
       transparent: api.transparent,
-    }
+    },
   }
-  return [url, params]
 }
+
+const notTileCached = (tileProps: TileProp[], key: string) => !tileProps.some((tile: TileProp) => tile.params.key === key)
 
 const tileProps: TileProp[] = []
 const ProcWMS = (props: Urls) => {
   const ref = useRef<L.LayerGroup>(null)
   const [layerId, setLayerId] = useState<number | null>(null)
+
   const api: Api = wmsList[props.Identifier as keyof typeof wmsList]
   const time = timeDuration(props.Time, api.duration)
-  const key = api.identifier + time
-  const [currentUrl, params] = procProps(api, time, key)
-  const currentProps: TileProp = {
-    url: currentUrl,
-    params: params,
-    type: api.type
-  }
-
-  if (!tileProps.some((e: TileProp) => e.params.key === key)) {
-    tileProps.push(currentProps)
+  const key = api.identifier + time + props.elevation
+  if (notTileCached(tileProps, key)) {
+    switch (api.type) {
+      case 'wms':
+        tileProps.push(propsWMS(api, time, key, props.elevation))
+        break;
+      case 'wmts':
+        tileProps.push(propsWMTS(api, time, key))
+        break;
+    }
   }
 
   useEffect(() => {
@@ -110,7 +130,6 @@ const ProcWMS = (props: Urls) => {
 
   });
 
-
   return (
     <>
       <LayerGroup ref={ref}>
@@ -118,7 +137,7 @@ const ProcWMS = (props: Urls) => {
           return <TileLayerCanvas key={tileProp.params.key} type={tileProp.type} url={tileProp.url} params={tileProp.params} />
         })}
       </LayerGroup>
-      <ShowData layergroup={ref.current} layerId={layerId} identifier={props.Identifier} />
+      <ShowData layergroup={ref.current} layerId={layerId} identifier={api.identifier} datetime={time} elevation={props.elevation} />
     </>
   )
 }

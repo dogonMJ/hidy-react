@@ -51,9 +51,9 @@ const getNASAData = (map: any, latlng: L.LatLng, layergroup: L.LayerGroup | null
   setBartip(bartips[index])
 }
 
-const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, identifier: string, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>) => {
+const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, identifier: string, elevation: number, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>) => {
   const bbox = `${latlng.lat - 0.02},${latlng.lng - 0.02},${latlng.lat + 0.02},${latlng.lng + 0.02}`
-  const imgTime = datetime.split('T')[0] + 'T00:00:00.000Z'
+  // const imgTime = datetime.split('T')[0] + 'T00:00:00.000Z'
   const param = new URLSearchParams({
     request: 'GetFeatureInfo',
     service: 'WMS',
@@ -68,7 +68,8 @@ const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, i
     i: '50',
     j: '50',
     info_format: 'text/xml',
-    time: imgTime
+    time: datetime,
+    elevation: elevation.toString()
   })
   await fetch(baseUrl + param.toString())
     .then((response) => response.text())
@@ -80,12 +81,12 @@ const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, i
       setBartip(value)
     })
 }
-const ShowData = (props: { layergroup: L.LayerGroup | null, layerId: number | null, identifier: string }) => {
+const ShowData = (props: { layergroup: L.LayerGroup | null, layerId: number | null, identifier: string, datetime: string, elevation: number }) => {
   const map: any = useMap()
   const [bartip, setBartip] = useState<string | undefined | null>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [unit, setUnit] = useState<string>('')
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  // const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   let colorBar: any;
   let baseUrl: string;
   useMapEvents({
@@ -106,15 +107,21 @@ const ShowData = (props: { layergroup: L.LayerGroup | null, layerId: number | nu
         case 'adt':
           setUnit('m')
           baseUrl = "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4?"
-          getWMSData(baseUrl, e.latlng, datetime, props.identifier, setBartip)
+          getWMSData(baseUrl, e.latlng, props.datetime, props.identifier, props.elevation, setBartip)
           break
         case 'CHL':
           setUnit('mg/m\u00B2')
           baseUrl = "https://nrt.cmems-du.eu/thredds/wms/dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt?"
-          getWMSData(baseUrl, e.latlng, datetime, props.identifier, setBartip)
+          getWMSData(baseUrl, e.latlng, props.datetime, props.identifier, props.elevation, setBartip)
+          break
+        case 'thetao':
+          setUnit('\u00B0C')
+          baseUrl = "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-thetao?"
+          getWMSData(baseUrl, e.latlng, props.datetime, props.identifier, props.elevation, setBartip)
           break
         default: colorBar = null
           break;
+
       }
     }
   })

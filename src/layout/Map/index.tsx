@@ -7,12 +7,14 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import MouseCoordinates from "layout/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
 import DataPanel from "layout/DataPanel";
 import LayerLegend from 'components/LayerLegend';
 import { LanguageControl } from 'components/LanguageControl'
+import { DepthMeter } from 'components/DepthMeter';
+import { RenderIf } from 'components/RenderIf/RenderIf';
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
@@ -43,10 +45,15 @@ const addLeafletMeasureControl = (map: L.Map) => {
   });
   measureControl.addTo(map);
 }
+const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
 const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const layerIdentifier = useSelector((state: RootState) => state.coordInput.layerIdent);
+  const memoDepthMeter = useMemo(() => {
+    return <DepthMeter />
+  }, [])
   return (
     <>
       <Flatpickr
@@ -83,7 +90,12 @@ const LeafletMap = () => {
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <DataPanel />
+        <RenderIf isTrue={is3D(layerIdentifier)}>
+          {/* <DepthMeter /> */}
+          {memoDepthMeter}
+        </RenderIf>
       </MapContainer>
+
     </>
   )
 }
