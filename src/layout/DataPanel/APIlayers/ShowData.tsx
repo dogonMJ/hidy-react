@@ -1,14 +1,19 @@
 import React, { useState } from "react"
 import { useMap, useMapEvents } from 'react-leaflet'
-import { useSelector } from "react-redux"
-import { RootState } from "store/store"
 import L from 'leaflet'
 import { coor } from 'types';
 import DataToolTip from "components/DataToolTip"
 import seaSurfTempColor from 'assets/jsons/GHRSST_Sea_Surface_Temperature.json'
 import seaSurfTempAnoColor from 'assets/jsons/GHRSST_Sea_Surface_Temperature_Anomalies.json'
-import { RenderIf } from "components/RenderIf/RenderIf"
-
+import { Api } from 'types'
+import { NasaColors } from 'types/typeColorBars'
+interface ColorBars {
+  [key: string]: NasaColors
+}
+const colorBars: ColorBars = {
+  "seaSurfTempAnoColor": seaSurfTempAnoColor,
+  "seaSurfTempColor": seaSurfTempColor
+}
 const getTileXYZ = (lat: number, lon: number, zoom: number) => {
   const xtile = Math.floor((lon + 180) / 360 * (1 << zoom));
   const ytile = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * (1 << zoom));
@@ -42,18 +47,23 @@ const getPixelColor = (map: L.Map, latlng: L.LatLng, layerGroup: any, layerId: n
 }
 
 /* NASA GIBS doesn't support GetFeatureInfo */
-const getNASAData = (map: any, latlng: L.LatLng, layergroup: L.LayerGroup | null, layerId: number | null, colorBar: any, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>) => {
+const getNASAData = (map: any, latlng: L.LatLng, layergroup: L.LayerGroup | null, layerId: number | null, colorBar: any) => {
   const pixelRGB = getPixelColor(map, latlng, layergroup, layerId)
   const pixelColor = rgbaToHex(pixelRGB[0], pixelRGB[1], pixelRGB[2])
   const barColor = colorBar.maps[0].entries.colors
   const bartips = colorBar.maps[0].legend.tooltips
   const index = barColor.indexOf(pixelColor)
-  setBartip(bartips[index])
+  return bartips[index]
 }
 
-const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, identifier: string, elevation: number, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>) => {
+const getWMSData = async (
+  baseUrl: string,
+  latlng: L.LatLng,
+  datetime: string,
+  identifier: string,
+  elevation: number, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>,
+) => {
   const bbox = `${latlng.lat - 0.02},${latlng.lng - 0.02},${latlng.lat + 0.02},${latlng.lng + 0.02}`
-  // const imgTime = datetime.split('T')[0] + 'T00:00:00.000Z'
   const param = new URLSearchParams({
     request: 'GetFeatureInfo',
     service: 'WMS',
@@ -71,7 +81,7 @@ const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, i
     time: datetime,
     elevation: elevation.toString()
   })
-  await fetch(baseUrl + param.toString())
+  fetch(`${baseUrl}?${param.toString()}`)
     .then((response) => response.text())
     .then((text) => (new window.DOMParser()).parseFromString(text, "text/xml").documentElement)
     .then((doc) => {
@@ -80,58 +90,51 @@ const getWMSData = async (baseUrl: string, latlng: L.LatLng, datetime: string, i
     .then((value) => {
       setBartip(value)
     })
+    .catch((err) => {
+      console.log(err)
+    })
 }
-const ShowData = (props: { layergroup: L.LayerGroup | null, layerId: number | null, identifier: string, datetime: string, elevation: number }) => {
+const ShowData = (props: {
+  layergroup: L.LayerGroup | null,
+  layerId: number | null,
+  identifier: string,
+  datetime: string,
+  elevation: number,
+  param: Api
+}) => {
   const map: any = useMap()
   const [bartip, setBartip] = useState<string | undefined | null>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [unit, setUnit] = useState<string>('')
-  // const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  let colorBar: any;
-  let baseUrl: string;
   useMapEvents({
     mousedown: (e) => {
       setPosition(e.latlng)
-      switch (props.identifier) {
-        case "GHRSST_L4_MUR_Sea_Surface_Temperature":
-          colorBar = seaSurfTempColor
-          setUnit('\u00B0C')
-          getNASAData(map, e.latlng, props.layergroup, props.layerId, colorBar, setBartip)
+      switch (props.param.type) {
+        case 'wms':
+          setUnit(props.param.unit)
+          getWMSData(props.param.url, e.latlng, props.datetime, props.param.layer, props.elevation, setBartip)
           break;
-        case "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies":
-          colorBar = seaSurfTempAnoColor
-          setUnit('\u00B0C')
-          getNASAData(map, e.latlng, props.layergroup, props.layerId, colorBar, setBartip)
+        case 'wmts':
+          if (props.param.colorBar) {
+            const colorBar = colorBars[props.param.colorBar]
+            const value = getNASAData(map, e.latlng, props.layergroup, props.layerId, colorBar)
+            setBartip(value)
+          } else {
+            setBartip('')
+          }
+          setUnit(props.param.unit)
           break;
-        case 'sla':
-        case 'adt':
-          setUnit('m')
-          baseUrl = "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4?"
-          getWMSData(baseUrl, e.latlng, props.datetime, props.identifier, props.elevation, setBartip)
-          break
-        case 'CHL':
-          setUnit('mg/m\u00B2')
-          baseUrl = "https://nrt.cmems-du.eu/thredds/wms/dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt?"
-          getWMSData(baseUrl, e.latlng, props.datetime, props.identifier, props.elevation, setBartip)
-          break
-        case 'thetao':
-          setUnit('\u00B0C')
-          baseUrl = "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-thetao?"
-          getWMSData(baseUrl, e.latlng, props.datetime, props.identifier, props.elevation, setBartip)
-          break
-        default: colorBar = null
+        default:
+          setUnit('')
+          setBartip('')
           break;
-
       }
     }
   })
 
   return (
     <>
-      <RenderIf isTrue={bartip}>
-        <DataToolTip position={position} content={`${bartip} ${unit}`} />
-      </RenderIf>
-      {/* {bartip && <DataToolTip position={position} content={`${bartip} ${unit}`} />} */}
+      <DataToolTip position={position} content={`${bartip} ${unit}`} />
     </>
   )
 }

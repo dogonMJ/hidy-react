@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { ListItemIcon, IconButton, Popover } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import InfoList from 'layout/DataPanel/InfoButton/InfoList'
+import InfoList from 'components/InfoButton/InfoList'
+
 const InfoButton = (props: { dataId: string }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

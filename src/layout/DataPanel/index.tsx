@@ -7,6 +7,7 @@ import ToggleCWB from 'layout/DataPanel/CWB';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
+import CwbSeaForecast from './Forecast/CwbSeaForecast';
 import { DataPanelItem } from 'components/DataPanelItem';
 // @ts-ignore
 import Cache from 'cachai';
@@ -33,8 +34,9 @@ const DataPanel = () => {
   const itemList: ItemList = {
     APIlayers: <APILayers cache={cache} />,
     CWBsites: <ToggleCWB />,
+    CwbSeaForecast: <CwbSeaForecast />,
     Animated: <AnimatedCurrents />,
-    SatData: <SatelliteData />
+    SatData: <SatelliteData />,
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)
@@ -93,11 +95,6 @@ const DataPanel = () => {
           }}
           component="nav"
           aria-labelledby="nested-list-subheader"
-          // subheader={
-          //   <ListSubheader component="div" id="nested-list-subheader">
-          //     {t('dataPanel')}
-          //   </ListSubheader>
-          // }
           onMouseEnter={mouseEnter}
           onMouseLeave={mouseLeave}
         >
@@ -105,7 +102,7 @@ const DataPanel = () => {
             Object.keys(itemList).map((item) => {
               return (
                 <Fragment key={`item-${item}`}>
-                  < DataPanelItem
+                  <DataPanelItem
                     // icon={item}
                     handleClick={handleClick(item)}
                     open={openSwitch[item]}

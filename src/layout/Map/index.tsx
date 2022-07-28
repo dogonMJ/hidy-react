@@ -15,6 +15,7 @@ import LayerLegend from 'components/LayerLegend';
 import { LanguageControl } from 'components/LanguageControl'
 import { DepthMeter } from 'components/DepthMeter';
 import { RenderIf } from 'components/RenderIf/RenderIf';
+import { CPlan } from 'components/Cplan';
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
@@ -45,15 +46,12 @@ const addLeafletMeasureControl = (map: L.Map) => {
   });
   measureControl.addTo(map);
 }
-const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
+const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? 1 : 0
 const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const layerIdentifier = useSelector((state: RootState) => state.coordInput.layerIdent);
-  const memoDepthMeter = useMemo(() => {
-    return <DepthMeter />
-  }, [])
   return (
     <>
       <Flatpickr
@@ -62,7 +60,7 @@ const LeafletMap = () => {
         value={Date.parse(datetime)}
         onChange={([datetime]) => dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))}
         options={{
-          maxDate: timeNow,
+          maxDate: timeNow.setDate(timeNow.getDate() + 9),
           time_24hr: true,
           allowInput: false,
           minuteIncrement: 10,
@@ -90,10 +88,8 @@ const LeafletMap = () => {
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <DataPanel />
-        <RenderIf isTrue={is3D(layerIdentifier)}>
-          {/* <DepthMeter /> */}
-          {memoDepthMeter}
-        </RenderIf>
+        <CPlan />
+        <DepthMeter opacity={is3D(layerIdentifier)} />
       </MapContainer>
 
     </>

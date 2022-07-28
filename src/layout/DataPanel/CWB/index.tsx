@@ -4,7 +4,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText, Checkbox, ListItem } 
 import CwbSeaSites from 'layout/DataPanel/CWB/CwbSeaSites';
 import CwbWeatherSites from 'layout/DataPanel/CWB/CwbWeatherSites';
 import CwbRadar from 'layout/DataPanel/CWB/CwbRadar';
-import InfoButton from "layout/DataPanel/InfoButton";
+import InfoButton from "components/InfoButton";
 
 const optionList = ['sea', 'weather', 'radar']
 const ToggleCWB = () => {
@@ -51,6 +51,7 @@ const ToggleCWB = () => {
       {checked.includes('sea') && <CwbSeaSites />}
       {checked.includes('weather') && <CwbWeatherSites />}
       {checked.includes('radar') && <CwbRadar />}
+      {/* <WaveForecast /> */}
     </>
   );
 }

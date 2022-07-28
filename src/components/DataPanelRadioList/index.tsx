@@ -1,5 +1,5 @@
 import { List, RadioGroup, ListItemButton, FormControlLabel, ListItemText, ListItem, Radio } from '@mui/material';
-import InfoButton from "layout/DataPanel/InfoButton";
+import InfoButton from "components/InfoButton";
 import { useTranslation } from "react-i18next";
 
 interface Props {

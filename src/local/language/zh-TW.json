@@ -34,7 +34,7 @@
   "remove": "移除",
   "dataPanel": "資料圖層",
   "CWBsites": {
-    "title": "中央氣象局資料",
+    "title": "中央氣象局近即時資料",
     "cwb": "中央氣象局",
     "cwbopendata": "中央氣象局開放資料平台",
     "sitelang": "C",
@@ -62,8 +62,9 @@
     "BS": "級"
   },
   "APIlayers": {
-    "title": "衛星資料",
+    "title": "衛星圖像",
     "close": "關閉",
+    "allOthers": "若圖層未出現可能是伺服器速度或來源尚未更新，請查看其他日期或是稍等幾分鐘。",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
     "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度異常",
     "MODIS_Aqua_CorrectedReflectance_TrueColor": "真實色彩",
@@ -74,7 +75,14 @@
     "adtOthers": "相對大地水準面海表面高又稱絕對海水面動力地形(ADT, i.e. sea surface height above geoid)。\nADT衍生自SLA資料。",
     "CHL": "海洋葉綠素-a濃度(近即時)",
     "chlOthers": "本產品由多種資料及演算法內插估計。\n此近即時資料於獲取衛星資料一日後發布。",
-    "allOthers": "若圖層未出現可能是來源尚未更新，請查看其他日期或是稍等數小時。"
+    "instOthers": "每日更新D-18h到D+48h。",
+    "3dinst_thetao": "海水位溫分析及預報 (+48小時)",
+    "3dinst_so": "海水鹽度分析及預報 (+48小時)",
+    "dailyOthers": "每日更新D-1至D+9預報。\n每週三進行D-14至D-8及D-7至D-1兩階段的數據同化(Data Assimilation)，並於週四更新分析結果。",
+    "bottomT": "海床位溫分析及預報",
+    "mlotst": "混合層厚度分析及預報",
+    "zos": "相對大地水準面海表面高分析及預報",
+    "3dsea_water_velocity": "海水速度分析及預報"
   },
   "Animated": {
     "title": "流速動畫",
@@ -86,10 +94,32 @@
   "SatData": {
     "title": "再處理衛星資料"
   },
+  "CwbSeaForecast": {
+    "title": "中央氣象局數值模式預報",
+    "close": "關閉",
+    "cwbcur": "表面海流",
+    "cwbsst": "海表溫度(\u2103)",
+    "cwbdir": "海表流向",
+    "cwbpsu": "海表鹽度(psu)",
+    "cwbspd": "海表流速(m/s)",
+    "cwbsla": "海表高度(m)",
+    "lat": "資料緯度",
+    "lon": "資料經度",
+    "sst": "表面溫度 (\u2103)",
+    "east": "東向流速 (m/s)",
+    "north": "北向流速 (m/s)",
+    "spd": "流速 (m/s)",
+    "dir": "流向",
+    "ssh": "海面高 (m)",
+    "sal": "海表鹽度 (psu)",
+    "others": "每日14:00(UTC+8)更新後資料範圍為當日00:00(UTC)至第三日00:00(UTC)。\n例如11/15 14:00(UTC+8)更新之資料範圍為11/15 00:00(UTC) ~ 11/18 00:00(UTC)。"
+  },
   "DataInfo": {
     "close": "關閉圖層",
     "source": "資料來源",
     "productID": "產品編號",
+    "dataset": "資料集",
+    "variable": "變數",
     "spatialRes": "空間解析度",
     "temporalRes": "時間解析度",
     "temporalRange": "時間範圍",
@@ -106,6 +136,7 @@
     "m": "公尺",
     "cwbRadar": "中央氣象局雷達回波",
     "cwbOpenData": "中央氣象局資料開放平台",
-    "madtDes": "使用"
+    "madtDes": "使用",
+    "mean": "平均"
   }
 }

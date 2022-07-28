@@ -27,7 +27,7 @@ const SatelliteData = () => {
       <DataPanelRadioList
         identifier={identifier}
         handelClick={handleToggle}
-        group='APIlayers'
+        group='SatelliteData'
         optionList={optionList}
       />
       <RenderIf isTrue={identifier !== 'close'}>

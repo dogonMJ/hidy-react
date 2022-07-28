@@ -4,9 +4,12 @@ import { coordInputSlice } from "store/slice/mapSlice";
 import ProcWMS from './ProcWMS'
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from "components/RenderIf/RenderIf";
+import { Divider, ListSubheader } from "@mui/material";
 
-const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature",
-  "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor", "sla", "adt", "CHL", "3dinst_thetao"]
+
+const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature", "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor",
+  "sla", "adt", "CHL",]
+const optionForecast = ["close", "3dinst_thetao", "3dinst_so", "3dsea_water_velocity", "mlotst", "zos", "bottomT",]
 const APILayers = (props: { cache: any }) => {
   const dispatch = useDispatch()
   const identifier = useSelector((state: RootState) => state.coordInput.layerIdent);
@@ -20,11 +23,24 @@ const APILayers = (props: { cache: any }) => {
   };
   return (
     <>
+      <ListSubheader component="div" id="nested-list-subheader" sx={{ lineHeight: '25px', marginTop: '10px' }}>
+        Latest Image
+      </ListSubheader>
       <DataPanelRadioList
         identifier={identifier}
         handelClick={handleToggle}
         group='APIlayers'
         optionList={optionList}
+      />
+      <Divider variant="middle" />
+      <ListSubheader component="div" id="nested-list-subheader" sx={{ lineHeight: '25px', marginTop: '10px' }}>
+        Model Forecast
+      </ListSubheader>
+      <DataPanelRadioList
+        identifier={identifier}
+        handelClick={handleToggle}
+        group='APIlayers'
+        optionList={optionForecast}
       />
       <RenderIf isTrue={identifier !== "close"}>
         <ProcWMS

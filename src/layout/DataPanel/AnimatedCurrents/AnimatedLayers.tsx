@@ -66,12 +66,10 @@ const AnimatedLayers = (props: { indetifier: string, time: string }) => {
   }
   useEffect(() => {
     adjustXY(map.getPixelBounds(), map.getPixelOrigin())
-    console.log('effect1')
   }, [])
   useEffect(() => {
     // adjustXY(map.getPixelBounds(), map.getPixelOrigin())
     loadWindy(url)
-    console.log('effect2')
   }, [url])
 
   useMapEvents({

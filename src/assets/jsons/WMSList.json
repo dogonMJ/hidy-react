@@ -2,71 +2,135 @@
   "GHRSST_L4_MUR_Sea_Surface_Temperature": {
     "type": "wmts",
     "url": "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best",
-    "identifier": "GHRSST_L4_MUR_Sea_Surface_Temperature",
+    "layer": "GHRSST_L4_MUR_Sea_Surface_Temperature",
     "duration": "P1D",
     "style": "default",
     "tileMatrixSet": "GoogleMapsCompatible_Level7",
     "formatExt": "png",
-    "crossOrigin": "anonymous"
+    "crossOrigin": "anonymous",
+    "unit": "\u00B0C",
+    "colorBar": "seaSurfTempColor"
   },
   "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": {
     "type": "wmts",
     "url": "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best",
-    "identifier": "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
+    "layer": "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
     "duration": "P1D",
     "style": "default",
     "tileMatrixSet": "GoogleMapsCompatible_Level7",
     "formatExt": "png",
-    "crossOrigin": "anonymous"
+    "crossOrigin": "anonymous",
+    "unit": "\u00B0C",
+    "colorBar": "seaSurfTempAnoColor"
   },
   "MODIS_Aqua_CorrectedReflectance_TrueColor": {
     "type": "wmts",
     "url": "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best",
-    "identifier": "MODIS_Aqua_CorrectedReflectance_TrueColor",
+    "layer": "MODIS_Aqua_CorrectedReflectance_TrueColor",
     "duration": "P1D",
     "style": "default",
     "tileMatrixSet": "GoogleMapsCompatible_Level9",
     "formatExt": "jpg",
-    "crossOrigin": "anonymous"
+    "crossOrigin": "anonymous",
+    "unit": " "
   },
   "sla": {
     "type": "wms",
     "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4",
-    "identifier": "sla",
+    "layer": "sla",
     "duration": "P1D",
     "style": "boxfill/rainbow",
     "format": "image/png",
     "transparent": true,
-    "crossOrigin": "anonymous"
+    "crossOrigin": "anonymous",
+    "unit": "m"
   },
   "adt": {
     "type": "wms",
     "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4",
-    "identifier": "adt",
+    "layer": "adt",
     "duration": "P1D",
     "style": "boxfill/rainbow",
     "format": "image/png",
     "transparent": true,
-    "crossOrigin": "anonymous"
+    "crossOrigin": "anonymous",
+    "unit": "m"
   },
   "CHL": {
     "type": "wms",
     "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt",
-    "identifier": "CHL",
+    "layer": "CHL",
     "duration": "P1D",
     "style": "boxfill/rainbow",
     "format": "image/png",
     "transparent": true,
-    "crossOrigin": "anonymous"
+    "crossOrigin": "anonymous",
+    "unit": "mg/m\u00B2"
   },
   "3dinst_thetao": {
     "type": "wms",
     "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-thetao",
-    "identifier": "thetao",
+    "layer": "thetao",
     "duration": "P6H",
+    "style": "boxfill/redblue",
+    "format": "image/png",
+    "transparent": true,
+    "crossOrigin": "anonymous",
+    "unit": "\u00B0C"
+  },
+  "3dinst_so": {
+    "type": "wms",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-so",
+    "layer": "so",
+    "duration": "P6H",
+    "style": "boxfill/occam",
+    "format": "image/png",
+    "transparent": true,
+    "crossOrigin": "anonymous",
+    "unit": "10\u207B\u00B3"
+  },
+  "bottomT": {
+    "type": "wms",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024",
+    "layer": "bottomT",
+    "duration": "P1D12",
+    "style": "boxfill/redblue",
+    "format": "image/png",
+    "transparent": true,
+    "crossOrigin": "anonymous",
+    "unit": "\u00B0C"
+  },
+  "3dsea_water_velocity": {
+    "type": "wms",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024",
+    "layer": "sea_water_velocity",
+    "duration": "P1D12",
+    "style": "boxfill/ferret",
+    "format": "image/png",
+    "transparent": true,
+    "crossOrigin": "anonymous",
+    "unit": "m/s"
+  },
+  "mlotst": {
+    "type": "wms",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024",
+    "layer": "mlotst",
+    "duration": "P1D12",
     "style": "boxfill/rainbow",
     "format": "image/png",
     "transparent": true,
-    "crossOrigin": "anonymous"
+    "crossOrigin": "anonymous",
+    "unit": "m"
+  },
+  "zos": {
+    "type": "wms",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-hourly-t-u-v-ssh",
+    "layer": "zos",
+    "duration": "P1H30",
+    "style": "boxfill/redblue",
+    "format": "image/png",
+    "transparent": true,
+    "crossOrigin": "anonymous",
+    "unit": "m"
   }
 }

@@ -82,3 +82,7 @@ input {
 .infoButton {
   white-space: pre-line;
 }
+
+.CPlanBtn {
+  z-index: 1000;
+}

@@ -28,7 +28,7 @@ const getMarks = (unit: string, valueArray: number[], ticks = [0, -20, -100, -50
   return result
 }
 
-export const DepthMeter = () => {
+export const DepthMeter = (props: { opacity: number }) => {
   const map = useMap()
   const dispatch = useDispatch()
   const elevations = useSelector((state: RootState) => state.coordInput.elevations);
@@ -52,6 +52,7 @@ export const DepthMeter = () => {
         const text = await response.text()
         const xmlDoc = new window.DOMParser().parseFromString(text, "text/xml")
         const elevationList = xmlDoc.getElementsByName('elevation')[0].textContent?.trim().split(',').map(Number).reverse()
+
         if (elevationList) {
           setMarks(getMarks('m', elevationList))
           // setElevations(elevationList)
@@ -66,8 +67,6 @@ export const DepthMeter = () => {
 
   return (
     <Box
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
       sx={{
         // position: 'fixed',
         display: 'flex',
@@ -85,6 +84,8 @@ export const DepthMeter = () => {
       }}
     >
       <Paper
+        onMouseEnter={mouseEnter}
+        onMouseLeave={mouseLeave}
         sx={{
           position: 'relative',
           zIndex: 1000,
@@ -95,6 +96,7 @@ export const DepthMeter = () => {
           top: '170px',
           height: 'calc(70vh - 170px)',
           backgroundColor: isEnter ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.7)',
+          opacity: props.opacity,
         }}>
         <DepthMeterSlider values={elevations} marks={marks} handleChange={handleChange} />
       </Paper>
