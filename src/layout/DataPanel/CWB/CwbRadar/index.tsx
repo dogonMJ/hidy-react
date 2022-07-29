@@ -23,7 +23,7 @@ const CwbRadar = () => {
   }, [index]);
 
   return (
-    <ImageOverlay url={imgUrl} crossOrigin='anonymous' bounds={[[17.75, 115], [29.25, 126.5]]} />
+    <ImageOverlay url={imgUrl} crossOrigin='anonymous' bounds={[[17.75, 115], [29.25, 126.5]]} zIndex={500} />
   )
 }
 

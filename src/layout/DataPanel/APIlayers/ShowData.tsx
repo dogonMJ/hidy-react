@@ -7,6 +7,11 @@ import seaSurfTempColor from 'assets/jsons/GHRSST_Sea_Surface_Temperature.json'
 import seaSurfTempAnoColor from 'assets/jsons/GHRSST_Sea_Surface_Temperature_Anomalies.json'
 import { Api } from 'types'
 import { NasaColors } from 'types/typeColorBars'
+
+interface extendMouseEvent extends MouseEvent {
+  toElement: HTMLElement;
+}
+
 interface ColorBars {
   [key: string]: NasaColors
 }
@@ -109,6 +114,11 @@ const ShowData = (props: {
   useMapEvents({
     mousedown: (e) => {
       setPosition(e.latlng)
+      const originalEvent = e.originalEvent as extendMouseEvent
+      if (originalEvent.toElement.innerHTML === "Close" || originalEvent.toElement.innerHTML === "關閉") {
+        props.param.type = ''
+        // prevent memory leak
+      }
       switch (props.param.type) {
         case 'wms':
           setUnit(props.param.unit)

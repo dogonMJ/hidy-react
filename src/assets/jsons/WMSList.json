@@ -87,7 +87,7 @@
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "10\u207B\u00B3"
+    "unit": "psu"
   },
   "bottomT": {
     "type": "wms",

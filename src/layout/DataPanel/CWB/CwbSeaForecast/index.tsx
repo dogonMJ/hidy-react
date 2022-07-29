@@ -55,15 +55,17 @@ const CwbSeaForecast = () => {
     }
   }, [datetime, identifier, identifier2])
   useEffect(() => {
-    fetch(`https://odbpo.oc.ntu.edu.tw/static/figs/cwbforecast/data_${date}.json`)
-      .then((response) => response.json())
-      .then((json) => {
-        setJsonData(json)
-      })
-      .catch((e) => {
-        setJsonData(null)
-      })
-  }, [datetime])
+    if (identifier !== 'close' || identifier2 !== 'close') {
+      fetch(`https://odbpo.oc.ntu.edu.tw/static/figs/cwbforecast/data_${date}.json`)
+        .then((response) => response.json())
+        .then((json) => {
+          setJsonData(json)
+        })
+        .catch((e) => {
+          setJsonData(null)
+        })
+    }
+  }, [date, identifier, identifier2])
   return (
     <>
       <DataPanelRadioList
@@ -82,10 +84,10 @@ const CwbSeaForecast = () => {
         <ShowCwbForecast data={jsonData} bounds={[[6.95, 109.95], [36.05, 126.05]]} />
       </RenderIf>
       <RenderIf isTrue={identifier2 !== 'close'}>
-        <ImageOverlay ref={ref2} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={300} />
+        <ImageOverlay ref={ref2} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={3} />
       </RenderIf>
       <RenderIf isTrue={identifier !== 'close'}>
-        <ImageOverlay ref={ref} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={200} />
+        <ImageOverlay ref={ref} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={2} />
       </RenderIf>
     </>
   );

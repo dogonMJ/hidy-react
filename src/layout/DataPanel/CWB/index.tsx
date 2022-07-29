@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, Checkbox, ListItem } from '@mui/material';
+import { Divider, ListSubheader } from "@mui/material";
 import CwbSeaSites from 'layout/DataPanel/CWB/CwbSeaSites';
 import CwbWeatherSites from 'layout/DataPanel/CWB/CwbWeatherSites';
 import CwbRadar from 'layout/DataPanel/CWB/CwbRadar';
+import CwbSeaForecast from 'layout/DataPanel/CWB/CwbSeaForecast';
 import InfoButton from "components/InfoButton";
 
 const optionList = ['sea', 'weather', 'radar']
@@ -23,6 +25,10 @@ const ToggleCWB = () => {
   };
   return (
     <>
+      <Divider variant="middle" />
+      <ListSubheader component="div" id="nested-list-subheader" sx={{ lineHeight: '25px', marginTop: '10px' }}>
+        {t('CWBsites.subheader')}
+      </ListSubheader>
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         {optionList.map((value) => {
           const labelId = `checkbox-list-label-${value}`;
@@ -48,10 +54,15 @@ const ToggleCWB = () => {
           );
         })}
       </List>
+      <Divider variant="middle" />
+      <ListSubheader component="div" id="nested-list-subheader" sx={{ lineHeight: '25px', marginTop: '10px' }}>
+        {t('CwbSeaForecast.subheader')}
+      </ListSubheader>
+      <CwbSeaForecast />
+      <Divider variant="middle" />
       {checked.includes('sea') && <CwbSeaSites />}
       {checked.includes('weather') && <CwbWeatherSites />}
       {checked.includes('radar') && <CwbRadar />}
-      {/* <WaveForecast /> */}
     </>
   );
 }

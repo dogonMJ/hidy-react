@@ -7,7 +7,6 @@ import ToggleCWB from 'layout/DataPanel/CWB';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
-import CwbSeaForecast from './Forecast/CwbSeaForecast';
 import { DataPanelItem } from 'components/DataPanelItem';
 // @ts-ignore
 import Cache from 'cachai';
@@ -34,7 +33,6 @@ const DataPanel = () => {
   const itemList: ItemList = {
     APIlayers: <APILayers cache={cache} />,
     CWBsites: <ToggleCWB />,
-    CwbSeaForecast: <CwbSeaForecast />,
     Animated: <AnimatedCurrents />,
     SatData: <SatelliteData />,
   }

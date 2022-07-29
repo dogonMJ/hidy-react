@@ -5,7 +5,7 @@ import wmsList from 'assets/jsons/WMSList.json'
 import { TileLayerCanvas } from './TileLayerCanvas'
 import ShowData from './ShowData'
 import { Api } from 'types'
-
+import { RenderIf } from "components/RenderIf/RenderIf";
 /*
 PROCESS NASA GIBS URL
 WMS Capabilities:
@@ -124,7 +124,6 @@ const ProcWMS = (props: Urls) => {
     const exist = await checkTime(getCapabilities, time)
     return exist
   }
-
   if (noTileCached(tileProps, key)) {
     switch (api.type) {
       case 'wms':
@@ -148,9 +147,11 @@ const ProcWMS = (props: Urls) => {
           layer.setOpacity(0)
         }
       })
+    } else {
+      setTileExist(false)
     }
-    setTileExist(false)
-  });
+
+  }, [key]);
 
   return (
     <>

@@ -18,6 +18,8 @@ import { RenderIf } from 'components/RenderIf/RenderIf';
 import { CPlan } from 'components/Cplan';
 // @ts-ignore
 import 'leaflet-measure/'
+// @ts-ignore
+import "./leaflet.latlng-graticule.js"
 import 'leaflet-measure/dist/leaflet-measure.css';
 
 declare const L: any;
@@ -43,10 +45,28 @@ const addLeafletMeasureControl = (map: L.Map) => {
         decimals: 1
       }
     }
-  });
+  })
   measureControl.addTo(map);
 }
-const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? 1 : 0
+const addGraticule = (map: L.Map) => {
+  const graticule = new L.latlngGraticule({
+    showLabel: true,
+    dashArray: [0, 0],
+    opacity: 0.5,
+    weight: 0.5,
+    font: '12px Rubik',
+    zoomInterval: [
+      { start: 2, end: 3, interval: 30 },
+      { start: 4, end: 4, interval: 10 },
+      { start: 5, end: 6, interval: 5 },
+      { start: 7, end: 7, interval: 2 },
+      { start: 8, end: 9, interval: 1 },
+      { start: 10, end: 11, interval: 0.5 },
+    ]
+  })
+  graticule.addTo(map);
+}
+const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
 const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
@@ -80,7 +100,10 @@ const LeafletMap = () => {
         doubleClickZoom={false}
         renderer={L.canvas()}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
-        whenCreated={(map) => addLeafletMeasureControl(map)}
+        whenCreated={(map) => {
+          addLeafletMeasureControl(map);
+          addGraticule(map)
+        }}
       >
         <LanguageControl position='topright' />
         <MyBaseLayers />
@@ -89,7 +112,9 @@ const LeafletMap = () => {
         <MouseCoordinates />
         <DataPanel />
         <CPlan />
-        <DepthMeter opacity={is3D(layerIdentifier)} />
+        <RenderIf isTrue={is3D(layerIdentifier)}>
+          <DepthMeter opacity={1} />
+        </RenderIf>
       </MapContainer>
 
     </>

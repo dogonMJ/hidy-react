@@ -70,12 +70,12 @@ export const DepthMeter = (props: { opacity: number }) => {
       sx={{
         // position: 'fixed',
         display: 'flex',
-        height: '75%',
+        height: '65%',
         justifyContent: 'right',
         margin: '5px',
         padding: '15px 5px',
         // flexWrap: 'wrap',
-        // zIndex: '1000',
+        // zIndex: 1700,
         // width: '95px',
         // right: '6px',
         // bottom: '8rem',
@@ -88,13 +88,13 @@ export const DepthMeter = (props: { opacity: number }) => {
         onMouseLeave={mouseLeave}
         sx={{
           position: 'relative',
-          zIndex: 1000,
+          zIndex: 1700,
           width: '95px',
           display: 'flex',
           margin: '2px',
           padding: '15px 5px',
-          top: '170px',
-          height: 'calc(70vh - 170px)',
+          top: '250px',
+          height: 'calc(70vh - 200px)',
           backgroundColor: isEnter ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.7)',
           opacity: props.opacity,
         }}>

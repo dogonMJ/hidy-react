@@ -34,7 +34,8 @@
   "remove": "移除",
   "dataPanel": "資料圖層",
   "CWBsites": {
-    "title": "中央氣象局近即時資料",
+    "title": "中央氣象局資料",
+    "subheader": "最新資料",
     "cwb": "中央氣象局",
     "cwbopendata": "中央氣象局開放資料平台",
     "sitelang": "C",
@@ -63,6 +64,8 @@
   },
   "APIlayers": {
     "title": "衛星圖像",
+    "subheader1": "最新圖資",
+    "subheader2": "模式預報",
     "close": "關閉",
     "allOthers": "若圖層未出現可能是伺服器速度或來源尚未更新，請查看其他日期或是稍等幾分鐘。",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
@@ -95,7 +98,7 @@
     "title": "再處理衛星資料"
   },
   "CwbSeaForecast": {
-    "title": "中央氣象局數值模式預報",
+    "subheader": "數值模式預報",
     "close": "關閉",
     "cwbcur": "表面海流",
     "cwbsst": "海表溫度(\u2103)",
@@ -121,6 +124,7 @@
     "dataset": "資料集",
     "variable": "變數",
     "spatialRes": "空間解析度",
+    "spatialRange": "空間範圍",
     "temporalRes": "時間解析度",
     "temporalRange": "時間範圍",
     "updateFreq": "更新頻率",

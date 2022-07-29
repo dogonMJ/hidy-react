@@ -34,7 +34,8 @@
   "remove": "Remove",
   "dataPanel": "Data Layers",
   "CWBsites": {
-    "title": "Central Weather Bureau NRT Data",
+    "title": "Central Weather Bureau Data",
+    "subheader": "Latest Data",
     "cwb": "Central Weather Bureau",
     "cwbopendata": "Central Weather Bureau Open Weather Data",
     "sitelang": "E",
@@ -63,6 +64,8 @@
   },
   "APIlayers": {
     "title": "Satellite Image",
+    "subheader1": "Latest Image",
+    "subheader2": "Model Forecast",
     "close": "Close",
     "allOthers": "Due to the schedule or the server limitation, the images might update later by the provider. Please select another date or wait for a few minutes.",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "Sea Surface Temperature",
@@ -95,7 +98,7 @@
     "title": "Reprocessed Satellite Data"
   },
   "CwbSeaForecast": {
-    "title": "CWB Model Forecast",
+    "subheader": "Model Forecast",
     "close": "Close",
     "cwbcur": "Surface Current",
     "cwbsst": "Sea Surface Temperature (\u2103)",
@@ -121,6 +124,7 @@
     "dataset": "Dataset",
     "variable": "Variable",
     "spatialRes": "Spatial Resolution",
+    "spatialRange": "Spatial Range",
     "temporalRes": "Temporal Resolution",
     "temporalRange": "Temporal Range",
     "updateFreq": "Update Frequency",
