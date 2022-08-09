@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { List, ListItemButton, ListItemIcon, ListItemText, Checkbox, ListItem } from '@mui/material';
-import { Divider, ListSubheader } from "@mui/material";
+import { List, ListItemButton, ListItemIcon, ListItemText, ListItem } from '@mui/material';
+import { Divider, ListSubheader, Switch } from "@mui/material";
 import CwbSeaSites from 'layout/DataPanel/CWB/CwbSeaSites';
 import CwbWeatherSites from 'layout/DataPanel/CWB/CwbWeatherSites';
 import CwbRadar from 'layout/DataPanel/CWB/CwbRadar';
@@ -39,7 +39,7 @@ const ToggleCWB = () => {
             >
               <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                 <ListItemIcon>
-                  <Checkbox
+                  <Switch
                     edge="start"
                     checked={checked.indexOf(value) !== -1}
                     tabIndex={-1}

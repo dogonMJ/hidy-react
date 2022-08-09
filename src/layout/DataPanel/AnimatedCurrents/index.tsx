@@ -6,6 +6,7 @@ import { RootState } from "store/store"
 import AnimatedLayers from "layout/DataPanel/AnimatedCurrents/AnimatedLayers";
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from 'components/RenderIf/RenderIf';
+import { Divider } from "@mui/material";
 
 const optionList = ["close", "madt", "msla"]
 const AnimatedCurrents = () => {
@@ -18,12 +19,14 @@ const AnimatedCurrents = () => {
 
   return (
     <>
+      <Divider variant="middle" />
       <DataPanelRadioList
         identifier={identifier}
         handelClick={handleToggle}
         group='Animated'
         optionList={optionList}
       />
+      <Divider variant="middle" />
       <RenderIf isTrue={identifier !== 'close'}>
         <Pane name="canvas" style={{ zIndex: 400 }}>
           <AnimatedLayers

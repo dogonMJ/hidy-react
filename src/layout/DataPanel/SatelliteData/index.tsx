@@ -4,7 +4,7 @@ import { RootState } from "store/store"
 import { ImageOverlay } from "react-leaflet";
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from "components/RenderIf/RenderIf";
-
+import { Divider } from "@mui/material";
 const optionList = ['close', 'madt', 'msla', 'chla']
 const SatelliteData = () => {
   const ref = useRef<any>(null)
@@ -24,12 +24,14 @@ const SatelliteData = () => {
   })
   return (
     <>
+      <Divider variant="middle" />
       <DataPanelRadioList
         identifier={identifier}
         handelClick={handleToggle}
         group='SatelliteData'
         optionList={optionList}
       />
+      <Divider variant="middle" />
       <RenderIf isTrue={identifier !== 'close'}>
         <ImageOverlay ref={ref} url={''} crossOrigin='anonymous' bounds={[[2, 105], [35, 150]]} />
       </RenderIf>

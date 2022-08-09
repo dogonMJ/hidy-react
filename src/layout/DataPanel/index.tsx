@@ -7,6 +7,7 @@ import ToggleCWB from 'layout/DataPanel/CWB';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
+import { ODB } from 'layout/DataPanel/ODB';
 import { DataPanelItem } from 'components/DataPanelItem';
 // @ts-ignore
 import Cache from 'cachai';
@@ -35,6 +36,7 @@ const DataPanel = () => {
     CWBsites: <ToggleCWB />,
     Animated: <AnimatedCurrents />,
     SatData: <SatelliteData />,
+    OdbData: <ODB />,
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)

@@ -32,9 +32,9 @@ const DataToolTip = (props: { position: coor, content: any }) => {
     mouseout: () => setCircleStyle({ fill: false, opacity: 0 })
   }
   return (
-    <CircleMarker pane={'markerPane'} center={props.position} radius={15} eventHandlers={handleCircleMarker} pathOptions={circleStyle}>
-      <CircleMarker pane={'markerPane'} center={props.position} radius={3} pathOptions={pointStyle} />
-      <Tooltip pane={'tooltipPane'} >
+    <CircleMarker center={props.position} radius={15} eventHandlers={handleCircleMarker} pathOptions={circleStyle}>
+      <CircleMarker center={props.position} radius={3} pathOptions={pointStyle} />
+      <Tooltip >
         <FormatCoordinate coords={props.position} format={latlonFormat} /><br />
         <span style={{ whiteSpace: 'pre-line' }}>{props.content}</span>
       </Tooltip>

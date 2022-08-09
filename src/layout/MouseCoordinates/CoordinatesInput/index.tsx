@@ -14,7 +14,12 @@ const CoordinatesInput = () => {
   const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
   const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
   const markers = useSelector((state: RootState) => state.coordInput.markers)
-
+  const mouseEnter = () => {
+    map.dragging.disable()
+  }
+  const mouseLeave = () => {
+    map.dragging.enable()
+  }
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.target as HTMLInputElement
     if (target.id === 'lat') {
@@ -50,7 +55,10 @@ const CoordinatesInput = () => {
     },
   };
   return (
-    <Paper className="mousePos coordInput">
+    <Paper
+      className="mousePos coordInput"
+      onMouseEnter={mouseEnter}
+      onMouseLeave={mouseLeave}>
       <table >
         <thead>
           <tr>

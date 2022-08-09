@@ -49,7 +49,7 @@ const APILayers = (props: { cache: any }) => {
         <ProcWMS
           Identifier={identifier}
           Time={datetime}
-          elevation={elevation}
+          // elevation={elevation}
           cache={cache}
         />
       </RenderIf>

@@ -7,21 +7,17 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
-import { useEffect, useRef, useState, useMemo } from "react";
 import MouseCoordinates from "layout/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
 import DataPanel from "layout/DataPanel";
 import LayerLegend from 'components/LayerLegend';
 import { LanguageControl } from 'components/LanguageControl'
-import { DepthMeter } from 'components/DepthMeter';
-import { RenderIf } from 'components/RenderIf/RenderIf';
 import { CPlan } from 'components/Cplan';
 // @ts-ignore
 import 'leaflet-measure/'
 // @ts-ignore
 import "./leaflet.latlng-graticule.js"
 import 'leaflet-measure/dist/leaflet-measure.css';
-
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
 
@@ -67,6 +63,7 @@ const addGraticule = (map: L.Map) => {
   graticule.addTo(map);
 }
 const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
+
 const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
@@ -112,11 +109,10 @@ const LeafletMap = () => {
         <MouseCoordinates />
         <DataPanel />
         <CPlan />
-        <RenderIf isTrue={is3D(layerIdentifier)}>
+        {/* <RenderIf isTrue={is3D(layerIdentifier)}>
           <DepthMeter opacity={1} />
-        </RenderIf>
+        </RenderIf> */}
       </MapContainer>
-
     </>
   )
 }

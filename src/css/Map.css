@@ -86,3 +86,10 @@ input {
 .CPlanBtn {
   z-index: 1000;
 }
+
+.arrow-icon {
+  color: #e69138;
+  margin-top: 0;
+  margin-top: 0;
+  /* background-color: aqua; */
+}

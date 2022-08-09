@@ -392,6 +392,18 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
         </Typography >
       )
+    case 'odbCurrent':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.${props.dataId}`)}</b><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/adcp/" rel="noreferrer">物理海洋海流資料</a><br />
+          {t('DataInfo.productID')}: sadcp_grid15moa<br />
+          {t('DataInfo.spatialRange')}: 18 ~ 27°N, 117 ~ 125°E<br />
+          {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
+          {t('DataInfo.temporalRange')}: 1991 ~ 2021<br />
+          {t('DataInfo.others')}: {t('OdbData.others')}<br />
+        </Typography >
+      )
   }
   return <></>
 }
