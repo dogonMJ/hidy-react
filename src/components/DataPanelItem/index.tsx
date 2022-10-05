@@ -16,7 +16,7 @@ export const DataPanelItem = (props: Props) => {
     } = props
     return (
         <>
-            <ListItemButton role={undefined} onClick={handleClick} dense>
+            <ListItemButton role={undefined} onClick={handleClick} sx={{ backgroundColor: '#f3f6f4' }} dense>
                 <RenderIf isTrue={icon}>
                     <ListItemIcon>
                         {icon}

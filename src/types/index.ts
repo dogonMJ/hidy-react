@@ -23,3 +23,11 @@ export interface Api {
     elevation?: number
     colorBar?: string
 }
+
+export interface StringObject {
+    [key: string]: string
+}
+
+export interface Legend {
+    [key: string]: StringObject
+}

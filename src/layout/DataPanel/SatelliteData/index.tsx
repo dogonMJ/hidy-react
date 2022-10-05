@@ -5,6 +5,7 @@ import { ImageOverlay } from "react-leaflet";
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { Divider } from "@mui/material";
+
 const optionList = ['close', 'madt', 'msla', 'chla']
 const SatelliteData = () => {
   const ref = useRef<any>(null)

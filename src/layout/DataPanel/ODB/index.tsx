@@ -42,7 +42,7 @@ export const ODB = () => {
     setChecked(newChecked);
   };
 
-  const creatSelection = (value: string[], transParentNode?: string) => {
+  const creatSelection = (value: string[] | number[], transParentNode?: string) => {
     const res = value.map((value) => {
       const translation = `${transParentNode}.${value}`
       return (

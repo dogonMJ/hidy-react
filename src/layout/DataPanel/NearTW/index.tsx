@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem } from '@mui/material';
 import { Divider, ListSubheader, Switch } from "@mui/material";
-import CwbSeaSites from 'layout/DataPanel/CWB/CwbSeaSites';
-import CwbWeatherSites from 'layout/DataPanel/CWB/CwbWeatherSites';
-import CwbRadar from 'layout/DataPanel/CWB/CwbRadar';
-import CwbSeaForecast from 'layout/DataPanel/CWB/CwbSeaForecast';
+import CwbSeaSites from 'layout/DataPanel/NearTW/CwbSeaSites';
+import CwbWeatherSites from 'layout/DataPanel/NearTW/CwbWeatherSites';
+import CwbRadar from 'layout/DataPanel/NearTW/CwbRadar';
+import CwbSeaForecast from 'layout/DataPanel/NearTW/CwbSeaForecast';
 import InfoButton from "components/InfoButton";
+import { MoiSubstrate } from "./MoiSubstrate";
 
-const optionList = ['sea', 'weather', 'radar']
+const optionList = ['sea', 'weather', 'radar', 'substrate']
 const ToggleCWB = () => {
   const { t } = useTranslation()
   const [checked, setChecked] = useState<string[]>([]);
@@ -60,6 +61,7 @@ const ToggleCWB = () => {
       </ListSubheader>
       <CwbSeaForecast />
       <Divider variant="middle" />
+      {checked.includes('substrate') && <MoiSubstrate />}
       {checked.includes('sea') && <CwbSeaSites />}
       {checked.includes('weather') && <CwbWeatherSites />}
       {checked.includes('radar') && <CwbRadar />}

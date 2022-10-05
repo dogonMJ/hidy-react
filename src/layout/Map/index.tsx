@@ -10,40 +10,42 @@ import 'css/Map.css'
 import MouseCoordinates from "layout/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
 import DataPanel from "layout/DataPanel";
-import LayerLegend from 'components/LayerLegend';
 import { LanguageControl } from 'components/LanguageControl'
-import { CPlan } from 'components/Cplan';
+import { CPlanControll } from 'components/Cplan';
+import { DrawLine } from 'components/DrawLine';
+
 // @ts-ignore
 import 'leaflet-measure/'
 // @ts-ignore
 import "./leaflet.latlng-graticule.js"
 import 'leaflet-measure/dist/leaflet-measure.css';
+
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
 
-const addLeafletMeasureControl = (map: L.Map) => {
-  const measureControl = new L.Control.Measure({
-    position: 'topright',
-    lineColor: 'blue',
-    primaryLengthUnit: 'kilometers',
-    secondaryLengthUnit: 'nauticalmiles',
-    primaryAreaUnit: 'sqkilometers',
-    secondaryAreaUnit: 'hectares',
-    units: {
-      nauticalmiles: {
-        factor: 1 / 1852,
-        display: 'nm',
-        decimals: 1
-      },
-      sqkilometers: {
-        factor: 1 / 1000000,
-        display: 'km\u00B2',
-        decimals: 1
-      }
-    }
-  })
-  measureControl.addTo(map);
-}
+// const addLeafletMeasureControl = (map: L.Map) => {
+//   const measureControl = new L.Control.Measure({
+//     position: 'topright',
+//     lineColor: 'blue',
+//     primaryLengthUnit: 'kilometers',
+//     secondaryLengthUnit: 'nauticalmiles',
+//     primaryAreaUnit: 'sqkilometers',
+//     secondaryAreaUnit: 'hectares',
+//     units: {
+//       nauticalmiles: {
+//         factor: 1 / 1852,
+//         display: 'nm',
+//         decimals: 1
+//       },
+//       sqkilometers: {
+//         factor: 1 / 1000000,
+//         display: 'km\u00B2',
+//         decimals: 1
+//       }
+//     }
+//   })
+//   measureControl.addTo(map);
+// }
 const addGraticule = (map: L.Map) => {
   const graticule = new L.latlngGraticule({
     showLabel: true,
@@ -62,13 +64,11 @@ const addGraticule = (map: L.Map) => {
   })
   graticule.addTo(map);
 }
-const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
-
 const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  const layerIdentifier = useSelector((state: RootState) => state.coordInput.layerIdent);
+
   return (
     <>
       <Flatpickr
@@ -84,7 +84,7 @@ const LeafletMap = () => {
           weekNumbers: true,
         }}
       />
-      <LayerLegend />
+
       <MapContainer
         id='mapContainer'
         className='mapContainer'
@@ -98,20 +98,20 @@ const LeafletMap = () => {
         renderer={L.canvas()}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => {
-          addLeafletMeasureControl(map);
+          // addLeafletMeasureControl(map);
           addGraticule(map)
         }}
       >
+        <div id={'LengendContainer'} style={{ display: 'flex', flexDirection: 'column-reverse', position: 'absolute', bottom: 25, zIndex: 1000 }}></div>
         <LanguageControl position='topright' />
         <MyBaseLayers />
         <ZoomControl position="topright" />
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <DataPanel />
-        <CPlan />
-        {/* <RenderIf isTrue={is3D(layerIdentifier)}>
-          <DepthMeter opacity={1} />
-        </RenderIf> */}
+        <CPlanControll />
+        <DrawLine />
+        {/* <SeafloorControl /> */}
       </MapContainer>
     </>
   )

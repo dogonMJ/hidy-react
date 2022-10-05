@@ -3,12 +3,13 @@ import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useMap } from 'react-leaflet';
-import ToggleCWB from 'layout/DataPanel/CWB';
+import ToggleCWB from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
 import { ODB } from 'layout/DataPanel/ODB';
 import { DataPanelItem } from 'components/DataPanelItem';
+import { SeafloorElevation } from 'layout/DataPanel/SeafloorElevation';
 // @ts-ignore
 import Cache from 'cachai';
 const cache = new Cache(400)
@@ -37,6 +38,7 @@ const DataPanel = () => {
     Animated: <AnimatedCurrents />,
     SatData: <SatelliteData />,
     OdbData: <ODB />,
+    // Seafloor: <SeafloorElevation />,
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)
@@ -91,7 +93,9 @@ const DataPanel = () => {
         <Divider />
         <List
           sx={{
-            bgcolor: 'background.paper', overflow: 'auto',
+            bgcolor: 'background.paper',
+            overflow: 'auto',
+            padding: 0
           }}
           component="nav"
           aria-labelledby="nested-list-subheader"
@@ -106,7 +110,8 @@ const DataPanel = () => {
                     // icon={item}
                     handleClick={handleClick(item)}
                     open={openSwitch[item]}
-                    text={t(`${item}.title`)} />
+                    text={t(`${item}.title`)}
+                  />
                   <Collapse
                     in={openSwitch[item]}
                     timeout="auto" >

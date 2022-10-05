@@ -62,31 +62,41 @@ const getNASAData = (map: any, latlng: L.LatLng, layergroup: L.LayerGroup | null
 }
 
 const getWMSData = async (
+  map: L.Map,
   baseUrl: string,
   latlng: L.LatLng,
   datetime: string,
   identifier: string,
   elevation: number, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>,
 ) => {
-  const bbox = `${latlng.lat - 0.02},${latlng.lng - 0.02},${latlng.lat + 0.02},${latlng.lng + 0.02}`
-  const param = new URLSearchParams({
+  // const bbox = `${latlng.lat - 0.02},${latlng.lng - 0.02},${latlng.lat + 0.02},${latlng.lng + 0.02}`
+  const url = new URL(baseUrl)
+  const size = map.getSize()
+  const point = map.latLngToContainerPoint(latlng)
+  url.search = new URLSearchParams({
     request: 'GetFeatureInfo',
     service: 'WMS',
-    version: '1.3.0',
+    // version: '1.3.0',
+    version: '1.1.1',
     layers: identifier,
-    crs: 'EPSG:4326',
+    // crs: 'EPSG:4326',
+    srs: 'EPSG:4326',
     styles: "boxfill/rainbow",
-    bbox: bbox, //'13462700.917811524,2504688.542848655,13775786.985667607,2817774.6107047372',
-    width: '101',
-    height: '101',
+    bbox: map.getBounds().toBBoxString(),//bbox,
+    // width: '101',
+    // height: '101',
+    width: size.x.toString(),
+    height: size.y.toString(),
     query_layers: identifier,
-    i: '50',
-    j: '50',
+    // i: '50',
+    // j: '50',
+    x: point.x.toString(),
+    y: point.y.toString(),
     info_format: 'text/xml',
     time: datetime,
     elevation: elevation.toString()
-  })
-  fetch(`${baseUrl}?${param.toString()}`)
+  }).toString()
+  fetch(url.toString())
     .then((response) => response.text())
     .then((text) => (new window.DOMParser()).parseFromString(text, "text/xml").documentElement)
     .then((doc) => {
@@ -116,13 +126,12 @@ const ShowData = (props: {
       setPosition(e.latlng)
       const originalEvent = e.originalEvent as extendMouseEvent
       if (originalEvent.toElement.innerHTML === "Close" || originalEvent.toElement.innerHTML === "關閉") {
-        props.param.type = ''
-        // prevent memory leak
+        return
       }
       switch (props.param.type) {
         case 'wms':
           setUnit(props.param.unit)
-          getWMSData(props.param.url, e.latlng, props.datetime, props.param.layer, props.elevation, setBartip)
+          getWMSData(map, props.param.url, e.latlng, props.datetime, props.param.layer, props.elevation, setBartip)
           break;
         case 'wmts':
           if (props.param.colorBar) {

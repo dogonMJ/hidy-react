@@ -58,7 +58,7 @@
   },
   "CHL": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_obs-oc_glo_bgc-plankton_nrt_l4-gapfree-multi-4km_P1D",
     "layer": "CHL",
     "duration": "P1D",
     "style": "boxfill/rainbow",

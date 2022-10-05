@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMap } from 'react-leaflet';
 import { Box, Paper } from '@mui/material';
 import { createPortal } from 'react-dom'
@@ -8,14 +7,14 @@ import { DepthMeterSlider } from 'components/DepthMeterSlider'
 export const DepthMeter = (props: { values: number[], marks: SliderMarks[] }) => {
   const mapContainer = document.getElementById('mapContainer')
   const map = useMap()
-  const [isEnter, setIsEnter] = useState(false)
+  // const [isEnter, setIsEnter] = useState(false)
   const mouseEnter = () => {
     map.dragging.disable()
-    setIsEnter(true)
+    // setIsEnter(true)
   }
   const mouseLeave = () => {
     map.dragging.enable()
-    setIsEnter(false)
+    // setIsEnter(false)
   }
   if (mapContainer) {
     return (

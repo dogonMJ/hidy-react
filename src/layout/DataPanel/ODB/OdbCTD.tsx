@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { ImageOverlay } from 'react-leaflet'
@@ -6,10 +6,10 @@ import { DepthMeter } from 'components/DepthlMeter';
 import { SliderMarks } from 'types'
 import { GeoJSON, Tooltip } from 'react-leaflet'
 import FormatCoordinate from 'components/FormatCoordinate';
+import { LegendControl } from 'components/LeafletLegend';
 import { LatLng } from 'leaflet';
 import L from "leaflet";
 import { coor } from 'types';
-import { setEnvironmentData } from 'worker_threads';
 
 const ctdDepths = Array.from(Array(20), (e, i) => i * -5 - 5).concat(Array.from(Array(16), (e, i) => i * -25 - 125)).concat(Array.from(Array(10), (e, i) => i * -50 - 550)).reverse()
 const marks: SliderMarks[] = []
@@ -39,6 +39,8 @@ export const OdbCTD = () => {
   const depth = ctdDepths[depthMeterValue] ? -ctdDepths[depthMeterValue] : 5
   const url = `https://odbpo.oc.ntu.edu.tw/static/figs/odb/ctd/ctd_grid15moa_${type}_${period}${depth}.png`
   const urlJson = `https://odbpo.oc.ntu.edu.tw/static/figs/odb/ctd/ctd_grid15moa_${period}${depth}.json`
+  const legendContent = `<img src=${`https://odbpo.oc.ntu.edu.tw/static/figs/odb/ctd/colorbar_${type}.png`} alt="legend" style="width:320px;margin:-5px"/>`
+
   const mouseOver = (e: any) => {
     const property = e.layer.feature.properties
     const t = property.t
@@ -81,6 +83,7 @@ export const OdbCTD = () => {
       </GeoJSON>
       <ImageOverlay ref={ref} url={url} bounds={[[17.875, 116.875], [27.125, 125.125]]} crossOrigin='anonymous' />
       <DepthMeter values={ctdDepths} marks={marks} />
+      <LegendControl position='bottomleft' legendContent={legendContent} />
     </>
   )
 }

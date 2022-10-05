@@ -4,24 +4,40 @@ import { RootState } from "store/store"
 import { coordInputSlice } from "store/slice/mapSlice";
 import ProcWMS from './ProcWMS'
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
+// import { ImageLengend } from "components/ImageLegend";
+import { LegendControl } from 'components/LeafletLegend'
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { Divider, ListSubheader } from "@mui/material";
+import SeaTempAno from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
+import SeaTemp from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature.png'
+import { useState } from "react";
 
 const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature", "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor",
   "sla", "adt", "CHL",]
 const optionForecast = ["close", "3dinst_thetao", "3dinst_so", "3dsea_water_velocity", "mlotst", "zos", "bottomT",]
+const getLegendUrl = (layerIdentifier: string) => {
+  switch (layerIdentifier) {
+    case "GHRSST_L4_MUR_Sea_Surface_Temperature":
+      return SeaTemp
+    case "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies":
+      return SeaTempAno
+    default:
+      return
+  }
+}
 const APILayers = (props: { cache: any }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const identifier = useSelector((state: RootState) => state.coordInput.layerIdent);
+  // const identifier = useSelector((state: RootState) => state.coordInput.layerIdent);
+  const [identifier, setIdentifier] = useState("close")
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue);
-  const elevations = useSelector((state: RootState) => state.coordInput.elevations);
-  const elevation = elevations[depthMeterValue]
   const cache = props.cache
   const handleToggle = (value: string) => () => {
-    dispatch(coordInputSlice.actions.layerIdentifier(value))
+    // dispatch(coordInputSlice.actions.layerIdentifier(value))
+    setIdentifier(value)
   };
+  const legendUrl = getLegendUrl(identifier)
+  const legendContent = `<img src=${legendUrl} alt="legend" style="width:320px;margin:-5px"/>`
   return (
     <>
       <Divider variant="middle" />
@@ -49,9 +65,11 @@ const APILayers = (props: { cache: any }) => {
         <ProcWMS
           Identifier={identifier}
           Time={datetime}
-          // elevation={elevation}
           cache={cache}
         />
+      </RenderIf>
+      <RenderIf isTrue={legendUrl}>
+        <LegendControl position='bottomleft' legendContent={legendContent} />
       </RenderIf>
     </>
   )

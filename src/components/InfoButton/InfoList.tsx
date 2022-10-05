@@ -94,16 +94,17 @@ const InfoList = (props: { dataId: string }) => {
       )
     case 'CHL':
       return (
-        <Typography sx={{ p: 2 }}>
+        <Typography sx={{ p: 2 }}>OCEANCOLOUR_GLO_BGC_L4_NRT_009_102
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
-          {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00099" rel="noreferrer">OCEANCOLOUR_GLO_CHL_L4_NRT_OBSERVATIONS_009_033</a><br />
-          {t('DataInfo.dataset')}:dataset-oc-glo-bio-multi-l4-chl_interpolated_4km_daily-rt<br />
-          {t('DataInfo.variable')}:mass_concentration_of_chlorophyll_a_in_sea_water (CHL)<br />
+          {/* {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00099" rel="noreferrer">OCEANCOLOUR_GLO_CHL_L4_NRT_OBSERVATIONS_009_033</a><br /> */}
+          {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00279" rel="noreferrer">OCEANCOLOUR_GLO_BGC_L4_NRT_009_102</a><br />
+          {t('DataInfo.dataset')}:cmems_obs-oc_glo_bgc-plankton_nrt_l4-gapfree-multi-4km_P1D<br />
+          {t('DataInfo.variable')}: mass_concentration_of_chlorophyll_a_in_sea_water (CHL)<br />
           {t('DataInfo.spatialRes')}: 4{t('DataInfo.km')} × 4{t('DataInfo.km')}<br />
-          {t('DataInfo.temporalRange')}: 2021-07-01 ~ <br />
+          {t('DataInfo.temporalRange')}: 2022-08-22 ~ <br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
-          {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 20:00 (UTC+8)<br />
+          {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 22:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
           {t('APIlayers.allOthers')}<br />
           <span style={{ whiteSpace: 'pre-wrap' }}>{t('APIlayers.chlOthers')}</span>

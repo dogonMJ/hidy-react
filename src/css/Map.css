@@ -90,6 +90,68 @@ input {
 .arrow-icon {
   color: #e69138;
   margin-top: 0;
-  margin-top: 0;
-  /* background-color: aqua; */
+}
+
+.legendbg {
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  line-height: 18px;
+  text-align: left;
+  color: #555;
+}
+
+.sedLegend i {
+  width: 8px;
+  height: 8px;
+  float: left;
+  margin-right: 8px;
+  margin-top: 0.3rem;
+  opacity: 0.8;
+  border-radius: 50%;
+}
+
+.topoLegend i {
+  width: 8px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.8;
+}
+
+.sedCoreTooltip {
+  width: 8.5rem;
+}
+
+.js-plotly-plot .plotly .modebar {
+  left: 0;
+  top: -30px !important;
+}
+
+.modebar-group {
+  background-color: #e0e0e0 !important;
+}
+
+.bg-white {
+  background: #fff;
+}
+
+.Icon-dot {
+  /* fill: 'red'; */
+}
+
+.seafloor-control:active {
+  background-color: red;
+  box-shadow: 1px 1px #666;
+  transform: translateY(1px);
+}
+
+.leaflet-editing-icon {
+  border-radius: 50%;
+  background-color: #ffbf4b;
+  width: 6px !important;
+  height: 6px !important;
+  margin-left: -3px !important;
+  margin-top: -3px !important;
 }

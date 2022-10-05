@@ -133,7 +133,14 @@
     "fall": "Autumn",
     "winter": "Winter",
     "NE": "NE Monsoon",
-    "SW": "SW Monsoon"
+    "SW": "SW Monsoon",
+    "sedCoreLegend": {
+      "SG": "Shipek Grab (SG)",
+      "GC": "Gravity Core (GC)",
+      "B": "Box Core (B)",
+      "GHP": "Geo Heat Probe (GHP)",
+      "PC": "Piston Core (PC)"
+    }
   },
   "DataInfo": {
     "close": "Close Layers",
