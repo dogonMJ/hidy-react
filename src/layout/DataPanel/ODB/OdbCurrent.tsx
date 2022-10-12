@@ -1,13 +1,13 @@
-import { GeoJSON, Tooltip } from 'react-leaflet'
+import { GeoJSON } from 'react-leaflet'
 import { useEffect, useState, useRef } from 'react'
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { coor, SliderMarks, StringObject } from 'types';
 import 'leaflet'
 import 'leaflet-canvas-markers'
-import FormatCoordinate from 'components/FormatCoordinate';
 import { DepthMeter } from 'components/DepthlMeter';
 import { LegendControl } from "components/LeafletLegend"
+import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
 // import ArrowRight from 'assets/images/straight-right-arrow.svg';
 import Arrow from 'assets/images/ArrowUp.svg'
 declare const L: any;
@@ -55,7 +55,6 @@ export const OdbCurrent = () => {
   const [data, setData] = useState<any>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [content, setContent] = useState('')
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
   const legendContent = `<img src=${Arrow} height=20 width=10><span style="margin-left:8px;">0.5 m/s</span>`
@@ -104,10 +103,7 @@ export const OdbCurrent = () => {
   return (
     <>
       <GeoJSON ref={ref} data={data} pointToLayer={pointToLayer} eventHandlers={{ mouseover: mouseOver }} >
-        <Tooltip>
-          <FormatCoordinate coords={position} format={latlonFormat} /><br />
-          <span style={{ whiteSpace: 'pre-line' }}>{content}</span>
-        </Tooltip>
+        <GeoJsonTooltip position={position} content={content} />
       </GeoJSON>
       <DepthMeter values={adcpDepths} marks={marks} />
       <LegendControl position='bottomleft' legendContent={legendContent} />

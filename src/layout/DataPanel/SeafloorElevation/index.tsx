@@ -4,6 +4,7 @@ import { LineChart } from "components/LineChart"
 import { coor } from "types";
 import { PlotParams } from "react-plotly.js";
 
+// source: ETOPO5 edited by Kuo, details need to be checked. E:\Depth and E:\drifter
 declare const L: any
 interface Zseg {
   x: number[]

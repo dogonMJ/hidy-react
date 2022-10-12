@@ -12,7 +12,10 @@ import MyBaseLayers from "components/Baselayers";
 import DataPanel from "layout/DataPanel";
 import { LanguageControl } from 'components/LanguageControl'
 import { CPlanControll } from 'components/Cplan';
-import { DrawLine } from 'components/DrawLine';
+// import { DragDrop } from 'components/DragDrop';
+import { DragDrop } from 'components/DragDrop';
+import { DrawLine } from 'components/DrawShapes';
+import { useEffect, useState } from 'react';
 
 // @ts-ignore
 import 'leaflet-measure/'
@@ -68,7 +71,36 @@ const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const [dropedFile, setDropedFile] = useState<any>()
 
+  // const zzz: any = []
+  // const handleDrop = (e: any) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+  //     zzz.push(e.dataTransfer.files[0])
+  //     setDropedFile([...zzz])
+  //   }
+  // };
+  // const handleDrag = function (e: any) {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   if (e.type === "dragenter" || e.type === "dragover") {
+  //     // setDragActive(true);
+  //     // console.log('enter')
+  //   } else if (e.type === "dragleave") {
+  //     // setDragActive(false);
+  //     // console.log('leave')
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const mapContainer = document.getElementById('mapContainer')
+  //   if (mapContainer) {
+  //     mapContainer.ondrop = handleDrop
+  //     mapContainer.ondragover = handleDrag
+  //   }
+  // }, [])
   return (
     <>
       <Flatpickr
@@ -98,7 +130,6 @@ const LeafletMap = () => {
         renderer={L.canvas()}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => {
-          // addLeafletMeasureControl(map);
           addGraticule(map)
         }}
       >
@@ -112,6 +143,7 @@ const LeafletMap = () => {
         <CPlanControll />
         <DrawLine />
         {/* <SeafloorControl /> */}
+        <DragDrop />
       </MapContainer>
     </>
   )

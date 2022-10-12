@@ -1,11 +1,9 @@
 import { useEffect, useState, useRef } from 'react'
-import { GeoJSON, Tooltip } from 'react-leaflet'
-import { useSelector } from "react-redux";
-import { RootState } from "store/store"
+import { GeoJSON } from 'react-leaflet'
 import { coor, Legend } from 'types';
 import L, { LatLng } from 'leaflet';
-import FormatCoordinate from 'components/FormatCoordinate';
 import { LegendControl } from "components/LeafletLegend"
+import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
 
 const sedColors: Legend = {
   // 'boulder,sand': "#AFAF9D",
@@ -229,7 +227,6 @@ export const MoiSubstrate = () => {
   const [data, setData] = useState<any>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [content, setContent] = useState('')
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
 
   const mouseOver = (e: any) => {
     const feature = e.layer.feature
@@ -275,10 +272,7 @@ export const MoiSubstrate = () => {
   return (
     <>
       <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} eventHandlers={{ mouseover: mouseOver }}>
-        <Tooltip>
-          <FormatCoordinate coords={position} format={latlonFormat} /><br />
-          <span style={{ whiteSpace: 'pre-line' }}>{content}</span>
-        </Tooltip>
+        <GeoJsonTooltip position={position} content={content} />
       </GeoJSON>
       <LegendControl position='bottomleft' legendContent={contents.join('<br>')} legendClassNames={'sedLegend'} />
     </>

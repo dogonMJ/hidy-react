@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
-import { ImageOverlay } from 'react-leaflet'
+import L, { LatLng } from 'leaflet';
+import { ImageOverlay, GeoJSON } from 'react-leaflet'
 import { DepthMeter } from 'components/DepthlMeter';
-import { SliderMarks } from 'types'
-import { GeoJSON, Tooltip } from 'react-leaflet'
-import FormatCoordinate from 'components/FormatCoordinate';
 import { LegendControl } from 'components/LeafletLegend';
-import { LatLng } from 'leaflet';
-import L from "leaflet";
-import { coor } from 'types';
+import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
+import { coor, SliderMarks } from 'types';
 
 const ctdDepths = Array.from(Array(20), (e, i) => i * -5 - 5).concat(Array.from(Array(16), (e, i) => i * -25 - 125)).concat(Array.from(Array(10), (e, i) => i * -50 - 550)).reverse()
 const marks: SliderMarks[] = []
@@ -32,7 +29,6 @@ export const OdbCTD = () => {
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [content, setContent] = useState('')
   const [data, setData] = useState<any>()
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const type = useSelector((state: RootState) => state.coordInput.OdbCtdSelection)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
@@ -76,10 +72,7 @@ export const OdbCTD = () => {
   return (
     <>
       <GeoJSON ref={refJson} data={data} pointToLayer={pointToLayer} eventHandlers={{ mouseover: mouseOver }} >
-        <Tooltip>
-          <FormatCoordinate coords={position} format={latlonFormat} /><br />
-          <span style={{ whiteSpace: 'pre-line' }}>{content}</span>
-        </Tooltip>
+        <GeoJsonTooltip position={position} content={content} />
       </GeoJSON>
       <ImageOverlay ref={ref} url={url} bounds={[[17.875, 116.875], [27.125, 125.125]]} crossOrigin='anonymous' />
       <DepthMeter values={ctdDepths} marks={marks} />

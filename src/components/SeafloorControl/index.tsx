@@ -4,7 +4,7 @@ import 'leaflet-draw/dist/leaflet.draw.css'
 import { createPortal } from "react-dom";
 import { IconButton } from "@mui/material";
 import LandscapeIcon from '@mui/icons-material/Landscape';
-import { DrawLine } from "components/DrawLine";
+import { DrawLine } from "components/DrawShapes"
 declare const L: any;
 
 export const SeafloorControl = () => {
