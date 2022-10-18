@@ -167,5 +167,20 @@
     "cwbOpenData": "中央氣象局資料開放平台",
     "madtDes": "使用",
     "mean": "平均"
+  },
+  "CPlanLayers": {
+    "title": "航次規劃 (C-Plan)",
+    "description": "C-Plan (Cruise Planner)是ODB設計，專門提供研究者規劃航次任務，並可以輸出研究船航次申請圖表。",
+    "tip": "輸入在C-Plan上的存檔名稱(C-key)，點選右方勾勾或是按下enter，若輸入正確地圖上會出現該航次的規劃圖。\n點選上方新出現之C-key可以移動至該圖層、右方叉叉可以移除圖層。",
+    "table": {
+      "id": "編號",
+      "name": "站名",
+      "lat": "緯度",
+      "lon": "經度",
+      "time": "作業時間",
+      "speed": "船速",
+      "inst": "作業項目",
+      "dist": "距離"
+    }
   }
 }

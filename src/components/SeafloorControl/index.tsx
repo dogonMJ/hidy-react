@@ -3,12 +3,15 @@ import 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { createPortal } from "react-dom";
 import { IconButton } from "@mui/material";
-import LandscapeIcon from '@mui/icons-material/Landscape';
-import { DrawLine } from "components/DrawShapes"
+import { DrawShapes } from "components/DrawShapes";
+import ShapeLineIcon from '@mui/icons-material/ShapeLine';
+import { RenderIf } from "components/RenderIf/RenderIf";
+
 declare const L: any;
 
 export const SeafloorControl = () => {
   const [container, setContainer] = useState<any>(document.createElement('div'))
+  const [showDrawLine, setShowDrawLine] = useState(false)
   const positionClass = 'leaflet-top leaflet-right'
 
   useEffect(() => {
@@ -22,14 +25,17 @@ export const SeafloorControl = () => {
     <>
       <div className='leaflet-control leaflet-bar bg-white seafloor-control' tabIndex={-1}>
         <IconButton
-          onClick={() => { console.log('zzz') }}
+          onClick={() => { setShowDrawLine(!showDrawLine) }}
           sx={{
             width: 30,
             height: 30
           }}
         >
-          <LandscapeIcon />
+          <ShapeLineIcon fontSize="small" style={{ color: '#464646' }} />
         </IconButton>
+        <RenderIf isTrue={showDrawLine}>
+          <DrawShapes />
+        </RenderIf>
       </div>
     </>
     , container

@@ -1,0 +1,31 @@
+{
+  "colors": [
+    {
+      "value": "rgba(8, 99, 181, 1)"
+    },
+    {
+      "value": "rgba(254, 198, 0, 1)"
+    },
+    {
+      "value": "rgba(243, 145, 0, 1)"
+    },
+    {
+      "value": "rgba(227, 0, 31, 1)"
+    },
+    {
+      "value": "rgba(229, 0, 100, 1)"
+    },
+    {
+      "value": "rgba(149, 74, 151, 1)"
+    },
+    {
+      "value": "rgba(0, 158, 227, 1)"
+    },
+    {
+      "value": "rgba(19, 165, 56, 1)"
+    }
+  ],
+  "name": "Custom",
+  "key": null,
+  "source": "https://loading.io/color/feature/gvb/"
+}

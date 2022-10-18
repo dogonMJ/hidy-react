@@ -9,7 +9,7 @@ import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
 import { ODB } from 'layout/DataPanel/ODB';
 import { DataPanelItem } from 'components/DataPanelItem';
-import { SeafloorElevation } from 'layout/DataPanel/SeafloorElevation';
+import { CPlanLayers } from './CPlanLayers';
 // @ts-ignore
 import Cache from 'cachai';
 const cache = new Cache(400)
@@ -38,7 +38,7 @@ const DataPanel = () => {
     Animated: <AnimatedCurrents />,
     SatData: <SatelliteData />,
     OdbData: <ODB />,
-    // Seafloor: <SeafloorElevation />,
+    CPlanLayers: <CPlanLayers />,
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)

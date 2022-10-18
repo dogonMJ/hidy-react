@@ -1,7 +1,6 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { RootState } from "store/store"
-import { coordInputSlice } from "store/slice/mapSlice";
 import ProcWMS from './ProcWMS'
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 // import { ImageLengend } from "components/ImageLegend";
@@ -27,13 +26,10 @@ const getLegendUrl = (layerIdentifier: string) => {
 }
 const APILayers = (props: { cache: any }) => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  // const identifier = useSelector((state: RootState) => state.coordInput.layerIdent);
   const [identifier, setIdentifier] = useState("close")
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const cache = props.cache
   const handleToggle = (value: string) => () => {
-    // dispatch(coordInputSlice.actions.layerIdentifier(value))
     setIdentifier(value)
   };
   const legendUrl = getLegendUrl(identifier)
@@ -46,7 +42,7 @@ const APILayers = (props: { cache: any }) => {
       </ListSubheader>
       <DataPanelRadioList
         identifier={identifier}
-        handelClick={handleToggle}
+        handleClick={handleToggle}
         group='APIlayers'
         optionList={optionList}
       />
@@ -56,7 +52,7 @@ const APILayers = (props: { cache: any }) => {
       </ListSubheader>
       <DataPanelRadioList
         identifier={identifier}
-        handelClick={handleToggle}
+        handleClick={handleToggle}
         group='APIlayers'
         optionList={optionForecast}
       />

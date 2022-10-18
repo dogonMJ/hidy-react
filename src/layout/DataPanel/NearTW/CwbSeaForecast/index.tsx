@@ -70,13 +70,13 @@ const CwbSeaForecast = () => {
     <>
       <DataPanelRadioList
         identifier={identifier2}
-        handelClick={handleToggle2}
+        handleClick={handleToggle2}
         group='CwbSeaForecast'
         optionList={optionList2}
       />
       <DataPanelRadioList
         identifier={identifier}
-        handelClick={handleToggle}
+        handleClick={handleToggle}
         group='CwbSeaForecast'
         optionList={optionList}
       />

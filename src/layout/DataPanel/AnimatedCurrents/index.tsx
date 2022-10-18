@@ -22,7 +22,7 @@ const AnimatedCurrents = () => {
       <Divider variant="middle" />
       <DataPanelRadioList
         identifier={identifier}
-        handelClick={handleToggle}
+        handleClick={handleToggle}
         group='Animated'
         optionList={optionList}
       />

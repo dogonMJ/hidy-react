@@ -1,0 +1,31 @@
+{
+  "colors": [
+    {
+      "value": "rgba(95, 201, 248, 1)"
+    },
+    {
+      "value": "rgba(254, 203, 46, 1)"
+    },
+    {
+      "value": "rgba(253, 148, 38, 1)"
+    },
+    {
+      "value": "rgba(252, 49, 88, 1)"
+    },
+    {
+      "value": "rgba(20, 126, 251, 1)"
+    },
+    {
+      "value": "rgba(83, 215, 105, 1)"
+    },
+    {
+      "value": "rgba(252, 61, 57, 1)"
+    },
+    {
+      "value": "rgba(142, 142, 147, 1)"
+    }
+  ],
+  "name": "Custom",
+  "key": null,
+  "source":"https://loading.io/color/feature/ios/"
+}

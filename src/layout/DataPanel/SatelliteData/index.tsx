@@ -28,7 +28,7 @@ const SatelliteData = () => {
       <Divider variant="middle" />
       <DataPanelRadioList
         identifier={identifier}
-        handelClick={handleToggle}
+        handleClick={handleToggle}
         group='SatelliteData'
         optionList={optionList}
       />

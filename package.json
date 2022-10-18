@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.8.1",
     "@fontsource/roboto": "^4.5.3",
     "@mapbox/leaflet-omnivore": "^0.3.4",
-    "@mui/icons-material": "^5.4.4",
+    "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.4.4",
     "@reduxjs/toolkit": "^1.7.1",
     "@testing-library/jest-dom": "^5.16.1",

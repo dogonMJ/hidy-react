@@ -1,7 +1,6 @@
 import { useState } from "react"
 import L, { LatLng } from 'leaflet';
 import { useMap } from "react-leaflet"
-import { coor } from "types";
 import { IconButton } from "@mui/material";
 import Close from "@mui/icons-material/Close";
 import * as geojson from 'geojson';
@@ -12,11 +11,13 @@ import omnivore from '@mapbox/leaflet-omnivore'
 //@ts-ignore
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
-
+import * as Spectral_10 from "assets/jsons/Spectral_10.json"
 
 interface DropGeoJSON extends L.GeoJSON {
   filename?: string
 }
+
+const { colors } = Spectral_10
 
 function flattenObj(obj: any, parent: string | null, res: any = {}) {
   //https://stackoverflow.com/questions/44134212/best-way-to-flatten-js-object-keys-and-values-to-a-single-depth-array
@@ -38,8 +39,8 @@ export const DragDrop = () => {
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const mapContainer = document.getElementById('mapContainer')
 
-  const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlang: LatLng) => {
-    return new L.CircleMarker(latlang)
+  const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlng: LatLng) => {
+    return new L.CircleMarker(latlng)
   }
   const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
     if (feature.properties.description) {
@@ -84,7 +85,6 @@ export const DragDrop = () => {
   const styleFunc = (feature: geojson.Feature<geojson.Geometry, any> | undefined) => {
     const type = feature?.geometry.type
     const number = dropCount
-    const colors = ['#ff41e4', '#ff9c1c', '#ffec6d', '#05ecf5', '#a766ff']
     if (type === 'Point' || type === 'MultiPoint') {
       return {
         radius: 5,
@@ -92,14 +92,14 @@ export const DragDrop = () => {
         color: '#000000',
         stroke: true,
         weight: 0.2,
-        fillColor: colors[number % 5],//'#ffc16f',
+        fillColor: colors[number % 10].value,//'#ffc16f',
         fillOpacity: 1,
       };
     } else {
       return {
         radius: 5,
         opacity: 1,
-        color: '#ff7070',
+        // color: '#ff7070',
         stroke: true,
         weight: 2,
       }
@@ -123,10 +123,10 @@ export const DragDrop = () => {
                 style: styleFunc,
                 pointToLayer: pointToLayer,
                 onEachFeature: onEachFeatureJSON,
-
               })
               jsonLayer.filename = file.name
               jsonLayer.addTo(map)
+              map.fitBounds(jsonLayer.getBounds())
               setDataList([...dataList, jsonLayer])
             }
           })
@@ -143,6 +143,7 @@ export const DragDrop = () => {
               const kmlLayer = omnivore.kml.parse(data, null, customLayer)
               kmlLayer.filename = file.name
               kmlLayer.addTo(map)
+              map.fitBounds(kmlLayer.getBounds())
               setDataList([...dataList, kmlLayer])
             }
           })
@@ -199,6 +200,7 @@ export const DragDrop = () => {
               })
               gpxLayer.filename = file.name
               gpxLayer.addTo(map);
+              map.fitBounds(gpxLayer.getBounds())
               setDataList([...dataList, gpxLayer])
 
             }
@@ -217,19 +219,25 @@ export const DragDrop = () => {
     setDataList(dataList.filter((data: any, i: number) => i !== index))
   }
   return (
-    <div>
+    <>
       {dataList && dataList.map((data: any, index: number) =>
-        <div key={`Drop-${index}`}>
-          <div className='leaflet-control leaflet-bar' tabIndex={-1} style={{ backgroundColor: '#f3f6f4' }}>
-            <IconButton
-              size="small"
-              onClick={() => close(index)}>
-              <Close />
-              <span>{data.filename}</span>
-            </IconButton>
-          </div>
+        <div
+          key={`Drop-${index}`}
+          className='leaflet-control leaflet-bar'
+          tabIndex={-1}
+          style={{
+            backgroundColor: '#f3f6f4',
+            float: "right",
+            marginRight: 60,
+          }}>
+          <IconButton
+            size="small"
+            onClick={() => close(index)}>
+            <Close />
+            <span>{data.filename}</span>
+          </IconButton>
         </div>
       )}
-    </div>
+    </>
   )
 }

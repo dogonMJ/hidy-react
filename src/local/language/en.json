@@ -164,5 +164,20 @@
     "m": "m",
     "km": "km",
     "mean": "mean"
+  },
+  "CPlanLayers": {
+    "title": "Cruise Planner (C-Plan)",
+    "description": "C-Plan is a cruise planning tool provided by ODB.\nThe tool is designed for researchers to plane cruise missions on map and export tables for cruise application.",
+    "tip": "Enter saved C-key, if it is correct, cruise data would be displayed on map.\nClick the C-key on top of the inputbox to move to the layer. Click the cross to close layer.",
+    "table": {
+      "id": "ID",
+      "name": "Site",
+      "lat": "Latitude",
+      "lon": "Longitude",
+      "time": "Time to stay",
+      "speed": "Travel speed",
+      "inst": "Instruments",
+      "dist": "Distance"
+    }
   }
 }

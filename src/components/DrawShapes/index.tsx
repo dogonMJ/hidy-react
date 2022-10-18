@@ -6,8 +6,7 @@ import { EditControl } from "react-leaflet-draw"
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { RenderIf } from "components/RenderIf/RenderIf";
-import { SeafloorElevation } from "layout/DataPanel/SeafloorElevation";
-import { SeafloorControl } from "../SeafloorControl";
+import { SeafloorElevation } from "components/SeafloorElevation";
 
 declare const L: any
 
@@ -20,7 +19,7 @@ const dotIcon = ({ fill = "#3388ff", opacity = 0.7, size = [10, 10], anchor = [1
   iconAnchor: anchor,
 });
 
-export const DrawLine = () => {
+export const DrawShapes = () => {
   const map = useMap()
   const featureRef = useRef<any>()
   const [coordsProfile, setCoordsProfile] = useState<LatLng[]>([])
@@ -29,7 +28,6 @@ export const DrawLine = () => {
   return (
     <>
       <FeatureGroup ref={featureRef}>
-        {/* <SeafloorControl /> */}
         <EditControl
           position="topright"
           draw={{
@@ -43,18 +41,8 @@ export const DrawLine = () => {
             polyline: {
               showLength: true,
               icon: dotIcon(),
-              // shapeOptions: {
-              //   color: 'red'
-              // },
             },
           }}
-          // edit={{
-          //   edit: false
-          // }}
-          // onDrawStart={(e) => {
-          //   console.log('ddd')
-          //   setRenderProfile(false)
-          // }}
           onCreated={(e) => {
             switch (e.layerType) {
               case 'polyline':
@@ -131,12 +119,6 @@ export const DrawLine = () => {
                   center.addTo(featureRef.current)
                   e.layer.bringToFront()
                 })
-                // e.layer.on('edit', () => {
-                //   console.log('end', e.layer)
-                //   latlng = e.layer.getLatLng()
-                //   center.initialize(latlng)
-                //   center.addTo(featureRef.current)
-                // })
                 break
             }
           }}

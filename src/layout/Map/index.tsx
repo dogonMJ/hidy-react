@@ -14,9 +14,7 @@ import { LanguageControl } from 'components/LanguageControl'
 import { CPlanControll } from 'components/Cplan';
 // import { DragDrop } from 'components/DragDrop';
 import { DragDrop } from 'components/DragDrop';
-import { DrawLine } from 'components/DrawShapes';
-import { useEffect, useState } from 'react';
-
+import { SeafloorControl } from 'components/SeafloorControl';
 // @ts-ignore
 import 'leaflet-measure/'
 // @ts-ignore
@@ -71,36 +69,7 @@ const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  const [dropedFile, setDropedFile] = useState<any>()
 
-  // const zzz: any = []
-  // const handleDrop = (e: any) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-  //     zzz.push(e.dataTransfer.files[0])
-  //     setDropedFile([...zzz])
-  //   }
-  // };
-  // const handleDrag = function (e: any) {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   if (e.type === "dragenter" || e.type === "dragover") {
-  //     // setDragActive(true);
-  //     // console.log('enter')
-  //   } else if (e.type === "dragleave") {
-  //     // setDragActive(false);
-  //     // console.log('leave')
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const mapContainer = document.getElementById('mapContainer')
-  //   if (mapContainer) {
-  //     mapContainer.ondrop = handleDrop
-  //     mapContainer.ondragover = handleDrag
-  //   }
-  // }, [])
   return (
     <>
       <Flatpickr
@@ -141,8 +110,7 @@ const LeafletMap = () => {
         <MouseCoordinates />
         <DataPanel />
         <CPlanControll />
-        <DrawLine />
-        {/* <SeafloorControl /> */}
+        <SeafloorControl />
         <DragDrop />
       </MapContainer>
     </>

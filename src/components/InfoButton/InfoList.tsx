@@ -405,6 +405,15 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('OdbData.others')}<br />
         </Typography >
       )
+    case 'CPlanLayers':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`CPlanLayers.title`)}</b><br />
+          <a target="_blank" href="https://odbwms.oc.ntu.edu.tw/odbintl/rasters/cplan/" rel="noreferrer">C-Plan</a><br />
+          <span>{t('CPlanLayers.description')}</span><br />
+          <span>{t('CPlanLayers.tip')}</span><br />
+        </Typography >
+      )
   }
   return <></>
 }

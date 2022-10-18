@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 interface Props {
   identifier: any
-  handelClick: any
+  handleClick: any
   group: string
   optionList: string[]
 }
@@ -13,7 +13,7 @@ export const DataPanelRadioList = (props: Props) => {
   const { t } = useTranslation()
   const {
     identifier,
-    handelClick,
+    handleClick,
     group,
     optionList
   } = props
@@ -33,7 +33,7 @@ export const DataPanelRadioList = (props: Props) => {
                 key={value}
                 disablePadding
               >
-                <ListItemButton role={undefined} onClick={handelClick(value)} dense>
+                <ListItemButton role={undefined} onClick={handleClick(value)} dense>
                   <FormControlLabel
                     value={value}
                     control={<Radio />}
