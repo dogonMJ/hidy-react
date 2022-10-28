@@ -123,6 +123,7 @@
     "odbGravity": "Gravity",
     "odbSedCore": "Sediment Core",
     "odbCtd": "CTD",
+    "odbChemistry": "Marine Chemistry",
     "density": "Density",
     "t": "Temperature",
     "sal": "Salinity",
@@ -140,6 +141,32 @@
       "B": "Box Core (B)",
       "GHP": "Geo Heat Probe (GHP)",
       "PC": "Piston Core (PC)"
+    },
+    "chemistryList": {
+      "siteName": "ODB Marine Chemistry Database",
+      "siteUrl": "https://www.odb.ntu.edu.tw/chem/en/",
+      "latRange": "Latitude Range",
+      "lonRange": "Longitude Range",
+      "dateRange": "Date Range",
+      "depthRange": "Depth Range",
+      "para": "Parameters",
+      "Sal": "Salinity",
+      "DO": "Dissolved Oxygen",
+      "NO3": "Nitrate (NO\u2083\u207B)",
+      "NO2": "Nitrite (NO\u2082\u207B)",
+      "PO4": "Phosphate (PO\u2084\u00B3\u207B)",
+      "SiOx": "Silicate",
+      "NH4": "Ammonium (NH\u2084\u207A)",
+      "Chl": "Chlorophyll a",
+      "POC": "Particulate Organic Carbon (POC)",
+      "PON": "Particulate Organic Nitrogen (PON)",
+      "DOC": "Dissolved Organic Carbon (DOC)",
+      "DIC": "Dissolved Inorganic Carbon (DIC)",
+      "pH_NBS": "pH (NBS)",
+      "pH_total": "pH (total)",
+      "Alk": "Total Alkalinity",
+      "source": "Bottle sampling data stored in ODB Marine Database.",
+      "description": "Select data in certain spatiotemporal range.\nThe map shows all sites include ANY of the selected parameters and depths.\nEach point on the map shows sampling location, sampling time, depth, cruise ID, and other measured parameters.\nIf the points are overlapping, zoom back until the cluster point appears. Click to cluster to show each point."
     }
   },
   "DataInfo": {
@@ -166,7 +193,7 @@
     "mean": "mean"
   },
   "CPlanLayers": {
-    "title": "Cruise Planner (C-Plan)",
+    "title": "Cruise Planner (C-Plan) Layers",
     "description": "C-Plan is a cruise planning tool provided by ODB.\nThe tool is designed for researchers to plane cruise missions on map and export tables for cruise application.",
     "tip": "Enter saved C-key, if it is correct, cruise data would be displayed on map.\nClick the C-key on top of the inputbox to move to the layer. Click the cross to close layer.",
     "table": {

@@ -3,13 +3,14 @@ import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useMap } from 'react-leaflet';
+import { DataPanelItem } from 'components/DataPanelItem';
 import ToggleCWB from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
 import { ODB } from 'layout/DataPanel/ODB';
-import { DataPanelItem } from 'components/DataPanelItem';
-import { CPlanLayers } from './CPlanLayers';
+import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
+import { LontermMean } from 'layout/DataPanel/LongtermMean';
 // @ts-ignore
 import Cache from 'cachai';
 const cache = new Cache(400)
@@ -39,13 +40,20 @@ const DataPanel = () => {
     SatData: <SatelliteData />,
     OdbData: <ODB />,
     CPlanLayers: <CPlanLayers />,
+    LongtermMean: <LontermMean />
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)
   const [open, setOpen] = useState(false);
 
-  const mouseEnter = () => map.scrollWheelZoom.disable()
-  const mouseLeave = () => map.scrollWheelZoom.enable()
+  const mouseEnter = () => {
+    map.scrollWheelZoom.disable()
+    map.dragging.disable()
+  }
+  const mouseLeave = () => {
+    map.scrollWheelZoom.enable()
+    map.dragging.enable()
+  }
   const handleDrawerOpen = () => setOpen(true)
   const handleDrawerClose = () => setOpen(false)
   const handleClick = (item: string) => () => {

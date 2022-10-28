@@ -180,3 +180,8 @@ input {
   border: 0;
   box-shadow: 0 0px 0px;
 }
+
+.chemDatePickr {
+  width: 200px;
+  text-align: center;
+}

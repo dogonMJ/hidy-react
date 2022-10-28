@@ -43,14 +43,6 @@ export const CPlanLayers = () => {
       .bindPopup(`${feature.geometry.coordinates[1].toString()}, ${feature.geometry.coordinates[0].toString()}`)
   }
 
-  const onEachFeature = (feature: geojson.Feature<geojson.Geometry, any>, layer: L.Layer) => {
-    if (feature.geometry.type === 'LineString') {
-      console.log(feature, layer)
-    } else if (feature.geometry.type === 'Point') {
-      console.log(feature)
-    }
-  }
-
   const handleChange = (e: any) => {
     setCkey(e.target.value)
   }
@@ -82,14 +74,6 @@ export const CPlanLayers = () => {
     map.removeLayer(layerList[index])
     setLayerList(layerList.filter((data: any, i: number) => i !== index))
     setRenderTable(false)
-  }
-  const disableMapAction = () => {
-    map.dragging.disable()
-    map.scrollWheelZoom.disable()
-  }
-  const enableMapAction = () => {
-    map.dragging.enable()
-    map.scrollWheelZoom.enable()
   }
   const handleFlyTo = (layer: any) => {
     map.fitBounds(layer.getBounds())
@@ -132,8 +116,6 @@ export const CPlanLayers = () => {
           value={ckey}
           onKeyDown={handleSearch}
           onChange={handleChange}
-          onMouseEnter={disableMapAction}
-          onMouseLeave={enableMapAction}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">

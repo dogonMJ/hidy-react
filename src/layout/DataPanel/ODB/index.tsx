@@ -12,20 +12,23 @@ import { OdbCTD } from './OdbCTD';
 import { OdbGravity } from './OdbGravity';
 import { OdbCurrent } from './OdbCurrent';
 import { OdbSedCore } from './OdbSedCore';
+import { OdbChemistry } from './OdbChemistry';
 import { SubSelection } from 'components/SubSelection';
 
-const optionList = ['odbTopo', 'odbCtd', 'odbGravity', 'odbCurrent', 'odbSedCore']
+const optionList = ['odbTopo', 'odbCtd', 'odbGravity', 'odbCurrent', 'odbSedCore', 'odbChemistry']
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const [checked, setChecked] = useState<string[]>([]);
   const type = useSelector((state: RootState) => state.coordInput.OdbCtdSelection)
+  const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
+
   const handleCtdChange = (event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
     if (newSelect) {
       dispatch(coordInputSlice.actions.OdbCtdSelection(newSelect))
     }
   };
-  const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
+
   const handleCurChange = (event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
     if (newSelect) {
       dispatch(coordInputSlice.actions.OdbCurSelection(newSelect))
@@ -108,6 +111,9 @@ export const ODB = () => {
       </RenderIf>
       <RenderIf isTrue={checked.includes('odbSedCore')}>
         <OdbSedCore />
+      </RenderIf>
+      <RenderIf isTrue={checked.includes('odbChemistry')}>
+        <OdbChemistry />
       </RenderIf>
     </>
   )

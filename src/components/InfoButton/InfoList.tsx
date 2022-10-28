@@ -414,6 +414,16 @@ const InfoList = (props: { dataId: string }) => {
           <span>{t('CPlanLayers.tip')}</span><br />
         </Typography >
       )
+    case 'odbChemistry':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.odbChemistry`)}</b><br />
+          <a target="_blank" href={t('OdbData.chemistryList.siteUrl')} rel="noreferrer">{t('OdbData.chemistryList.siteName')}</a><br />
+          <a target="_blank" href="https://chemview.odb.ntu.edu.tw/" rel="noreferrer">ODB Marine Chemistry Viewer</a><br />
+          {t('DataInfo.source')}: {t('OdbData.chemistryList.source')}<br />
+          {t('DataInfo.others')}: <br />{t('OdbData.chemistryList.description')}<br />
+        </Typography >
+      )
   }
   return <></>
 }

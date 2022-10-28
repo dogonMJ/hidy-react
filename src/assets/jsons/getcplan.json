@@ -1,0 +1,167 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-25 00:00:00",
+        "time": "00:03:00",
+        "depths": "['5', '10', '20', '30', '50', '80', '100', '150', '200', '1000']",
+        "parameters": "['Salinity', 'D.O.', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-25 00:00:00",
+        "time": "03:00:00",
+        "depths": "['5', '10', '20', '30', '50', '80', '100', '150', '200']",
+        "parameters": "['Salinity', 'D.O.', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-25 00:00:00",
+        "time": "05:58:00",
+        "depths": "['5', '10', '20', '30', '50', '80', '100', '150', '200', '1000']",
+        "parameters": "['Salinity', 'D.O.', 'NO3', 'NO2', 'PO4', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-25 00:00:00",
+        "time": "09:51:00",
+        "depths": "['5', '10', '20', '30', '50', '80', '100', '150', '200']",
+        "parameters": "['Salinity', 'D.O.', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-25 00:00:00",
+        "time": "12:01:00",
+        "depths": "['5', '10', '20', '30', '50', '80', '100', '150', '200']",
+        "parameters": "['Salinity', 'D.O.', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-24 00:00:00",
+        "time": "15:04:00",
+        "depths": "['5', '10', '20', '50', '80', '100', '150', '200', '300', '400', '500']",
+        "parameters": "['Salinity', 'D.O.', 'NO3', 'NO2', 'PO4', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-25 00:00:00",
+        "time": "15:01:00",
+        "depths": "['5', '10', '20', '50', '80', '100', '150', '200', '300', '400', '500']",
+        "parameters": "['Salinity', 'D.O.', 'NO3', 'NO2', 'PO4', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-24 00:00:00",
+        "time": "17:59:00",
+        "depths": "['5', '10', '20', '30', '50', '80', '100', '150', '200']",
+        "parameters": "['Salinity', 'D.O.', 'SiO3', 'Chlorophyll a']"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.0,
+          18.0
+        ]
+      },
+      "properties": {
+        "ship": "OR1",
+        "cruise": "1103",
+        "date": "2015-04-24 00:00:00",
+        "time": "20:58:00",
+        "depths": "['5', '10', '15', '20', '30', '50', '80', '100', '150', '200']",
+        "parameters": "['Salinity', 'D.O.', 'NO3', 'NO2', 'PO4', 'SiO3', 'Chlorophyll a']"
+      }
+    }
+  ]
+}

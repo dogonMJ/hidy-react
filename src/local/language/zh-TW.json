@@ -123,6 +123,7 @@
     "odbGravity": "重力",
     "odbSedCore": "岩心",
     "odbCtd": "鹽溫深儀",
+    "odbChemistry": "海洋化學",
     "density": "密度",
     "t": "溫度",
     "sal": "鹽度",
@@ -140,6 +141,32 @@
       "B": "箱型岩心採樣 (B)",
       "GHP": "地熱探針 (GHP)",
       "PC": "活塞岩心採樣 (PC)"
+    },
+    "chemistryList": {
+      "siteName": "ODB海洋化學資料庫",
+      "siteUrl": "https://www.odb.ntu.edu.tw/chem/",
+      "latRange": "緯度範圍",
+      "lonRange": "經度範圍",
+      "dateRange": "日期範圍",
+      "depthRange": "深度範圍",
+      "para": "參數",
+      "Sal": "鹽度",
+      "DO": "溶解氧",
+      "NO3": "硝酸鹽 (NO\u2083\u207B)",
+      "NO2": "亞硝酸鹽 (NO\u2082\u207B)",
+      "PO4": "磷酸鹽 (PO\u2084\u00B3\u207B)",
+      "SiOx": "矽酸鹽",
+      "NH4": "銨 (NH\u2084\u207A)",
+      "Chl": "葉綠素a",
+      "POC": "顆粒有機碳 (POC)",
+      "PON": "顆粒有機氮 (PON)",
+      "DOC": "溶解有機碳 (DOC)",
+      "DIC": "溶解無機碳 (DIC)",
+      "pH_NBS": "pH (NBS)",
+      "pH_total": "pH (總)",
+      "Alk": "總鹼度",
+      "source": "ODB海洋化學資料庫存有之船測水樣化學參數。",
+      "description": "可選擇特定時間、空間範圍內之資料。\n地圖會顯示包含任一所選參數及深度之採樣點位，提供該採樣航次、時間、位置及其他測量參數。\n若點位太集中或重疊，可往回縮放點選集合點位，可出現該集合之爆炸圖。"
     }
   },
   "DataInfo": {
@@ -169,7 +196,7 @@
     "mean": "平均"
   },
   "CPlanLayers": {
-    "title": "航次規劃 (C-Plan)",
+    "title": "航次規劃圖層",
     "description": "C-Plan (Cruise Planner)是ODB設計，專門提供研究者規劃航次任務，並可以輸出研究船航次申請圖表。",
     "tip": "輸入在C-Plan上的存檔名稱(C-key)，點選右方勾勾或是按下enter，若輸入正確地圖上會出現該航次的規劃圖。\n點選上方新出現之C-key可以移動至該圖層、右方叉叉可以移除圖層。",
     "table": {
