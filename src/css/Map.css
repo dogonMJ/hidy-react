@@ -185,3 +185,13 @@ input {
   width: 200px;
   text-align: center;
 }
+
+.Longterm-Contour-Label {
+  font-size: 1rem;
+  /* font-weight: bold; */
+  /* text-shadow: 0 0 5px rgb(153, 153, 153); */
+  background: none;
+  box-shadow: none;
+  border: transparent;
+  -webkit-text-stroke: 0.02rem black;
+}

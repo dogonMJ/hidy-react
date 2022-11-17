@@ -1,11 +1,9 @@
 import 'leaflet'
 import { useEffect, useRef, useState } from "react"
-import { GeoJSON, useMap } from "react-leaflet"
+import { GeoJSON } from "react-leaflet"
 import { LatLng } from "leaflet"
 import * as geojson from 'geojson';
 import Flatpickr from "react-flatpickr";
-// import "flatpickr/dist/themes/light.css";
-import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect'
 import 'flatpickr/dist/plugins/monthSelect/style.css'
 import 'leaflet.markercluster/dist/leaflet.markercluster.js'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -96,12 +94,12 @@ export const OdbChemistry = () => {
     },
     'pH_NBS': {
       name: t('OdbData.chemistryList.pH_NBS'),
-      code: 'ph(NBS)',
+      code: 'pH(NBS)',
       unit: ''
     },
     'pH_total': {
       name: t('OdbData.chemistryList.pH_total'),
-      code: 'ph(total)',
+      code: 'pH(total)',
       unit: ''
     },
     'Alk': {
@@ -257,6 +255,7 @@ export const OdbChemistry = () => {
                   key={id}
                   control={
                     <Checkbox size='small' onChange={handleParameters} name={varList[par].code} />
+                    // <Checkbox size='small' onChange={handleParameters} name={par} />
                   }
                   label={<Typography variant='caption' sx={{ width: 135 }}>{varList[par].name} {varList[par].unit}</Typography>}
                 />

@@ -424,6 +424,41 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: <br />{t('OdbData.chemistryList.description')}<br />
         </Typography >
       )
+    case 'StatMeanLongterm':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.ncei.noaa.gov/products/world-ocean-atlas" rel="noreferrer">World Ocean Atlas 2018</a><br />
+          {t('DataInfo.productType')}: WOA18 decav<br />
+          {t('DataInfo.spatialRange')}: 2 ~ 35°N, 105 ~ 135°E<br />
+          {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
+          {t('DataInfo.temporalRange')}: 1955-01-01 ~ 2017-12-31<br />
+          {t('DataInfo.others')}: {t('StatMean.description.woa')}<br />
+        </Typography >
+      )
+    case 'StatMeanMonthly':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00019" rel="noreferrer">GLOBAL_MULTIYEAR_BGC_001_029</a><br />
+          {t('DataInfo.dataset')}:Monthly mean fields for product global reanalysis bio 001 029<br />
+          {t('DataInfo.spatialRange')}: 2 ~ 35°N, 105 ~ 135°E<br />
+          {t('DataInfo.spatialRes')}:  0.25° × 0.25°<br />
+          {t('DataInfo.temporalRange')}: 1993-01 ~ 2018-12 <br />
+          {t('DataInfo.others')}: {t('StatMean.description.cmems')}<br />
+        </Typography >
+      )
+    case 'StatMeanProfile':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('StatMean.description.profile')}
+        </Typography >
+      )
+    case 'StatMeanContour':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('StatMean.description.contour')}
+        </Typography >
+      )
   }
   return <></>
 }

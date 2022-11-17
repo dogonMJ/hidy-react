@@ -43,10 +43,19 @@ export const DragDrop = () => {
     return new L.CircleMarker(latlng)
   }
   const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
-    if (feature.properties.description) {
-      layer.bindPopup(`${feature.properties.name}<br>${feature.properties.description}`).bindTooltip(feature.properties.name)
+    if (feature.geometry.type === 'Point') {
+      let content = ''
+      const flattened = flattenObj(feature.properties, null)
+      Object.keys(flattened).forEach((key) => {
+        content = content.concat(`${key}: ${flattened[key]}<br>`)
+      })
+      layer.bindPopup(content).bindTooltip(content)
     } else {
-      layer.bindPopup(feature.properties.name).bindTooltip(feature.properties.name)
+      if (feature.properties.description) {
+        layer.bindPopup(`${feature.properties.name}<br>${feature.properties.description}`).bindTooltip(feature.properties.name)
+      } else {
+        layer.bindPopup(feature.properties.name).bindTooltip(feature.properties.name)
+      }
     }
   }
   const onEachFeatureJSON = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
@@ -99,7 +108,7 @@ export const DragDrop = () => {
       return {
         radius: 5,
         opacity: 1,
-        // color: '#ff7070',
+        color: colors[number % 10].value,//'#ff7070',
         stroke: true,
         weight: 2,
       }

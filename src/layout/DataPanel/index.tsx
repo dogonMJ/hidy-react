@@ -10,7 +10,7 @@ import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
 import { ODB } from 'layout/DataPanel/ODB';
 import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
-import { LontermMean } from 'layout/DataPanel/LongtermMean';
+import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 // @ts-ignore
 import Cache from 'cachai';
 const cache = new Cache(400)
@@ -40,7 +40,7 @@ const DataPanel = () => {
     SatData: <SatelliteData />,
     OdbData: <ODB />,
     CPlanLayers: <CPlanLayers />,
-    LongtermMean: <LontermMean />
+    StatMean: <StatisticMean />
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)

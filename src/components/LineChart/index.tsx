@@ -1,6 +1,6 @@
 import Plot from 'react-plotly.js';
 import Draggable from 'react-draggable';
-import { useRef, forwardRef } from 'react';
+import { useRef, forwardRef, useState } from 'react';
 import { Pane, useMap } from 'react-leaflet';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
@@ -16,6 +16,7 @@ export const LineChart = forwardRef((
   , ref: any,) => {
   const nodeRef = useRef(null)
   const map = useMap()
+  const [disabled, setDisabled] = useState(false)
   const { data, layout, config } = props.plotProps
   const layerCenterPoint = map.latLngToLayerPoint(map.getBounds().getCenter())
 
@@ -27,7 +28,7 @@ export const LineChart = forwardRef((
     map.dragging.enable()
     map.scrollWheelZoom.enable()
   }
-  const onClick = () => {
+  const onClose = () => {
     enableMapAction()
     props.setOpen(false)
   }
@@ -38,6 +39,7 @@ export const LineChart = forwardRef((
         nodeRef={nodeRef}
         // defaultClassName={'DefaultDraggable'}
         defaultPosition={{ x: layerCenterPoint.x - 400, y: layerCenterPoint.y + 60 }}
+        disabled={disabled}
       >
         <div ref={nodeRef} >
           <div
@@ -50,7 +52,7 @@ export const LineChart = forwardRef((
             }}
           >
             <IconButton
-              onClick={onClick}
+              onClick={onClose}
               sx={{
                 display: 'flex',
                 marginLeft: 'auto',
@@ -63,8 +65,19 @@ export const LineChart = forwardRef((
               data={data}
               layout={layout}
               config={config}
-              onHover={props.hover}
-              onUnhover={props.unhover}
+              onHover={(evt) => {
+                if (props.hover) {
+                  props.hover(evt)
+                }
+                setDisabled(true)
+              }}
+              onUnhover={(evt) => {
+                if (props.unhover) {
+                  props.unhover(evt)
+                }
+                setDisabled(false)
+              }}
+              onClick={() => setDisabled(true)}
             />
           </div>
         </div>
