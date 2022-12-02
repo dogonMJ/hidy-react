@@ -20,6 +20,9 @@ import 'leaflet-measure/'
 // @ts-ignore
 import "./leaflet.latlng-graticule.js"
 import 'leaflet-measure/dist/leaflet-measure.css';
+import { sign } from 'layout/SignIn/utils'
+import { SignInControl } from 'components/SignInControl';
+import CustomControl from "react-leaflet-custom-control";
 
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
@@ -65,10 +68,17 @@ const addGraticule = (map: L.Map) => {
   })
   graticule.addTo(map);
 }
+
+
 const LeafletMap = () => {
   const dispatch = useDispatch()
   const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const checkLogin = async () => {
+    const userInfo = await sign.getUserInfo()
+    dispatch(coordInputSlice.actions.userInfo(userInfo))
+  }
+  checkLogin()
 
   return (
     <>
@@ -103,14 +113,17 @@ const LeafletMap = () => {
         }}
       >
         <div id={'LengendContainer'} style={{ display: 'flex', flexDirection: 'column-reverse', position: 'absolute', bottom: 25, zIndex: 1000 }}></div>
-        <LanguageControl position='topright' />
-        <MyBaseLayers />
-        <ZoomControl position="topright" />
+        <CustomControl position='topright'>
+          <SignInControl />
+          <LanguageControl />
+          <MyBaseLayers />
+          <ZoomControl position="topright" />
+          <CPlanControll />
+          <SeafloorControl />
+        </CustomControl>
         <ScaleControl imperial={false} />
         <MouseCoordinates />
         <DataPanel />
-        <CPlanControll />
-        <SeafloorControl />
         <DragDrop />
       </MapContainer>
     </>

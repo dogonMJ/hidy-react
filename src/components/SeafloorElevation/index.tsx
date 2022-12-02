@@ -4,22 +4,17 @@ import { LineChart } from "components/LineChart"
 import { coor } from "types";
 import { PlotParams } from "react-plotly.js";
 
-// source: ETOPO5 edited by Kuo, details need to be checked. E:\Depth and E:\drifter
+// old source: ETOPO5 edited by Kuo, details need to be checked. E:\Depth and E:\drifter
 declare const L: any
-interface Zseg {
-  x: number[]
-  y: number[]
-  z: number[]
-  d: number[]
-}
+
 const dotIcon = {
   height: 24,
   width: 24,
   path: 'M6 20q-1.25 0-2.125-.875T3 17q0-1.25.875-2.125T6 14q1.25 0 2.125.875T9 17q0 1.25-.875 2.125T6 20Zm12 0q-1.25 0-2.125-.875T15 17q0-1.25.875-2.125T18 14q1.25 0 2.125.875T21 17q0 1.25-.875 2.125T18 20Zm-6-10q-1.25 0-2.125-.875T9 7q0-1.25.875-2.125T12 4q1.25 0 2.125.875T15 7q0 1.25-.875 2.125T12 10Z'
 }
 export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  const plotRef = useRef<any>()
   const { coords, setOpen } = props
+  const plotRef = useRef<any>()
   const map = useMap()
   const [plotProps, setPlotProps] = useState<PlotParams>({
     data: [],
@@ -40,12 +35,13 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
           text: 'Distance (km)',
           standoff: 10
         },
-        fixedrange: true,
+        // fixedrange: true,
         showspikes: true,
         spikemode: 'across',
         spikedash: 'solid',
         spikethickness: 2,
         spikecolor: '#9c9c9c',
+        hoverformat: '.2f'
       },
       yaxis: {
         title: {
@@ -60,17 +56,36 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
     }
   })
   let hoverPoint: L.CircleMarker;
+  let lastLon: number | null = null
   const hover = (data: Plotly.PlotHoverEvent) => {
     const points = data.points[0]
     const id = points.pointIndex
+    const lng = coords.slice(-1)[0].lng
+    let lon = Number(points.data.lon[id])
+    if ((lastLon && Math.abs(lon - lastLon) > 180) || lastLon === null) {
+      lon = Number(points.data.lon[id]) + 360 * (Math.sign(lng))
+    }
+    lastLon = lon
+    ///// if map span > 720 /////
+    // const cross = Math.trunc(lng / 180)
+    // if (Math.abs(cross) > 0) {
+    //   if (lastLon && Math.abs(lon - lastLon) > 180) {
+    //     lon = Number(points.data.lon[id]) + 360 * (cross)
+    //   }
+    // } else {
+    //   if (lastLon && Math.abs(lon - lastLon) > 180) {
+    //     lon = Number(points.data.lon[id]) + 360 * (Math.sign(lng))
+    //   }
+    // }
+    //////////////////////////////
     const latlng = {
       lat: points.data.lat[id],
-      lon: points.data.lon[id]
+      lon: lon
     }
     hoverPoint = L.circleMarker(latlng, { radius: 4 })
     hoverPoint.addTo(map)
   }
-  const unHover = (data: Plotly.PlotMouseEvent) => {
+  const unHover = () => {
     map.removeLayer(hoverPoint)
   }
   useEffect(() => {
@@ -80,48 +95,62 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
       let lat: number[] = []
       let lon: number[] = []
       const annotations: Array<Partial<Plotly.Annotations>> = []
-      const endPoints: number[][] = []
-      // fetch Data
-      for (let i = 0; i < coords.length - 1; i++) {
-        const url = `https://odbgo.oc.ntu.edu.tw/grd/seaclim/zseg/${coords[i].lng},${coords[i].lat},${coords[i + 1].lng},${coords[i + 1].lat}/json`
-        const json: Zseg[] = await fetch(url)
-          .then((res) => res.json())
-          .catch((e) => {
-            setOpen(false)
-            alert('Out of range (2~35\xB0N, 105~135\xB0E)')
-          })
-        const max = Math.max(...dist) > 0 ? Math.max(...dist) : 0
-        dist = [...dist, ...json[0].d.map(n => n + max)]
-        depth = [...depth, ...json[0].z]
-        lon = [...lon, ...json[0].x]
-        lat = [...lat, ...json[0].y]
-        const index1 = dist.length - 1
-        const index2 = json[0].d.length - 1
-        if (i === 0) {
-          endPoints.push([dist[0], depth[0], json[0].y[0], json[0].x[0]])
+      const lats = coords.map((coord) => coord.lat)
+      const lngs = coords.map((coord) => {
+        const lng = coord.lng
+        const round = Math.trunc(lng / 180)
+        if (lng >= 180) {
+          return lng - 180 * round - 180
+        } else if (lng < -180) {
+          return lng - 180 * round + 180
+        } else {
+          return coord.lng
         }
-        endPoints.push([dist[index1], depth[index1], json[0].y[index2], json[0].x[index2]])
-      }
+      })
+      await fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${lngs}&lat=${lats}`)
+        .then(res => res.json())
+        .then(json => {
+          lon = json.longitude.map((value: number) => Math.round(value * 10000) / 10000)
+          lat = json.latitude.map((value: number) => Math.round(value * 10000) / 10000)
+          depth = json.z
+          json.distance.reduce(
+            (accumulator: number, currentValue: number) => {
+              dist.push(accumulator + currentValue)
+              return accumulator + currentValue
+            }
+          );
+        })
+      const endPoints = await fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${lngs}&lat=${lats}&mode=point`)
+        .then(res => res.json())
+        .then(json => {
+          const d = [0]
+          json.distance.reduce((accumulator: number, currentValue: number) => {
+            d.push(accumulator + currentValue)
+            return accumulator + currentValue
+          })
+          json.distance = d
+          return { ...json }
+        })
       const text = lat.map((lat, i) => `${lat}, ${lon[i]}`)
       // handle annotations
-      endPoints.forEach((endPoint) => {
+      for (let i = 0; i < endPoints.z.length; i++) {
         annotations.push({
           visible: true,
-          x: endPoint[0],
-          y: endPoint[1],
+          x: endPoints.distance[i],//endPoint[0],
+          y: endPoints.z[i],//endPoint[1],
           xref: 'x',
           yref: 'y',
-          text: `(${endPoint[2]}, ${endPoint[3]})`,
+          text: `(${endPoints.latitude[i].toFixed(4)}, ${endPoints.longitude[i].toFixed(4)})`,
           showarrow: true,
           arrowhead: 6,
           ay: -40,
           startstandoff: 30,
         })
-      })
+      }
       plotProps.layout.annotations = annotations
       // handle data
       plotProps.data = [{
-        x: dist,
+        x: [0, ...dist],
         y: depth,
         lat: lat,
         lon: lon,
@@ -134,7 +163,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
           shape: 'spline'
         },
         // hovertemplate: `%{text}<br>Distance:%{x} km<br>Elevation: %{y} m<extra></extra>`
-        hovertemplate: `%{text}<br><b>%{x} km</b><br><b>%{y} m</b><extra></extra>`,
+        hovertemplate: `%{text}<br><b>%{x:.2f} km</b><br><b>%{y} m</b><extra></extra>`,
       }]
       // handle config & custom button for toogle annotations
       plotProps.config!.modeBarButtonsToAdd = [{

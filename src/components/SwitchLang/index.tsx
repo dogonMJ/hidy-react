@@ -1,21 +1,11 @@
 import { useState } from 'react';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import TranslateIcon from '@mui/icons-material/Translate';
+import { IconButton } from '@mui/material';
 import { useTranslation } from "react-i18next";
 
 const SwitchLang = () => {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const [lang, setLang] = useState('zh-TW');
-  // const handleSwitch = (
-  //   event: any,//React.MouseEvent<HTMLElement>,
-  //   newLang: string | null,
-  // ) => {
-  //   console.log(newLang)
-  //   if (newLang) {
-  //     setLang(newLang);
-  //     i18n.changeLanguage(newLang)
-  //   }
-  // };
   const handleSwitch = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.currentTarget as HTMLInputElement
     switch (target.value) {
@@ -33,44 +23,22 @@ const SwitchLang = () => {
     }
   }
   return (
-    // <ToggleButtonGroup
-    //   size="small"
-    //   value={lang}
-    //   exclusive
-    //   onChange={handleSwitch}
-    //   sx={{
-    //     right: 5,
-    //     backgroundColor: 'white',
-    //   }}
-    // >
-    //   <ToggleButton value="zh-TW" aria-label='中文' className='langBtn'>
-    //     中文
-    //   </ToggleButton>
-    //   <ToggleButton value="en" aria-label='EN' className='langBtn'>
-    //     EN
-    //   </ToggleButton>
-    // </ToggleButtonGroup>
-    <ToggleButtonGroup
-      size="small"
-      value={lang}
-      exclusive
-      onChange={handleSwitch}
-      sx={{
-        right: 5,
-        backgroundColor: 'white',
-        width: '45px',
-        height: '25px',
-      }}
-    >
-      <ToggleButton value={lang} sx={{
-        width: '95px',
-        fontFamily: 'Rubik',
-        "&.Mui-selected":
-          { background: 'white' }
-      }}>
-        {t('switchLang')}
-      </ToggleButton>
-    </ToggleButtonGroup>
+    <div className='leaflet-bar bg-white' tabIndex={-1}>
+      <IconButton
+        value={lang}
+        onClick={handleSwitch}
+        sx={{
+          width: 30,
+          height: 30,
+          fontFamily: 'Rubik',
+          fontSize: '5px',
+          fontWeight: 900
+        }}
+      >
+        <TranslateIcon fontSize="small" />
+        {/* {t('switchLang')} */}
+      </IconButton>
+    </div>
   );
 }
 

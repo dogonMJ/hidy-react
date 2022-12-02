@@ -75,6 +75,19 @@ input {
   color: #000;
 }
 
+.leaflet-touch .leaflet-control-layers-toggle {
+  width: 30px;
+  height: 30px;
+}
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  background-size: 20px;
+}
+
+.leaflet-control-layers {
+  border-radius: 4px;
+}
+
 .infoMark {
   transform: rotate(180deg);
 }
@@ -194,4 +207,10 @@ input {
   box-shadow: none;
   border: transparent;
   -webkit-text-stroke: 0.02rem black;
+}
+
+.SignIn-control-position {
+  float: right;
+  right: 70px;
+  top: 5px;
 }

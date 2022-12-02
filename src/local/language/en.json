@@ -1,5 +1,5 @@
 {
-  "switchLang": "中文",
+  "switchLang": "中",
   "measure": "Measure",
   "measureDistancesAndAreas": "Measure distances and areas",
   "createNewMeasurement": "Create a new measurement",
@@ -259,5 +259,15 @@
       "profile": "0~500m profile of selected longitudinal or latitudinal line.\nHovering over the graph shows the value of each point. \nx: Latitude or Longitude; y: depth; z: value; NaN: No data or land.",
       "contour": "Contour on each depth. Hovering over the line to show value."
     }
+  },
+  "account": {
+    "title": "ODB SSO",
+    "username": "User",
+    "password": "Password",
+    "signin": "Sign In",
+    "signout": "Sign Out",
+    "signup": "Create new account",
+    "forgot": "Forgot password",
+    "remember": "Remember me"
   }
 }
