@@ -268,6 +268,13 @@
     "signout": "Sign Out",
     "signup": "Create new account",
     "forgot": "Forgot password",
-    "remember": "Remember me"
+    "unauthorized": "Please check user name and password",
+    "remember": "Auto login",
+    "chkRemember": "Auto login in two weeks",
+    "notChkRemember": "Logout in 24 hours or on browser closed"
+  },
+  "ShipTrack": {
+    "title": "Research Vessels",
+    "latest": "Latest Update"
   }
 }

@@ -11,6 +11,7 @@ import SatelliteData from 'layout/DataPanel/SatelliteData';
 import { ODB } from 'layout/DataPanel/ODB';
 import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
 import { StatisticMean } from 'layout/DataPanel/StatisticMean';
+import { ShipTrack } from './ShipTrack';
 // @ts-ignore
 import Cache from 'cachai';
 const cache = new Cache(400)
@@ -40,7 +41,8 @@ const DataPanel = () => {
     SatData: <SatelliteData />,
     OdbData: <ODB />,
     CPlanLayers: <CPlanLayers />,
-    StatMean: <StatisticMean />
+    StatMean: <StatisticMean />,
+    ShipTrack: <ShipTrack />
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)

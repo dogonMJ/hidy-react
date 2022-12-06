@@ -271,6 +271,13 @@
     "signout": "登出",
     "signup": "創建新帳號",
     "forgot": "忘記帳號",
-    "remember": "記住帳號密碼"
+    "unauthorized": "請檢查使用者名稱及密碼",
+    "remember": "自動登入",
+    "chkRemember": "兩週內可自動登入",
+    "notChkRemember": "24小時後或關閉瀏覽器時登出"
+  },
+  "ShipTrack": {
+    "title": "研究船位",
+    "latest": "最近更新時間"
   }
 }

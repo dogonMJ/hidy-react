@@ -7,7 +7,7 @@ interface odbssoPayload extends JwtPayload {
 
 const API_HOST = 'http://127.0.0.1:8000/odbauth'
 
-export const sign = {
+export const account = {
   getCsrfToken: async function (csrfName = "csrftoken") {
     // django default csrf name "csrftoken"
     let cookieValue = undefined;
@@ -21,7 +21,7 @@ export const sign = {
         }
       }
     } else {
-      cookieValue = sign.setCsrfToken()
+      cookieValue = account.setCsrfToken()
     }
     return cookieValue;
   },
@@ -37,7 +37,7 @@ export const sign = {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'X-CSRFTOKEN': await sign.getCsrfToken(),
+        'X-CSRFTOKEN': await account.getCsrfToken(),
       },
       body: JSON.stringify({ username, password, remember })
     })
@@ -55,7 +55,7 @@ export const sign = {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'X-CSRFTOKEN': await sign.getCsrfToken(),
+        'X-CSRFTOKEN': await account.getCsrfToken(),
       },
     })
       .then(response => response.json())

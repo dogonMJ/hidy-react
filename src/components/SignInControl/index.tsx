@@ -34,7 +34,7 @@ export const SignInControl = () => {
 
   const userAbbr = (username: string) => username ? username.charAt(0).toUpperCase() : null
   const handleClose = () => setSignInPanel(false);
-  const handleClick = () => userInfo.username ? setShowBanner(!showBanner) : setSignInPanel(!showSignInPanel)
+  const handleClick = () => userInfo.username ? setShowBanner(true) : setSignInPanel(true)
   const handleMouseOver = () => {
     if (userInfo.username) {
       setShowBanner(true)

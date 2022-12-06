@@ -1,40 +1,31 @@
 import * as React from 'react';
 import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { Avatar, Button, CssBaseline, TextField, Checkbox, Link, Grid, Box, Typography, Container } from '@mui/material';
 import ODBIcon from 'assets/images/ODB.png';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { coordInputSlice } from "store/slice/mapSlice";
-import { sign } from './utils'
+import { account } from './utils'
 import { RenderIf } from 'components/RenderIf/RenderIf';
 
 export const SignIn = (props: { setOpen: any }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const [authFail, setAuthFail] = useState(false)
+  const [check, setCheck] = useState(false)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget)
-    console.log(data.get('remember'))
-    const loginFetch = await sign.login({
+    const loginFetch = await account.login({
       'username': data.get('username'),
       'password': data.get('password'),
       'remember': data.get('remember'),
     })
 
     if (loginFetch.logged) {
-      const userInfo = await sign.getUserInfo()
+      const userInfo = await account.getUserInfo()
       dispatch(coordInputSlice.actions.userInfo(userInfo))
       setAuthFail(false)
       props.setOpen(false)
@@ -42,6 +33,8 @@ export const SignIn = (props: { setOpen: any }) => {
       setAuthFail(true)
     }
   };
+
+  const handleRemeber = (event: any) => setCheck(event.target.checked)
 
   return (
     <Container component="main" maxWidth="xs" sx={{ width: '80%', }}>
@@ -65,7 +58,6 @@ export const SignIn = (props: { setOpen: any }) => {
             label={t('account.username')}
             name="username"
             autoComplete="username"
-            autoFocus
             size='small'
           />
           <TextField
@@ -86,13 +78,16 @@ export const SignIn = (props: { setOpen: any }) => {
               alignItems="center"
             >
               <Typography variant="caption" sx={{ color: 'red' }} align='center'>
-                {'Unauthorized'}
+                {t('account.unauthorized')}
               </Typography>
             </Box>
           </RenderIf>
-          <Typography variant="caption">
-            <Checkbox value="remember" color="primary" name='remember' />
+          <Typography variant="subtitle2">
+            <Checkbox value="remember" color="primary" name='remember' onChange={handleRemeber} />
             {t('account.remember')}
+          </Typography>
+          <Typography variant="caption" sx={{ paddingLeft: 1.5 }}>
+            {check ? t('account.chkRemember') : t('account.notChkRemember')}
           </Typography>
           <Button
             type="submit"
