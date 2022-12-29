@@ -4,8 +4,14 @@ interface odbssoPayload extends JwtPayload {
   username: string
   secLevel: number
 }
-
-const API_HOST = 'http://127.0.0.1:8000/odbauth'
+interface argVerify {
+  statusCode: number,
+  logged: boolean,
+  ticket: string
+}
+// const API_HOST = 'http://127.0.0.1:8000/odbauth'
+const AUTH_HOST = 'https://odbsso.oc.ntu.edu.tw/sso2/odbauth'
+const PROXY_HOST = 'https://127.0.0.1:5000'
 
 export const account = {
   getCsrfToken: async function (csrfName = "csrftoken") {
@@ -26,14 +32,14 @@ export const account = {
     return cookieValue;
   },
   setCsrfToken: async () => {
-    const response = await fetch(`${API_HOST}/csrf/`, {
+    const response = await fetch(`${AUTH_HOST}/csrf/`, {
       credentials: 'include',
     })
       .then(response => response.json())
     return response.csrfToken
   },
   login: async ({ username, password, remember }: any) => {
-    const request = new Request(`${API_HOST}/login/`, {
+    const request = new Request(`${AUTH_HOST}/login/`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -50,22 +56,71 @@ export const account = {
         )
       )
   },
+  // logout: async () => {
+  //   return fetch(`${AUTH_HOST}/logout/`, {
+  //     method: 'POST',
+  //     credentials: 'include',
+  //     headers: {
+  //       'X-CSRFTOKEN': await account.getCsrfToken(),
+  //     },
+  //   })
+  //     .then(response => response.json())
+  // },
+
   logout: async () => {
-    return fetch(`${API_HOST}/logout/`, {
+    return fetch(`${PROXY_HOST}/logout`, {
+      credentials: 'include',
+    })
+      .then(response => response.json())
+      .then(json => console.log(json))
+  },
+  getUserInfo: async () => {
+    return fetch(`${PROXY_HOST}/userinfo`, {
+      credentials: 'include',
+    })
+      .then(response => response.json())
+  },
+  logintest: async ({ username, password, remember }: any) => {
+    const request = new Request(`${AUTH_HOST}/login2/`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'X-CSRFTOKEN': await account.getCsrfToken(),
       },
+      body: JSON.stringify({ username, password, remember })
     })
-      .then(response => response.json())
+    const response = await fetch(request)
+    const result: any = await response.json()
+      .then((json) => {
+        return {
+          statusCode: response.status,
+          logged: json.logged,
+          ticket: json.ticket
+        }
+      })
+    const userInfo = await account.verify(result)
+    return userInfo
   },
-  getUserInfo: async () => {
-    return fetch(`${API_HOST}/getinfo/`, {
+  verify: (arg: argVerify) => {
+    const { statusCode, logged, ticket } = arg
+    if ((statusCode === 200) && (logged === true)) {
+      return fetch(`${PROXY_HOST}/verify?ticket=${ticket}`, {
+        credentials: 'include'
+      })
+        .then(response => response.json())
+    } else if (logged === false) {
+      return { stauts: false, message: 'Not logged in' }
+    } else {
+      return { stauts: false, message: `Error: ${statusCode}` }
+    }
+  },
+  test: () => {
+    return fetch(`${PROXY_HOST}/test`, {
+      method: 'POST',
       credentials: 'include',
+      body: JSON.stringify({ 'aaa': 'AAA', 'bbb': 'BBB' })
     })
-      .then(response => response.json())
-  },
+  }
 }
 //// JWT
 

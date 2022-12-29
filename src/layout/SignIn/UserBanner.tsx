@@ -35,6 +35,7 @@ export const UserBanner = React.forwardRef((props: { userInfo: any, setOpen: any
             {t('account.signout')}
           </Typography>
         </IconButton>
+        <button onClick={() => account.test()}>sdggdsg</button>
       </Typography>
     </Stack>
   )

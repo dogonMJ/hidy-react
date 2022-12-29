@@ -15,30 +15,46 @@ export const SignIn = (props: { setOpen: any }) => {
   const [authFail, setAuthFail] = useState(false)
   const [check, setCheck] = useState(false)
 
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget)
+  //   const loginFetch = await account.login({
+  //     'username': data.get('username'),
+  //     'password': data.get('password'),
+  //     'remember': data.get('remember'),
+  //   })
+
+  //   if (loginFetch.logged) {
+  //     const userInfo = await account.getUserInfo()
+  //     dispatch(coordInputSlice.actions.userInfo(userInfo))
+  //     setAuthFail(false)
+  //     props.setOpen(false)
+  //   } else {
+  //     setAuthFail(true)
+  //   }
+  // };
+
+  const handleRemeber = (event: any) => setCheck(event.target.checked)
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget)
-    const loginFetch = await account.login({
+    const loginFetch = await account.logintest({
       'username': data.get('username'),
       'password': data.get('password'),
       'remember': data.get('remember'),
     })
-
-    if (loginFetch.logged) {
-      const userInfo = await account.getUserInfo()
-      dispatch(coordInputSlice.actions.userInfo(userInfo))
+    if (loginFetch.status) {
+      dispatch(coordInputSlice.actions.userInfo(loginFetch))
       setAuthFail(false)
       props.setOpen(false)
     } else {
       setAuthFail(true)
     }
   };
-
-  const handleRemeber = (event: any) => setCheck(event.target.checked)
-
   return (
     <Container component="main" maxWidth="xs" sx={{ width: '80%', }}>
       <CssBaseline />
+      <button onClick={() => account.test()}>dfafdasfas</button>
       <Box
         sx={{
           display: 'flex',

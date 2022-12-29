@@ -43,7 +43,8 @@ const CwbSeaSites = () => {
   const cwbkey = process.env.REACT_APP_CWB_KEY
   const fetchSiteData = () => {
     // B0075-001 海象監測-48小時浮標站與潮位站，API擷取json
-    return fetch('https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=' + cwbkey + '&format=JSON')
+    // return fetch('https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=' + cwbkey + '&format=JSON')
+    return fetch(`http://localhost:5000/cwbapi/O-B0075-001/`)
       .then((response) => response.json())
       .then((data) => {
         const weatherData = {} as DataArray;
@@ -59,7 +60,8 @@ const CwbSeaSites = () => {
   }
   const fetchSiteInfo = () => {
     // B0076-001 浮標、潮位站測站資料，資料開放平台json
-    return fetch('https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-B0076-001?Authorization=' + cwbkey + '&downloadType=WEB&format=JSON')
+    // return fetch('https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/O-B0076-001?Authorization=' + cwbkey + '&downloadType=WEB&format=JSON')
+    return fetch(`http://localhost:5000/cwbfile/O-B0076-001/`)
       .then((response) => response.json())
       .then((data) => {
         const stationInfo = {} as DataArray;

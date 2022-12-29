@@ -275,6 +275,15 @@
   },
   "ShipTrack": {
     "title": "Research Vessels",
-    "latest": "Latest Update"
+    "latest": "Latest Update",
+    "ShipLocation": "Show Location on Map",
+    "HistTrack": "Past Cruise Tracks",
+    "ship": "Vessel",
+    "year": "Year",
+    "nor1Info": "Visit NOR1 info",
+    "description": {
+      "location": "Latest updated location of NOR1 (yellow), NOR2 (green), and NOR3 (red)。\nClick update time on panel to move to the current location.\nThe locations are not in real-time.\nUpdate frequency depends on the administration of each vessel and satellite network condition.",
+      "hist": "Past cruise tracks of OR1, OR2, OR3, NOR1, NOR2, and NOR3."
+    }
   }
 }

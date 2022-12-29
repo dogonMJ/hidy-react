@@ -459,6 +459,18 @@ const InfoList = (props: { dataId: string }) => {
           {t('StatMean.description.contour')}
         </Typography >
       )
+    case 'ShipLocation':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('ShipTrack.description.location')}
+        </Typography >
+      )
+    case 'HistTrack':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('ShipTrack.description.hist')}
+        </Typography >
+      )
   }
   return <></>
 }

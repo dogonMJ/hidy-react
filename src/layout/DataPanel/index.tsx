@@ -1,4 +1,6 @@
 import { useState, Fragment } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
@@ -14,6 +16,7 @@ import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
 // @ts-ignore
 import Cache from 'cachai';
+
 const cache = new Cache(400)
 interface OnOff {
   [key: string]: boolean
@@ -34,6 +37,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const DataPanel = () => {
   const map = useMap()
   const { t } = useTranslation()
+  const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
   const itemList: ItemList = {
     APIlayers: <APILayers cache={cache} />,
     CWBsites: <ToggleCWB />,
@@ -42,6 +46,8 @@ const DataPanel = () => {
     OdbData: <ODB />,
     CPlanLayers: <CPlanLayers />,
     StatMean: <StatisticMean />,
+  }
+  const secLevelAll: ItemList = {
     ShipTrack: <ShipTrack />
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
@@ -126,6 +132,24 @@ const DataPanel = () => {
                     in={openSwitch[item]}
                     timeout="auto" >
                     {itemList[item]}
+                  </Collapse>
+                </Fragment>
+              )
+            })
+          }
+          {userInfo.groupL && userInfo.groupL.length > 0 &&
+            Object.keys(secLevelAll).map((item) => {
+              return (
+                <Fragment key={`item-${item}`}>
+                  <DataPanelItem
+                    handleClick={handleClick(item)}
+                    open={openSwitch[item]}
+                    text={t(`${item}.title`)}
+                  />
+                  <Collapse
+                    in={openSwitch[item]}
+                    timeout="auto" >
+                    {secLevelAll[item]}
                   </Collapse>
                 </Fragment>
               )

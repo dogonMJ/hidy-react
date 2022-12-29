@@ -76,6 +76,7 @@ const LeafletMap = () => {
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
+    console.log(userInfo)
     dispatch(coordInputSlice.actions.userInfo(userInfo))
   }
   checkLogin()
@@ -85,7 +86,7 @@ const LeafletMap = () => {
       <Flatpickr
         className='dateTimePicker'
         data-enable-time
-        value={Date.parse(datetime)}
+        value={datetime}
         onChange={([datetime]) => dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))}
         options={{
           maxDate: timeNow.setDate(timeNow.getDate() + 9),
