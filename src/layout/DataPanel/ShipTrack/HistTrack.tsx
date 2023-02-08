@@ -29,7 +29,6 @@ const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>,
   })
 }
 
-
 export const HistTrack = () => {
   const map = useMap()
   const ref = useRef<any>()
@@ -39,8 +38,8 @@ export const HistTrack = () => {
   const [year, setYear] = useState('')
   const [json, setJson] = useState<any>(null)
 
-  const getShips = () => fetch('https://odbpo.oc.ntu.edu.tw/ais/getorshiplist')
-    // const getShips = () => fetch('http://localhost:5000/odbdata/ais/getorshiplist')
+  // const getShips = () => fetch('https://odbpo.oc.ntu.edu.tw/ais/getorshiplist')
+  const getShips = () => fetch(`${process.env.REACT_APP_PROXY_BASE}/data/shiphist/getorshiplist`)
     .then(response => response.json())
     .then(json => setShipList(json[0]))
 
@@ -64,14 +63,19 @@ export const HistTrack = () => {
 
   useEffect(() => {
     ref.current.clearLayers()
-    fetch(`https://localhost:3000/test_files/${ship}_${year}.kml`)
-      .then(response => response.text())
-      .then(text => {
-        const kml = new DOMParser().parseFromString(text, "text/xml");
-        const json = toGeoJSON.kml(kml)
-        setJson(json)
-        ref.current.addData(json)
+    // fetch(`https://localhost:3000/test_files/${ship}_${year}.kml`)
+    if (year) {
+      fetch(`${process.env.REACT_APP_PROXY_BASE}/odbdata/histship?ship=${ship}&year=${year}`, {
+        credentials: 'include'
       })
+        .then(response => response.text())
+        .then(text => {
+          const kml = new DOMParser().parseFromString(text, "text/xml");
+          const json = toGeoJSON.kml(kml)
+          setJson(json)
+          ref.current.addData(json)
+        })
+    }
   }, [year, ship])
   return (
     <>

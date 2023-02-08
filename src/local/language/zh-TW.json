@@ -173,6 +173,7 @@
     "close": "關閉圖層",
     "source": "資料來源",
     "productID": "產品編號",
+    "reference": "參考資料",
     "productType": "產品類型",
     "dataset": "資料集",
     "variable": "變數",
@@ -269,12 +270,12 @@
     "password": "密碼",
     "signin": "登入",
     "signout": "登出",
-    "signup": "創建新帳號",
-    "forgot": "忘記帳號",
+    "signup": "創建帳號",
+    "forgot": "忘記密碼",
     "unauthorized": "請檢查使用者名稱及密碼",
     "remember": "自動登入",
-    "chkRemember": "兩週內可自動登入",
-    "notChkRemember": "24小時後或關閉瀏覽器時登出"
+    "chkRemember": "14日內可自動登入",
+    "notChkRemember": "關閉瀏覽器時登出"
   },
   "ShipTrack": {
     "title": "研究船位",

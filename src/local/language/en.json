@@ -173,6 +173,7 @@
     "close": "Close Layers",
     "source": "Data Source",
     "productID": "Product ID",
+    "reference": "References",
     "productType": "Product Type",
     "dataset": "Dataset",
     "variable": "Variable",
@@ -270,8 +271,8 @@
     "forgot": "Forgot password",
     "unauthorized": "Please check user name and password",
     "remember": "Auto login",
-    "chkRemember": "Auto login in two weeks",
-    "notChkRemember": "Logout in 24 hours or on browser closed"
+    "chkRemember": "Auto login in 14 days",
+    "notChkRemember": "Logout on browser closed"
   },
   "ShipTrack": {
     "title": "Research Vessels",

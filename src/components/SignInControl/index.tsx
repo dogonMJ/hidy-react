@@ -3,18 +3,21 @@ import 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { Box, DialogContent, IconButton, Slide, Paper, Stack } from "@mui/material";
 import { Dialog } from '@mui/material';
-import { SignIn } from "layout/SignIn"
+import { SignIn } from "layout/Account/SignIn"
 import LoginIcon from '@mui/icons-material/Login';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Avatar from '@mui/material/Avatar';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
-import { UserBanner } from "layout/SignIn/UserBanner";
-
+import { UserBanner } from "layout/Account/UserBanner";
+import { SignUp } from "layout/Account/SignUp"
+import { ResetPassword } from "layout/Account/ResetPassword"
 
 export const SignInControl = () => {
   const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
-  const [showSignInPanel, setSignInPanel] = useState(false)
+  const [showSignInPanel, setShowSignInPanel] = useState(false)
+  const [showSignUpPanel, setShowSignUpPanel] = useState(false)
+  const [showResetPwdPanel, setShowResetPwdPanel] = useState(false)
   const [showBanner, setShowBanner] = useState(false)
   const bannerRef = useRef<any>()
 
@@ -33,8 +36,12 @@ export const SignInControl = () => {
   }
 
   const userAbbr = (username: string) => username ? username.charAt(0).toUpperCase() : null
-  const handleClose = () => setSignInPanel(false);
-  const handleClick = () => userInfo.username ? setShowBanner(true) : setSignInPanel(true)
+  const handleClose = () => {
+    setShowSignInPanel(false);
+    setShowSignUpPanel(false)
+    setShowResetPwdPanel(false)
+  }
+  const handleClick = () => userInfo.username ? setShowBanner(true) : setShowSignInPanel(true)
   const handleMouseOver = () => {
     if (userInfo.username) {
       setShowBanner(true)
@@ -79,7 +86,30 @@ export const SignInControl = () => {
         maxWidth='xs'
       >
         <DialogContent >
-          <SignIn setOpen={setSignInPanel} />
+          <SignIn setOpen={setShowSignInPanel} setSignUpOpen={setShowSignUpPanel} setResetPwdOpen={setShowResetPwdPanel} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={showSignUpPanel}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth='xs'
+      >
+        <DialogContent >
+          <SignUp />
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={showResetPwdPanel}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth='xs'
+      >
+        <DialogContent >
+          <ResetPassword />
         </DialogContent>
       </Dialog>
     </>

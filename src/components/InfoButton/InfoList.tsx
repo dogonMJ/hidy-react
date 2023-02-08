@@ -16,6 +16,7 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" rel="noreferrer">Global Imagery Browse Services (GIBS)</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature</a><br />
+          {t('DataInfo.reference')}: <a target="_blank" href="https://doi.org/10.5067/GHGMR-4FJ04" rel="noreferrer">MUR-JPL-L4-GLOB-v4.1</a><br />
           {t('DataInfo.spatialRes')}: 1 {t('DataInfo.km')}<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.temporalRange')}: 2002-06-01 ~ <br />
@@ -31,7 +32,8 @@ const InfoList = (props: { dataId: string }) => {
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" rel="noreferrer">Global Imagery Browse Services (GIBS)</a><br />
-          {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature</a><br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies</a><br />
+          {t('DataInfo.reference')}: <a target="_blank" href="https://doi.org/10.5067/GHGMR-4FJ04" rel="noreferrer">MUR-JPL-L4-GLOB-v4.1</a><br />
           {t('DataInfo.spatialRes')}: 1 {t('DataInfo.km')}<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.temporalRange')}: 2002-07-23 ~ <br />
@@ -47,7 +49,9 @@ const InfoList = (props: { dataId: string }) => {
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" rel="noreferrer">Global Imagery Browse Services (GIBS)</a><br />
-          {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature</a><br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://nasa-gibs.github.io/gibs-api-docs/available-visualizations/#visualization-product-catalog" rel="noreferrer">GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies</a><br />
+          {t('DataInfo.reference')}: <a target="_blank" href="https://doi.org/10.5067/MODIS/MYD02HKM.061" rel="noreferrer">MYD02HKM</a>&nbsp;&nbsp;
+          <a target="_blank" href="https://doi.org/10.5067/MODIS/MYD021KM.061" rel="noreferrer">MYD021KM</a><br />
           {t('DataInfo.spatialRes')}: 250 {t('DataInfo.m')}<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.temporalRange')}: 2002-07-03 ~ <br />

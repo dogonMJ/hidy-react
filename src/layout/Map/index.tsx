@@ -20,7 +20,7 @@ import 'leaflet-measure/'
 // @ts-ignore
 import "./leaflet.latlng-graticule.js"
 import 'leaflet-measure/dist/leaflet-measure.css';
-import { account } from 'layout/SignIn/utils'
+import { account } from 'layout/Account/utils'
 import { SignInControl } from 'components/SignInControl';
 import CustomControl from "react-leaflet-custom-control";
 
@@ -76,7 +76,6 @@ const LeafletMap = () => {
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
-    console.log(userInfo)
     dispatch(coordInputSlice.actions.userInfo(userInfo))
   }
   checkLogin()

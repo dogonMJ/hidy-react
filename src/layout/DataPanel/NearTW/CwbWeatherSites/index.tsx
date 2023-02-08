@@ -40,7 +40,7 @@ const CwbWeatherSites = () => {
   const [weatherData, setWeatherData] = useState<DataArray>({})
   const fetchSiteData = () => {
     // return fetch(`https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0001-001?Authorization=${process.env.REACT_APP_CWB_KEY}`)
-    return fetch(`http://localhost:5000/cwbapi/O-A0001-001/`)
+    return fetch(`${process.env.REACT_APP_PROXY_BASE}/data/cwbapi/O-A0001-001/`)
       .then((response) => response.json())
       .then((data) => {
         data.records.location.forEach((location: any) => {

@@ -9,39 +9,20 @@ import { coordInputSlice } from "store/slice/mapSlice";
 import { account } from './utils'
 import { RenderIf } from 'components/RenderIf/RenderIf';
 
-export const SignIn = (props: { setOpen: any }) => {
+export const SignIn = (props: { setOpen: any, setSignUpOpen: any, setResetPwdOpen: any }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const [authFail, setAuthFail] = useState(false)
   const [check, setCheck] = useState(false)
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget)
-  //   const loginFetch = await account.login({
-  //     'username': data.get('username'),
-  //     'password': data.get('password'),
-  //     'remember': data.get('remember'),
-  //   })
-
-  //   if (loginFetch.logged) {
-  //     const userInfo = await account.getUserInfo()
-  //     dispatch(coordInputSlice.actions.userInfo(userInfo))
-  //     setAuthFail(false)
-  //     props.setOpen(false)
-  //   } else {
-  //     setAuthFail(true)
-  //   }
-  // };
-
   const handleRemeber = (event: any) => setCheck(event.target.checked)
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget)
-    const loginFetch = await account.logintest({
+    const loginFetch = await account.login({
       'username': data.get('username'),
       'password': data.get('password'),
-      'remember': data.get('remember'),
+      'remember': data.get('remember') === 'true' ? true : false,
     })
     if (loginFetch.status) {
       dispatch(coordInputSlice.actions.userInfo(loginFetch))
@@ -51,6 +32,14 @@ export const SignIn = (props: { setOpen: any }) => {
       setAuthFail(true)
     }
   };
+  const handleSignUp = () => {
+    props.setOpen(false)
+    props.setSignUpOpen(true)
+  }
+  const handleResetPwd = () => {
+    props.setOpen(false)
+    props.setResetPwdOpen(true)
+  }
   return (
     <Container component="main" maxWidth="xs" sx={{ width: '80%', }}>
       <CssBaseline />
@@ -99,7 +88,7 @@ export const SignIn = (props: { setOpen: any }) => {
             </Box>
           </RenderIf>
           <Typography variant="subtitle2">
-            <Checkbox value="remember" color="primary" name='remember' onChange={handleRemeber} />
+            <Checkbox value="true" color="primary" name='remember' onChange={handleRemeber} />
             {t('account.remember')}
           </Typography>
           <Typography variant="caption" sx={{ paddingLeft: 1.5 }}>
@@ -115,12 +104,13 @@ export const SignIn = (props: { setOpen: any }) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              {/* <Link href="#" variant="body2" onClick={handleResetPwd}> */}
+              <Link href="https://127.0.0.1:5000/account/reset/password/" variant="body2" target="_blank" rel="noreferrer">
                 {t('account.forgot')}
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" onClick={handleSignUp}>
                 {t('account.signup')}
               </Link>
             </Grid>
