@@ -1,6 +1,4 @@
-import { CompressOutlined, ConnectingAirportsOutlined } from "@mui/icons-material";
-
-const PROXY_HOST = 'https://127.0.0.1:5000';
+const PROXY_HOST = process.env.REACT_APP_PROXY_BASE;
 
 declare var AbortSignal: {
   prototype: AbortSignal;
@@ -75,7 +73,10 @@ export const account = {
     return fetch(`${PROXY_HOST}/account/signup`, {
       credentials: 'include',
       method: 'POST',
-      headers: { 'Content-Type': "application/x-www-form-urlencoded;charset=UTF-8" },
+      headers: {
+        'x-csrf-token': await account.getCsrfToken(),
+        'Content-Type': "application/x-www-form-urlencoded;charset=UTF-8",
+      },
       body: formbody
     })
       .then(res => res.json())

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Avatar, Button, CssBaseline, TextField, OutlinedInput, Box, Typography, Container, InputAdornment, IconButton, FormControl, InputLabel, FormHelperText, Dialog } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ODBIcon from 'assets/images/ODB.png';
 import { useTranslation } from 'react-i18next';
 import { account } from './utils'
@@ -11,13 +12,14 @@ export const SignUp = () => {
   const { t } = useTranslation()
   const [confirmError, setConfirmError] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameValid, setUsernameValid] = useState(false)
+  const [usernameValid, setUsernameValid] = useState<boolean | null>(null)
   const [openMsg, setOpenMsg] = useState(false)
   const [message, setMessage] = useState({ text: '', title: '' })
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget)
+    const currentTarget = event.currentTarget
+    const data = new FormData(currentTarget)
     const pwd = data.get('password1')
     const confirm = data.get('password2')
 
@@ -26,19 +28,16 @@ export const SignUp = () => {
         setConfirmError(false)
         const signupFetch = await account.signup(data)
         if (signupFetch['check_email']) {
-          console.log('Registered! Please check email to activate account')
           setMessage({
             title: 'Succesfully Registered!',
             text: 'Please check email to activate account'
           })
+          currentTarget.reset()
           setOpenMsg(true)
         } else {
-          // const errMsg = signupFetch['message']
-          // console.log(JSON.stringify(errMsg))
-
           setMessage({
-            title: 'Something wrong...',
-            text: 'Please check if the password is too common or similar to any above information.'
+            title: 'Something went wrong...',
+            text: 'Please check if the password is too common or similar to any above information.\nIf you encounter any other problems, please contact us.'
           })
           setOpenMsg(true)
         }
@@ -46,7 +45,6 @@ export const SignUp = () => {
         return setConfirmError(true)
       }
     } else {
-      console.log('username invalid')
       return setUsernameValid(false)
     }
   };
@@ -57,7 +55,7 @@ export const SignUp = () => {
   };
 
   const checkUsername = async (event: any) => {
-    const userStatus = await fetch(`https://127.0.0.1:5000/account/signup/chkuser?username=${event.target.value}`)
+    const userStatus = await fetch(`${process.env.REACT_APP_PROXY_BASE}/account/signup/chkuser?username=${event.target.value}`)
       .then(response => response.json())
     setUsernameValid(userStatus.username_valid)
   }
@@ -77,6 +75,9 @@ export const SignUp = () => {
             {t('signup.title')}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+              <FormHelperText>{t('account.validChar')}</FormHelperText>
+            </Typography >
             <TextField
               margin="normal"
               required
@@ -84,13 +85,16 @@ export const SignUp = () => {
               id="username"
               label={t('account.username')}
               name="username"
-              autoComplete="username"
               size='small'
               onBlur={checkUsername}
-              error={!usernameValid}
-              helperText={usernameValid ? t('account.usernameRule') : t('account.userNotValid')} //英數底線>2
+              error={usernameValid === false}
+              helperText={usernameValid ?
+                <Typography variant='caption' color="#2e7d32">
+                  {t('account.userValid')}
+                </Typography> :
+                usernameValid === false ? t('account.userNotValid') : t('account.usernameRule')}
               inputProps={{
-                pattern: "[\\w@.+-]{2,}"
+                pattern: "[\\p{L}\\w@.+-]{2,}" //unicode字元(各語言字母)、數字、@/./+/-/_
               }}
             />
             <TextField
@@ -137,7 +141,7 @@ export const SignUp = () => {
                 label={t('account.password1')}
                 inputProps={{
                   minLength: 6,
-                  pattern: '(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)'
+                  pattern: '(?=.*[0-9])(?=.*[\\p{L}])([\\w\\p{L}@.+-]+)'
                 }}
                 endAdornment={
                   <InputAdornment position="end">
@@ -151,22 +155,25 @@ export const SignUp = () => {
                   </InputAdornment>
                 }
               />
-              <FormHelperText>{t('account.pwdRule')}</FormHelperText>
+
+              <TextField
+                type="password"
+                id="password2"
+                name="password2"
+                size='small'
+                required
+                fullWidth
+                autoComplete="off"
+                margin="normal"
+                label={t('account.password2')}
+                error={confirmError}
+                helperText={confirmError ? t('account.incorrect') : ''}
+                variant={confirmError ? 'filled' : 'outlined'}
+              />
+              <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+                <FormHelperText>{t('account.pwdRule')}</FormHelperText>
+              </Typography >
             </FormControl>
-            <TextField
-              type="password"
-              id="password2"
-              name="password2"
-              size='small'
-              required
-              fullWidth
-              autoComplete="off"
-              margin="normal"
-              label={t('account.password2')}
-              error={confirmError}
-              helperText={confirmError ? t('account.incorrect') : ''}
-              variant={confirmError ? 'filled' : 'outlined'}
-            />
             <Button
               type="submit"
               fullWidth

@@ -272,7 +272,17 @@
     "unauthorized": "Please check user name and password",
     "remember": "Auto login",
     "chkRemember": "Auto login in 14 days",
-    "notChkRemember": "Logout on browser closed"
+    "notChkRemember": "Logout on browser closed",
+    "usernameRule": "Must contain at least 2 characters.",
+    "userValid": "User name valid!",
+    "userNotValid": "User name exist or contains invalid character(s).",
+    "lastname": "Last name",
+    "firstname": "First name",
+    "email": "E-mail address",
+    "password1": "Password",
+    "password2": "Confirm password",
+    "pwdRule": "At least 6 characters.\nAt least 1 letter and 1 digit.\nCan't be too similar to other personal information.\nCan't be a commonly used password.",
+    "validChar": "Valid characters: \nUnicode letters (case sensitive), digits, @/./_/+/-"
   },
   "ShipTrack": {
     "title": "Research Vessels",

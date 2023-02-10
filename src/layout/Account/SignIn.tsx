@@ -105,7 +105,7 @@ export const SignIn = (props: { setOpen: any, setSignUpOpen: any, setResetPwdOpe
           <Grid container>
             <Grid item xs>
               {/* <Link href="#" variant="body2" onClick={handleResetPwd}> */}
-              <Link href="https://127.0.0.1:5000/account/reset/password/" variant="body2" target="_blank" rel="noreferrer">
+              <Link href={`${process.env.REACT_APP_PROXY_BASE}/account/reset/password/`} variant="body2" target="_blank" rel="noreferrer">
                 {t('account.forgot')}
               </Link>
             </Grid>

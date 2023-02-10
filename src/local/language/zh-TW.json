@@ -275,7 +275,17 @@
     "unauthorized": "請檢查使用者名稱及密碼",
     "remember": "自動登入",
     "chkRemember": "14日內可自動登入",
-    "notChkRemember": "關閉瀏覽器時登出"
+    "notChkRemember": "關閉瀏覽器時登出",
+    "usernameRule": "必須包含至少2個字元",
+    "userValid": "可使用使用者名稱",
+    "userNotValid": "使用者名稱重複或含有無效字元",
+    "lastname": "姓",
+    "firstname": "名",
+    "email": "電子信箱",
+    "password1": "密碼",
+    "password2": "確認密碼",
+    "pwdRule": "密碼必須包含至少6個字元\n包含1個字母和1個阿拉伯數字\n密碼不可以和上方資訊相似\n密碼不可太常見",
+    "validChar": "有效字元：\nUnicode文字字元(大小寫有別)、阿拉伯數字、@/./_/+/-"
   },
   "ShipTrack": {
     "title": "研究船位",
