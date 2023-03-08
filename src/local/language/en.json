@@ -34,7 +34,7 @@
   "remove": "Remove",
   "dataPanel": "Data Layers",
   "CWBsites": {
-    "title": "Central Weather Bureau Data",
+    "title": "Marine/Meteorological Data Near Taiwan",
     "subheader": "Latest Data",
     "cwb": "Central Weather Bureau",
     "cwbopendata": "Central Weather Bureau Open Weather Data",
@@ -265,6 +265,7 @@
     "title": "ODB SSO",
     "username": "User",
     "password": "Password",
+    "close": "Close",
     "signin": "Sign In",
     "signout": "Sign Out",
     "signup": "Create new account",
@@ -282,7 +283,17 @@
     "password1": "Password",
     "password2": "Confirm password",
     "pwdRule": "At least 6 characters.\nAt least 1 letter and 1 digit.\nCan't be too similar to other personal information.\nCan't be a commonly used password.",
-    "validChar": "Valid characters: \nUnicode letters (case sensitive), digits, @/./_/+/-"
+    "validChar": "Valid characters: \nUnicode letters (case sensitive), digits, @/./_/+/-",
+    "register": {
+      "success": {
+        "title": "Succesfully Registered!",
+        "text": "Please check email to activate account"
+      },
+      "fail": {
+        "title": "Something went wrong...",
+        "text": "Please check if the password is too common or similar to any above information.\nIf you encounter any other problems, please contact us."
+      }
+    }
   },
   "ShipTrack": {
     "title": "Research Vessels",

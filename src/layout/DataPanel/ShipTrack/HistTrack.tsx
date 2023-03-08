@@ -39,7 +39,7 @@ export const HistTrack = () => {
   const [json, setJson] = useState<any>(null)
 
   // const getShips = () => fetch('https://odbpo.oc.ntu.edu.tw/ais/getorshiplist')
-  const getShips = () => fetch(`${process.env.REACT_APP_PROXY_BASE}/data/shiphist/getorshiplist`)
+  const getShips = () => fetch(`${process.env.REACT_APP_PROXY_BASE}/data/shiplist/getorshiplist`)
     .then(response => response.json())
     .then(json => setShipList(json[0]))
 
@@ -65,7 +65,7 @@ export const HistTrack = () => {
     ref.current.clearLayers()
     // fetch(`https://localhost:3000/test_files/${ship}_${year}.kml`)
     if (year) {
-      fetch(`${process.env.REACT_APP_PROXY_BASE}/odbdata/histship?ship=${ship}&year=${year}`, {
+      fetch(`${process.env.REACT_APP_PROXY_BASE}/data/histship?ship=${ship}&year=${year}`, {
         credentials: 'include'
       })
         .then(response => response.text())

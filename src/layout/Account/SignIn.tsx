@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { Avatar, Button, CssBaseline, TextField, Checkbox, Link, Grid, Box, Typography, Container } from '@mui/material';
 import ODBIcon from 'assets/images/ODB.png';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
+import { useDispatch } from "react-redux";
 import { coordInputSlice } from "store/slice/mapSlice";
 import { account } from './utils'
 import { RenderIf } from 'components/RenderIf/RenderIf';
@@ -43,7 +42,7 @@ export const SignIn = (props: { setOpen: any, setSignUpOpen: any, setResetPwdOpe
   return (
     <Container component="main" maxWidth="xs" sx={{ width: '80%', }}>
       <CssBaseline />
-      <button onClick={() => account.test()}>dfafdasfas</button>
+      {/* <button onClick={() => account.test()}>dfafdasfas</button> */}
       <Box
         sx={{
           display: 'flex',

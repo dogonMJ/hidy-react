@@ -98,10 +98,10 @@ export const SignInControl = () => {
         maxWidth='xs'
       >
         <DialogContent >
-          <SignUp />
+          <SignUp setOpen={setShowSignUpPanel} />
         </DialogContent>
       </Dialog>
-      <Dialog
+      {/* <Dialog
         open={showResetPwdPanel}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -111,7 +111,7 @@ export const SignInControl = () => {
         <DialogContent >
           <ResetPassword />
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

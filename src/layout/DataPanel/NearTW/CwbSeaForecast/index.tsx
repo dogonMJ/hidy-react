@@ -8,7 +8,7 @@ import { ShowCwbForecast } from "./ShowCwbForecast";
 
 const optionList = ['close', 'cwbsst', 'cwbpsu', 'cwbsla', 'cwbspd']
 const optionList2 = ['close', 'cwbcur', 'cwbdir']
-const getUrl = (identifier: string, date: string) => `https://odbpo.oc.ntu.edu.tw/static/figs/cwbforecast/epsg3857_${identifier}_${date}.png`
+const getUrl = (identifier: string, date: string) => `${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbforecast/epsg3857_${identifier}_${date}.png`
 const CwbSeaForecast = () => {
   const ref = useRef<any>(null)
   const ref2 = useRef<any>(null)
@@ -56,7 +56,7 @@ const CwbSeaForecast = () => {
   }, [datetime, identifier, identifier2])
   useEffect(() => {
     if (identifier !== 'close' || identifier2 !== 'close') {
-      fetch(`https://odbpo.oc.ntu.edu.tw/static/figs/cwbforecast/data_${date}.json`)
+      fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbforecast/data_${date}.json`)
         .then((response) => response.json())
         .then((json) => {
           setJsonData(json)

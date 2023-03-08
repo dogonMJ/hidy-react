@@ -70,7 +70,7 @@ export const OdbSedCore = () => {
     }
   }
   useEffect(() => {
-    fetch('https://odbpo.oc.ntu.edu.tw/static/figs/odb/sedcore.json')
+    fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/sedcore.json`)
       .then((response) => response.json())
       .then((json) => {
         setData(json)

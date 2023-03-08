@@ -2,7 +2,7 @@ import 'leaflet'
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { coordInputSlice } from "store/slice/mapSlice";
-import { MapContainer, ZoomControl, ScaleControl } from 'react-leaflet'
+import { MapContainer, ZoomControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
@@ -23,7 +23,8 @@ import 'leaflet-measure/dist/leaflet-measure.css';
 import { account } from 'layout/Account/utils'
 import { SignInControl } from 'components/SignInControl';
 import CustomControl from "react-leaflet-custom-control";
-
+import { CustomScaleControl } from 'components/CustomScaleControl';
+import { useState } from 'react';
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
 
@@ -50,6 +51,27 @@ declare const L: any;
 //   })
 //   measureControl.addTo(map);
 // }
+type ScaleUnitType = 'metric' | 'nautical' | 'imperial'
+interface UnitSwitch {
+  [index: string]: {
+    next: ScaleUnitType
+    switch: boolean[]
+  }
+}
+const unitSwitch: UnitSwitch = {
+  'metric': {
+    next: 'nautical',
+    switch: [true, false, false]
+  },
+  'nautical': {
+    next: 'imperial',
+    switch: [false, true, false]
+  },
+  'imperial': {
+    next: 'metric',
+    switch: [false, false, true]
+  },
+}
 const addGraticule = (map: L.Map) => {
   const graticule = new L.latlngGraticule({
     showLabel: true,
@@ -69,9 +91,9 @@ const addGraticule = (map: L.Map) => {
   graticule.addTo(map);
 }
 
-
 const LeafletMap = () => {
   const dispatch = useDispatch()
+  const [scaleUnit, setScaleUnit] = useState<ScaleUnitType>('metric')
   const timeNow = new Date()
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const checkLogin = async () => {
@@ -121,7 +143,14 @@ const LeafletMap = () => {
           <CPlanControll />
           <SeafloorControl />
         </CustomControl>
-        <ScaleControl imperial={false} />
+        <CustomControl position='bottomleft'>
+          <CustomScaleControl
+            metric={unitSwitch[scaleUnit].switch[0]}
+            nautical={unitSwitch[scaleUnit].switch[1]}
+            imperial={unitSwitch[scaleUnit].switch[2]}
+            onClick={() => setScaleUnit(unitSwitch[scaleUnit].next)}
+          />
+        </CustomControl>
         <MouseCoordinates />
         <DataPanel />
         <DragDrop />

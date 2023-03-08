@@ -7,16 +7,22 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useTranslation } from 'react-i18next';
 
 interface Content {
+  success: boolean
   title?: string
   text: string
 }
 
-export const Msgbox = (props: { open: boolean, setOpen: any, content: Content }) => {
-  const { open, setOpen, content } = props
+export const Msgbox = (props: { open: boolean, setOpen: any, content: Content, setOpenOther?: any }) => {
+  const { open, setOpen, content, setOpenOther } = props
   const { t } = useTranslation()
 
   const handleClose = () => {
-    setOpen(false);
+    if (content.success) {
+      setOpen(false);
+      setOpenOther(false)
+    } else {
+      setOpen(false);
+    }
   };
 
   return (

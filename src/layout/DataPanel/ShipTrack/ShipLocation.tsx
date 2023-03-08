@@ -36,7 +36,7 @@ export const ShipLocation = () => {
 
   const fetchShipInfo = async () => {
     // const baseUrl = 'https://api.odb.ntu.edu.tw/cruise/ship/'
-    const baseUrl = 'https://127.0.0.1:5000/data/shiploc/'
+    const baseUrl = `${process.env.REACT_APP_PROXY_BASE}/data/shiploc/`
     await Promise.all([fetch(`${baseUrl}NOR1`, { credentials: 'include' }), fetch(`${baseUrl}NOR2`, { credentials: 'include' }), fetch(`${baseUrl}NOR3`, { credentials: 'include' })])
       .then(async ([NOR1, NOR2, NOR3]) => {
         const nor1 = await NOR1.json()

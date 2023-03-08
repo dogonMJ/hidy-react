@@ -260,7 +260,7 @@ export const MoiSubstrate = () => {
     }
   }
   useEffect(() => {
-    fetch('https://odbpo.oc.ntu.edu.tw/static/figs/odb/substrate.json')
+    fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/substrate.json`)
       .then((response) => response.json())
       .then((json) => {
         setData(json)

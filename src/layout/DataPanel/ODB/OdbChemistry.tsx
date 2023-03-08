@@ -160,7 +160,7 @@ export const OdbChemistry = () => {
   }
 
   useEffect(() => {
-    const url = `https://chemview.odb.ntu.edu.tw/bottlehidy?lat_from=${lat[0]}&lat_to=${lat[1]}&lon_from=${lon[0]}&lon_to=${lon[1]}&dep1=${depthList[depthIndex[0]]}&dep2=${depthList[depthIndex[1]]}&var=${parameters.join(',')}&date_from=${date[0]}&date_to=${date[1]}`
+    const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbchem/bottlehidy?lat_from=${lat[0]}&lat_to=${lat[1]}&lon_from=${lon[0]}&lon_to=${lon[1]}&dep1=${depthList[depthIndex[0]]}&dep2=${depthList[depthIndex[1]]}&var=${parameters.join(',')}&date_from=${date[0]}&date_to=${date[1]}`
     fetch(url)
       .then((response) => response.json())
       .then((json) => {

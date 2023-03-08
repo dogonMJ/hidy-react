@@ -7,9 +7,9 @@ import CwbWeatherSites from 'layout/DataPanel/NearTW/CwbWeatherSites';
 import CwbRadar from 'layout/DataPanel/NearTW/CwbRadar';
 import CwbSeaForecast from 'layout/DataPanel/NearTW/CwbSeaForecast';
 import InfoButton from "components/InfoButton";
-import { MoiSubstrate } from "./MoiSubstrate";
+// import { MoiSubstrate } from "./MoiSubstrate";
 
-const optionList = ['sea', 'weather', 'radar', 'substrate']
+const optionList = ['sea', 'weather', 'radar']
 const ToggleCWB = () => {
   const { t } = useTranslation()
   const [checked, setChecked] = useState<string[]>([]);
@@ -61,7 +61,7 @@ const ToggleCWB = () => {
       </ListSubheader>
       <CwbSeaForecast />
       <Divider variant="middle" />
-      {checked.includes('substrate') && <MoiSubstrate />}
+      {/* {checked.includes('substrate') && <MoiSubstrate />} */}
       {checked.includes('sea') && <CwbSeaSites />}
       {checked.includes('weather') && <CwbWeatherSites />}
       {checked.includes('radar') && <CwbRadar />}

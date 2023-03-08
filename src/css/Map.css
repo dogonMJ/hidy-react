@@ -214,3 +214,7 @@ input {
   right: 70px;
   top: 5px;
 }
+
+.cusor-pointer {
+  cursor: pointer;
+}

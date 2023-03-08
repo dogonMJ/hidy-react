@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Avatar, Button, CssBaseline, TextField, OutlinedInput, Box, Typography, Container, InputAdornment, IconButton, FormControl, InputLabel, FormHelperText, Dialog } from '@mui/material';
+import { Avatar, Button, CssBaseline, TextField, OutlinedInput, Box, Typography, Container, InputAdornment, IconButton, FormControl, InputLabel, FormHelperText } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ODBIcon from 'assets/images/ODB.png';
 import { useTranslation } from 'react-i18next';
 import { account } from './utils'
 import { Msgbox } from './Msgbox';
 
-export const SignUp = () => {
+export const SignUp = (props: { setOpen: any }) => {
   const { t } = useTranslation()
   const [confirmError, setConfirmError] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
   const [usernameValid, setUsernameValid] = useState<boolean | null>(null)
   const [openMsg, setOpenMsg] = useState(false)
-  const [message, setMessage] = useState({ text: '', title: '' })
+  const [message, setMessage] = useState({ success: false, text: '', title: '' })
+  const setOpenSignUp = props.setOpen
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,15 +29,17 @@ export const SignUp = () => {
         const signupFetch = await account.signup(data)
         if (signupFetch['check_email']) {
           setMessage({
-            title: 'Succesfully Registered!',
-            text: 'Please check email to activate account'
+            success: true,
+            title: t('account.register.success.title'),
+            text: t('account.register.success.text')
           })
           currentTarget.reset()
           setOpenMsg(true)
         } else {
           setMessage({
-            title: 'Something went wrong...',
-            text: 'Please check if the password is too common or similar to any above information.\nIf you encounter any other problems, please contact us.'
+            success: false,
+            title: t('account.register.fail.title'),
+            text: t('account.register.fail.text')
           })
           setOpenMsg(true)
         }
@@ -72,7 +74,7 @@ export const SignUp = () => {
           }}>
           <Avatar sx={{ m: 1 }} src={ODBIcon} />
           <Typography component="h1" variant="h6" sx={{ fontWeight: 600 }}>
-            {t('signup.title')}
+            {t('account.signup')}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <Typography sx={{ whiteSpace: 'pre-wrap' }}>
@@ -185,7 +187,7 @@ export const SignUp = () => {
           </Box>
         </Box>
       </Container>
-      <Msgbox open={openMsg} setOpen={setOpenMsg} content={message} />
+      <Msgbox open={openMsg} setOpen={setOpenMsg} content={message} setOpenOther={setOpenSignUp} />
     </>
   );
 }

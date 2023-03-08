@@ -34,7 +34,7 @@
   "remove": "移除",
   "dataPanel": "資料圖層",
   "CWBsites": {
-    "title": "中央氣象局資料",
+    "title": "台灣周遭海氣象",
     "subheader": "最新資料",
     "cwb": "中央氣象局",
     "cwbopendata": "中央氣象局開放資料平台",
@@ -268,6 +268,7 @@
     "title": "海洋學門資料庫單一帳號登入",
     "username": "使用者名稱",
     "password": "密碼",
+    "close": "關閉",
     "signin": "登入",
     "signout": "登出",
     "signup": "創建帳號",
@@ -285,7 +286,17 @@
     "password1": "密碼",
     "password2": "確認密碼",
     "pwdRule": "密碼必須包含至少6個字元\n包含1個字母和1個阿拉伯數字\n密碼不可以和上方資訊相似\n密碼不可太常見",
-    "validChar": "有效字元：\nUnicode文字字元(大小寫有別)、阿拉伯數字、@/./_/+/-"
+    "validChar": "有效字元：\nUnicode文字字元(大小寫有別)、阿拉伯數字、@/./_/+/-",
+    "register": {
+      "success": {
+        "title": "註冊成功!",
+        "text": "請至信箱收信完成帳號啟用程序"
+      },
+      "fail": {
+        "title": "註冊失敗...",
+        "text": "請檢查密碼是否太常見或是和上方資訊相似。\n如果有其他問題請聯繫ODB管理員。"
+      }
+    }
   },
   "ShipTrack": {
     "title": "研究船位",

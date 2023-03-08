@@ -19,7 +19,7 @@ const SatelliteData = () => {
 
   useEffect(() => {
     if (ref.current) {
-      const url = `https://odbpo.oc.ntu.edu.tw/static/figs/${identifier}/${identifier}${date}.png`
+      const url = `${process.env.REACT_APP_PROXY_BASE}/data/figs/${identifier}/${identifier}${date}.png`
       ref.current.setUrl(url)
     }
   })

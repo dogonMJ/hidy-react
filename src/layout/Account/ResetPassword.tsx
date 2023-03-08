@@ -9,16 +9,16 @@ import { Msgbox } from './Msgbox';
 export const ResetPassword = () => {
   const { t } = useTranslation()
   const [openMsg, setOpenMsg] = useState(false)
-  const [message, setMessage] = useState({ text: '', title: '' })
+  const [message, setMessage] = useState({ success: false, text: '', title: '' })
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const emailForm = new FormData(event.currentTarget)
     const resetFetch = await account.resetPassword(emailForm)
     if (resetFetch.mail_sent) {
-      setMessage({ title: '重設密碼', text: '重設密碼信件已寄出' })
+      setMessage({ success: true, title: '重設密碼', text: '重設密碼信件已寄出' })
     } else {
-      setMessage({ title: '重設密碼', text: '無法寄出重設密碼信件，請洽ODB管理員' })
+      setMessage({ success: false, title: '重設密碼', text: '無法寄出重設密碼信件，請洽ODB管理員' })
     }
     setOpenMsg(true)
   };
