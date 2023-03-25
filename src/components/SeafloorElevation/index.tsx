@@ -3,7 +3,8 @@ import { useMap } from "react-leaflet";
 import { LineChart } from "components/LineChart"
 import { coor } from "types";
 import { PlotParams } from "react-plotly.js";
-
+import { useSelector } from "react-redux";
+import { RootState } from "store/store"
 // old source: ETOPO5 edited by Kuo, details need to be checked. E:\Depth and E:\drifter
 declare const L: any
 
@@ -16,6 +17,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
   const { coords, setOpen } = props
   const plotRef = useRef<any>()
   const map = useMap()
+  const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
   const [plotProps, setPlotProps] = useState<PlotParams>({
     data: [],
     layout: {
@@ -32,7 +34,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
       },
       xaxis: {
         title: {
-          text: 'Distance (km)',
+          text: scaleUnit === 'imperial' ? 'Distance (mi)' : scaleUnit === 'nautical' ? 'Distance (nm)' : 'Distance (km)',
           standoff: 10
         },
         // fixedrange: true,
@@ -45,7 +47,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
       },
       yaxis: {
         title: {
-          text: 'Elevation (m)',
+          text: scaleUnit === 'imperial' ? 'Elevation (ft)' : 'Elevation (m)',
           standoff: 5
         },
       }
@@ -119,6 +121,12 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
               return accumulator + currentValue
             }
           );
+          if (scaleUnit === 'nautical') {
+            dist = dist.map((x: number) => x / 1.852)
+          } else if (scaleUnit === 'imperial') {
+            dist = dist.map((x: number) => x / 1.609344)
+            depth = depth.map((x: number) => x * 3.28)
+          }
         })
       const endPoints = await fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${lngs}&lat=${lats}&mode=point`)
         .then(res => res.json())
@@ -129,6 +137,12 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
             return accumulator + currentValue
           })
           json.distance = d
+          if (scaleUnit === 'nautical') {
+            json.distance = json.distance.map((x: number) => x / 1.852)
+          } else if (scaleUnit === 'imperial') {
+            json.distance = json.distance.map((x: number) => x / 1.609344)
+            json.z = json.z.map((x: number) => x * 3.28)
+          }
           return { ...json }
         })
       const text = lat.map((lat, i) => `${lat}, ${lon[i]}`)
@@ -163,7 +177,9 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
           shape: 'spline'
         },
         // hovertemplate: `%{text}<br>Distance:%{x} km<br>Elevation: %{y} m<extra></extra>`
-        hovertemplate: `%{text}<br><b>%{x:.2f} km</b><br><b>%{y} m</b><extra></extra>`,
+        hovertemplate: scaleUnit === 'imperial' ? `%{text}<br><b>%{x:.2f} mi</b><br><b>%{y} ft</b><extra></extra>` :
+          scaleUnit === 'nautical' ? `%{text}<br><b>%{x:.2f} nm</b><br><b>%{y} m</b><extra></extra>` :
+            `%{text}<br><b>%{x:.2f} km</b><br><b>%{y} m</b><extra></extra>`,
       }]
       // handle config & custom button for toogle annotations
       plotProps.config!.modeBarButtonsToAdd = [{

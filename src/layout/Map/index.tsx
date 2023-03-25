@@ -12,7 +12,6 @@ import MyBaseLayers from "components/Baselayers";
 import DataPanel from "layout/DataPanel";
 import { LanguageControl } from 'components/LanguageControl'
 import { CPlanControll } from 'components/Cplan';
-// import { DragDrop } from 'components/DragDrop';
 import { DragDrop } from 'components/DragDrop';
 import { SeafloorControl } from 'components/SeafloorControl';
 // @ts-ignore
@@ -24,7 +23,7 @@ import { account } from 'layout/Account/utils'
 import { SignInControl } from 'components/SignInControl';
 import CustomControl from "react-leaflet-custom-control";
 import { CustomScaleControl } from 'components/CustomScaleControl';
-import { useState } from 'react';
+import { ScaleUnitType } from 'types'
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
 
@@ -51,26 +50,14 @@ declare const L: any;
 //   })
 //   measureControl.addTo(map);
 // }
-type ScaleUnitType = 'metric' | 'nautical' | 'imperial'
+
 interface UnitSwitch {
-  [index: string]: {
-    next: ScaleUnitType
-    switch: boolean[]
-  }
+  [index: string]: ScaleUnitType
 }
 const unitSwitch: UnitSwitch = {
-  'metric': {
-    next: 'nautical',
-    switch: [true, false, false]
-  },
-  'nautical': {
-    next: 'imperial',
-    switch: [false, true, false]
-  },
-  'imperial': {
-    next: 'metric',
-    switch: [false, false, true]
-  },
+  'metric': 'nautical',
+  'nautical': 'imperial',
+  'imperial': 'metric',
 }
 const addGraticule = (map: L.Map) => {
   const graticule = new L.latlngGraticule({
@@ -93,8 +80,9 @@ const addGraticule = (map: L.Map) => {
 
 const LeafletMap = () => {
   const dispatch = useDispatch()
-  const [scaleUnit, setScaleUnit] = useState<ScaleUnitType>('metric')
+  // const [scaleUnit, setScaleUnit] = useState<ScaleUnitType>('metric')
   const timeNow = new Date()
+  const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
@@ -145,10 +133,10 @@ const LeafletMap = () => {
         </CustomControl>
         <CustomControl position='bottomleft'>
           <CustomScaleControl
-            metric={unitSwitch[scaleUnit].switch[0]}
-            nautical={unitSwitch[scaleUnit].switch[1]}
-            imperial={unitSwitch[scaleUnit].switch[2]}
-            onClick={() => setScaleUnit(unitSwitch[scaleUnit].next)}
+            metric={scaleUnit === 'metric' ? true : false}
+            nautical={scaleUnit === 'nautical' ? true : false}
+            imperial={scaleUnit === 'imperial' ? true : false}
+            onClick={() => dispatch(coordInputSlice.actions.scaleUnitSwitch(unitSwitch[scaleUnit]))}
           />
         </CustomControl>
         <MouseCoordinates />

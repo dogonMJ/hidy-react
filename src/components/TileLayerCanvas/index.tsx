@@ -6,7 +6,7 @@ import { createLayerComponent } from "@react-leaflet/core";
 import L from "leaflet";
 //@ts-ignore
 import "tilelayer-canvas";
-import "./wmslayer-canvas"
+import "./wmslayer-canvas.js"
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer
   const instance = (props.type === 'wmts') ? layer.canvas(props.url, { ...props.params }) : layer.wms.canvas2D(props.url, { ...props.params });

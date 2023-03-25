@@ -69,11 +69,11 @@
     "close": "關閉",
     "allOthers": "若圖層未出現可能是伺服器速度或來源尚未更新，請查看其他日期或是稍等幾分鐘。",
     "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
-    "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度異常",
+    "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度距平",
     "MODIS_Aqua_CorrectedReflectance_TrueColor": "真實色彩",
     "Himawari_AHI_Band3_Red_Visible_1km": "可見紅光",
     "sla": "相對平均海平面海表面高",
-    "slaOthers": "相對平均海平面海表面高又稱海平面異常(SLA, i.e. Sea Level Anomalies)，使用20年(1993~2012)平均計算。\nSLA網格資料由多種高度測量整合資料進行最適內插估計。",
+    "slaOthers": "相對平均海平面海表面高又稱海平面距平(SLA, i.e. Sea Level Anomalies)，使用20年(1993~2012)平均計算。\nSLA網格資料由多種高度測量整合資料進行最適內插估計。",
     "adt": "相對大地水準面海表面高",
     "adtOthers": "相對大地水準面海表面高又稱絕對海水面動力地形(ADT, i.e. sea surface height above geoid)。\nADT衍生自SLA資料。",
     "CHL": "海洋葉綠素-a濃度(近即時)",
@@ -309,6 +309,39 @@
     "description": {
       "location": "新海研1號(黃色)、新海研2號(綠色)、新海研3號(紅色)最近更新位置。\n點選面板更新時間可移動至該船位置。\n三艘船位置更新頻率由各船掌控，視衛星網路情況回傳，並非即時船位。",
       "hist": "海研一號、海研二號、海研三號、新海研1號、新海研2號、新海研3號歷年航次路線。"
+    }
+  },
+  "WMSSelector": {
+    "title": "介接WMS/WMTS圖層",
+    "disclaimer": "各資料提供者格式略有差異，不保證能夠連接",
+    "directAddLayers": "加入圖層",
+    "layerSelector": "搜尋並加入圖層",
+    "addUrlOption": "加入WMS/WMTS網址至選項",
+    "add": "新增",
+    "urlType": "網址格式",
+    "serverUrl": "服務網址",
+    "selectUrl": "選擇服務網址*",
+    "serviceType": "服務類型*",
+    "layerKeyword": "圖層關鍵字",
+    "keyword": "關鍵字",
+    "search": "搜尋圖層",
+    "selectLayer": "選擇圖層",
+    "clearLayer": "清除圖層",
+    "opacity": "不透明度",
+    "alert": {
+      "dupOption": "重複輸入",
+      "inputError": "請檢查伺服器網址或服務類型是否正確",
+      "noLayer": "找不到圖層",
+      "error": "請檢查所有選項，或聯絡ODB管理員"
+    },
+    "description": {
+      "addUrlOption": "1. 輸入完整OGC WMS/WMTS之GetCapabilities網址，或是根網址(base URL)。\n2. 按下右方「新增」鍵在下方選項新增網址。\n*需支援EPSG:3857投影。\n*空白與tab會自動移除。\n範例：\nKVP格式: https://gis.sinica.edu.tw/tileserver/wmts\nRESTful格式: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml",
+      "selectUrl": "選擇所需要之網址或內建選項。",
+      "serviceType": "選擇服務格式，通常網址就會有wms或wmts字樣。",
+      "layerKeyword": "輸入圖層關鍵字。\n忽略大小寫之精確搜尋，可於字串任何地方用萬用字元「*」做模糊搜尋。\n空白、萬用字元則搜尋所有圖層。\n範例：\n「sea」搜尋sea圖層；「*sea」搜尋sea結尾圖層；「sea*」搜尋sea開頭圖層；「*sea*」搜尋包含sea的圖層。",
+      "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful格式。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(tile col)、y(tile row)、z(tile matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/{z}/{y}/{x}.jpg\n\nKVP WMS: 請將BBOX、WIDTH、HEIGHT移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg",
+      "directAddLayers": "直接輸入圖層網址及參數直接加入圖層。\n請參考網址說明修改參數為正確格式。",
+      "layerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。"
     }
   }
 }

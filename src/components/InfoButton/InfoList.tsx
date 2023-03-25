@@ -475,6 +475,48 @@ const InfoList = (props: { dataId: string }) => {
           {t('ShipTrack.description.hist')}
         </Typography >
       )
+    case 'addUrlOption':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('WMSSelector.description.addUrlOption')}
+        </Typography >
+      )
+    case 'selectUrl':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('WMSSelector.description.selectUrl')}
+        </Typography >
+      )
+    case 'serviceType':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('WMSSelector.description.serviceType')}
+        </Typography >
+      )
+    case 'layerKeyword':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('WMSSelector.description.layerKeyword')}
+        </Typography >
+      )
+    case 'directAddLayers':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('WMSSelector.description.directAddLayers')}
+        </Typography >
+      )
+    case 'layerSelector':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('WMSSelector.description.layerSelector')}
+        </Typography >
+      )
+    case 'urlType':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('WMSSelector.description.urlType')}
+        </Typography >
+      )
   }
   return <></>
 }

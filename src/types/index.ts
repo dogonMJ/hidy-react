@@ -31,3 +31,5 @@ export interface StringObject {
 export interface Legend {
     [key: string]: StringObject
 }
+
+export type ScaleUnitType = 'metric' | 'nautical' | 'imperial'

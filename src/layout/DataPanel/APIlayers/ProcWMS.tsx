@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { LayerGroup } from 'react-leaflet'
 import L from 'leaflet'
 import wmsList from 'assets/jsons/WMSList.json'
-import { TileLayerCanvas } from './TileLayerCanvas'
+import { TileLayerCanvas } from '../../../components/TileLayerCanvas'
 import ShowData from './ShowData'
 import { Api } from 'types'
 import { DepthMeter } from 'components/DepthlMeter';

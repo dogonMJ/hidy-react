@@ -1,38 +1,17 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useMap } from "react-leaflet"
 import * as geojson from 'geojson';
-import { Box, Typography, Stack, MenuItem, InputLabel, Select, SelectChangeEvent, FormControl, Switch } from '@mui/material'
-import { styled } from '@mui/material/styles';
+import { Box, Typography, Stack, MenuItem, InputLabel, Select, SelectChangeEvent, FormControl } from '@mui/material'
 import { useTranslation } from "react-i18next";
 import { ProcUrl } from 'layout/DataPanel/StatisticMean/ProcUrl';
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { TopoJSON } from "components/TopoJSON/TopoJSON";
 import { varList } from "./varList"
 import InfoButton from "components/InfoButton";
-
+import { SwitchSameColor } from "components/SwitchSameColor";
 const depths = [0, 10, 20, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500]
 
-const PeriodSwitch = styled(Switch)(({ theme }) => ({
-  '& .MuiSwitch-switchBase': {
-    transform: 'translateX(0px)',
-    '&.Mui-checked': {
-      color: '#fff',
-      transform: 'translateX(20px)',
-      '& + .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: '#8CBBE9',
-      },
-    },
-  },
-  '& .MuiSwitch-thumb': {
-    backgroundColor: '#1976D2',
-  },
-  '& .MuiSwitch-track': {
-    opacity: 1,
-    backgroundColor: '#8CBBE9',
-  },
-}));
-
+const PeriodSwitch = SwitchSameColor()
 const gridStyle = {
   weight: 2,
   color: '#838383'

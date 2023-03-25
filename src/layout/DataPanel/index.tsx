@@ -4,7 +4,7 @@ import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { useMap } from 'react-leaflet';
+import { useMap, useMapEvents } from 'react-leaflet';
 import { DataPanelItem } from 'components/DataPanelItem';
 import ToggleCWB from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
@@ -14,6 +14,7 @@ import { ODB } from 'layout/DataPanel/ODB';
 import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
 import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
+import { WMSSelector } from './WMSSelector';
 // @ts-ignore
 import Cache from 'cachai';
 
@@ -46,6 +47,7 @@ const DataPanel = () => {
     OdbData: <ODB />,
     CPlanLayers: <CPlanLayers />,
     StatMean: <StatisticMean />,
+    WMSSelector: < WMSSelector />
   }
   const secLevelAll: ItemList = {
     ShipTrack: <ShipTrack />
@@ -54,14 +56,15 @@ const DataPanel = () => {
   const [openSwitch, setOpenSwitch] = useState(onOff)
   const [open, setOpen] = useState(false);
 
-  const mouseEnter = () => {
-    map.scrollWheelZoom.disable()
-    map.dragging.disable()
-  }
-  const mouseLeave = () => {
+  const enableMouse = () => {
     map.scrollWheelZoom.enable()
     map.dragging.enable()
   }
+  const disableMouse = () => {
+    map.scrollWheelZoom.disable()
+    map.dragging.disable()
+  }
+
   const handleDrawerOpen = () => setOpen(true)
   const handleDrawerClose = () => setOpen(false)
   const handleClick = (item: string) => () => {
@@ -115,8 +118,8 @@ const DataPanel = () => {
           }}
           component="nav"
           aria-labelledby="nested-list-subheader"
-          onMouseEnter={mouseEnter}
-          onMouseLeave={mouseLeave}
+          onMouseEnter={disableMouse}
+          onMouseLeave={enableMouse}
         >
           {
             Object.keys(itemList).map((item) => {

@@ -1,10 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { coor } from "types";
+import { ScaleUnitType, StringObject } from 'types'
 
-interface Format {
-  [key: string]: string
-}
-const formatOrder: Format = {
+const formatOrder: StringObject = {
   'latlon-dd': 'latlon-dm',
   'latlon-dm': 'latlon-dms',
   'latlon-dms': 'latlon-dd',
@@ -24,6 +21,7 @@ export interface inputstate {
   OdbCurSelection: string
   OdbCtdSelection: string
   userInfo: { [key: string]: any }
+  scaleUnit: ScaleUnitType
 }
 export const coordInputSlice = createSlice({
   name: "coordInput",
@@ -40,6 +38,7 @@ export const coordInputSlice = createSlice({
     OdbCurSelection: 'avg',
     OdbCtdSelection: 't',
     userInfo: {},
+    scaleUnit: 'metric'
   } as inputstate,
   reducers: {
     switchActive: (state, action: PayloadAction<boolean>) => {
@@ -77,6 +76,9 @@ export const coordInputSlice = createSlice({
     },
     userInfo: (state, action: PayloadAction<{ [key: string]: any }>) => {
       state.userInfo = action.payload
+    },
+    scaleUnitSwitch: (state, action: PayloadAction<ScaleUnitType>) => {
+      state.scaleUnit = action.payload
     },
   }
 });

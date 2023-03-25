@@ -1,4 +1,6 @@
 import 'leaflet'
+import { useSelector } from "react-redux";
+import { RootState } from "store/store"
 import { LatLng } from "leaflet";
 import { useRef, useState } from "react";
 import { useMap, FeatureGroup } from "react-leaflet";
@@ -22,7 +24,7 @@ const dotIcon = ({ fill = "#3388ff", opacity = 0.7, size = [10, 10], anchor = [1
 
 const calGeodesic = (latlng1: LatLng, latlng2: LatLng) => {
   const geod = geodesic.Geodesic.WGS84
-  return geod.Inverse(latlng1.lat, latlng1.lng, latlng2.lat, latlng2.lng).s12! / 1000
+  return geod.Inverse(latlng1.lat, latlng1.lng, latlng2.lat, latlng2.lng).s12!
 }
 
 export const DrawShapes = () => {
@@ -30,7 +32,19 @@ export const DrawShapes = () => {
   const featureRef = useRef<any>()
   const [coordsProfile, setCoordsProfile] = useState<LatLng[]>([])
   const [renderProfile, setRenderProfile] = useState(false)
+  const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
   // const geod = geodesic.Geodesic.WGS84
+  const readableDistance = (distanceInMeters: number) => L.GeometryUtil.readableDistance(
+    distanceInMeters,
+    scaleUnit === 'metric' ? true : false,
+    false,
+    scaleUnit === 'nautical' ? true : false,
+  )
+  const readableArea = (areaInSqMeters: number) => L.GeometryUtil.readableArea(
+    areaInSqMeters,
+    scaleUnit === 'imperial' ? false : ['km', 'ha', 'm'], //metric and nautical
+    scaleUnit === 'imperial' ? true : false,
+  )
   return (
     <>
       <FeatureGroup ref={featureRef}>
@@ -42,12 +56,24 @@ export const DrawShapes = () => {
             polygon: {
               showArea: true,
               showLength: true,
+              feet: false,
+              metric: scaleUnit === 'metric' ? true : false,
+              nautic: scaleUnit === 'nautical' ? true : false,
             },
             rectangle: false,
             polyline: {
               showLength: true,
+              feet: false,
+              metric: scaleUnit === 'metric' ? true : false,
+              nautic: scaleUnit === 'nautical' ? true : false,
               icon: dotIcon(),
             },
+            circle: {
+              showRadius: true,
+              feet: false,
+              metric: scaleUnit === 'metric' ? true : false,
+              nautic: scaleUnit === 'nautical' ? true : false,
+            }
           }}
           onCreated={(e) => {
             switch (e.layerType) {
@@ -64,10 +90,10 @@ export const DrawShapes = () => {
                     if (i > 0) {
                       const distance = calGeodesic(latlngs[i - 1], latlng)
                       accDist.push(distance)
-                      // const distance = (latlngs[i - 1].distanceTo(latlng) / 1000)
-                      // accDist.push(distance)
                       const acc = accDist.reduce((a, b) => a + b, 0)
-                      const content = `${latlng.lat.toFixed(2)}, ${latlng.lng.toFixed(2)}<br>d = ${distance.toFixed(2)} km<br>D = ${acc.toFixed(2)} km`
+                      const distanceString = readableDistance(distance)
+                      const accString = readableDistance(acc)
+                      const content = `${latlng.lat.toFixed(2)}, ${latlng.lng.toFixed(2)}<br>d = ${distanceString}<br>D = ${accString}`
                       L.tooltip().setLatLng(latlng).setContent(content).addTo(tooltips)
                     } else {
                       const content = `${latlng.lat.toFixed(2)}, ${latlng.lng.toFixed(2)}`
@@ -88,15 +114,16 @@ export const DrawShapes = () => {
                   const accDist: number[] = []
                   pgLatlngs.forEach((latlng: LatLng, i: number) => {
                     if (i > 0) {
-                      const distance = calGeodesic(pgLatlngs[i - 1], latlng)//(pgLatlngs[i - 1].distanceTo(latlng) / 1000)
+                      const distance = calGeodesic(pgLatlngs[i - 1], latlng)
                       accDist.push(distance)
                     }
                   })
-                  // accDist.push(pgLatlngs[0].distanceTo(pgLatlngs.slice(-1)[0]) / 1000)
                   accDist.push(calGeodesic(pgLatlngs[0], pgLatlngs.slice(-1)[0]))
                   const acc = accDist.reduce((a, b) => a + b, 0)
-                  const pgArea = L.GeometryUtil.geodesicArea(pgLatlngs) / 1000000;
-                  const pgContent = `A = ${pgArea.toFixed(2)} km&sup2<br>p = ${acc.toFixed(2)} km`
+                  const accString = readableDistance(acc)
+                  const pgArea = L.GeometryUtil.geodesicArea(pgLatlngs);
+                  const areaString = readableArea(pgArea)
+                  const pgContent = `A = ${areaString}<br>p = ${accString}`
                   e.layer.bindTooltip(pgContent)
                 })
                 e.layer.on('edit', () => {
@@ -109,13 +136,16 @@ export const DrawShapes = () => {
                 let center = L.circleMarker(latlng, { radius: 1 })
                 e.layer.bringToFront()
                 e.layer.on('mouseover', () => {
-                  const radius = e.layer.getRadius() / 1000
+                  const radius = e.layer.getRadius()
                   const ccArea = radius ** 2 * Math.PI
                   const circumference = 2 * radius * Math.PI
+                  const radiusString = readableDistance(radius)
+                  const circumferenceString = readableDistance(circumference)
+                  const areaString = readableArea(ccArea)
                   const ccContent = `${latlng.lat.toFixed(2)}, ${latlng.lng.toFixed(2)}<br>
-                  r = ${radius.toFixed(2)} km<br>
-                  c = ${circumference.toFixed(2)} km<br>
-                  A = ${ccArea.toFixed(2)} km&sup2`
+                  r = ${radiusString}<br>
+                  c = ${circumferenceString}<br>
+                  A = ${areaString}`
                   e.layer.bindTooltip(ccContent)
                   center.addTo(featureRef.current)
                 })
