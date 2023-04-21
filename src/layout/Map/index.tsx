@@ -19,7 +19,7 @@ import 'leaflet-measure/'
 // @ts-ignore
 import "./leaflet.latlng-graticule.js"
 import 'leaflet-measure/dist/leaflet-measure.css';
-import { account } from 'layout/Account/utils'
+import { account } from 'Utils/UtilsAccount'
 import { SignInControl } from 'components/SignInControl';
 import CustomControl from "react-leaflet-custom-control";
 import { CustomScaleControl } from 'components/CustomScaleControl';
@@ -80,10 +80,9 @@ const addGraticule = (map: L.Map) => {
 
 const LeafletMap = () => {
   const dispatch = useDispatch()
-  // const [scaleUnit, setScaleUnit] = useState<ScaleUnitType>('metric')
   const timeNow = new Date()
   const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  // const datetime = useSelector((state: RootState) => state.coordInput.datetime);
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
     dispatch(coordInputSlice.actions.userInfo(userInfo))
@@ -95,9 +94,10 @@ const LeafletMap = () => {
       <Flatpickr
         className='dateTimePicker'
         data-enable-time
-        value={datetime}
+        // value={datetime}
         onChange={([datetime]) => dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))}
         options={{
+          defaultDate: new Date(),
           maxDate: timeNow.setDate(timeNow.getDate() + 9),
           time_24hr: true,
           allowInput: false,
@@ -116,7 +116,7 @@ const LeafletMap = () => {
         zoomControl={false}
         preferCanvas={true}
         doubleClickZoom={false}
-        renderer={L.canvas()}
+        renderer={L.canvas({ tolerance: 3 })}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => {
           addGraticule(map)

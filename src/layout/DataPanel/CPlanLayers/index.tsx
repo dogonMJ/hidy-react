@@ -6,7 +6,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useMap } from 'react-leaflet';
 import * as geojson from 'geojson';
 import L, { LatLng } from 'leaflet';
-import * as iosColors from 'assets/jsons/colors_ios.json'
+import iosColors from 'assets/jsons/colors_ios.json'
 import CloseIcon from '@mui/icons-material/Close';
 import InfoButton from "components/InfoButton";
 import { DataTable } from './DataTable';

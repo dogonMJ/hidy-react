@@ -13,7 +13,7 @@ import { useState } from "react";
 
 const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature", "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor",
   "sla", "adt", "CHL",]
-const optionForecast = ["close", "3dinst_thetao", "3dinst_so", "3dsea_water_velocity", "mlotst", "zos", "bottomT",]
+const optionForecast = ["3dinst_thetao", "3dinst_so", "3dsea_water_velocity", "mlotst", "zos", "bottomT",]
 const getLegendUrl = (layerIdentifier: string) => {
   switch (layerIdentifier) {
     case "GHRSST_L4_MUR_Sea_Surface_Temperature":

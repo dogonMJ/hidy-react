@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { coordInputSlice } from "store/slice/mapSlice";
 import { Stack, Typography, IconButton } from "@mui/material"
 import LogoutIcon from '@mui/icons-material/Logout';
-import { account } from './utils'
+import { account } from '../../Utils/UtilsAccount'
 
 export const UserBanner = React.forwardRef((props: { userInfo: any, setOpen: any }, ref) => {
   const { userInfo, setOpen } = props
@@ -35,7 +35,6 @@ export const UserBanner = React.forwardRef((props: { userInfo: any, setOpen: any
             {t('account.signout')}
           </Typography>
         </IconButton>
-        <button onClick={() => account.test()}>sdggdsg</button>
       </Typography>
     </Stack>
   )

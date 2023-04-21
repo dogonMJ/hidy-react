@@ -5,7 +5,7 @@ import ODBIcon from 'assets/images/ODB.png';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
 import { coordInputSlice } from "store/slice/mapSlice";
-import { account } from './utils'
+import { account } from '../../Utils/UtilsAccount'
 import { RenderIf } from 'components/RenderIf/RenderIf';
 
 export const SignIn = (props: { setOpen: any, setSignUpOpen: any, setResetPwdOpen: any }) => {

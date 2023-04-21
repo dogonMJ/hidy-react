@@ -4,7 +4,7 @@ import { Avatar, Button, CssBaseline, TextField, OutlinedInput, Box, Typography,
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import ODBIcon from 'assets/images/ODB.png';
 import { useTranslation } from 'react-i18next';
-import { account } from './utils'
+import { account } from '../../Utils/UtilsAccount'
 import { Msgbox } from './Msgbox';
 
 export const SignUp = (props: { setOpen: any }) => {

@@ -69,7 +69,7 @@
   },
   "scripts": {
     "start": "set https=true&&react-scripts start",
-    "build": "webpack",
+    "build": "webpack build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

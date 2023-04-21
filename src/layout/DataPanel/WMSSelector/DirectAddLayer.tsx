@@ -1,42 +1,81 @@
 import { useTranslation } from "react-i18next"
-import { TileLayer } from "react-leaflet"
+import { TileLayer, useMap, useMapEvents } from "react-leaflet"
 import { TileLayerCanvas } from "../../../components/TileLayerCanvas"
 import { FormControl, FormControlLabel, FormLabel, Stack, Radio, RadioGroup, TextField, Button, CircularProgress, Box } from "@mui/material"
 import InfoButton from "components/InfoButton"
 import { useEffect, useState, useRef } from "react"
 import { OpacitySlider } from "../../../components/OpacitySlider"
+import { getUrlQuery, checkServiceType } from "Utils/UtilsURL"
+import { AlertSlide } from "components/AlertSlide/AlertSlide";
+import { ServiceType } from "types"
 //https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg
 //https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?&service=WMS&request=GetMap&layers=GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature&styles=&format=image%2Fpng&transparent=true&version=1.1.1&time=2019-03-17&width=256&height=256&srs=EPSG%3A3857
+
+interface Params {
+  base: string
+  params: { [key: string]: any }
+}
+
 export const DirectAddLayers = () => {
   const { t } = useTranslation()
+  const map = useMap()
   const ref = useRef<any>(null)
-  const [urlType, setUrlType] = useState('REST')
+  const [serviceType, setServiceType] = useState<ServiceType>('WMTS')
   const [url, setUrl] = useState<string>('')
   const [key, setKey] = useState<string>()
   const [showLayer, setShowLayer] = useState<string | null>(null)
   const [opacity, setOpacity] = useState(100)
   const [loading, setLoading] = useState(false)
+  const [params, setParams] = useState<Params>({ base: '', params: {} })
+  const [openZoomAlert, setOpenZoomAlert] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState('')
 
-  const handleUrlType = (event: React.ChangeEvent<HTMLInputElement>) => {
+  useMapEvents({
+    'zoomend': () => {
+      if (showLayer) {
+        setOpenZoomAlert(true)
+        setZoomLevel(map.getZoom().toString())
+        setTimeout(() => setOpenZoomAlert(false), 3000)
+      }
+    },
+  })
+
+  const handleServiceType = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowLayer(null)
-    setUrlType(event.target.value)
+    setServiceType(event.target.value as ServiceType)
   }
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    value.includes('?') ? setUrlType('KVP') : setUrlType('REST')
-    setShowLayer(null)
-    setUrl(value)
+    const url = event.target.value
+    setServiceType(checkServiceType(url))
+    // setShowLayer(null)
+    setUrl(url)
   }
 
   const handleAddLayer = () => {
+    if (serviceType === 'WMS') {
+      const paramsObject = getUrlQuery(url)
+      Object.assign(paramsObject.params, {
+        crossOrigin: 'anonymous',
+        uppercase: true,
+      })
+      setParams(paramsObject)
+    } else {
+      setParams({ base: url, params: {} })
+    }
     setKey(new Date().toTimeString())
-    setShowLayer(urlType)
+    setShowLayer(serviceType)
   }
 
   const handleOpacity = (event: Event, newValue: number | number[]) => {
     setOpacity(newValue as number);
   };
+
+  const handleClearLayer = () => {
+    setShowLayer(null)
+    setOpenZoomAlert(false)
+    setZoomLevel('')
+  }
 
   const eventHandlers = {
     // tileerror: (e: any) => console.log('ppppp', e),
@@ -60,11 +99,11 @@ export const DirectAddLayers = () => {
         <RadioGroup
           row
           name="URL Type"
-          value={urlType}
-          onChange={handleUrlType}
+          value={serviceType}
+          onChange={handleServiceType}
         >
-          <FormControlLabel value="REST" control={<Radio />} label="RESTful" />
-          <FormControlLabel value="KVP" control={<Radio />} label="KVP (Key-Value Pair)" />
+          <FormControlLabel value="WMS" control={<Radio />} label="WMS" />
+          <FormControlLabel value="WMTS" control={<Radio />} label="WMTS" />
         </RadioGroup>
       </FormControl>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -92,29 +131,27 @@ export const DirectAddLayers = () => {
           <br />
           <OpacitySlider opacity={opacity} onChange={handleOpacity} />
           <br />
-          <Button variant="contained" color={'error'} onClick={() => setShowLayer(null)}>{t('WMSSelector.clearLayer')}</Button>
+          <Button variant="contained" color={'error'} onClick={handleClearLayer}>{t('WMSSelector.clearLayer')}</Button>
         </>
       }
-      {showLayer === 'REST' &&
+      {showLayer === 'WMTS' &&
         <TileLayer
           ref={ref}
           key={key}
-          url={url}
+          url={params.base}
           eventHandlers={eventHandlers}
           crossOrigin='anonymous'
         />}
-      {showLayer === 'KVP' &&
+      {showLayer === 'WMS' &&
         <TileLayerCanvas
           ref={ref}
           key={key}
-          url={url}
+          url={params.base}
           eventHandlers={eventHandlers}
-          params={{
-            crossOrigin: 'anonymous',
-            uppercase: true,
-          }}
+          params={params.params}
         />
       }
+      <AlertSlide open={openZoomAlert} setOpen={setOpenZoomAlert} severity='info' > {`TileMatrix (Zoom Level): ${zoomLevel}`} </AlertSlide>
     </>
   )
 }

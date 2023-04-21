@@ -4,7 +4,7 @@ import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { useMap, useMapEvents } from 'react-leaflet';
+import { useMap } from 'react-leaflet';
 import { DataPanelItem } from 'components/DataPanelItem';
 import ToggleCWB from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
@@ -15,6 +15,7 @@ import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
 import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
 import { WMSSelector } from './WMSSelector';
+import { SatelliteWebMaps } from './SatelliteWebMaps';
 // @ts-ignore
 import Cache from 'cachai';
 
@@ -47,7 +48,8 @@ const DataPanel = () => {
     OdbData: <ODB />,
     CPlanLayers: <CPlanLayers />,
     StatMean: <StatisticMean />,
-    WMSSelector: < WMSSelector />
+    WMSSelector: < WMSSelector />,
+    WebMaps: <SatelliteWebMaps cache={cache} />
   }
   const secLevelAll: ItemList = {
     ShipTrack: <ShipTrack />
@@ -97,7 +99,7 @@ const DataPanel = () => {
         ModalProps={{ keepMounted: true, }}
         PaperProps={{
           sx: {
-            maxHeight: 'calc(100% - 113px)',
+            maxHeight: 'calc(100% - 140px)',
             height: 'auto',
             marginLeft: '0px'
           }

@@ -22,7 +22,7 @@ const toLocalDate = (utcString: string) => {
 
 const shipicons = [1, 2, 3].map((shipNum) =>
   new L.Icon({
-    iconUrl: require(`assets/images/ship${shipNum}.png`),
+    iconUrl: require(`/src/assets/images/ship${shipNum}.png`),
     iconAnchor: [19, 22],
     popupAnchor: [0, 0],
     iconSize: [38, 22],

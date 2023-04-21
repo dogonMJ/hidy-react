@@ -7,7 +7,7 @@ import { SignIn } from "layout/Account/SignIn"
 import LoginIcon from '@mui/icons-material/Login';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Avatar from '@mui/material/Avatar';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { UserBanner } from "layout/Account/UserBanner";
 import { SignUp } from "layout/Account/SignUp"

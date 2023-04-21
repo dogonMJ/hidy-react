@@ -11,7 +11,7 @@ import omnivore from '@mapbox/leaflet-omnivore'
 //@ts-ignore
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
-import * as Spectral_10 from "assets/jsons/Spectral_10.json"
+import Spectral_10 from "assets/jsons/Spectral_10.json"
 
 interface DropGeoJSON extends L.GeoJSON {
   filename?: string

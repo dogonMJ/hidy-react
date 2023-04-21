@@ -19,17 +19,17 @@ export const PlotContour = (props: { url: string }) => {
   const onEachFeature = (feature: geojson.Feature<geojson.LineString, any>, layer: L.Layer) => {
     layer.bindPopup(feature.properties.title)
     // layer.bindTooltip(`<div style='color:${feature.properties.color}'>${feature.properties.title}</div>`,
-    //   { className: 'Longterm-Contour-Label', permanent: false, direction: "center", sticky: true })
+    //   { className: 'Longterm-Contour-Label', permanent: true, direction: "center", sticky: true })
     const idx = Math.ceil(feature.geometry.coordinates.length / 2)
-    L.tooltip({ className: 'Longterm-Contour-Label', permanent: false, direction: "center", sticky: true })
+    L.tooltip({ className: 'Longterm-Contour-Label', permanent: false, direction: "center", sticky: true, })
       .setContent(`<div style='color:${feature.properties.color}'>${feature.properties.title}</div>`)
       .setLatLng(feature.geometry.coordinates[idx].reverse())
       .addTo(tooltipLayer);
   }
   const styleFunc = (feature: any) => {
     return {
-      weight: 2.5,
-      color: feature.properties.color
+      weight: 3,
+      color: feature.properties.color,
     }
   }
   useEffect(() => {

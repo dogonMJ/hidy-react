@@ -40,7 +40,6 @@ const CwbSeaSites = () => {
     'siteInfo': {},
     'siteData': {},
   })
-  const cwbkey = process.env.REACT_APP_CWB_KEY
   const fetchSiteData = () => {
     // B0075-001 海象監測-48小時浮標站與潮位站，API擷取json
     // return fetch('https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-B0075-001?Authorization=' + cwbkey + '&format=JSON')

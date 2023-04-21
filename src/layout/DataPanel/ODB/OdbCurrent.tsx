@@ -10,6 +10,7 @@ import { LegendControl } from "components/LeafletLegend"
 import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
 // import ArrowRight from 'assets/images/straight-right-arrow.svg';
 import Arrow from 'assets/images/ArrowUp.svg'
+
 declare const L: any;
 
 // const legendColors: StringObject = {

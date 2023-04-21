@@ -6,7 +6,6 @@
   L.TileLayer.WMS.Canvas2D = L.TileLayer.WMS.extend({
     createTile: function (coords, done) {
       var tileUrl = this.getTileUrl(coords);
-
       // create canvas
       var canvas = L.DomUtil.create('canvas', 'leaflet-tile');
 
@@ -20,14 +19,12 @@
 
       var img = new Image();
       img.src = tileUrl;
-      var crossOrigin = this.options.crossOrigin
-      if (crossOrigin) {
-        img.crossOrigin = crossOrigin
+      if (this.options.crossOrigin || this.options.crossOrigin === '') {
+        img.crossOrigin = this.options.crossOrigin === true ? '' : this.options.crossOrigin;
       }
       img.onload = function () {
         context.drawImage(img, 0, 0);
       };
-
       L.DomEvent.on(img, 'load', L.Util.bind(this._tileOnLoad, this, done, img));
       L.DomEvent.on(img, 'error', L.Util.bind(this._tileOnError, this, done, img));
 

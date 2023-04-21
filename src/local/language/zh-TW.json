@@ -85,7 +85,11 @@
     "bottomT": "海床位溫分析及預報",
     "mlotst": "混合層厚度分析及預報",
     "zos": "相對大地水準面海表面高分析及預報",
-    "3dsea_water_velocity": "海水速度分析及預報"
+    "3dsea_water_velocity": "海水速度分析及預報",
+    "alert": {
+      "range": "不在時間範圍內",
+      "loading": "圖層載入中"
+    }
   },
   "Animated": {
     "title": "流速動畫",
@@ -332,14 +336,15 @@
       "dupOption": "重複輸入",
       "inputError": "請檢查伺服器網址或服務類型是否正確",
       "noLayer": "找不到圖層",
-      "error": "請檢查所有選項，或聯絡ODB管理員"
+      "error": "請檢查所有選項，或聯絡ODB管理員",
+      "zoomLevel": "這個圖層可能不支援此縮放比例"
     },
     "description": {
       "addUrlOption": "1. 輸入完整OGC WMS/WMTS之GetCapabilities網址，或是根網址(base URL)。\n2. 按下右方「新增」鍵在下方選項新增網址。\n*需支援EPSG:3857投影。\n*空白與tab會自動移除。\n範例：\nKVP格式: https://gis.sinica.edu.tw/tileserver/wmts\nRESTful格式: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml",
       "selectUrl": "選擇所需要之網址或內建選項。",
       "serviceType": "選擇服務格式，通常網址就會有wms或wmts字樣。",
       "layerKeyword": "輸入圖層關鍵字。\n忽略大小寫之精確搜尋，可於字串任何地方用萬用字元「*」做模糊搜尋。\n空白、萬用字元則搜尋所有圖層。\n範例：\n「sea」搜尋sea圖層；「*sea」搜尋sea結尾圖層；「sea*」搜尋sea開頭圖層；「*sea*」搜尋包含sea的圖層。",
-      "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful格式。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(tile col)、y(tile row)、z(tile matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/{z}/{y}/{x}.jpg\n\nKVP WMS: 請將BBOX、WIDTH、HEIGHT移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg",
+      "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful WMTS。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(col)、y(row)、z(matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/{z}/{y}/{x}.jpg\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg\n\nWMS: 請將BBOX移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256\n\n",
       "directAddLayers": "直接輸入圖層網址及參數直接加入圖層。\n請參考網址說明修改參數為正確格式。",
       "layerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。"
     }

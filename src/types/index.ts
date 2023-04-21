@@ -32,4 +32,23 @@ export interface Legend {
     [key: string]: StringObject
 }
 
+export type ServiceType = 'WMTS' | 'WMS'
 export type ScaleUnitType = 'metric' | 'nautical' | 'imperial'
+
+export interface ApiParams {
+    key: string
+    crossOrigin?: Api['crossOrigin']
+    opacity?: number
+    layers?: Api['layer']
+    styles?: Api['style']
+    format?: Api['format']
+    transparent?: Api['transparent']
+    time?: string
+    elevation?: number
+}
+
+export interface TileProp {
+    url: Api['url']
+    params: ApiParams,
+    type: Api['type']
+}

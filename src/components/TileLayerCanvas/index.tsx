@@ -7,9 +7,24 @@ import L from "leaflet";
 //@ts-ignore
 import "tilelayer-canvas";
 import "./wmslayer-canvas.js"
+
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer
-  const instance = (props.type === 'wmts') ? layer.canvas(props.url, { ...props.params }) : layer.wms.canvas2D(props.url, { ...props.params });
+  const type = props.type ? props.type.toUpperCase() : ''
+  const instance = (type === 'WMTS') ? layer.canvas(props.url, { ...props.params }) : layer.wms.canvas2D(props.url, { ...props.params });
+  if (type !== 'WMTS') {
+    const newParams = Object.fromEntries(
+      Object.entries(props.params).map(([k, v]) => [k.toUpperCase(), v])
+    );
+    const wmsKeys = Object.keys(instance.wmsParams).filter(key => !Object.keys(newParams).includes(key.toUpperCase()))
+    const defaultObj: { [key: string]: any } = {}
+    wmsKeys.forEach(key => {
+      defaultObj[key] = instance.wmsParams[key]
+    })
+    Object.assign(newParams, defaultObj)
+    instance.wmsParams = {}
+    instance.setParams({ ...newParams })
+  }
   return { instance, context };
 };
 

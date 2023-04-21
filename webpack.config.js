@@ -32,7 +32,7 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         type: "asset/resource"
       },
     ]
@@ -41,6 +41,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
       filename: 'index.html',
+      favicon: "./public/favicon.ico",
+      manifest: "./public/manifest.json",
       inject: true,
       minify: true,
     }),

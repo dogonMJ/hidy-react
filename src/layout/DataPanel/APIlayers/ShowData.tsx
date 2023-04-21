@@ -109,6 +109,7 @@ const getWMSData = async (
       console.log(err)
     })
 }
+
 const ShowData = (props: {
   layergroup: L.LayerGroup | null,
   layerId: number | null,
@@ -124,8 +125,8 @@ const ShowData = (props: {
   useMapEvents({
     mousedown: (e) => {
       setPosition(e.latlng)
-      const originalEvent = e.originalEvent as extendMouseEvent
-      if (originalEvent.toElement.innerHTML === "Close" || originalEvent.toElement.innerHTML === "關閉") {
+      const target = e.originalEvent.target as Element
+      if (target.innerHTML === "Close" || target.innerHTML === "關閉") {
         return
       }
       switch (props.param.type) {
