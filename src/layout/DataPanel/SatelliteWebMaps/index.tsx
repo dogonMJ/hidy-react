@@ -1,7 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "store/store";
 import { Divider, ListSubheader } from "@mui/material";
 import { DataPanelRadioList } from "components/DataPanelRadioList";
 import { ProcWebMaps } from "./ProcWebMaps";

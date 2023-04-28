@@ -89,7 +89,7 @@ export const OdbCurrent = () => {
     return marker
   }
   useEffect(() => {
-    const depth = adcpDepths[depthMeterValue] ? -adcpDepths[depthMeterValue] : 20
+    const depth = depthMeterValue ? adcpDepths[depthMeterValue] ? -adcpDepths[depthMeterValue] : 20 : 20
     const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?dep0=${depth}&dep_mode=exact&format=geojson&mode=${periodTransform[period]}&append=u,v,count&mean_threshold=10`
     // const url = `https://odbpo.oc.ntu.edu.tw/static/figs/odb/adcp/adcp_grid15moa_${period}${depth}.json`
     fetch(url)

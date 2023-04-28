@@ -5,21 +5,29 @@ import { SliderMarks, TileProp } from 'types'
 
 const isValueExist = (value: any) => value ? true : false
 const getTickValues = (ticks: number[], valueArray: number[]) => {
-  const values: any[] = []
-  ticks.forEach((tick) => values.push(valueArray.find((value) => value <= tick)))
+  const values: number[] = []
+  ticks.forEach((tick) => {
+    const found = valueArray.find((value) => value >= tick)
+    if (found) {
+      values.push(found)
+    }
+  })
   return values
 }
 export const getMarks = (unit: string, valueArray: number[], ticks = [0, -20, -100, -500, -1000, -2000, -3000, -4000]) => {
   const result: SliderMarks[] = []
-  const tickValues = getTickValues(ticks, [...valueArray].reverse())
-  valueArray.forEach((value, i) => {
+  const sorted = valueArray.sort((a, b) => a - b)
+  const tickValues = getTickValues(ticks, sorted)
+  sorted.forEach((value, i) => {
     result.push({ value: i, label: '' })
   })
   tickValues.filter(isValueExist).forEach((value) => {
-    const index = valueArray.indexOf(value)
+    const index = sorted.indexOf(value)
     result[index] = { value: index, label: `${Math.round(value)} ${unit}` }
   })
-  result[0] = { value: 0, label: `${Math.round(valueArray[0])} ${unit}` }
+  const lstIdx = sorted.length - 1
+  result[lstIdx] = { value: lstIdx, label: `${Math.round(sorted[lstIdx])} ${unit}` }
+  result[0] = { value: 0, label: `${Math.round(sorted[0])} ${unit}` }
   return result
 }
 

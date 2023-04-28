@@ -1,21 +1,11 @@
-import { format } from "path"
-
-interface Durations {
-  years: number
-  months: number
-  weeks: number
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
-}
+import { ElevationInfo } from 'types'
 
 const round6Hour = (hour: string) => {
   const remainder = Number(hour) % 6
   return remainder === 0 ? hour : (Number(hour) - remainder).toString().padStart(2, '0')
 }
 
-const timeDuration = (time: string, duration: string) => {
+const timeDuration = (time: string, duration: string | undefined) => {
 
   switch (duration) {
     case 'P1D':
@@ -70,16 +60,6 @@ const parseDuration = (durationString: string) => {
   } else {
     return [0, 0]
   }
-  // return matches ? {
-  //   years: parseInt(matches[1]),
-  //   months: parseInt(matches[2]),
-  //   weeks: parseInt(matches[3]),
-  //   days: parseInt(matches[4]),
-  //   hours: parseInt(matches[5]),
-  //   minutes: parseInt(matches[6]),
-  //   seconds: parseInt(matches[7]),
-  // } as Durations
-  //   : null
 }
 
 const modTimeString = (time: Date, start: string, duration: string) => {
@@ -122,9 +102,13 @@ const modTimeString = (time: Date, start: string, duration: string) => {
     case 7:
       return time.toISOString()
   }
-  return result.toISOString()
+  if (start.includes('T')) {
+    return result.toISOString()
+  } else {
+    const [withoutT] = result.toISOString().split('T')
+    return withoutT
+  }
 }
-
 
 const timeDurations = (timeString: string, timeInfo: string | undefined): [string, boolean] => {
   if (timeInfo && timeString) {
@@ -139,7 +123,27 @@ const timeDurations = (timeString: string, timeInfo: string | undefined): [strin
     return [timeString, true]
   }
 }
-export { timeDuration, timeDurations, getUrlQuery, checkServiceType }
+
+const getElevationInfo = (elevationObject: any): ElevationInfo => {
+  const defaultValue = elevationObject.default ? Number(elevationObject.default) : undefined
+  const unit = elevationObject.unit ? String(elevationObject.unit) : undefined
+  const objValues = elevationObject.value
+  let values;
+  if (objValues) {
+    if (Array.isArray(objValues)) {
+      values = objValues.length === 1 ? String(objValues[0]).split(',').map(Number) : objValues.map(Number)
+    } else {
+      values = typeof objValues === 'string' ? objValues.split(',').map(Number) : [objValues]
+    }
+  } else {
+    values = undefined
+  }
+  return { defaultValue, unit, values }
+}
+
+
+
+export { timeDuration, timeDurations, getUrlQuery, checkServiceType, getElevationInfo }
 
 // const timeShift = (time: Date, parsedDuration: Durations) => {
 //   const validKeys = Object.keys(parsedDuration).filter(key => !Number.isNaN(parsedDuration[key as keyof Durations]))

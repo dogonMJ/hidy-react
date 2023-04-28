@@ -110,7 +110,7 @@ const getWMSData = async (
     })
 }
 
-const ShowData = (props: {
+export const ShowData = (props: {
   layergroup: L.LayerGroup | null,
   layerId: number | null,
   identifier: string,
@@ -129,12 +129,12 @@ const ShowData = (props: {
       if (target.innerHTML === "Close" || target.innerHTML === "關閉") {
         return
       }
-      switch (props.param.type) {
-        case 'wms':
-          setUnit(props.param.unit)
+      switch (props.param.featureinfo) {
+        case true:
+          setUnit(props.param.unit ? props.param.unit : '')
           getWMSData(map, props.param.url, e.latlng, props.datetime, props.param.layer, props.elevation, setBartip)
           break;
-        case 'wmts':
+        case false:
           if (props.param.colorBar) {
             const colorBar = colorBars[props.param.colorBar]
             const value = getNASAData(map, e.latlng, props.layergroup, props.layerId, colorBar)
@@ -142,7 +142,7 @@ const ShowData = (props: {
           } else {
             setBartip('')
           }
-          setUnit(props.param.unit)
+          setUnit(props.param.unit ? props.param.unit : '')
           break;
         default:
           setUnit('')
@@ -158,5 +158,3 @@ const ShowData = (props: {
     </>
   )
 }
-
-export default ShowData

@@ -1,4 +1,4 @@
-import { Alert, AlertColor, IconButton, Slide } from "@mui/material";
+import { Alert, AlertColor, Slide } from "@mui/material";
 import { createPortal } from "react-dom";
 import { ReactNode, useEffect } from "react";
 

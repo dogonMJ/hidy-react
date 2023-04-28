@@ -12,8 +12,9 @@ export interface Api {
     type: string
     url: string
     layer: string
-    duration: string
-    unit: string
+    featureinfo: boolean
+    duration?: string
+    unit?: string
     style?: string
     format?: string
     transparent?: boolean
@@ -51,4 +52,10 @@ export interface TileProp {
     url: Api['url']
     params: ApiParams,
     type: Api['type']
+}
+
+export interface ElevationInfo {
+    defaultValue: number | undefined
+    unit: string | undefined
+    values: number[] | undefined
 }

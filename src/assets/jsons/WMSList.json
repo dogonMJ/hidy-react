@@ -9,7 +9,8 @@
     "formatExt": "png",
     "crossOrigin": "anonymous",
     "unit": "\u00B0C",
-    "colorBar": "seaSurfTempColor"
+    "colorBar": "seaSurfTempColor",
+    "featureinfo": false
   },
   "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": {
     "type": "wmts",
@@ -21,7 +22,8 @@
     "formatExt": "png",
     "crossOrigin": "anonymous",
     "unit": "\u00B0C",
-    "colorBar": "seaSurfTempAnoColor"
+    "colorBar": "seaSurfTempAnoColor",
+    "featureinfo": false
   },
   "MODIS_Aqua_CorrectedReflectance_TrueColor": {
     "type": "wmts",
@@ -32,7 +34,8 @@
     "tileMatrixSet": "GoogleMapsCompatible_Level9",
     "formatExt": "jpg",
     "crossOrigin": "anonymous",
-    "unit": " "
+    "unit": " ",
+    "featureinfo": false
   },
   "sla": {
     "type": "wms",
@@ -43,7 +46,8 @@
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "m"
+    "unit": "m",
+    "featureinfo": true
   },
   "adt": {
     "type": "wms",
@@ -54,7 +58,8 @@
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "m"
+    "unit": "m",
+    "featureinfo": true
   },
   "CHL": {
     "type": "wms",
@@ -65,72 +70,79 @@
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "mg/m\u00B2"
+    "unit": "mg/m\u00B2",
+    "featureinfo": true
   },
   "3dinst_thetao": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-thetao",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy-thetao_anfc_0.083deg_PT6H-i",
     "layer": "thetao",
     "duration": "PT6H",
     "style": "boxfill/redblue",
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "\u00B0C"
+    "unit": "\u00B0C",
+    "featureinfo": true
   },
   "3dinst_so": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-so",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy-so_anfc_0.083deg_PT6H-i",
     "layer": "so",
     "duration": "PT6H",
     "style": "boxfill/occam",
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "psu"
+    "unit": "psu",
+    "featureinfo": true
   },
   "bottomT": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024",
-    "layer": "bottomT",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
+    "layer": "tob",
     "duration": "P1D12",
     "style": "boxfill/redblue",
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "\u00B0C"
+    "unit": "\u00B0C",
+    "featureinfo": true
   },
   "3dsea_water_velocity": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i",
     "layer": "sea_water_velocity",
     "duration": "P1D12",
     "style": "boxfill/ferret",
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "m/s"
+    "unit": "m/s",
+    "featureinfo": true
   },
   "mlotst": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
     "layer": "mlotst",
     "duration": "P1D12",
     "style": "boxfill/rainbow",
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "m"
+    "unit": "m",
+    "featureinfo": true
   },
   "zos": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-hourly-t-u-v-ssh",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
     "layer": "zos",
     "duration": "PT1H30",
     "style": "boxfill/redblue",
     "format": "image/png",
     "transparent": true,
     "crossOrigin": "anonymous",
-    "unit": "m"
+    "unit": "m",
+    "featureinfo": true
   }
 }

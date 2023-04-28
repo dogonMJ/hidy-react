@@ -32,7 +32,7 @@ export const OdbCTD = () => {
   const type = useSelector((state: RootState) => state.coordInput.OdbCtdSelection)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
-  const depth = ctdDepths[depthMeterValue] ? -ctdDepths[depthMeterValue] : 5
+  const depth = depthMeterValue ? ctdDepths[depthMeterValue] ? -ctdDepths[depthMeterValue] : 5 : 5
   const url = `${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/ctd/ctd_grid15moa_${type}_${period}${depth}.png`
   const urlJson = `${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/ctd/ctd_grid15moa_${period}${depth}.json`
   const legendContent = `<img src=${`${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/ctd/colorbar_${type}.png`} alt="legend" style="width:320px;margin:-5px"/>`

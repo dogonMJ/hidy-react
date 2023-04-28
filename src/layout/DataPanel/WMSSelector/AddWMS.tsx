@@ -5,9 +5,32 @@ export const AddWMS = (props: { params: any, opacity?: number, eventHandlers?: L
   const { params, opacity = 100, eventHandlers } = { ...props }
   const ref = useRef<any>()
   const time = params.time ? params.time : ''
+  const parameters = {
+    layers: params.layer,
+    time: time,
+    crossOrigin: 'anonymous',
+    transparent: true,
+    format: 'image/png',
+    uppercase: true,
+  }
+
+  useEffect(() => {
+    params.elevation ?
+      ref.current.setParams({
+        ...parameters,
+        time: time,
+        elevation: params.elevation,
+      }) :
+      ref.current.setParams({
+        ...parameters,
+        time: time,
+      })
+  }, [params, time])
+
   useEffect(() => {
     ref.current.setOpacity(opacity / 100)
-  })
+  }, [opacity])
+
   return (
     <TileLayerCanvas
       ref={ref}
@@ -15,13 +38,7 @@ export const AddWMS = (props: { params: any, opacity?: number, eventHandlers?: L
       type={params.service}
       url={params.url}
       eventHandlers={eventHandlers}
-      params={{
-        layers: params.layer,
-        crossOrigin: 'anonymous',
-        transparent: true,
-        format: 'image/png',
-        time: time,
-        uppercase: true
-      }} />
+      params={parameters}
+    />
   )
 }

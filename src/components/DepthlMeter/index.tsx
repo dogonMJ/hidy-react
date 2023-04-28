@@ -2,7 +2,7 @@ import { useMap } from 'react-leaflet';
 import { Box, Paper } from '@mui/material';
 import { createPortal } from 'react-dom'
 import { SliderMarks } from 'types'
-import { DepthMeterSlider } from 'components/DepthMeterSlider'
+import { DepthMeterSlider } from 'components/DepthlMeter/DepthMeterSlider'
 
 export const DepthMeter = (props: { values: number[], marks: SliderMarks[] }) => {
   const mapContainer = document.getElementById('mapContainer')

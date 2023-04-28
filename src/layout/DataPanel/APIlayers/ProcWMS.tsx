@@ -3,7 +3,7 @@ import { LayerGroup } from 'react-leaflet'
 import L from 'leaflet'
 import wmsList from 'assets/jsons/WMSList.json'
 import { TileLayerCanvas } from '../../../components/TileLayerCanvas'
-import ShowData from './ShowData'
+import { ShowData } from './ShowData'
 import { Api, TileProp } from 'types'
 import { DepthMeter } from 'components/DepthlMeter';
 import { useSelector } from "react-redux";
@@ -31,6 +31,7 @@ const propsWMTS = (api: Api, time: string, key: string) => {
       key: key,
       crossOrigin: api.crossOrigin,
       opacity: 0,
+      featureinfo: api.featureinfo
     },
   }
 }
@@ -47,6 +48,7 @@ const propsWMS = (api: Api, time: string, key: string, elevation: number) => {
       styles: api.style,
       format: api.format,
       transparent: api.transparent,
+      featureinfo: api.featureinfo
     },
   }
 }
@@ -64,7 +66,7 @@ const ProcWMS = (props: Urls) => {
   const api: Api = wmsList[props.Identifier as keyof typeof wmsList]
   const time = timeDuration(props.Time, api.duration)
 
-  const depth = depths[depthMeterValue] && is3D(props.Identifier) ? depths[depthMeterValue] : -0.49402499198913574
+  const depth = depthMeterValue ? (depths[depthMeterValue] && is3D(props.Identifier)) ? depths[depthMeterValue] : -0.49402499198913574 : -0.49402499198913574
   const key = api.layer + time + depth
 
   if (noTileCached(tileProps, key)) {
