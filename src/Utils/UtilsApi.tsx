@@ -51,6 +51,7 @@ const checkTime = async (url: string, time: string) => {
         if (currentTime < lastTime && currentTime > startTime) {
           res = true
         }
+        console.log(res, str)
       }
     })
     .catch(() => false);

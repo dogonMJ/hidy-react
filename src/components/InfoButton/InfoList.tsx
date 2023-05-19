@@ -517,6 +517,19 @@ const InfoList = (props: { dataId: string }) => {
           {t('WMSSelector.description.urlType')}
         </Typography >
       )
+    case 'draw':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('draw.source')}: <a target="_blank" href="https://doi.org/10.5285/e0f0bb80-ab44-2739-e053-6c86abc0289c" rel="noreferrer">GEBCO Compilation Group (2022) GEBCO_2022 Grid</a><br />
+          {t('draw.info')}<br />
+          {t('draw.polyline')}<br />
+          {t('draw.polygon')}<br />
+          {t('draw.circle')}<br />
+          {t('draw.marker')}<br />
+          {t('draw.edit')}<br />
+          {t('draw.del')}
+        </Typography >
+      )
   }
   return <></>
 }

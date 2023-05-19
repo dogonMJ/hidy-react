@@ -1,4 +1,4 @@
-import 'leaflet'
+import leaflet, { Map, Control, Polygon, Polyline, Circle } from 'leaflet';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { LatLng } from "leaflet";
@@ -33,7 +33,6 @@ export const DrawShapes = () => {
   const [coordsProfile, setCoordsProfile] = useState<LatLng[]>([])
   const [renderProfile, setRenderProfile] = useState(false)
   const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
-  // const geod = geodesic.Geodesic.WGS84
   const readableDistance = (distanceInMeters: number) => L.GeometryUtil.readableDistance(
     distanceInMeters,
     scaleUnit === 'metric' ? true : false,
@@ -51,8 +50,15 @@ export const DrawShapes = () => {
         <EditControl
           position="topright"
           draw={{
-            circlemarker: false,
             marker: false,
+            circlemarker: {
+              stroke: true,
+              color: 'black',
+              weight: 1,
+              fillColor: '#3388ff',
+              fillOpacity: 1,
+              radius: 3  //mod react-leaflet-draw/src/index.d.ts and leaflet-draw/@types/index.d.ts
+            },
             polygon: {
               showArea: true,
               showLength: true,
@@ -77,14 +83,27 @@ export const DrawShapes = () => {
           }}
           onCreated={(e) => {
             switch (e.layerType) {
+              case 'circlemarker':
+                const circlemarkerLayer = e.layer as Circle
+                circlemarkerLayer.on('mouseover', (ev: any) => {
+                  fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${ev.latlng.lng}&lat=${ev.latlng.lat}`)
+                    .then(res => res.json())
+                    .then(json => {
+                      const z = scaleUnit === 'imperial' ? `${Math.round(json.z[0] / 0.3048)} ft` : `${json.z[0]} m`
+                      const cmContent = `${ev.latlng.lat.toFixed(4)}, ${ev.latlng.lng.toFixed(4)}<br>ele: ${z}`
+                      e.layer.bindTooltip(cmContent)
+                    })
+                })
+                break
               case 'polyline':
+                const polylineLayer = e.layer as Polyline
                 const tooltips = new L.layerGroup();
-                const latlngs = e.layer.getLatLngs()
-                e.layer.on('click', (e: any) => {
+                const latlngs = polylineLayer.getLatLngs() as LatLng[]
+                polylineLayer.on('click', () => {
                   setCoordsProfile(latlngs)
                   setRenderProfile(true)
                 })
-                e.layer.on('mouseover', () => {
+                polylineLayer.on('mouseover', () => {
                   const accDist: number[] = []
                   latlngs.forEach((latlng: LatLng, i: number) => {
                     if (i > 0) {
@@ -93,24 +112,25 @@ export const DrawShapes = () => {
                       const acc = accDist.reduce((a, b) => a + b, 0)
                       const distanceString = readableDistance(distance)
                       const accString = readableDistance(acc)
-                      const content = `${latlng.lat.toFixed(2)}, ${latlng.lng.toFixed(2)}<br>d = ${distanceString}<br>D = ${accString}`
+                      const content = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}<br>d: ${distanceString}<br>D: ${accString}`
                       L.tooltip().setLatLng(latlng).setContent(content).addTo(tooltips)
                     } else {
-                      const content = `${latlng.lat.toFixed(2)}, ${latlng.lng.toFixed(2)}`
+                      const content = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`
                       L.tooltip().setLatLng(latlng).setContent(content).addTo(tooltips)
                     }
                   })
                   tooltips.addTo(map)
                 })
-                e.layer.on('mouseout', () => {
+                polylineLayer.on('mouseout', () => {
                   tooltips.clearLayers()
                 })
                 setCoordsProfile(latlngs)
                 setRenderProfile(true)
                 break
               case 'polygon':
-                let pgLatlngs = e.layer.getLatLngs()[0]
-                e.layer.on('mouseover', () => {
+                const polygonLayer = e.layer as Polygon
+                let pgLatlngs = polygonLayer.getLatLngs()[0] as LatLng[]
+                polygonLayer.on('mouseover', () => {
                   const accDist: number[] = []
                   pgLatlngs.forEach((latlng: LatLng, i: number) => {
                     if (i > 0) {
@@ -124,39 +144,40 @@ export const DrawShapes = () => {
                   const pgArea = L.GeometryUtil.geodesicArea(pgLatlngs);
                   const areaString = readableArea(pgArea)
                   const pgContent = `A = ${areaString}<br>p = ${accString}`
-                  e.layer.bindTooltip(pgContent)
+                  polygonLayer.bindTooltip(pgContent)
                 })
-                e.layer.on('edit', () => {
-                  pgLatlngs = e.layer.getLatLngs()[0]
-                  e.layer.bringToFront()
+                polygonLayer.on('edit', () => {
+                  pgLatlngs = polygonLayer.getLatLngs() as LatLng[]
+                  polygonLayer.bringToFront()
                 })
                 break
               case 'circle':
-                let latlng = e.layer.getLatLng()
+                const circleLayer = e.layer as Circle
+                let latlng = circleLayer.getLatLng()
                 let center = L.circleMarker(latlng, { radius: 1 })
-                e.layer.bringToFront()
-                e.layer.on('mouseover', () => {
-                  const radius = e.layer.getRadius()
+                circleLayer.bringToFront()
+                circleLayer.on('mouseover', () => {
+                  const radius = circleLayer.getRadius()
                   const ccArea = radius ** 2 * Math.PI
                   const circumference = 2 * radius * Math.PI
                   const radiusString = readableDistance(radius)
                   const circumferenceString = readableDistance(circumference)
                   const areaString = readableArea(ccArea)
-                  const ccContent = `${latlng.lat.toFixed(2)}, ${latlng.lng.toFixed(2)}<br>
-                  r = ${radiusString}<br>
-                  c = ${circumferenceString}<br>
-                  A = ${areaString}`
-                  e.layer.bindTooltip(ccContent)
+                  const ccContent = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}<br>
+                  r: ${radiusString}<br>
+                  c: ${circumferenceString}<br>
+                  A: ${areaString}`
+                  circleLayer.bindTooltip(ccContent)
                   center.addTo(featureRef.current)
                 })
-                e.layer.on('mouseout', () => {
+                circleLayer.on('mouseout', () => {
                   featureRef.current.removeLayer(center)
                 })
-                e.layer.on('edit', () => {
-                  latlng = e.layer.getLatLng()
+                circleLayer.on('edit', () => {
+                  latlng = circleLayer.getLatLng()
                   center.initialize(latlng)
                   center.addTo(featureRef.current)
-                  e.layer.bringToFront()
+                  circleLayer.bringToFront()
                 })
                 break
             }

@@ -23,18 +23,7 @@ interface Urls {
   cache: any
   // elevation: number
 }
-const propsWMTS = (api: Api, time: string, key: string) => {
-  return {
-    type: api.type,
-    url: `${api.url}/${api.layer}/${api.style}/${time}/${api.tileMatrixSet}/{z}/{y}/{x}.${api.formatExt}`,
-    params: {
-      key: key,
-      crossOrigin: api.crossOrigin,
-      opacity: 0,
-      featureinfo: api.featureinfo
-    },
-  }
-}
+
 const propsWMS = (api: Api, time: string, key: string, elevation: number) => {
   return {
     type: api.type,
@@ -70,18 +59,8 @@ const ProcWMS = (props: Urls) => {
   const key = api.layer + time + depth
 
   if (noTileCached(tileProps, key)) {
-    switch (api.type) {
-      case 'wms':
-        checkTile(api.url, api.layer, time)
-          .then((exist) => setTileExist(exist))
-        if (tileExist) {
-          tileProps.push(propsWMS(api, time, key, depth))
-        }
-        break;
-      case 'wmts':
-        tileProps.push(propsWMTS(api, time, key))
-        break;
-    }
+    checkTile(api.url, api.layer, time)
+    tileProps.push(propsWMS(api, time, key, depth))
   }
 
   const layerEventHandlers = {

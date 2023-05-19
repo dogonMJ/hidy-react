@@ -4,7 +4,7 @@ import { IconButton } from '@mui/material';
 import { useTranslation } from "react-i18next";
 
 const SwitchLang = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [lang, setLang] = useState('zh-TW');
   const handleSwitch = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.currentTarget as HTMLInputElement
@@ -25,14 +25,17 @@ const SwitchLang = () => {
   return (
     <div className='leaflet-bar bg-white' tabIndex={-1}>
       <IconButton
+        aria-label={t('translation.title')}
+        title={t('translation.title')}
         value={lang}
         onClick={handleSwitch}
         sx={{
           width: 30,
           height: 30,
-          fontFamily: 'Rubik',
-          fontSize: '5px',
-          fontWeight: 900
+          borderRadius: 0,
+          // fontFamily: 'Rubik',
+          // fontSize: '5px',
+          // fontWeight: 900
         }}
       >
         <TranslateIcon fontSize="small" />

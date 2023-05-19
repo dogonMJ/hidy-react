@@ -1,10 +1,11 @@
-import { useMap } from "react-leaflet"
+import { useMap, useMapEvents } from "react-leaflet"
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store"
 import { coordInputSlice } from "../../../store/slice/mapSlice";
 import { useTranslation } from "react-i18next";
 import { TextField, IconButton, Paper } from '@mui/material';
-import { GpsFixed, AddLocationAlt } from '@mui/icons-material';
+import { GpsFixed, AddLocationAlt, AdsClick } from '@mui/icons-material';
+import { useState } from "react";
 
 const CoordinatesInput = () => {
   const map = useMap();
@@ -14,6 +15,7 @@ const CoordinatesInput = () => {
   const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
   const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
   const markers = useSelector((state: RootState) => state.coordInput.markers)
+
   const mouseEnter = () => {
     map.dragging.disable()
   }
@@ -64,6 +66,9 @@ const CoordinatesInput = () => {
           <tr>
             <td>{t('coordHeader')}</td>
             <td>
+              {/* <IconButton aria-label="addMarker" onClick={changeCursorMode} style={{ float: 'right' }} size="small" >
+                <AdsClick style={{ fontSize: '20px' }} />
+              </IconButton> */}
               <IconButton aria-label="addMarker" onClick={addMarkerBtn} style={{ float: 'right' }} size="small" >
                 <AddLocationAlt style={{ fontSize: '20px' }} />
               </IconButton>

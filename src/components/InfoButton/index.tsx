@@ -1,10 +1,19 @@
 
 import { useState } from "react";
-import { ListItemIcon, IconButton, Popover } from '@mui/material';
+import { ListItemIcon, IconButton, Popover, PopoverOrigin, SxProps } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import InfoList from 'components/InfoButton/InfoList'
 
-const InfoButton = (props: { dataId: string }) => {
+interface InfoButtonProps {
+  dataId: string,
+  anchorOrigin?: PopoverOrigin
+  transformOrigin?: PopoverOrigin
+  iconSx?: SxProps
+  itemSx?: SxProps
+}
+
+const InfoButton = (props: InfoButtonProps) => {
+  const { dataId, anchorOrigin = { vertical: 'bottom', horizontal: 'right' }, transformOrigin, iconSx, itemSx } = props
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -16,8 +25,8 @@ const InfoButton = (props: { dataId: string }) => {
   const id = open ? 'simple-popover' : undefined;
   return (
     <>
-      <ListItemIcon>
-        <IconButton onClick={handleClick}>
+      <ListItemIcon sx={itemSx}>
+        <IconButton onClick={handleClick} sx={iconSx}>
           <ErrorOutlineIcon className="infoMark" fontSize="small" />
         </IconButton>
       </ListItemIcon>
@@ -26,12 +35,10 @@ const InfoButton = (props: { dataId: string }) => {
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
+        anchorOrigin={anchorOrigin}
+        transformOrigin={transformOrigin}
       >
-        <InfoList dataId={props.dataId} />
+        <InfoList dataId={dataId} />
       </Popover>
     </>
   )

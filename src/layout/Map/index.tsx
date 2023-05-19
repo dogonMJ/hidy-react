@@ -1,4 +1,5 @@
 import 'leaflet'
+import { useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { coordInputSlice } from "store/slice/mapSlice";
@@ -24,6 +25,7 @@ import { SignInControl } from 'components/SignInControl';
 import CustomControl from "react-leaflet-custom-control";
 import { CustomScaleControl } from 'components/CustomScaleControl';
 import { ScaleUnitType } from 'types'
+import { ClipScreenshot } from 'components/ClipScreenshot';
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
 
@@ -116,11 +118,13 @@ const LeafletMap = () => {
         zoomControl={false}
         preferCanvas={true}
         doubleClickZoom={false}
+        dragging={true}
         renderer={L.canvas({ tolerance: 3 })}
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
         whenCreated={(map) => {
           addGraticule(map)
         }}
+      // worldCopyJump={true}
       >
         <div id={'LengendContainer'} style={{ display: 'flex', flexDirection: 'column-reverse', position: 'absolute', bottom: 25, zIndex: 1000 }}></div>
         <CustomControl position='topright'>
@@ -130,6 +134,7 @@ const LeafletMap = () => {
           <ZoomControl position="topright" />
           <CPlanControll />
           <SeafloorControl />
+          <ClipScreenshot />
         </CustomControl>
         <CustomControl position='bottomleft'>
           <CustomScaleControl

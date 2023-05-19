@@ -12,6 +12,7 @@ const MyBaseLayers = () => {
                         id='baseLayer'
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        crossOrigin="anonymous"
                     />
                 </BaseLayer>
                 <BaseLayer name='Bing Map' checked>
@@ -26,6 +27,7 @@ const MyBaseLayers = () => {
                         id='baseLayer'
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?"
+                        crossOrigin="anonymous"
                         params={{
                             layers: 'gebco_latest',
                             format: 'image/png'
@@ -37,6 +39,7 @@ const MyBaseLayers = () => {
                         id='baseLayer'
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?"
+                        crossOrigin="anonymous"
                         params={{
                             layers: 'GEBCO_LATEST_2_sub_ice_topo',
                             format: 'image/png'
@@ -48,6 +51,7 @@ const MyBaseLayers = () => {
                         id='baseLayer'
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?"
+                        crossOrigin="anonymous"
                         params={{
                             layers: 'GEBCO_LATEST_3',
                             format: 'image/png'

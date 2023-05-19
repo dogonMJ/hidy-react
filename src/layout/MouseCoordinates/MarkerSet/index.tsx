@@ -4,7 +4,8 @@ import FormatCoordinate from 'components/FormatCoordinate'
 import { RootState } from "store/store"
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from "react";
 
 interface markerSet {
   markerCoord: (number | null)[],
@@ -33,13 +34,31 @@ const MarkerSet = (props: markerSet) => {
   const { t } = useTranslation();
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [markerLat, markerLon] = [...props.markerCoord]
+  const [elevation, setElevation] = useState(null)
+  const popupopen = () => {
+    if (markerLat !== null && markerLon !== null) {
+      let lon = markerLon
+      if (markerLon > 180) {
+        const round = Math.round(markerLon / 360)
+        lon = markerLon - 360 * round
+      } else if (markerLon < -180) {
+        const round = -Math.round(markerLon / 360)
+        lon = markerLon + 360 * round
+      }
+      fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${lon}&lat=${markerLat}`)
+        .then(res => res.json())
+        .then(json => setElevation(json.z[0]))
+    }
+  }
+
   if (markerLat !== null && markerLon !== null) {
     if (props.id !== undefined) {
       return (
-        <Marker position={[markerLat, markerLon]} icon={greenIcon} >
+        <Marker position={[markerLat, markerLon]} icon={greenIcon} eventHandlers={{ popupopen: popupopen }}>
           <Popup>
             <Stack>
               <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
+              {elevation && <div>Elevation: {elevation} m</div>}
               <Button
                 size="small"
                 style={{ padding: 0, height: '1rem', marginTop: '5px' }}
@@ -53,9 +72,10 @@ const MarkerSet = (props: markerSet) => {
       )
     } else {
       return (
-        <Marker position={[markerLat, markerLon]} icon={blueIcon} >
+        <Marker position={[markerLat, markerLon]} icon={blueIcon} eventHandlers={{ popupopen: popupopen }} >
           <Popup>
             <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
+            {elevation && <div>Elevation: {elevation} m</div>}
           </Popup>
         </Marker>
       )

@@ -1,10 +1,11 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect, useRef } from 'react';
+import 'leaflet'
 import { useSelector } from 'react-redux';
 import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { useMap } from 'react-leaflet';
+import { useMap, } from 'react-leaflet';
 import { DataPanelItem } from 'components/DataPanelItem';
 import ToggleCWB from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
@@ -18,6 +19,7 @@ import { WMSSelector } from './WMSSelector';
 import { SatelliteWebMaps } from './SatelliteWebMaps';
 // @ts-ignore
 import Cache from 'cachai';
+declare const L: any
 
 const cache = new Cache(400)
 interface OnOff {
@@ -38,6 +40,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const DataPanel = () => {
   const map = useMap()
+  const ref = useRef<any>()
   const { t } = useTranslation()
   const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
   const itemList: ItemList = {
@@ -49,7 +52,7 @@ const DataPanel = () => {
     CPlanLayers: <CPlanLayers />,
     StatMean: <StatisticMean />,
     WMSSelector: < WMSSelector />,
-    WebMaps: <SatelliteWebMaps cache={cache} />
+    // WebMaps: <SatelliteWebMaps cache={cache} />
   }
   const secLevelAll: ItemList = {
     ShipTrack: <ShipTrack />
@@ -59,12 +62,12 @@ const DataPanel = () => {
   const [open, setOpen] = useState(false);
 
   const enableMouse = () => {
-    map.scrollWheelZoom.enable()
-    map.dragging.enable()
+    // map.scrollWheelZoom.enable()
+    // map.dragging.enable()
   }
   const disableMouse = () => {
-    map.scrollWheelZoom.disable()
-    map.dragging.disable()
+    // map.scrollWheelZoom.disable()
+    // map.dragging.disable()
   }
 
   const handleDrawerOpen = () => setOpen(true)
@@ -73,9 +76,12 @@ const DataPanel = () => {
     openSwitch[item] = !openSwitch[item]
     setOpenSwitch({ ...openSwitch })
   }
-
+  useEffect(() => {
+    L.DomEvent.disableClickPropagation(ref.current);
+    L.DomEvent.disableScrollPropagation(ref.current);
+  })
   return (
-    <>
+    <div ref={ref} id='dataPanel'>
       <Button
         onClick={handleDrawerOpen}
         endIcon={<ChevronRight />}
@@ -162,7 +168,7 @@ const DataPanel = () => {
           }
         </List>
       </Drawer>
-    </>
+    </div>
   )
 }
 

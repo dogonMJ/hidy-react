@@ -32,7 +32,7 @@ const MouseCoordinates = () => {
     ));
   }
   return (
-    <Paper className="mousePos">
+    <Paper id='mouseCoordinates' className="mousePos">
       <table style={{ fontFamily: 'monospace' }}>
         <tbody>
           <tr>

@@ -18,7 +18,7 @@ L.Control.Cplan = L.Control.extend({
     container.innerHTML = `
     <div>
       <a role="button" aria-label="C-Plan" href="https://odbwms.oc.ntu.edu.tw/odbintl/rasters/cplan/" target="_blank" rel="noreferrer">
-        <img src=${CPicon} style="padding:5px" alt='C-Plan' title="To C-Plan"/>
+        <img src=${CPicon} style="padding:5px" alt='C-Plan' title="C-Plan"/>
       </a>
     </div>`
   },

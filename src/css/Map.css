@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@600&family=Rubik&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap'); */
 
+/* @font-face {
+  font-family: 'KulminoituvaRegular';
+  src: url('http://www.miketaylr.com/f/kulminoituva.ttf');
+} */
 html {
   padding: 0;
   margin: 0;
@@ -214,6 +219,10 @@ input {
   float: right;
   right: 70px;
   top: 5px;
+}
+
+.cursor-crosshair {
+  cursor: crosshair;
 }
 
 .cusor-pointer {

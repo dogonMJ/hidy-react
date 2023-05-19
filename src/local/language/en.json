@@ -345,5 +345,12 @@
       "directAddLayers": "Enter the layer URL and parameters directly to add the layer.\nPlease refer to the access method instructions to modify the parameters into the correct format.",
       "layerSelector": "Add layers by searching through the dataset.\nNote that some layers require datetime parameters, please set them using the datetime selector above (local time)."
     }
+  },
+  "draw": {
+    "title": "Add Shapes",
+    "source": " Terrain model data source"
+  },
+  "translation": {
+    "title": "Switch Language"
   }
 }
