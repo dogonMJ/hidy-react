@@ -66,7 +66,6 @@ export const screenshot = async (map: Map, bounds: LatLngBounds) => {
   const width = bottomRight.x - topLeft.x;
   const height = bottomRight.y - topLeft.y;
   const mapScale = 1
-  // console.log({ topLeft, bottomRight, width, height, bounds }, map.getSize(), map.getZoom())
   const clipped = await html2canvas(map.getContainer(), {
     scale: mapScale,
     x: topLeft.x,
@@ -110,29 +109,33 @@ export const screenshot = async (map: Map, bounds: LatLngBounds) => {
       //draw -- x scale
       let acc = 0
       x_secLength.forEach((section, i) => {
-        ctx.fillStyle = (i % 2 === 0) ? "black" : "grey"
+        ctx.fillStyle = (i % 2 === 0) ? "black" : "#ccc"
         ctx.fillRect(frameWidth + acc, frameWidth - scaleWidth, section, scaleWidth);
         ctx.fillRect(frameWidth + acc, frameWidth + clipped.height, section, scaleWidth);
         if (i !== 0) {
-          ctx.fillText(lngMarks[i].toFixed(2), frameWidth + acc - 20, frameWidth - scaleWidth - 2)
+          ctx.fillText(lngMarks[i].toFixed(2), frameWidth + acc - 20, frameWidth - scaleWidth - 3)
         }
         acc += section
       })
       //draw -- y scale
       acc = 0
       y_secLength.forEach((section, i) => {
-        ctx.fillStyle = (i % 2 === 0) ? "black" : "grey"
+        ctx.fillStyle = (i % 2 === 0) ? "black" : "#ccc"
         ctx.fillRect(frameWidth - scaleWidth, frameWidth + acc, scaleWidth, section);
         ctx.fillRect(frameWidth + clipped.width, frameWidth + acc, scaleWidth, section);
         if (i !== 0) {
           ctx.save()
-          ctx.translate(frameWidth - scaleWidth - 2, frameWidth + acc)
+          ctx.translate(frameWidth - scaleWidth - 3, frameWidth + acc)
           ctx.rotate(270 * Math.PI / 180)
           ctx.fillText(latMarks[i].toFixed(2), -20, 0)
           ctx.restore()
         }
         acc += section
       })
+      // border
+      ctx.lineWidth = 1
+      ctx.strokeStyle = 'black'
+      ctx.strokeRect(0 + frameWidth - scaleWidth, 0 + frameWidth - scaleWidth, clipped.width + scaleWidth * 2, clipped.height + scaleWidth * 2)
     }
     //download
     const link = document.createElement('a');

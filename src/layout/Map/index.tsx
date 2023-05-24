@@ -12,7 +12,7 @@ import MouseCoordinates from "layout/MouseCoordinates";
 import MyBaseLayers from "components/Baselayers";
 import DataPanel from "layout/DataPanel";
 import { LanguageControl } from 'components/LanguageControl'
-import { CPlanControll } from 'components/Cplan';
+import { CPlanControl } from 'components/CplanControl';
 import { DragDrop } from 'components/DragDrop';
 import { SeafloorControl } from 'components/SeafloorControl';
 // @ts-ignore
@@ -25,7 +25,7 @@ import { SignInControl } from 'components/SignInControl';
 import CustomControl from "react-leaflet-custom-control";
 import { CustomScaleControl } from 'components/CustomScaleControl';
 import { ScaleUnitType } from 'types'
-import { ClipScreenshot } from 'components/ClipScreenshot';
+import { ScreenshotControl } from 'components/ScreenshotControl';
 declare const L: any;
 // const MeasureControl = withLeaflet(MeasureControlDefault);
 
@@ -129,12 +129,12 @@ const LeafletMap = () => {
         <div id={'LengendContainer'} style={{ display: 'flex', flexDirection: 'column-reverse', position: 'absolute', bottom: 25, zIndex: 1000 }}></div>
         <CustomControl position='topright'>
           <SignInControl />
-          <LanguageControl />
           <MyBaseLayers />
           <ZoomControl position="topright" />
-          <CPlanControll />
+          <CPlanControl />
+          <LanguageControl />
+          <ScreenshotControl position="topright" />
           <SeafloorControl />
-          <ClipScreenshot />
         </CustomControl>
         <CustomControl position='bottomleft'>
           <CustomScaleControl
@@ -144,6 +144,7 @@ const LeafletMap = () => {
             onClick={() => dispatch(coordInputSlice.actions.scaleUnitSwitch(unitSwitch[scaleUnit]))}
           />
         </CustomControl>
+        <ScreenshotControl position="bottomright" />
         <MouseCoordinates />
         <DataPanel />
         <DragDrop />

@@ -1,7 +1,8 @@
 import { useState, Fragment, useEffect, useRef } from 'react';
 import 'leaflet'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "store/store"
+import { coordInputSlice } from 'store/slice/mapSlice';
 import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
@@ -42,7 +43,9 @@ const DataPanel = () => {
   const map = useMap()
   const ref = useRef<any>()
   const { t } = useTranslation()
+  const dispatch = useDispatch()
   const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
+
   const itemList: ItemList = {
     APIlayers: <APILayers cache={cache} />,
     CWBsites: <ToggleCWB />,
@@ -61,11 +64,14 @@ const DataPanel = () => {
   const [openSwitch, setOpenSwitch] = useState(onOff)
   const [open, setOpen] = useState(false);
 
-  const enableMouse = () => {
+  const enterPanel = () => {
+    dispatch(coordInputSlice.actions.enterPanel(true))
     // map.scrollWheelZoom.enable()
     // map.dragging.enable()
+
   }
-  const disableMouse = () => {
+  const leavePanel = () => {
+    dispatch(coordInputSlice.actions.enterPanel(false))
     // map.scrollWheelZoom.disable()
     // map.dragging.disable()
   }
@@ -76,12 +82,18 @@ const DataPanel = () => {
     openSwitch[item] = !openSwitch[item]
     setOpenSwitch({ ...openSwitch })
   }
+
   useEffect(() => {
-    L.DomEvent.disableClickPropagation(ref.current);
+    // L.DomEvent.disableClickPropagation(ref.current);
     L.DomEvent.disableScrollPropagation(ref.current);
   })
   return (
-    <div ref={ref} id='dataPanel'>
+    <div
+      ref={ref}
+      id='dataPanel'
+      onMouseEnter={enterPanel}
+      onMouseLeave={leavePanel}
+    >
       <Button
         onClick={handleDrawerOpen}
         endIcon={<ChevronRight />}
@@ -126,8 +138,8 @@ const DataPanel = () => {
           }}
           component="nav"
           aria-labelledby="nested-list-subheader"
-          onMouseEnter={disableMouse}
-          onMouseLeave={enableMouse}
+        // onMouseEnter={disableMouse}
+        // onMouseLeave={enableMouse}
         >
           {
             Object.keys(itemList).map((item) => {

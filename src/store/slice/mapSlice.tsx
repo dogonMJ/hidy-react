@@ -22,6 +22,7 @@ export interface inputstate {
   OdbCtdSelection: string
   userInfo: { [key: string]: any }
   scaleUnit: ScaleUnitType
+  enterPanel: boolean
 }
 export const coordInputSlice = createSlice({
   name: "coordInput",
@@ -38,7 +39,8 @@ export const coordInputSlice = createSlice({
     OdbCurSelection: 'avg',
     OdbCtdSelection: 't',
     userInfo: {},
-    scaleUnit: 'metric'
+    scaleUnit: 'metric',
+    enterPanel: false
   } as inputstate,
   reducers: {
     switchActive: (state, action: PayloadAction<boolean>) => {
@@ -79,6 +81,9 @@ export const coordInputSlice = createSlice({
     },
     scaleUnitSwitch: (state, action: PayloadAction<ScaleUnitType>) => {
       state.scaleUnit = action.payload
+    },
+    enterPanel: (state, action: PayloadAction<boolean>) => {
+      state.enterPanel = action.payload
     },
   }
 });

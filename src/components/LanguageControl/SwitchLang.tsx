@@ -3,7 +3,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import { IconButton } from '@mui/material';
 import { useTranslation } from "react-i18next";
 
-const SwitchLang = () => {
+export const SwitchLang = () => {
   const { i18n, t } = useTranslation();
   const [lang, setLang] = useState('zh-TW');
   const handleSwitch = (e: React.MouseEvent<HTMLElement>) => {
@@ -44,5 +44,3 @@ const SwitchLang = () => {
     </div>
   );
 }
-
-export default SwitchLang

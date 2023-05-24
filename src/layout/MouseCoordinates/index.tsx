@@ -31,9 +31,22 @@ const MouseCoordinates = () => {
       latlonFormat
     ));
   }
+  const handleMouseEnter = () => {
+    dispatch(coordInputSlice.actions.enterPanel(true))
+  }
+  const handleMouseLeave = () => {
+    dispatch(coordInputSlice.actions.enterPanel(false))
+  }
   return (
-    <Paper id='mouseCoordinates' className="mousePos">
-      <table style={{ fontFamily: 'monospace' }}>
+    <Paper
+      id='mouseCoordinates'
+      className="mousePos"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <table
+        style={{ fontFamily: 'monospace' }}
+      >
         <tbody>
           <tr>
             <td style={{ width: '9.6rem' }}>

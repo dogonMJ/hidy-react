@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useMap } from "react-leaflet"
 import * as geojson from 'geojson';
 import { Box, Typography, Stack, MenuItem, InputLabel, Select, SelectChangeEvent, FormControl } from '@mui/material'
 import { useTranslation } from "react-i18next";
@@ -9,6 +8,8 @@ import { TopoJSON } from "components/TopoJSON/TopoJSON";
 import { varList } from "./varList"
 import InfoButton from "components/InfoButton";
 import { SwitchSameColor } from "components/SwitchSameColor";
+import { useDispatch } from "react-redux";
+import { coordInputSlice } from "store/slice/mapSlice";
 const depths = [0, 10, 20, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500]
 
 const PeriodSwitch = SwitchSameColor()
@@ -19,7 +20,7 @@ const gridStyle = {
 
 export const StatisticMean = () => {
   const { t } = useTranslation()
-  const map = useMap()
+  const dispatch = useDispatch()
   const [parameter, setParameter] = useState('close')
   const [monthly, setMonthly] = useState(false)
   const [profile, setProfile] = useState(false)
@@ -28,8 +29,9 @@ export const StatisticMean = () => {
   const [gridCoord, setGridCoord] = useState<string>('')
 
   const handleMouseLeave = () => {
-    map.scrollWheelZoom.enable()
-    map.dragging.enable()
+    dispatch(coordInputSlice.actions.enterPanel(false))
+    // map.scrollWheelZoom.enable()
+    // map.dragging.enable()
   }
   const handleParameter = (event: SelectChangeEvent) => {
     setParameter(event.target.value)

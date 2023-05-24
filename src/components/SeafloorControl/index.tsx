@@ -1,35 +1,22 @@
 
-import { useState, useEffect } from "react";
-import leaflet, { Control } from 'leaflet';
-import Draw from 'leaflet-draw';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import 'leaflet-draw/dist/leaflet.draw.css'
-import { createPortal } from "react-dom";
-import { Button, ButtonGroup, IconButton } from "@mui/material";
+import { ButtonGroup, IconButton, Paper } from "@mui/material";
 import { DrawShapes } from "components/DrawShapes";
 import ShapeLineIcon from '@mui/icons-material/ShapeLine';
 import { RenderIf } from "components/RenderIf/RenderIf";
 import InfoButton from "components/InfoButton";
-import { useTranslation } from "react-i18next";
-
-declare const L: any;
+import { PortalControlButton } from "components/PortalControlButton";
 
 export const SeafloorControl = () => {
   const { t } = useTranslation()
-  const [container, setContainer] = useState<any>(document.createElement('div'))
   const [showDrawLine, setShowDrawLine] = useState(false)
-  const positionClass = 'leaflet-top leaflet-right'
 
-  useEffect(() => {
-    const targetDiv = document.getElementsByClassName(positionClass)
-    setContainer(targetDiv[0])
-  }, [])
-
-  L.DomEvent.disableClickPropagation(container)
-
-  return createPortal(
-    <>
-      <div className='leaflet-control leaflet-bar bg-white seafloor-control' tabIndex={-1}>
-        <ButtonGroup orientation="vertical">
+  return (
+    <PortalControlButton position="topright">
+      <Paper sx={{ borderRadius: 0.5 }}>
+        <ButtonGroup orientation="vertical" >
           <IconButton
             aria-label={t('draw.title')}
             title={t('draw.title')}
@@ -38,8 +25,9 @@ export const SeafloorControl = () => {
               width: 30,
               height: 30,
               borderRadius: 0,
-              borderBottom: "1px solid #ccc",
             }}
+            tabIndex={-1}
+            disableRipple
           >
             <ShapeLineIcon fontSize="small" style={{ color: '#464646' }} />
           </IconButton>
@@ -58,11 +46,10 @@ export const SeafloorControl = () => {
             />
           </RenderIf>
         </ButtonGroup>
-        <RenderIf isTrue={showDrawLine}>
-          <DrawShapes />
-        </RenderIf>
-      </div>
-    </>
-    , container
+      </Paper>
+      <RenderIf isTrue={showDrawLine}>
+        <DrawShapes />
+      </RenderIf>
+    </PortalControlButton >
   )
 }

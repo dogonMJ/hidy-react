@@ -59,3 +59,5 @@ export interface ElevationInfo {
     unit: string | undefined
     values: number[] | undefined
 }
+
+export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"

@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
-import { useMap } from "react-leaflet"
 import { useTranslation } from "react-i18next";
 import { Box, Typography, MenuItem, InputLabel, Select, SelectChangeEvent, FormControl } from '@mui/material'
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { PlotContour } from "../PlotContour";
 import { PlotProfile } from "../PlotProfile";
 import { varList, avgTimeList } from "../varList";
+import { useDispatch } from "react-redux";
+import { coordInputSlice } from "store/slice/mapSlice";
 
 const years = Array.from({ length: 26 }, (v, i) => (i + 1993).toString())
 
 export const ProcUrl = (props: { parameter: string, depth: number, monthly: boolean, profile: boolean, coord: string }) => {
   const { parameter, depth, monthly, profile, coord } = props
   const { t } = useTranslation()
-  const map = useMap()
+  const dispatch = useDispatch()
   const [timePeriod, setTimePeriod] = useState<string>('mean')
   const [year, setYear] = useState(years[0])
   const [month, setMonth] = useState('01')
@@ -20,8 +21,9 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
   const [text, setText] = useState({})
 
   const handleMouseLeave = () => {
-    map.scrollWheelZoom.enable()
-    map.dragging.enable()
+    dispatch(coordInputSlice.actions.enterPanel(false))
+    // map.scrollWheelZoom.enable()
+    // map.dragging.enable()
   }
   const handleTimePeriod = (event: SelectChangeEvent) => {
     setTimePeriod(event.target.value)

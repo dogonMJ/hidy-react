@@ -1,7 +1,7 @@
 import { createControlComponent } from "@react-leaflet/core";
 import ReactDOM from 'react-dom';
 import { Control, DomUtil } from "leaflet";
-import SwitchLang from "components/SwitchLang";
+import { SwitchLang } from "components/LanguageControl/SwitchLang";
 
 const Language = Control.extend({
   onAdd: function (map: any) {
