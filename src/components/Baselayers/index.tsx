@@ -3,7 +3,7 @@ import { TileLayer, LayersControl, Pane, WMSTileLayer } from 'react-leaflet'
 // @ts-ignore
 import { BingLayer } from 'react-leaflet-bing-v2'
 const { BaseLayer } = LayersControl;
-const MyBaseLayers = () => {
+export const MyBaseLayers = () => {
     return (
         <LayersControl position='topright'>
             <Pane name='baseLayers' style={{ zIndex: 1 }}>
@@ -62,4 +62,4 @@ const MyBaseLayers = () => {
         </LayersControl >
     )
 }
-export default memo(MyBaseLayers);
+//TYLES=default&FEATUREINFO=false&service=WMS&request=GetMap&version=1.1.1&width=256&height=256&srs=EPSG%3A3857

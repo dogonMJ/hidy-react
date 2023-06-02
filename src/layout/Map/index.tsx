@@ -9,7 +9,7 @@ import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
 import MouseCoordinates from "layout/MouseCoordinates";
-import MyBaseLayers from "components/Baselayers";
+import { MyBaseLayers } from "components/Baselayers";
 import DataPanel from "layout/DataPanel";
 import { LanguageControl } from 'components/LanguageControl'
 import { CPlanControl } from 'components/CplanControl';
@@ -129,10 +129,10 @@ const LeafletMap = () => {
         <div id={'LengendContainer'} style={{ display: 'flex', flexDirection: 'column-reverse', position: 'absolute', bottom: 25, zIndex: 1000 }}></div>
         <CustomControl position='topright'>
           <SignInControl />
+          <LanguageControl />
           <MyBaseLayers />
           <ZoomControl position="topright" />
           <CPlanControl />
-          <LanguageControl />
           <ScreenshotControl position="topright" />
           <SeafloorControl />
         </CustomControl>

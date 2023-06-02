@@ -36,6 +36,7 @@ const rgbaToHex = (r: number, g: number, b: number) => {
 const getPixelColor = (map: L.Map, latlng: L.LatLng, layerGroup: any, layerId: number | null) => {
   const zoom = map.getZoom()
   const xyz = getTileXYZ(latlng.lat, latlng.lng, zoom)
+  console.log(layerGroup)
   const layer = layerGroup.getLayer(layerId)
   const levelOrigin = layer._levels[zoom].origin
   const mapOrigin = map.getPixelOrigin()
@@ -44,8 +45,27 @@ const getPixelColor = (map: L.Map, latlng: L.LatLng, layerGroup: any, layerId: n
   const pointerPos = map.latLngToContainerPoint(latlng)
   const pointerX = pointerPos.x - tilePos.x - (levelOrigin.x - mapOrigin.x)
   const pointerY = pointerPos.y - tilePos.y - (levelOrigin.y - mapOrigin.y)
+  // console.log(layer)
+  // const tileUrl = layer.getTileUrl(layer._tiles[xyz].coords)
+  // var img = document.createElement('img');
+  // img.src = tileUrl;
+  // img.crossOrigin = "anonymous";
+  // img.onloadstart = () => console.log('start')
+  // img.onload = function () {
+  //   console.log('ppp')
+  //   const canvas = document.createElement('canvas');
+  //   canvas.width = 256;
+  //   canvas.height = 256;
+
+  //   const context = canvas.getContext('2d');
+  //   context!.drawImage(img, 0, 0);
+  //   const imgData = context!.getImageData(pointerX, pointerY, 1, 1).data;
+  //   console.log(imgData)
+  //   // return imgData
+  // }
   const ctx = layer._tiles[xyz].el.getContext('2d')
   const imgData = ctx.getImageData(pointerX, pointerY, 1, 1).data;
+
   // ctx.fillStyle = "red";
   // ctx.fillRect(pointerX, pointerY, 1, 1);
   return imgData

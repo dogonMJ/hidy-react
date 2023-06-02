@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { LeafletEventHandlerFnMap } from 'leaflet'
 import { TileLayerCanvas } from "../../../components/TileLayerCanvas"
+import { WMSTileLayer } from "react-leaflet"
 export const AddWMS = (props: { params: any, opacity?: number, eventHandlers?: LeafletEventHandlerFnMap }) => {
   const { params, opacity = 100, eventHandlers } = { ...props }
   const ref = useRef<any>()

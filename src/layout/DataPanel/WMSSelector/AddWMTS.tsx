@@ -17,7 +17,6 @@ export const AddWMTS = (props: { params: any, opacity?: number, eventHandlers?: 
   useEffect(() => {
     ref.current.setOpacity(opacity / 100)
   })
-
   return (
     <TileLayer
       ref={ref}

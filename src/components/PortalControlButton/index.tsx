@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Positions } from "types";
 declare const L: any;
@@ -9,11 +9,13 @@ const POSITION_CLASSES = {
   topleft: 'leaflet-top leaflet-left',
   topright: 'leaflet-top leaflet-right',
 }
-interface ButtonPosition {
+
+interface ControlButtonProps extends HTMLAttributes<HTMLDivElement> {
   position: Positions
 }
-export const PortalControlButton: React.FC<ButtonPosition> = (props) => {
-  const { position, children } = props
+export const PortalControlButton: React.FC<ControlButtonProps> = (props) => {
+  const { position, children, className = "leaflet-control leaflet-bar", ...rest } = props
+
   const [container, setContainer] = useState<Element>(document.createElement('div'))
   const positionClass = ((position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright)
   L.DomEvent.disableClickPropagation(container)
@@ -25,7 +27,7 @@ export const PortalControlButton: React.FC<ButtonPosition> = (props) => {
     }
   }, [])
   return createPortal(
-    <div className='leaflet-control leaflet-bar' tabIndex={-1}>
+    <div className={className} {...rest} tabIndex={-1}>
       {children}
     </div>
     , container)

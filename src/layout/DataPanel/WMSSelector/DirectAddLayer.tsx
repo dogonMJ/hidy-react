@@ -8,6 +8,7 @@ import { OpacitySlider } from "../../../components/OpacitySlider"
 import { getUrlQuery, checkServiceType } from "Utils/UtilsURL"
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { ServiceType } from "types"
+
 //https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg
 //https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?&service=WMS&request=GetMap&layers=GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature&styles=&format=image%2Fpng&transparent=true&version=1.1.1&time=2019-03-17&width=256&height=256&srs=EPSG%3A3857
 
@@ -134,16 +135,9 @@ export const DirectAddLayers = () => {
           <Button variant="contained" color={'error'} onClick={handleClearLayer}>{t('WMSSelector.clearLayer')}</Button>
         </>
       }
-      {showLayer === 'WMTS' &&
-        <TileLayer
-          ref={ref}
-          key={key}
-          url={params.base}
-          eventHandlers={eventHandlers}
-          crossOrigin='anonymous'
-        />}
-      {showLayer === 'WMS' &&
+      {showLayer &&
         <TileLayerCanvas
+          type={showLayer}
           ref={ref}
           key={key}
           url={params.base}

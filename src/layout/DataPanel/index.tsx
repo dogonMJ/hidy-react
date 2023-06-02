@@ -67,13 +67,13 @@ const DataPanel = () => {
   const enterPanel = () => {
     dispatch(coordInputSlice.actions.enterPanel(true))
     // map.scrollWheelZoom.enable()
-    // map.dragging.enable()
+    map.dragging.disable()
 
   }
   const leavePanel = () => {
     dispatch(coordInputSlice.actions.enterPanel(false))
     // map.scrollWheelZoom.disable()
-    // map.dragging.disable()
+    map.dragging.enable()
   }
 
   const handleDrawerOpen = () => setOpen(true)
@@ -138,8 +138,8 @@ const DataPanel = () => {
           }}
           component="nav"
           aria-labelledby="nested-list-subheader"
-        // onMouseEnter={disableMouse}
-        // onMouseLeave={enableMouse}
+        // onMouseEnter={enterPanel}
+        // onMouseLeave={leavePanel}
         >
           {
             Object.keys(itemList).map((item) => {

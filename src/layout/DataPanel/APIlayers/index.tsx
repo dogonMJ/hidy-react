@@ -10,7 +10,7 @@ import { Divider, ListSubheader } from "@mui/material";
 import SeaTempAno from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
 import SeaTemp from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature.png'
 import { useState } from "react";
-
+import { WMSTileLayer } from "react-leaflet";
 const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature", "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor",
   "sla", "adt", "CHL",]
 const optionForecast = ["3dinst_thetao", "3dinst_so", "3dsea_water_velocity", "mlotst", "zos", "bottomT",]
@@ -67,6 +67,18 @@ const APILayers = (props: { cache: any }) => {
       <RenderIf isTrue={legendUrl}>
         <LegendControl position='bottomleft' legendContent={legendContent} />
       </RenderIf>
+      {/* <WMSTileLayer
+        id='baseLayer'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?"
+        crossOrigin="anonymous"
+        params={{
+          layers: 'GHRSST_L4_MUR_Sea_Surface_Temperature',
+          format: 'image/png',
+          time: '2023-05-27',
+          transparent: true
+        }}
+      /> */}
     </>
   )
 }

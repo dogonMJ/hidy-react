@@ -352,5 +352,21 @@
   },
   "translation": {
     "title": "Switch Language"
+  },
+  "screenshot": {
+    "title": "Screenshot",
+    "draw": "Toggle selection mode",
+    "download": "Download",
+    "coord": "Enter coordinates to define the selection range",
+    "north": "North",
+    "south": "South",
+    "east": "East",
+    "west": "West",
+    "info": {
+      "selection": "In selection mode, the cursor becomes a crosshair, and the map cannot be dragged.\n\tThe selection box disappears after moving or zooming the map.",
+      "input": "Enter coordinates to define the selection range. Click outside to activate selection mode.\n\tThe latitude range is ±90, and the longitude range is -239 to +481.",
+      "draw": "Toggle selection and regular mode.",
+      "download": "Download a screenshot of the selected area, or the entire screen if no selection is made.\n Incomplete layer loading results in an incomplete screenshot."
+    }
   }
 }

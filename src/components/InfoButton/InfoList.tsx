@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { useTranslation } from "react-i18next";
+import { Download, Crop, PanTool } from '@mui/icons-material'
 
 const InfoList = (props: { dataId: string }) => {
   const { t } = useTranslation()
@@ -528,6 +529,15 @@ const InfoList = (props: { dataId: string }) => {
           {t('draw.marker')}<br />
           {t('draw.edit')}<br />
           {t('draw.del')}
+        </Typography >
+      )
+    case 'screenshot':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('screenshot.info.selection')}<br />
+          {t('screenshot.info.input')}<br />
+          <Crop fontSize='small' />/<PanTool fontSize='small' /> : {t('screenshot.info.draw')}<br />
+          <Download fontSize='small' /> : {t('screenshot.info.download')}
         </Typography >
       )
   }

@@ -46,6 +46,7 @@ export interface ApiParams {
     transparent?: Api['transparent']
     time?: string
     elevation?: number
+    featureinfo?: boolean
 }
 
 export interface TileProp {

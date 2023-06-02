@@ -9,6 +9,7 @@ const mapLengthInterval = [
   { min: 8, step: 2 },
   { min: 15, step: 5 },
 ]
+const mapPixelInterval = [0, 100, 200, 500, 800]
 const binarySearch = (arr: number[], target: number) => {
   let left = 0;
   let right = arr.length - 1;
@@ -26,12 +27,30 @@ const binarySearch = (arr: number[], target: number) => {
   }
   return left;
 }
-const calMarks = (min: number, max: number, step: number) => {
+const calMarks = (min: number, max: number, step: number, markNumber: number) => {
   const factor = 1 / step
   const lower = Math.ceil(min * factor) / factor
   const upper = Math.floor(max * factor) / factor
   const len = Math.round((upper - lower) / step) + 1
-  return [min, ...Array.from(Array(len), (e, i) => Math.round((i * step + lower) * factor) / factor), max]
+  const marks = [...Array.from(Array(len), (e, i) => Math.round((i * step + lower) * factor) / factor)]
+  if (len > markNumber) {
+    const secLen = Math.ceil(len / markNumber)
+    const sections = Array.from(Array(markNumber).keys())
+    let res = sections.map((i) => marks[i * secLen])
+    res = res.filter((ele) => ele !== undefined)
+    return [min, ...res, max]
+  } else {
+    return [min, ...marks, max]
+  }
+}
+
+const getMarks = (min: number, max: number, length: number) => {
+  const diff = Math.round((max - min) * 10000) / 10000
+  const intervalMin = mapLengthInterval.map(e => e.min)
+  const index = binarySearch(intervalMin, diff) - 1
+  const step = mapLengthInterval[index].step
+  const markNumber = binarySearch(mapPixelInterval, length)
+  return calMarks(min, max, step, markNumber)
 }
 
 const calDifference = (arr: number[]) => {
@@ -40,13 +59,6 @@ const calDifference = (arr: number[]) => {
     differences.push(arr[i + 1] - arr[i]);
   }
   return differences;
-}
-const getMarks = (min: number, max: number) => {
-  const diff = Math.round((max - min) * 10000) / 10000
-  const intervalMin = mapLengthInterval.map(e => e.min)
-  const index = binarySearch(intervalMin, diff) - 1
-  const step = mapLengthInterval[index].step
-  return calMarks(min, max, step)
 }
 
 const calScaleLength = (map: Map, bbox: number[], marks: number[], direction: 'x' | 'y', scale: number = 1) => {
@@ -94,13 +106,12 @@ export const screenshot = async (map: Map, bounds: LatLngBounds) => {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     //get coordinates
-    // const bbox = selection.bounds?.toBBoxString().split(',').map(Number)
     const bbox = bounds.toBBoxString().split(',').map(Number)
 
     if (bbox) {
       const [minLng, minLat, maxLng, maxLat] = [...bbox]
-      const lngMarks = getMarks(minLng, maxLng)
-      const latMarks = getMarks(minLat, maxLat).reverse()
+      const lngMarks = getMarks(minLng, maxLng, width)
+      const latMarks = getMarks(minLat, maxLat, height).reverse()
       const x_secLength = calScaleLength(map, bbox, lngMarks, 'x', mapScale)
       const y_secLength = calScaleLength(map, bbox, latMarks, 'y', mapScale)
       //draw
@@ -139,7 +150,7 @@ export const screenshot = async (map: Map, bounds: LatLngBounds) => {
     }
     //download
     const link = document.createElement('a');
-    link.download = 'myImage.png';
+    link.download = 'hidy.png';
     link.href = canvas.toDataURL();
     document.body.appendChild(link);
     link.click();

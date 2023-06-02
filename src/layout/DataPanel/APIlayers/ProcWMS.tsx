@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LayerGroup } from 'react-leaflet'
+import { LayerGroup, WMSTileLayer, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import wmsList from 'assets/jsons/WMSList.json'
 import { TileLayerCanvas } from '../../../components/TileLayerCanvas'
@@ -37,7 +37,7 @@ const propsWMS = (api: Api, time: string, key: string, elevation: number) => {
       styles: api.style,
       format: api.format,
       transparent: api.transparent,
-      featureinfo: api.featureinfo
+      featureinfo: api.featureinfo,
     },
   }
 }
@@ -46,12 +46,13 @@ const depths = [-5727.9169921875, -5274.7841796875, -4833.291015625, -4405.22412
 // depths from https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-thetao?request=GetCapabilities&service=WMS
 const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
 
-const tileProps: TileProp[] = []
+// let tileProps: TileProp[] = []
 const ProcWMS = (props: Urls) => {
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
   const ref = useRef<L.LayerGroup>(null)
   const [layerId, setLayerId] = useState<number | null>(null)
-  const [tileExist, setTileExist] = useState(false)
+  // const [tileExist, setTileExist] = useState(false)
+  const [tileProps, setTileProps] = useState<TileProp[]>([])
   const api: Api = wmsList[props.Identifier as keyof typeof wmsList]
   const time = timeDuration(props.Time, api.duration)
 
@@ -59,30 +60,48 @@ const ProcWMS = (props: Urls) => {
   const key = api.layer + time + depth
 
   if (noTileCached(tileProps, key)) {
-    checkTile(api.url, api.layer, time)
+    // checkTile(api.url, api.layer, time)
     tileProps.push(propsWMS(api, time, key, depth))
   }
 
   const layerEventHandlers = {
-    error: () => console.log('error'),
-    load: (e: any) => console.log('load', e),
-    loading: (e: any) => console.log('loading', e),
-    tileerror: () => console.log('tileerror')
+    // error: () => console.log('error'),
+    // load: (e: any) => console.log('load', e),
+    // loading: (e: any) => console.log('loading', e),
+    // tileerror: () => console.log('tileerror'),
   }
+
+  const clearPreload = () => {
+    const layers = ref.current?.getLayers()
+    if (layers && layers?.length > 1) {
+      const layersToRemove = layers?.filter((layer: any) => layer.options.key !== key)
+      layersToRemove.forEach((layer) => {
+        ref.current?.removeLayer(layer)
+      })
+      setTileProps(tileProps.filter((tileProp) => tileProp.params.key === key))
+    }
+  }
+
+  useMapEvents({
+    zoomstart: () => {
+      clearPreload()
+    }
+  })
 
   useEffect(() => {
     if (ref.current) {
       ref.current.eachLayer((layer: any) => {
-        if (layer.options.key === key && ref.current) {
-          setLayerId(ref.current.getLayerId(layer))
+        if (layer.options.key === key) {
+          setLayerId(ref.current!.getLayerId(layer))
           layer.setOpacity(1)
         } else {
           layer.setOpacity(0)
         }
       })
-    } else {
-      setTileExist(false)
     }
+    // } else {
+    //   setTileExist(false)
+    // }
 
   }, [key]);
 

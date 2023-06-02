@@ -5,46 +5,71 @@ import { ClipScreenshot } from "components/ClipScreenshot";
 import { PortalControlButton } from "components/PortalControlButton";
 import { useMap } from "react-leaflet";
 import { Positions } from "types";
+import { RenderIf } from "components/RenderIf/RenderIf";
+import InfoButton from "components/InfoButton";
+import { useTranslation } from "react-i18next";
 
 export const ScreenshotControl = (props: { position: Positions }) => {
   const map = useMap()
+  const { t } = useTranslation()
   const [showBanner, setShowBanner] = useState(false)
   return (
-    <PortalControlButton position={props.position}>
+    <PortalControlButton position={props.position} className='leaflet-control' >
       <Stack
-        direction="row"
+        direction="column"
+        spacing={0.5}
+        justifyContent="flex-end"
+        alignItems="flex-end"
         sx={{
           overflow: 'hidden',
-          // maxHeight: 60,
+          border: 0,
         }}
       >
-        <Slide in={showBanner} direction='left' mountOnEnter unmountOnExit >
-          <Paper sx={{ marginRight: -3.5, paddingRight: "30px", borderRadius: 0.5 }} elevation={2}>
+        <Paper
+          sx={{
+            width: '30px',
+          }}
+          className="leaflet-bar"
+        >
+          <ButtonGroup orientation="vertical">
+            <IconButton
+              title={t('screenshot.title')}
+              onClick={() => {
+                if (showBanner === true) {
+                  map.getContainer().style.cursor = ''
+                }
+                setShowBanner(!showBanner)
+              }}
+              sx={{
+                width: 30,
+                height: 30,
+                borderRadius: 0
+              }}
+              tabIndex={-1}
+              disableRipple
+            >
+              <CameraAltIcon fontSize="small" style={{ color: '#464646' }} />
+            </IconButton>
+            <RenderIf isTrue={showBanner}>
+              <InfoButton
+                dataId="screenshot"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                iconSx={{
+                  padding: '5px',
+                  width: 30,
+                  height: 30,
+                  borderRadius: 0,
+                }}
+              />
+            </RenderIf>
+          </ButtonGroup>
+        </Paper>
+        <RenderIf isTrue={showBanner}>
+          <Paper className="leaflet-bar">
             <ClipScreenshot />
           </Paper>
-        </Slide>
-        <Paper sx={{ borderRadius: 0.5 }}>
-          {/* <ButtonGroup orientation="vertical"> */}
-          <IconButton
-            onClick={() => {
-              if (showBanner === true) {
-                map.getContainer().style.cursor = ''
-              }
-              setShowBanner(!showBanner)
-            }}
-            sx={{
-              width: 30,
-              height: 30,
-              borderRadius: 0
-            }}
-            tabIndex={-1}
-            disableRipple
-          >
-            <CameraAltIcon fontSize="small" style={{ color: '#464646' }} />
-          </IconButton>
-          {/* <ClipScreenshot /> */}
-          {/* </ButtonGroup> */}
-        </Paper>
+        </RenderIf>
       </Stack>
     </PortalControlButton>
   )

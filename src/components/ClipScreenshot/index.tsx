@@ -1,14 +1,13 @@
-import { MouseEvent, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LatLngBounds, LatLngBoundsLiteral, LatLng } from "leaflet";
 import { useMapEvents, Rectangle, useMap, Pane } from "react-leaflet";
 import { RootState } from "store/store";
 import { useSelector } from "react-redux";
 import 'leaflet'
+import { useTranslation } from "react-i18next";
 import { screenshot } from "Utils/UtilsScreenshot";
-import { Box, Grid, IconButton, Paper, TextField } from "@mui/material";
-import CropIcon from '@mui/icons-material/Crop';
-import DownloadIcon from '@mui/icons-material/Download';
-import PanToolIcon from '@mui/icons-material/PanTool';
+import { Box, ButtonGroup, Grid, IconButton, Stack, TextField } from "@mui/material";
+import { Download, Crop, PanTool } from '@mui/icons-material'
 
 interface Selections {
   bounds: LatLngBounds | null;
@@ -25,22 +24,21 @@ const styles = {
   textField: {
     width: 80,
     maxHeight: 5,
-    backgroundColor: 'red'
   },
   input: {
     fontFamily: 'Monospace',
-    fontSize: '10px',
-    maxHeight: '1.5rem',
-    backgroundColor: 'yellow',
-    padding: 0
+    fontSize: '15px',
+    height: "1.7rem",
+    padding: "0px 5px 0px 5px",
   },
   inputLabel: {
     fontSize: '15px',
-    backgroundColor: 'green'
   },
 };
+
 export const ClipScreenshot = () => {
   const map = useMap()
+  const { t } = useTranslation()
   const rectRef = useRef<any>()
   const enterPanel = useSelector((state: RootState) => state.coordInput.enterPanel);
   const [clippingMode, setClippingMode] = useState(false)
@@ -98,8 +96,9 @@ export const ClipScreenshot = () => {
 
   const handleCapture = async () => {
     if (!map) return;
-    const bounds = new LatLngBounds([[inputCoords[0], inputCoords[1]], [inputCoords[2], inputCoords[3]]] as LatLngBoundsLiteral)
-    bounds?.isValid() ? screenshot(map, bounds) : screenshot(map, map.getBounds())
+    const bounds = new LatLngBounds([[inputCoords[0], inputCoords[1]], [inputCoords[2], inputCoords[3]]] as LatLngBoundsLiteral);
+    const isEmpty = inputCoords.some((value) => value === '');
+    (bounds?.isValid() && !isEmpty) ? screenshot(map, bounds) : screenshot(map, map.getBounds())
   }
 
   const handleMode = () => {
@@ -130,7 +129,20 @@ export const ClipScreenshot = () => {
   const handleInputBlur = () => {
     const isempty = inputCoords.some((value) => value === '')
     const newBounds = isempty ? null : new LatLngBounds([[inputCoords[0], inputCoords[1]], [inputCoords[2], inputCoords[3]]] as LatLngBoundsLiteral)
+    if (inputCoords[3] < inputCoords[1]) {
+      const temp = inputCoords[3]
+      inputCoords[3] = inputCoords[1]
+      inputCoords[1] = temp
+    }
+    if (inputCoords[2] < inputCoords[0]) {
+      const temp = inputCoords[2]
+      inputCoords[2] = inputCoords[0]
+      inputCoords[0] = temp
+    }
     if (newBounds) {
+      setClippingMode(true)
+      map.dragging.disable()
+      map.getContainer().style.cursor = 'crosshair'
       map.fitBounds(newBounds)
     }
     setTimeout(() => {
@@ -141,125 +153,136 @@ export const ClipScreenshot = () => {
       })
     }, 10)
   }
+  useEffect(() => {
+    return () => {
+      map.dragging.enable()
+      setClippingMode(false)
+    }
+  }, [])
   return (
     <>
-      <Box sx={{ backgroundColor: 'blue' }}>
-        <Grid container spacing={1} sx={{ width: 185, height: 130, padding: '5px' }}>
-          <Grid item sm={12}>
-            <Paper sx={{ backgroundColor: 'red' }}>
-              <IconButton
-                onClick={handleMode}
-                size="small"
-                sx={{
-                  borderRadius: 0,
-                  height: 30
+      <Stack direction="row-reverse" >
+        <ButtonGroup orientation="vertical" >
+          <IconButton
+            title={t('screenshot.draw')}
+            onClick={handleMode}
+            size="small"
+            sx={{
+              borderRadius: 0,
+              height: 46,
+              width: 30,
+            }}
+          >
+            {clippingMode ? <PanTool fontSize="small" /> : <Crop />}
+          </IconButton>
+          <IconButton
+            title={t('screenshot.download')}
+            onClick={handleCapture}
+            size="small"
+            sx={{
+              borderRadius: 0,
+              height: 46,
+              width: 30
+            }}
+          >
+            <Download />
+          </IconButton>
+        </ButtonGroup>
+        <Box title={t('screenshot.coord')} sx={{ height: 86, padding: "6px 0px 0px 5px" }}>
+          <Grid container spacing={0} sx={{ width: 185 }}>
+            <Grid item sm={6} sx={{ padding: "10px 5px" }}>
+              <TextField
+                id="maxlat"
+                type="number"
+                style={styles.textField}
+                InputProps={{
+                  inputProps: {
+                    max: 90,
+                    min: -90,
+                    style: styles.input,
+                  }
                 }}
-              >
-                {clippingMode ? <PanToolIcon fontSize="small" /> : <CropIcon />}
-              </IconButton>
-              <IconButton
-                onClick={handleCapture}
-                size="small"
-                sx={{
-                  borderRadius: 0,
-                  height: 30
+                InputLabelProps={{
+                  shrink: true,
+                  style: styles.inputLabel
                 }}
-              >
-                <DownloadIcon />
-              </IconButton>
-            </Paper>
+                label={t('screenshot.north')}
+                value={inputCoords[2]}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+              />
+            </Grid>
+            <Grid item sm={6} sx={{ padding: "10px 5px" }}>
+              <TextField
+                id="maxlng"
+                type="number"
+                style={styles.textField}
+                InputProps={{
+                  inputProps: {
+                    max: 180,
+                    min: 150,
+                    style: styles.input,
+                  }
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                  style: styles.inputLabel
+                }}
+                label={t('screenshot.east')}
+                value={inputCoords[3]}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+              />
+            </Grid>
+            <Grid item sm={6} sx={{ padding: "10px 5px" }}>
+              <TextField
+                id="minlat"
+                type="number"
+                style={styles.textField}
+                InputProps={{
+                  inputProps: {
+                    max: 90,
+                    min: -90,
+                    style: styles.input,
+                  }
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                  style: styles.inputLabel
+                }}
+                label={t('screenshot.south')}
+                value={inputCoords[0]}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+              />
+            </Grid>
+            <Grid item sm={6} sx={{ padding: "10px 5px" }}>
+              <TextField
+                id="minlng"
+                type="number"
+                style={styles.textField}
+                InputProps={{
+                  inputProps: {
+                    max: 481,
+                    min: -239,
+                    style: styles.input,
+                  }
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                  style: styles.inputLabel
+                }}
+                label={t('screenshot.west')}
+                value={inputCoords[1]}
+                onChange={handleInputChange}
+                onBlur={handleInputBlur}
+              />
+            </Grid>
           </Grid>
-          <Grid item sm={6}>
-            <TextField
-              id="minlat"
-              type="number"
-              style={styles.textField}
-              InputProps={{
-                style: styles.input,
-                inputProps: {
-                  max: 90,
-                  min: -90
-                }
-              }}
-              InputLabelProps={{
-                shrink: true,
-                style: styles.inputLabel
-              }}
-              label={'South'}
-              value={inputCoords[0]}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-            />
-          </Grid>
-          <Grid item sm={6}>
-            <TextField
-              id="minlng"
-              type="number"
-              style={styles.textField}
-              InputProps={{
-                style: styles.input,
-                inputProps: {
-                  max: 481,
-                  min: -239
-                }
-              }}
-              InputLabelProps={{
-                shrink: true,
-                style: styles.inputLabel
-              }}
-              label={'West'}
-              value={inputCoords[1]}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-            />
-          </Grid>
-          <Grid item sm={6}>
-            <TextField
-              id="maxlat"
-              type="number"
-              style={styles.textField}
-              InputProps={{
-                style: styles.input,
-                inputProps: {
-                  max: 90,
-                  min: -90
-                }
-              }}
-              InputLabelProps={{
-                shrink: true,
-                style: styles.inputLabel
-              }}
-              label={'North'}
-              value={inputCoords[2]}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-            />
-          </Grid>
-          <Grid item sm={6}>
-            <TextField
-              id="maxlng"
-              type="number"
-              style={styles.textField}
-              InputProps={{
-                style: styles.input,
-                inputProps: {
-                  max: 180,
-                  min: 150
-                }
-              }}
-              InputLabelProps={{
-                shrink: true,
-                style: styles.inputLabel
-              }}
-              label={'East'}
-              value={inputCoords[3]}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-      {selection.bounds?.isValid() &&
+        </Box>
+      </Stack >
+      {
+        selection.bounds?.isValid() &&
         <Pane name='clip' >
           <Rectangle ref={rectRef} bounds={selection.bounds} />
         </Pane>
