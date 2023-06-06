@@ -33,7 +33,7 @@ export const ScreenshotControl = (props: { position: Positions }) => {
         >
           <ButtonGroup orientation="vertical">
             <IconButton
-              title={t('screenshot.title')}
+              title={`${t('screenshot.title')}`}
               onClick={() => {
                 if (showBanner === true) {
                   map.getContainer().style.cursor = ''

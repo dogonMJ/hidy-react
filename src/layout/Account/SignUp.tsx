@@ -77,7 +77,7 @@ export const SignUp = (props: { setOpen: any }) => {
             {t('account.signup')}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-            <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+            <Typography variant='caption' sx={{ whiteSpace: 'pre-wrap' }}>
               <FormHelperText>{t('account.validChar')}</FormHelperText>
             </Typography >
             <TextField
@@ -96,7 +96,7 @@ export const SignUp = (props: { setOpen: any }) => {
                 </Typography> :
                 usernameValid === false ? t('account.userNotValid') : t('account.usernameRule')}
               inputProps={{
-                pattern: "[\\p{L}\\w@.+-]{2,}" //unicode字元(各語言字母)、數字、@/./+/-/_
+                pattern: "[\\p{L}\\w@.+\\-]{2,}" //unicode字元(各語言字母)、數字、@/./+/-/_
               }}
             />
             <TextField
@@ -143,7 +143,7 @@ export const SignUp = (props: { setOpen: any }) => {
                 label={t('account.password1')}
                 inputProps={{
                   minLength: 6,
-                  pattern: '(?=.*[0-9])(?=.*[\\p{L}])([\\w\\p{L}@.+-]+)'
+                  pattern: '(?=.*[0-9])(?=.*[\\p{L}])([\\w\\p{L}@.+\\-]+)'
                 }}
                 endAdornment={
                   <InputAdornment position="end">
@@ -172,7 +172,7 @@ export const SignUp = (props: { setOpen: any }) => {
                 helperText={confirmError ? t('account.incorrect') : ''}
                 variant={confirmError ? 'filled' : 'outlined'}
               />
-              <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+              <Typography variant='caption' sx={{ whiteSpace: 'pre-wrap' }}>
                 <FormHelperText>{t('account.pwdRule')}</FormHelperText>
               </Typography >
             </FormControl>

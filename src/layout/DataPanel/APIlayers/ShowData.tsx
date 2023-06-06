@@ -36,7 +36,6 @@ const rgbaToHex = (r: number, g: number, b: number) => {
 const getPixelColor = (map: L.Map, latlng: L.LatLng, layerGroup: any, layerId: number | null) => {
   const zoom = map.getZoom()
   const xyz = getTileXYZ(latlng.lat, latlng.lng, zoom)
-  console.log(layerGroup)
   const layer = layerGroup.getLayer(layerId)
   const levelOrigin = layer._levels[zoom].origin
   const mapOrigin = map.getPixelOrigin()
@@ -63,7 +62,7 @@ const getPixelColor = (map: L.Map, latlng: L.LatLng, layerGroup: any, layerId: n
   //   console.log(imgData)
   //   // return imgData
   // }
-  const ctx = layer._tiles[xyz].el.getContext('2d')
+  const ctx = layer._tiles[xyz].el.getContext('2d', { willReadFrequently: true })
   const imgData = ctx.getImageData(pointerX, pointerY, 1, 1).data;
 
   // ctx.fillStyle = "red";

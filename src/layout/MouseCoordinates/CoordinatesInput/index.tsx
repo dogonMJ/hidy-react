@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { TextField, IconButton, Paper } from '@mui/material';
 import { GpsFixed, AddLocationAlt, AdsClick } from '@mui/icons-material';
 import { useState } from "react";
+import { LatLngBounds } from "leaflet";
 
 const CoordinatesInput = () => {
   const map = useMap();
@@ -32,7 +33,8 @@ const CoordinatesInput = () => {
   }
   const addMarkerBtn = () => {
     let inputLon2: number;
-    if (inputLon <= boundCenter[1]) { //中線
+    const maxBounds = map.options.maxBounds as LatLngBounds
+    if (inputLon <= maxBounds.getCenter().lng) { //中線
       inputLon2 = inputLon + 360
     } else {
       inputLon2 = inputLon - 360

@@ -2,6 +2,7 @@
 import { createControlComponent } from "@react-leaflet/core";
 import CPicon from 'assets/images/CP.svg'
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Control, DomUtil } from "leaflet";
 import { Box, Button } from "@mui/material";
 
@@ -38,8 +39,10 @@ const CPlanButton = () => {
 const Cplan = Control.extend({
   onAdd: function (map: any) {
     const div = DomUtil.create('div', '');
+    const root = createRoot(div)
     const jsx = <CPlanButton />
-    ReactDOM.render(jsx, div);
+    root.render(jsx)
+    // ReactDOM.render(jsx, div); //react 17
     return div;
   },
   onRemove: function (map: any) { },

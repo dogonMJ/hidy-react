@@ -12,12 +12,14 @@ const POSITION_CLASSES = {
 
 interface ControlButtonProps extends HTMLAttributes<HTMLDivElement> {
   position: Positions
+  order?: 'append' | 'unshift'
 }
 export const PortalControlButton: React.FC<ControlButtonProps> = (props) => {
-  const { position, children, className = "leaflet-control leaflet-bar", ...rest } = props
+  const { position, children, order = 'append', className = "leaflet-control leaflet-bar", ...rest } = props
 
-  const [container, setContainer] = useState<Element>(document.createElement('div'))
   const positionClass = ((position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright)
+  const init = order === 'append' ? document.createElement('div') : document.getElementsByClassName(positionClass)[0]
+  const [container, setContainer] = useState<Element>(init)
   L.DomEvent.disableClickPropagation(container)
 
   useEffect(() => {

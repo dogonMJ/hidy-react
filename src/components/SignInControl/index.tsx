@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, createElement } from "react";
 import 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { Box, DialogContent, IconButton, Slide, Paper, Stack } from "@mui/material";
@@ -12,6 +12,7 @@ import { RootState } from "store/store"
 import { UserBanner } from "layout/Account/UserBanner";
 import { SignUp } from "layout/Account/SignUp"
 import { ResetPassword } from "layout/Account/ResetPassword"
+import { PortalControlButton } from "components/PortalControlButton";
 
 export const SignInControl = () => {
   const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
@@ -39,7 +40,6 @@ export const SignInControl = () => {
   const handleClose = () => {
     setShowSignInPanel(false);
     setShowSignUpPanel(false)
-    setShowResetPwdPanel(false)
   }
   const handleClick = () => userInfo.username ? setShowBanner(true) : setShowSignInPanel(true)
   const handleMouseOver = () => {
@@ -50,34 +50,36 @@ export const SignInControl = () => {
 
   return (
     <>
-      <Stack
-        onMouseOver={handleMouseOver}
-        onMouseLeave={() => setShowBanner(false)}
-        direction="row"
-        sx={{
-          overflow: 'hidden',
-          borderRadius: 18
-        }}
-      >
-        <Slide in={showBanner} direction='left' mountOnEnter unmountOnExit >
-          <Paper sx={{ marginRight: -3.8, borderRadius: 15 }} elevation={2}>
-            <UserBanner ref={bannerRef} userInfo={userInfo} setOpen={setShowBanner} />
-          </Paper>
-        </Slide>
-        <IconButton
-          onClick={handleClick}
+      <PortalControlButton position="topright" className='leaflet-control' order="unshift">
+        <Stack
+          onMouseOver={handleMouseOver}
+          onMouseLeave={() => setShowBanner(false)}
+          direction="row"
           sx={{
-            width: 30,
-            height: 30,
-            marginRight: '1px',
+            overflow: 'hidden',
+            borderRadius: 18,
           }}
-          tabIndex={-1}
         >
-          <Avatar sx={avatarStyle(userInfo.username)} >
-            {userAbbr(userInfo.username)}
-          </Avatar>
-        </IconButton>
-      </Stack>
+          <Slide in={showBanner} direction='left' mountOnEnter unmountOnExit >
+            <Paper sx={{ marginRight: -3.8, borderRadius: 15 }} elevation={2}>
+              <UserBanner ref={bannerRef} userInfo={userInfo} setOpen={setShowBanner} />
+            </Paper>
+          </Slide>
+          <IconButton
+            onClick={handleClick}
+            sx={{
+              width: 30,
+              height: 30,
+              marginRight: '1px',
+            }}
+            tabIndex={-1}
+          >
+            <Avatar sx={avatarStyle(userInfo.username)} >
+              {userAbbr(userInfo.username)}
+            </Avatar>
+          </IconButton>
+        </Stack>
+      </PortalControlButton>
       <Dialog
         open={showSignInPanel}
         onClose={handleClose}

@@ -8,7 +8,7 @@ import "tilelayer-canvas";
 import { createLayerComponent } from "@react-leaflet/core";
 import L from "leaflet";
 // import "./wmslayer-canvas.js"
-import "./Canvas-TileLayer.js"
+import "./WMSCanvas-TileLayer.js"
 
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer

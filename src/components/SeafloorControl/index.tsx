@@ -12,14 +12,13 @@ import { PortalControlButton } from "components/PortalControlButton";
 export const SeafloorControl = () => {
   const { t } = useTranslation()
   const [showDrawLine, setShowDrawLine] = useState(false)
-
   return (
     <PortalControlButton position="topright">
       <Paper sx={{ borderRadius: 0.5 }}>
         <ButtonGroup orientation="vertical" >
           <IconButton
-            aria-label={t('draw.title')}
-            title={t('draw.title')}
+            aria-label={`${t('draw.title')}`}
+            title={`${t('draw.title')}`}
             onClick={() => { setShowDrawLine(!showDrawLine) }}
             sx={{
               width: 30,

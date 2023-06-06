@@ -2,15 +2,15 @@ import 'leaflet'
 import { useEffect, useRef, useState } from "react"
 import { GeoJSON } from "react-leaflet"
 import { LatLng } from "leaflet"
+import { Box, Checkbox, FormControlLabel, Slider, Typography, Grid } from '@mui/material'
+import { useTranslation } from "react-i18next";
 import * as geojson from 'geojson';
 import Flatpickr from "react-flatpickr";
 import 'flatpickr/dist/plugins/monthSelect/style.css'
-import 'leaflet.markercluster/dist/leaflet.markercluster.js'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import MarkerClusterGroup from 'react-leaflet-markercluster';
-import { Box, Checkbox, FormControlLabel, Slider, Typography, Grid } from '@mui/material'
-import { useTranslation } from "react-i18next";
+//@ts-ignore
+import MarkerCluster from '@changey/react-leaflet-markercluster'
+
 
 declare const L: any;
 
@@ -264,13 +264,13 @@ export const OdbChemistry = () => {
           })}
         </Grid>
       </Box>
-      <MarkerClusterGroup
+      <MarkerCluster
         ref={refCluster}
         disableClusteringAtZoom={12}
       >
         <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} >
         </GeoJSON>
-      </MarkerClusterGroup>
+      </MarkerCluster>
     </>
   )
 }

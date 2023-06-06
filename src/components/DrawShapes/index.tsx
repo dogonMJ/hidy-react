@@ -52,12 +52,12 @@ export const DrawShapes = () => {
           draw={{
             marker: false,
             circlemarker: {
-              stroke: true,
+              stroke: false,
               color: 'black',
               weight: 1,
               fillColor: '#3388ff',
               fillOpacity: 1,
-              radius: 3  //mod react-leaflet-draw/src/index.d.ts and leaflet-draw/@types/index.d.ts
+              radius: 3  //change type: react-leaflet-draw/src/index.d.ts and leaflet-draw/@types/index.d.ts
             },
             polygon: {
               showArea: true,
@@ -91,7 +91,7 @@ export const DrawShapes = () => {
                     .then(json => {
                       const z = scaleUnit === 'imperial' ? `${Math.round(json.z[0] / 0.3048)} ft` : `${json.z[0]} m`
                       const cmContent = `${ev.latlng.lat.toFixed(4)}, ${ev.latlng.lng.toFixed(4)}<br>ele: ${z}`
-                      e.layer.bindTooltip(cmContent)
+                      e.layer.bindPopup(cmContent)
                     })
                 })
                 break

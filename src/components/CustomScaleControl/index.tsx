@@ -18,16 +18,12 @@ const scaleControl = Control.Scale.include({
     const className = 'cusor-pointer leaflet-control-scale'
     const container = DomUtil.create('div', className)
     const options = this.options;
-
     this._addScales(options, className + '-line', container);
     DomEvent.on(container, 'click', function () {
       if (options.onClick) {
         options.onClick();
       }
     }, this);
-    // DomEvent.on(container, 'mouseover', function () {
-    //   console.log('sdfsdfsd')
-    // }, this);
     map.on(options.updateWhenIdle ? 'moveend' : 'move', this._update, this);
     map.whenReady(this._update, this);
     return container;

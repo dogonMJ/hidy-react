@@ -1,3 +1,4 @@
+import { createRoot } from 'react-dom/client';
 import { createControlComponent } from "@react-leaflet/core";
 import ReactDOM from 'react-dom';
 import { Control, DomUtil } from "leaflet";
@@ -6,8 +7,10 @@ import { SwitchLang } from "components/LanguageControl/SwitchLang";
 const Language = Control.extend({
   onAdd: function (map: any) {
     const div = DomUtil.create('div', '');
+    const root = createRoot(div)
     const jsx = <SwitchLang />
-    ReactDOM.render(jsx, div);
+    root.render(jsx)
+    // ReactDOM.render(jsx, div); //react 17
     return div;
   },
   onRemove: function (map: any) { },

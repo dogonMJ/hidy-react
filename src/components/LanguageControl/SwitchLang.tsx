@@ -25,8 +25,8 @@ export const SwitchLang = () => {
   return (
     <div className='leaflet-bar bg-white' tabIndex={-1}>
       <IconButton
-        aria-label={t('translation.title')}
-        title={t('translation.title')}
+        aria-label={`${t('translation.title')}`}
+        title={`${t('translation.title')}`}
         value={lang}
         onClick={handleSwitch}
         sx={{

@@ -1,13 +1,11 @@
 import 'leaflet'
 import { Marker, Popup } from "react-leaflet"
 import { useEffect, useState } from 'react'
-import 'leaflet.markercluster/dist/leaflet.markercluster.js'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import MarkerClusterGroup from 'react-leaflet-markercluster';
+import { renderToString } from 'react-dom/server';
 import PopupTemplate from './PopupSea'
 import WavesIcon from '@mui/icons-material/Waves';
-import ReactDOMServer from 'react-dom/server';
+//@ts-ignore
+import MarkerCluster from '@changey/react-leaflet-markercluster'
 
 declare const L: any;
 
@@ -32,7 +30,7 @@ interface SiteInfo {
 
 const icon = new L.divIcon({
   className: "CWB_Sea_icon",
-  html: ReactDOMServer.renderToString(<WavesIcon sx={{ color: '#ed6c02' }} />)
+  html: renderToString(<WavesIcon style={{ color: '#ED6C02' }} />)
 })
 
 const CwbSeaSites = () => {
@@ -91,19 +89,19 @@ const CwbSeaSites = () => {
     fetchData()
   }, [])
   return (
-    <>
-      <MarkerClusterGroup>
-        {
-          Object.values(weatherElement.siteInfo).map((station: any, idx: number) =>
-            <Marker key={idx} position={[Number(station.StationLatitude), Number(station.StationLongitude)]} icon={icon}>
-              <Popup >
-                <PopupTemplate weatherData={weatherElement.siteData} station={station} />
-              </Popup>
-            </Marker>
-          )
-        }
-      </MarkerClusterGroup>
-    </>
+
+    <MarkerCluster>
+      {
+        Object.values(weatherElement.siteInfo).map((station: any, idx: number) =>
+          <Marker key={idx} position={[Number(station.StationLatitude), Number(station.StationLongitude)]} icon={icon}>
+            <Popup >
+              <PopupTemplate weatherData={weatherElement.siteData} station={station} />
+            </Popup>
+          </Marker>
+        )
+      }
+    </MarkerCluster>
+
   )
 }
 export default CwbSeaSites

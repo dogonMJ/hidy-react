@@ -1,14 +1,13 @@
 import 'leaflet'
 import { Marker, Popup } from "react-leaflet"
 import { useEffect, useState } from 'react'
-import 'leaflet.markercluster/dist/leaflet.markercluster.js'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import MarkerClusterGroup from 'react-leaflet-markercluster';
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import PopupTemplate from './PopupWeather'
 import CloudIcon from '@mui/icons-material/Cloud';
 import proj4 from "proj4";
+//@ts-ignore
+import MarkerCluster from '@changey/react-leaflet-markercluster'
 
 declare const L: any;
 
@@ -33,7 +32,7 @@ const trans3821to4326 = (lat: number, lon: number) => {
 }
 const icon = new L.divIcon({
   className: "CWB_Sea_icon",
-  html: ReactDOMServer.renderToString(<CloudIcon sx={{ color: '#38AEDD' }} />)
+  html: renderToString(<CloudIcon style={{ color: '#38AEDD' }} />)
 })
 
 const CwbWeatherSites = () => {
@@ -63,7 +62,7 @@ const CwbWeatherSites = () => {
 
   return (
     <>
-      <MarkerClusterGroup>
+      <MarkerCluster>
         {
           Object.values(weatherData).map((station: any, idx: number) =>
             <Marker key={idx} position={trans3821to4326(Number(station.lat), Number(station.lon)) as [number, number]} icon={icon}>
@@ -73,7 +72,7 @@ const CwbWeatherSites = () => {
             </Marker>
           )
         }
-      </MarkerClusterGroup>
+      </MarkerCluster>
     </>
   )
 }

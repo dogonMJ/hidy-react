@@ -18,6 +18,7 @@ const MouseCoordinates = () => {
   const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [coords, setCoords] = useState<coor>({ lat: 0, lng: 0 });
+
   useMapEvent('mousemove', (evt) => {
     setCoords(evt.latlng)
   })

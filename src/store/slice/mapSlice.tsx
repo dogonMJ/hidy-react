@@ -8,6 +8,16 @@ const formatOrder: StringObject = {
 };
 
 const d = new Date()
+
+interface UnitSwitch {
+  [index: string]: ScaleUnitType
+}
+const unitSwitch: UnitSwitch = {
+  'metric': 'nautical',
+  'nautical': 'imperial',
+  'imperial': 'metric',
+}
+
 export interface inputstate {
   active: boolean
   inputLat: number
@@ -80,7 +90,7 @@ export const coordInputSlice = createSlice({
       state.userInfo = action.payload
     },
     scaleUnitSwitch: (state, action: PayloadAction<ScaleUnitType>) => {
-      state.scaleUnit = action.payload
+      state.scaleUnit = unitSwitch[action.payload]
     },
     enterPanel: (state, action: PayloadAction<boolean>) => {
       state.enterPanel = action.payload
