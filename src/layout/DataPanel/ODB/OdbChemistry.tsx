@@ -268,8 +268,7 @@ export const OdbChemistry = () => {
         ref={refCluster}
         disableClusteringAtZoom={12}
       >
-        <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} >
-        </GeoJSON>
+        <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>
     </>
   )

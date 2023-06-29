@@ -17,12 +17,9 @@ import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
 import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
 import { WMSSelector } from './WMSSelector';
-import { SatelliteWebMaps } from './SatelliteWebMaps';
-// @ts-ignore
-import Cache from 'cachai';
+
 declare const L: any
 
-const cache = new Cache(400)
 interface OnOff {
   [key: string]: boolean
 }
@@ -47,7 +44,7 @@ const DataPanel = () => {
   const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
 
   const itemList: ItemList = {
-    APIlayers: <APILayers cache={cache} />,
+    APIlayers: <APILayers />,
     CWBsites: <ToggleCWB />,
     Animated: <AnimatedCurrents />,
     SatData: <SatelliteData />,

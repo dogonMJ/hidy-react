@@ -3,14 +3,12 @@ import { useTranslation } from "react-i18next";
 import { RootState } from "store/store"
 import ProcWMS from './ProcWMS'
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
-// import { ImageLengend } from "components/ImageLegend";
 import { LegendControl } from 'components/LeafletLegend'
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { Divider, ListSubheader } from "@mui/material";
 import SeaTempAno from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
 import SeaTemp from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature.png'
 import { useState } from "react";
-import { WMSTileLayer } from "react-leaflet";
 const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature", "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor",
   "sla", "adt", "CHL",]
 const optionForecast = ["3dinst_thetao", "3dinst_so", "3dsea_water_velocity", "mlotst", "zos", "bottomT",]
@@ -24,11 +22,10 @@ const getLegendUrl = (layerIdentifier: string) => {
       return
   }
 }
-const APILayers = (props: { cache: any }) => {
+const APILayers = () => {
   const { t } = useTranslation()
   const [identifier, setIdentifier] = useState("close")
   const datetime = useSelector((state: RootState) => state.coordInput.datetime);
-  const cache = props.cache
   const handleToggle = (value: string) => () => {
     setIdentifier(value)
   };
@@ -61,7 +58,6 @@ const APILayers = (props: { cache: any }) => {
         <ProcWMS
           Identifier={identifier}
           Time={datetime}
-          cache={cache}
         />
       </RenderIf>
       <RenderIf isTrue={legendUrl}>

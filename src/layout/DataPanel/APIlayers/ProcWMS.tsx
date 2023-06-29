@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LayerGroup, WMSTileLayer, useMapEvents } from 'react-leaflet'
+import { LayerGroup, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import wmsList from 'assets/jsons/WMSList.json'
 import { TileLayerCanvas } from '../../../components/TileLayerCanvas'
@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { timeDuration } from "Utils/UtilsURL";
-import { getMarks, noTileCached, checkTile } from "Utils/UtilsApi";
+import { getMarks, noTileCached } from "Utils/UtilsApi";
 
 /*
 PROCESS NASA GIBS URL
@@ -20,8 +20,6 @@ https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?SERVICE=WMS&REQUEST=Ge
 interface Urls {
   Identifier: string
   Time: string
-  cache: any
-  // elevation: number
 }
 
 const propsWMS = (api: Api, time: string, key: string, elevation: number) => {
@@ -46,12 +44,10 @@ const depths = [-5727.9169921875, -5274.7841796875, -4833.291015625, -4405.22412
 // depths from https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-phy-001-024-3dinst-thetao?request=GetCapabilities&service=WMS
 const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
 
-// let tileProps: TileProp[] = []
 const ProcWMS = (props: Urls) => {
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
   const ref = useRef<L.LayerGroup>(null)
   const [layerId, setLayerId] = useState<number | null>(null)
-  // const [tileExist, setTileExist] = useState(false)
   const [tileProps, setTileProps] = useState<TileProp[]>([])
   const api: Api = wmsList[props.Identifier as keyof typeof wmsList]
   const time = timeDuration(props.Time, api.duration)
@@ -60,15 +56,7 @@ const ProcWMS = (props: Urls) => {
   const key = api.layer + time + depth
 
   if (noTileCached(tileProps, key)) {
-    // checkTile(api.url, api.layer, time)
     tileProps.push(propsWMS(api, time, key, depth))
-  }
-
-  const layerEventHandlers = {
-    // error: () => console.log('error'),
-    // load: (e: any) => console.log('load', e),
-    // loading: (e: any) => console.log('loading', e),
-    // tileerror: () => console.log('tileerror'),
   }
 
   const clearPreload = () => {
@@ -99,17 +87,13 @@ const ProcWMS = (props: Urls) => {
         }
       })
     }
-    // } else {
-    //   setTileExist(false)
-    // }
-
   }, [key]);
 
   return (
     <>
       <LayerGroup ref={ref}>
         {tileProps.map((tileProp: TileProp) => {
-          return <TileLayerCanvas key={tileProp.params.key} type={tileProp.type} url={tileProp.url} params={tileProp.params} eventHandlers={layerEventHandlers} />
+          return <TileLayerCanvas key={tileProp.params.key} type={tileProp.type} url={tileProp.url} params={tileProp.params} />
         })}
       </LayerGroup>
       <ShowData layergroup={ref.current} layerId={layerId} identifier={props.Identifier} datetime={time} elevation={depth} param={api} />

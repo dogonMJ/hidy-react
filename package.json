@@ -69,8 +69,10 @@
     "web-vitals": "^2.1.2"
   },
   "scripts": {
-    "start": "set https=true&&react-scripts start",
-    "build": "webpack build",
+    "start1": "set https=true&&react-scripts start",
+    "build1": "webpack build",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -106,11 +108,13 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
+    "source-map-loader": "^4.0.1",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.8",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "url-loader": "^4.1.1",
     "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "webpack-merge": "^5.9.0"
   }
 }

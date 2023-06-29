@@ -3,7 +3,7 @@ import { createControlComponent } from "@react-leaflet/core";
 
 interface CustomScaleOptions extends Control.ScaleOptions {
   nautical?: boolean
-  onClick?: any,
+  onClick?: () => void,
 }
 
 const scaleControl = Control.Scale.include({

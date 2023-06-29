@@ -7,7 +7,7 @@
 
 (function () {
     var L = window.L
-    L.LatLngGraticule = L.Layer.extend({
+    L.latLngGraticule = L.Layer.extend({
         includes: (L.Evented.prototype || L.Mixin.Events),
         options: {
             showLabel: true,
@@ -525,7 +525,7 @@
     });
 
     L.latlngGraticule = function (options) {
-        return new L.LatLngGraticule(options);
+        return new L.latLngGraticule(options);
     };
 
 

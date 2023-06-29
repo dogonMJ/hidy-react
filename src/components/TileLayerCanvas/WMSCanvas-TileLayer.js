@@ -10,7 +10,7 @@
     _delaysForZoom: null,
     createCanvas: function (tile, coords, done) {
       let err;
-      const ctx = tile.getContext("2d");
+      const ctx = tile.getContext("2d", { willReadFrequently: true });
       const { doubleSize } = this.options;
 
       const { x: width, y: height } = this.getTileSize();
