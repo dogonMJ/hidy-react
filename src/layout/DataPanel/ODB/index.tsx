@@ -13,9 +13,10 @@ import { OdbGravity } from './OdbGravity';
 import { OdbCurrent } from './OdbCurrent';
 import { OdbSedCore } from './OdbSedCore';
 import { OdbChemistry } from './OdbChemistry';
+import { OdbOCC } from './OdbOCC';
 import { SubSelection } from 'components/SubSelection';
 
-const optionList = ['odbTopo', 'odbCtd', 'odbGravity', 'odbCurrent', 'odbSedCore', 'odbChemistry']
+const optionList = ['odbTopo', 'odbCtd', 'odbGravity', 'odbCurrent', 'odbSedCore', 'odbChemistry', 'odbOCC']
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -114,6 +115,9 @@ export const ODB = () => {
       </RenderIf>
       <RenderIf isTrue={checked.includes('odbChemistry')}>
         <OdbChemistry />
+      </RenderIf>
+      <RenderIf isTrue={checked.includes('odbOCC')}>
+        <OdbOCC />
       </RenderIf>
     </>
   )

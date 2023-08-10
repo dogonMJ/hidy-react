@@ -5,7 +5,6 @@ import InfoButton from "components/InfoButton"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { RenderIf } from "components/RenderIf/RenderIf"
-import { CRS } from 'leaflet'
 
 interface ItemList {
   [key: string]: JSX.Element

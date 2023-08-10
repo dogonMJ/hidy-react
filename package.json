@@ -45,6 +45,7 @@
     "leaflet-kmz": "^1.0.8",
     "leaflet-measure": "^3.1.0",
     "leaflet.markercluster": "^1.5.3",
+    "leaflet.minichart": "^0.2.5",
     "plotly.js": "^2.14.0",
     "proj4": "^2.7.5",
     "react": "^18.2.0",

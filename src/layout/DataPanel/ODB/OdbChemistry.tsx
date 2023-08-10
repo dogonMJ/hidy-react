@@ -20,7 +20,6 @@ const handleIsoString = (dateObj: Date) => {
   dateObj.setTime(dateObj.getTime() + 8 * 3600000)
   return dateObj.toISOString().split('T')[0].replaceAll('-', '')
 }
-
 export const OdbChemistry = () => {
   const ref = useRef<any>()
   const refCluster = useRef<any>()

@@ -11,7 +11,7 @@
     createCanvas: function (tile, coords, done) {
       let err;
       const ctx = tile.getContext("2d", { willReadFrequently: true });
-      const { doubleSize } = this.options;
+      const { doubleSize, crossOrigin } = this.options;
 
       const { x: width, y: height } = this.getTileSize();
       tile.width = doubleSize ? width * 2 : width;
@@ -30,7 +30,7 @@
       };
       const tileZoom = this._getZoomForUrl();
       img.src = isNaN(tileZoom) ? '' : this.getTileUrl(coords);
-      img.crossOrigin = "anonymous";
+      img.crossOrigin = crossOrigin ? crossOrigin : "anonymous";
     },
     createTile: function (coords, done) {
       const { timeout } = this.options;

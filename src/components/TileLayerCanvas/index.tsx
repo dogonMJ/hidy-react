@@ -13,9 +13,13 @@ import "./WMSCanvas-TileLayer.js"
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer
   const type = props.type ? props.type.toUpperCase() : ''
-  const instance = (type === 'WMTS') ? layer.canvas(props.url, { ...props.params }) : layer.wmscanvas(props.url, { ...props.params, });
+  // const instance = (type === 'WMTS') ? layer.canvas(props.url, { ...props.params }) : layer.wmscanvas(props.url, { ...props.params, });
 
-  if (type !== 'WMTS') {
+  if (type === 'WMTS') {
+    const instance = layer.canvas(props.url, { key: props.params.key, })
+    return { instance, context };
+  } else {
+    const instance = layer.wmscanvas(props.url, { ...props.params, })
     const newParams = Object.fromEntries(
       Object.entries(props.params).map(([k, v]) => [k.toUpperCase(), v])
     );
@@ -27,8 +31,9 @@ const createLayer = (props: any, context: any) => {
     Object.assign(newParams, defaultObj)
     instance.wmsParams = {}
     instance.setParams({ ...newParams })
+    return { instance, context };
   }
-  return { instance, context };
+  // return { instance, context };
 };
 
 const updateLayer = (instance: any, props: any, prevProps: any) => {

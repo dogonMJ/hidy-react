@@ -63,3 +63,6 @@ export interface ElevationInfo {
 
 export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"
 
+export type BioDataset = "all" | "odb" | "oca"
+
+export type BioFilter = "topic" | "taxon"
