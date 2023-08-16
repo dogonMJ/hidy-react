@@ -128,6 +128,8 @@
     "odbSedCore": "Sediment Core",
     "odbCtd": "CTD",
     "odbChemistry": "Marine Chemistry",
+    "odbBio": "Biological Data",
+    "odbMicroPlastic": "Microplastics",
     "density": "Density",
     "t": "Temperature",
     "sal": "Salinity",
@@ -139,6 +141,13 @@
     "winter": "Winter",
     "NE": "NE Monsoon",
     "SW": "SW Monsoon",
+    "dataset": "Dataset",
+    "filter": "Filter",
+    "select": "Select",
+    "nodata": "No Data",
+    "all": "All",
+    "OCA": "OCA, Taiwan",
+    "NCEI": "NCEI, USA",
     "sedCoreLegend": {
       "SG": "Shipek Grab (SG)",
       "GC": "Gravity Core (GC)",
@@ -171,6 +180,37 @@
       "Alk": "Total Alkalinity",
       "source": "Bottle sampling data stored in ODB Marine Database.",
       "description": "Select data in certain spatiotemporal range.\nThe map shows all sites include ANY of the selected parameters and depths.\nEach point on the map shows sampling location, sampling time, depth, cruise ID, and other measured parameters.\nIf the points are overlapping, zoom back until the cluster point appears. Click to cluster to show each point."
+    },
+    "Bio": {
+      "samplingPt": "Sampling Points",
+      "composition": "Composition",
+      "topic": "Topics",
+      "taxon": "Taxa",
+      "grid": "Grid",
+      "search": "Search taxon by name",
+      "by": "By ",
+      "count": "Occurrence",
+      "zooplankton": "Zooplankton",
+      "larval fish": "Larval Fish",
+      "demersal fish": "Demersal Fish",
+      "eDNA fish": "Fish eDNA",
+      "macrobenthos": "Macrobenthos",
+      "source": "ODB Bio-ocean Database",
+      "description1": "The Bio-Ocean Database compiles biological trawling data from waters around Taiwan.\nThis data encompasses projects by the National Science and Technology Council, published papers, researcher contributions, and international open databases.",
+      "description2": "Mouse hover shows sampling date, location, data source, and topic. Click to display species, and taxon rank. <group> means mixture",
+      "description3": "To apply detailed data, please contact ODB technicians.",
+      "others": "Advanced Tools"
+    },
+    "plastic": {
+      "description": "The NCEI Marine Microplastics product provides access to aggregated global data on microplastics in marine settings.",
+      "cluster": "Data Cluster Level",
+      "concentraion": "Concentration",
+      "pieces": "pieces",
+      "Very Low": "Very Low",
+      "Low": "Low",
+      "Medium": "Medium",
+      "High": "High",
+      "Very High": "Very High"
     }
   },
   "DataInfo": {
@@ -196,7 +236,10 @@
     "min": "min",
     "m": "m",
     "km": "km",
-    "mean": "mean"
+    "mean": "mean",
+    "cwbRadar": "CWB Radar",
+    "cwbOpenData": "CWB Open Data",
+    "madtDes": "使用"
   },
   "CPlanLayers": {
     "title": "Cruise Planner (C-Plan) Layers",
@@ -348,7 +391,15 @@
   },
   "draw": {
     "title": "Add Shapes",
-    "source": " Terrain model data source"
+    "source": " Terrain model data source",
+    "resolution": "Spatial resolution: 15 arcseconds (approximately 460 meters, varying with location).",
+    "info": "Capable of drawing continuous line segments, polygons, circles, and individual points, with the ability to edit and delete the graphics.\n\tLength and area values are derived from geodesic calculations using the WGS84 ellipsoid.\n\tThe resulting values are for reference only",
+    "polyline": "Line Segments: Left-click to add consecutive line segments; connect points or click 'Finish' to complete.\n\tUse 'Delete last point' to undo the last point; 'cancel' to cancel the segment.\n\tHover for info: 'd' for distance from the previous point, 'D' for total distance.\n\tTerrain profile displays when completing a segment or clicking a completed one.\n\tThe profile features dotted lines for sections and coordinates, toggled by 'Toggle Annotation' in the top toolbar.\n\tTop toolbar enables actions such as saving, zooming, and panning.",
+    "polygon": "Polygon: Left-click to add segments, click start or 'Finish' to complete.\n\tHover for info: 'A' for area, 'p' for perimeter.",
+    "circle": "Circle: Left-click and drag from a point to create a circle; release to complete.\n\tHover for info at the center: 'r' for radius, 'c' for circumference, 'A' for area",
+    "marker": "Single Point: Left-click to add a point.\n\tHover for info: 'ele' for elevation.",
+    "edit": "Edit：",
+    "del": "Delete："
   },
   "translation": {
     "title": "Switch Language"

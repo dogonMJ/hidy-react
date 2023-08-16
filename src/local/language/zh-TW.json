@@ -128,6 +128,8 @@
     "odbSedCore": "岩心",
     "odbCtd": "鹽溫深儀",
     "odbChemistry": "海洋化學",
+    "odbBio": "生物資料",
+    "odbMicroPlastic": "塑膠微粒",
     "density": "密度",
     "t": "溫度",
     "sal": "鹽度",
@@ -139,6 +141,13 @@
     "winter": "冬季",
     "NE": "東北季風",
     "SW": "西南季風",
+    "dataset": "資料集",
+    "filter": "篩選",
+    "select": "選擇",
+    "nodata": "無資料",
+    "all": "所有",
+    "OCA": "海保署",
+    "NCEI": "美國NCEI",
     "sedCoreLegend": {
       "SG": "沉積物採樣 (SG)",
       "GC": "重力岩心採樣 (GC)",
@@ -171,6 +180,37 @@
       "Alk": "總鹼度",
       "source": "ODB海洋化學資料庫存有之船測水樣化學參數。",
       "description": "可選擇特定時間、空間範圍內之資料。\n地圖會顯示包含任一所選參數及深度之採樣點位，提供該採樣航次、時間、位置及其他測量參數。\n若點位太集中或重疊，可往回縮放點選集合點位，可出現該集合之爆炸圖。"
+    },
+    "Bio": {
+      "samplingPt": "採樣點位",
+      "composition": "資料組成",
+      "topic": "調查主題",
+      "taxon": "生物類群",
+      "grid": "網格",
+      "search": "輸入物種名搜尋",
+      "by": "依",
+      "count": "採樣數量",
+      "zooplankton": "浮游動物",
+      "larval fish": "仔稚魚",
+      "demersal fish": "底棲魚",
+      "eDNA fish": "魚類eDNA",
+      "macrobenthos": "大型底棲動物",
+      "source": "ODB生物海洋資料庫",
+      "description1": "生物海洋資料庫彙整台灣周遭海域的生物拖網資料。\n來源包含國科會專題計畫研究成果、公開發表之期刊或學術論文、研究者提供資料以及國際公開資料庫。",
+      "description2": "滑鼠指向點位可顯示採樣時間、位置、資料來源及調查主題。\n點選點位則會顯示該次採樣所得之物種及階層。<group>則表示混雜。",
+      "description3": "若需申請詳細資料請洽ODB技術員。",
+      "others": "進階查詢與分析工具"
+    },
+    "plastic": {
+      "description": "NCEI海洋塑膠微粒平台彙整全球海洋塑膠微粒調查計畫之數據",
+      "cluster": "資料疊合等級",
+      "concentraion": "濃度",
+      "pieces": "件",
+      "Very Low": "極低",
+      "Low": "低",
+      "Medium": "中等",
+      "High": "高",
+      "Very High": "極高"
     }
   },
   "DataInfo": {
@@ -194,12 +234,12 @@
     "instant": "瞬時",
     "hr": "小時",
     "min": "分鐘",
-    "km": "公里",
     "m": "公尺",
+    "km": "公里",
+    "mean": "平均",
     "cwbRadar": "中央氣象局雷達回波",
     "cwbOpenData": "中央氣象局資料開放平台",
-    "madtDes": "使用",
-    "mean": "平均"
+    "madtDes": "使用"
   },
   "CPlanLayers": {
     "title": "航次規劃圖層",
@@ -344,7 +384,7 @@
       "selectUrl": "選擇所需要之網址或內建選項。",
       "serviceType": "選擇服務格式，通常網址就會有wms或wmts字樣。",
       "layerKeyword": "輸入圖層關鍵字。\n忽略大小寫之精確搜尋，可於字串任何地方用萬用字元「*」做模糊搜尋。\n空白、萬用字元則搜尋所有圖層。\n範例：\n「sea」搜尋sea圖層；「*sea」搜尋sea結尾圖層；「sea*」搜尋sea開頭圖層；「*sea*」搜尋包含sea的圖層。",
-      "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful WMTS。\n請注意WMTS在Z值超過上限時可能無法載入圖磚。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(col)、y(row)、z(matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/{z}/{y}/{x}.jpg\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg\n\nWMS: 請將BBOX移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256",
+      "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful WMTS。\n請注意WMTS在Z值超過上限時可能無法載入圖磚。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(col)、y(row)、z(matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg\n\nWMS: 請將BBOX移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256",
       "directAddLayers": "直接輸入圖層網址及參數直接加入圖層。\n請參考網址說明修改參數為正確格式。",
       "layerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。"
     }

@@ -66,3 +66,7 @@ export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"
 export type BioDataset = "all" | "odb" | "oca"
 
 export type BioFilter = "topic" | "taxon"
+
+export interface ComponentList {
+    [key: string]: JSX.Element
+}

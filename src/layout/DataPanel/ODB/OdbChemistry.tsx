@@ -2,7 +2,7 @@ import 'leaflet'
 import { useEffect, useRef, useState } from "react"
 import { GeoJSON } from "react-leaflet"
 import { LatLng } from "leaflet"
-import { Box, Checkbox, FormControlLabel, Slider, Typography, Grid } from '@mui/material'
+import { Box, Checkbox, FormControlLabel, Slider, Typography, Grid, Divider } from '@mui/material'
 import { useTranslation } from "react-i18next";
 import * as geojson from 'geojson';
 import Flatpickr from "react-flatpickr";
@@ -178,6 +178,7 @@ export const OdbChemistry = () => {
 
   return (
     <>
+      <Divider variant="middle" />
       <Box sx={{ margin: 1 }}>
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.dateRange')} 1988 ~ 2016
@@ -263,6 +264,7 @@ export const OdbChemistry = () => {
           })}
         </Grid>
       </Box>
+      <Divider variant="middle" />
       <MarkerCluster
         ref={refCluster}
         disableClusteringAtZoom={12}

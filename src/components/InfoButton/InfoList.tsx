@@ -540,6 +540,24 @@ const InfoList = (props: { dataId: string }) => {
           <Download fontSize='small' /> : {t('screenshot.info.download')}
         </Typography >
       )
+    case 'odbMicroPlastic':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('OdbData.plastic.description')}<br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.ncei.noaa.gov/products/microplastics" rel="noreferrer">NCEI Marine Microplastics</a><br />
+        </Typography >
+      )
+    case 'odbBio':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          {t('OdbData.Bio.description1')}<br />
+          {t('OdbData.Bio.description2')}<br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/bio/bio-ocean-database/" rel="noreferrer">{t('OdbData.Bio.source')}</a><br />
+          {t('DataInfo.others')}:<br />
+          {t('OdbData.Bio.description3')}<br />
+          {t('OdbData.Bio.others')}: <a target="_blank" href="https://bio.odb.ntu.edu.tw/query/" rel="noreferrer">BioQuery and OpenAPI</a>
+        </Typography >
+      )
   }
   return <></>
 }

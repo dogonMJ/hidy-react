@@ -17,15 +17,14 @@ import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
 import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
 import { WMSSelector } from './WMSSelector';
+import { ComponentList } from 'types';
 
 declare const L: any
 
 interface OnOff {
   [key: string]: boolean
 }
-interface ItemList {
-  [key: string]: JSX.Element
-}
+
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -43,7 +42,7 @@ const DataPanel = () => {
   const dispatch = useDispatch()
   const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
 
-  const itemList: ItemList = {
+  const itemList: ComponentList = {
     APIlayers: <APILayers />,
     CWBsites: <ToggleCWB />,
     Animated: <AnimatedCurrents />,
@@ -54,7 +53,7 @@ const DataPanel = () => {
     WMSSelector: < WMSSelector />,
     // WebMaps: <SatelliteWebMaps cache={cache} />
   }
-  const secLevelAll: ItemList = {
+  const secLevelAll: ComponentList = {
     ShipTrack: <ShipTrack />
   }
   const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})

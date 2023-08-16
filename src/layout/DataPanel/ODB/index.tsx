@@ -13,10 +13,11 @@ import { OdbGravity } from './OdbGravity';
 import { OdbCurrent } from './OdbCurrent';
 import { OdbSedCore } from './OdbSedCore';
 import { OdbChemistry } from './OdbChemistry';
-import { OdbOCC } from './OdbOCC';
+import { OdbBio } from './OdbBio';
+import { OdbMicroplastics } from './OdbMicroPlastics';
 import { SubSelection } from 'components/SubSelection';
+import { ComponentList } from 'types';
 
-const optionList = ['odbTopo', 'odbCtd', 'odbGravity', 'odbCurrent', 'odbSedCore', 'odbChemistry', 'odbOCC']
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -57,68 +58,67 @@ export const ODB = () => {
     })
     return res
   }
+  const componentList: ComponentList = {
+    odbTopo: <OdbTopo opacity={1} />,
+    odbCtd: <>
+      <SubSelection select={type} handleChange={handleCtdChange}>
+        {creatSelection(['t', 'sal', 'density'], 'OdbData')}
+      </SubSelection>
+      <RenderIf isTrue={!checked.includes('odbCurrent')}>
+        <SubSelection select={period} handleChange={handleCurChange}>
+          {creatSelection(['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter'], 'OdbData')}
+        </SubSelection>
+      </RenderIf>
+      <OdbCTD />
+    </>,
+    odbGravity: <OdbGravity opacity={1} />,
+    odbCurrent: <>
+      <SubSelection select={period} handleChange={handleCurChange}>
+        {creatSelection(['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter'], 'OdbData')}
+      </SubSelection>
+      <OdbCurrent />
+    </>,
+    odbSedCore: <OdbSedCore />,
+    odbChemistry: <OdbChemistry />,
+    odbBio: <OdbBio />,
+    odbMicroPlastic: < OdbMicroplastics />,
+    // WebMaps: <SatelliteWebMaps cache={cache} />
+  }
   return (
     <>
       <Divider variant="middle" />
       <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        {optionList.map((value) => {
+        {Object.keys(componentList).map((value) => {
           const labelId = `checkbox-list-label-${value}`;
           return (
-            <ListItem
-              id={`listOption_${value}`}
-              key={value}
-              disablePadding
-            >
-              <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-                <ListItemIcon>
-                  <Switch
-                    edge="start"
-                    checked={checked.indexOf(value) !== -1}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
-                  />
-                </ListItemIcon>
-                <ListItemText id={labelId} primary={t(`OdbData.${value}`)} />
-              </ListItemButton>
-              <InfoButton dataId={value} />
-            </ListItem>
+            <div key={value}>
+              <ListItem
+                id={`listOption_${value}`}
+                key={value}
+                disablePadding
+              >
+                <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                  <ListItemIcon>
+                    <Switch
+                      edge="start"
+                      checked={checked.indexOf(value) !== -1}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{ 'aria-labelledby': labelId }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText id={labelId} primary={t(`OdbData.${value}`)} />
+                </ListItemButton>
+                <InfoButton dataId={value} />
+              </ListItem>
+              <RenderIf isTrue={checked.includes(value)}>
+                {componentList[value]}
+              </RenderIf>
+            </div>
           );
         })}
       </List>
       <Divider variant="middle" />
-      <RenderIf isTrue={checked.includes('odbTopo')}>
-        <OdbTopo opacity={1} />
-      </RenderIf>
-      <RenderIf isTrue={checked.includes('odbCtd')}>
-        <SubSelection select={type} handleChange={handleCtdChange}>
-          {creatSelection(['t', 'sal', 'density'], 'OdbData')}
-        </SubSelection>
-        <RenderIf isTrue={!checked.includes('odbCurrent')}>
-          <SubSelection select={period} handleChange={handleCurChange}>
-            {creatSelection(['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter'], 'OdbData')}
-          </SubSelection>
-        </RenderIf>
-        <OdbCTD />
-      </RenderIf>
-      <RenderIf isTrue={checked.includes('odbGravity')}>
-        <OdbGravity opacity={1} />
-      </RenderIf>
-      <RenderIf isTrue={checked.includes('odbCurrent')}>
-        <SubSelection select={period} handleChange={handleCurChange}>
-          {creatSelection(['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter'], 'OdbData')}
-        </SubSelection>
-        <OdbCurrent />
-      </RenderIf>
-      <RenderIf isTrue={checked.includes('odbSedCore')}>
-        <OdbSedCore />
-      </RenderIf>
-      <RenderIf isTrue={checked.includes('odbChemistry')}>
-        <OdbChemistry />
-      </RenderIf>
-      <RenderIf isTrue={checked.includes('odbOCC')}>
-        <OdbOCC />
-      </RenderIf>
     </>
   )
 }
