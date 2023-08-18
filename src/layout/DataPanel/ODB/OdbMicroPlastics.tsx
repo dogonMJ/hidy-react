@@ -1,5 +1,6 @@
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Select, OutlinedInput, Box, Chip, MenuItem, Slider, Typography, Stack, Divider } from "@mui/material"
-import { useState, useEffect, useRef } from "react";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Select, OutlinedInput, Box, Chip, MenuItem, Slider, Typography, Stack, Divider, Link } from "@mui/material"
+import { useState, useEffect, useRef, SyntheticEvent } from "react";
+import { renderToString } from 'react-dom/server';
 import { GeoJSON } from "react-leaflet"
 import { LatLng } from "leaflet"
 import { SelectChangeEvent } from "@mui/material";
@@ -11,6 +12,7 @@ import 'flatpickr/dist/plugins/monthSelect/style.css'
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
 import { useTranslation } from "react-i18next";
+
 
 declare const L: any;
 
@@ -45,18 +47,48 @@ export const OdbMicroplastics = () => {
   const [date, setDate] = useState<string[]>([])
   const [lat, setLat] = useState<number[]>([10, 40]);
   const [lon, setLon] = useState<number[]>([109, 135]);
+  const [sliderLat, setSliderLat] = useState<number[]>([10, 40]);
+  const [sliderLon, setSliderLon] = useState<number[]>([109, 135]);
   const [clusterLevel, setClusterLevel] = useState<number>(8)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: L.Layer) => {
     const property = feature.properties
-    const content = `Date: ${property.eventDate}<br>
-    Location: ${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}<br>
-    Source: ${property.organization}<br>
-    Creator: ${property.creator}<br>
-    Type: ${property.measurementType}<br>
-    Density: ${property.densityClass}&nbsp;<b style="background:${levelList[property.densityClass].color};color:${levelList[property.densityClass].color}">●</b>
-    `
-    layer.bindTooltip(content)
+    const content = (
+      <Box>
+        {t('OdbData.date')}: {property.eventDate}<br />
+        {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br />
+        {t('OdbData.plastic.type')}: {property.measurementType}<br />
+        {t('OdbData.plastic.concentration')}:
+        {" "}{property.densityClass} {" "}
+        <b style={{
+          background: levelList[property.densityClass].color,
+          color: levelList[property.densityClass].color
+        }}>●</b>
+        <br />
+      </Box>
+    )
+    const refernce = property.DOI ?
+      (<Box>
+        {t('OdbData.source')}:<br />
+        {property.organization}<br />
+        {t('OdbData.cite')}:<br />
+        <Link href={property.DOI} target="_blank" rel="noreferrer" >
+          <Typography style={{ paddingLeft: '15px', textIndent: '-15px', margin: 0 }}>
+            {property.bibliographicCitation}
+          </Typography>
+        </Link>
+      </Box>)
+      :
+      (<Box>
+        {t('OdbData.source')}:<br />
+        {property.organization}<br />
+        {t('OdbData.cite')}:<br />
+        <Typography style={{ paddingLeft: '15px', textIndent: '-15px', margin: 0 }}>
+          {property.bibliographicCitation}
+        </Typography>
+      </Box>)
+    layer.bindPopup(renderToString(content) + renderToString(refernce))
+    layer.bindTooltip(renderToString(content))
   }
 
   const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlang: LatLng) => {
@@ -84,9 +116,15 @@ export const OdbMicroplastics = () => {
     }
   }
   const handleLatChange = (event: Event, newValue: number | number[]) => {
-    setLat(newValue as number[]);
+    setSliderLat(newValue as number[]);
   };
   const handleLonChange = (event: Event, newValue: number | number[]) => {
+    setSliderLon(newValue as number[]);
+  };
+  const handleLatChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
+    setLat(newValue as number[]);
+  };
+  const handleLonChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     setLon(newValue as number[]);
   };
   const handleClusterLevelChange = (event: Event, newValue: number | number[]) => {
@@ -117,7 +155,7 @@ export const OdbMicroplastics = () => {
       refCluster.current.clearLayers()
       ref.current.clearLayers()
     }
-  }, [levels, dataset, lon, lat, date])
+  }, [levels, dataset, lon, lat, date, t])
 
   return (
     <>
@@ -160,8 +198,9 @@ export const OdbMicroplastics = () => {
             {t('OdbData.chemistryList.latRange')}&plusmn;90&deg;
           </Typography>
           <Slider
-            value={lat}
+            value={sliderLat}
             onChange={handleLatChange}
+            onChangeCommitted={handleLatChangeCommitted}
             min={-90}
             max={90}
             valueLabelDisplay="auto"
@@ -172,8 +211,9 @@ export const OdbMicroplastics = () => {
             {t('OdbData.chemistryList.lonRange')}&plusmn;180&deg;
           </Typography>
           <Slider
-            value={lon}
+            value={sliderLon}
             onChange={handleLonChange}
+            onChangeCommitted={handleLonChangeCommitted}
             min={-180}
             max={180}
             valueLabelDisplay="auto"
@@ -194,7 +234,7 @@ export const OdbMicroplastics = () => {
             sx={{ width: '85%', marginLeft: 2.1 }}
           />
           <Typography variant="subtitle2" gutterBottom>
-            {t('OdbData.select')}{t('OdbData.plastic.concentraion')} ({t('OdbData.plastic.pieces')}/m<sup>3</sup>)
+            {t('OdbData.select')}{t('OdbData.plastic.concentration')} ({t('OdbData.plastic.pieces')}/m<sup>3</sup>)
           </Typography>
           <Select
             multiple

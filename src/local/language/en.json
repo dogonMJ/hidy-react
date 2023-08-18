@@ -143,11 +143,15 @@
     "SW": "SW Monsoon",
     "dataset": "Dataset",
     "filter": "Filter",
-    "select": "Select",
+    "select": "Select ",
     "nodata": "No Data",
     "all": "All",
     "OCA": "OCA, Taiwan",
     "NCEI": "NCEI, USA",
+    "date": "Date",
+    "source": "Source",
+    "cite": "Citation",
+    "location": "Location",
     "sedCoreLegend": {
       "SG": "Shipek Grab (SG)",
       "GC": "Gravity Core (GC)",
@@ -179,6 +183,7 @@
       "pH_total": "pH (total)",
       "Alk": "Total Alkalinity",
       "source": "Bottle sampling data stored in ODB Marine Database.",
+      "others": "Advanced Tools",
       "description": "Select data in certain spatiotemporal range.\nThe map shows all sites include ANY of the selected parameters and depths.\nEach point on the map shows sampling location, sampling time, depth, cruise ID, and other measured parameters.\nIf the points are overlapping, zoom back until the cluster point appears. Click to cluster to show each point."
     },
     "Bio": {
@@ -186,6 +191,8 @@
       "composition": "Composition",
       "topic": "Topics",
       "taxon": "Taxa",
+      "rank": "Rank",
+      "name": "Name",
       "grid": "Grid",
       "search": "Search taxon by name",
       "by": "By ",
@@ -196,21 +203,25 @@
       "eDNA fish": "Fish eDNA",
       "macrobenthos": "Macrobenthos",
       "source": "ODB Bio-ocean Database",
-      "description1": "The Bio-Ocean Database compiles biological trawling data from waters around Taiwan.\nThis data encompasses projects by the National Science and Technology Council, published papers, researcher contributions, and international open databases.",
+      "source2": "Detailed sources labeled on each point.",
+      "description1": "The Bio-Ocean Database compiles Taiwan's marine trawling data, including Ocean Conservation Administration (OCA) or National Science and Technology Council (NSC) sponsored research projects, academic papers, researcher contributions, and global databases.",
       "description2": "Mouse hover shows sampling date, location, data source, and topic. Click to display species, and taxon rank. <group> means mixture",
       "description3": "To apply detailed data, please contact ODB technicians.",
       "others": "Advanced Tools"
     },
     "plastic": {
-      "description": "The NCEI Marine Microplastics product provides access to aggregated global data on microplastics in marine settings.",
+      "description1": "The NCEI Marine Microplastics product provides access to aggregated global data on microplastics in marine settings.",
+      "description2": "Project surveys by Ocean Conservation Administration (OCA), Ocean Affairs Council.",
+      "OCAfull": "OCA projects (Ch.)",
       "cluster": "Data Cluster Level",
-      "concentraion": "Concentration",
+      "concentration": "Concentration",
       "pieces": "pieces",
       "Very Low": "Very Low",
       "Low": "Low",
       "Medium": "Medium",
       "High": "High",
-      "Very High": "Very High"
+      "Very High": "Very High",
+      "type": "Type"
     }
   },
   "DataInfo": {

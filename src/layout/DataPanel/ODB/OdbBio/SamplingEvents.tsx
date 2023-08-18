@@ -1,5 +1,6 @@
-import { Select, OutlinedInput, Box, Chip, MenuItem, Slider, Typography, Autocomplete, TextField, Modal } from "@mui/material"
-import { useState, useEffect, useRef } from "react";
+import { Select, OutlinedInput, Box, Chip, MenuItem, Slider, Typography, Autocomplete, TextField, Modal, Link } from "@mui/material"
+import { useState, useEffect, useRef, SyntheticEvent } from "react";
+import { renderToString } from 'react-dom/server';
 import { GeoJSON, useMap } from "react-leaflet"
 import { LatLng } from "leaflet"
 import { SelectChangeEvent } from "@mui/material";
@@ -45,32 +46,54 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const [date, setDate] = useState<string[]>([])
   const [lat, setLat] = useState<number[]>([10, 40]);
   const [lon, setLon] = useState<number[]>([109, 135]);
+  const [sliderLat, setSliderLat] = useState<number[]>([10, 40]);
+  const [sliderLon, setSliderLon] = useState<number[]>([109, 135]);
   const [eventID, setEventID] = useState<string>('')
+  const [cite, setCite] = useState<StringObject>({ cite: '', source: '' })
   const [clusterLevel, setClusterLevel] = useState<number>(8)
   const [openModal, setOpenModal] = useState(false)
+  const [inputValue, setInputValue] = useState('')
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: L.Layer) => {
     const property = feature.properties
-    let content = ''
+    let content;
     if (property.canonicalName) {
-      content = `Date: ${property.eventDate}<br>
-        Location: ${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}<br>
-        Source: ${property.dataSource}<br>
-        Topic: ${property.dataTopic}<br>
-        Rank: ${property.taxonRank}<br>
-        Name: ${property.canonicalName}<br>
-    `
+      content = (
+        <Box>
+          {t('OdbData.date')}: {property.eventDate}<br />
+          {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br />
+          {t('OdbData.Bio.topic')}: {property.dataTopic}<br />
+          {t('OdbData.Bio.rank')}: {property.taxonRank}<br />
+          {t('OdbData.Bio.name')}: {property.canonicalName}
+        </Box>
+      )
     } else {
-      content = `Date: ${property.eventDate}<br>
-        Location: ${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}<br>
-        Source: ${property.dataSource}<br>
-        Topic: ${property.dataTopic}
-    `
+      content = (
+        <Box>
+          {t('OdbData.date')}: {property.eventDate}<br />
+          {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br />
+          {t('OdbData.Bio.topic')}: {property.dataTopic}
+        </Box>
+      )
     }
-    layer.bindTooltip(content)
+    layer.bindTooltip(renderToString(content))
+    if (filter === 'taxon') {
+      const addContent =
+        (<Box>
+          {t('OdbData.source')}:{" "}
+          {property.dataSource.startsWith('http') ? <Link href={property.dataSource} target="_blank" rel="noreferrer">Link</Link> : `${property.dataSource}`}<br />
+          {t('OdbData.cite')}:<br />
+          <Typography style={{ paddingLeft: '15px', textIndent: '-15px', margin: 0 }}>
+            {property.bibliographicCitation}
+          </Typography>
+        </Box>)
+
+      layer.bindPopup(renderToString(content) + renderToString(addContent))
+    }
     layer.on({
       click: () => {
         setEventID(property.eventID)
+        setCite({ cite: property.bibliographicCitation, source: property.dataSource })
         filter === 'topic' ? setOpenModal(true) : setOpenModal(false)
       }
     })
@@ -101,9 +124,15 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     }
   }
   const handleLatChange = (event: Event, newValue: number | number[]) => {
-    setLat(newValue as number[]);
+    setSliderLat(newValue as number[]);
   };
   const handleLonChange = (event: Event, newValue: number | number[]) => {
+    setSliderLon(newValue as number[]);
+  };
+  const handleLatChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
+    setLat(newValue as number[]);
+  };
+  const handleLonChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     setLon(newValue as number[]);
   };
   const handleClusterLevelChange = (event: Event, newValue: number | number[]) => {
@@ -141,7 +170,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           refCluster.current.addLayers(ref.current.getLayers())
         }
       })
-  }, [taxon, topics, dataset, lon, lat, date, filter])
+  }, [taxon, topics, dataset, lon, lat, date, filter, t])
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxopt/${dataset}`)
@@ -174,8 +203,9 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           {t('OdbData.chemistryList.latRange')} 10 ~ 40&deg;N
         </Typography>
         <Slider
-          value={lat}
+          value={sliderLat}
           onChange={handleLatChange}
+          onChangeCommitted={handleLatChangeCommitted}
           min={10}
           max={40}
           valueLabelDisplay="auto"
@@ -186,8 +216,9 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           {t('OdbData.chemistryList.lonRange')} 109 ~ 135&deg;E
         </Typography>
         <Slider
-          value={lon}
+          value={sliderLon}
           onChange={handleLonChange}
+          onChangeCommitted={handleLonChangeCommitted}
           min={109}
           max={135}
           valueLabelDisplay="auto"
@@ -201,7 +232,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           value={clusterLevel}
           onChange={handleClusterLevelChange}
           min={0}
-          max={10}
+          max={15}
           valueLabelDisplay="auto"
           marks
           track={false}
@@ -249,7 +280,10 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
             disableClearable
             options={taxaList.map((taxon) => taxon)}
             onChange={handleTaxaChange}
-            defaultValue={taxon === '' ? undefined : taxon}
+            inputValue={inputValue}
+            onInputChange={(_, newInputValue) => {
+              setInputValue(newInputValue)
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -274,7 +308,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
         open={openModal}
         onClose={handleModalClose}
       >
-        <BioTableAtPoint eventID={eventID} />
+        <BioTableAtPoint eventID={eventID} citation={cite} />
       </Modal>
     </>
   )
