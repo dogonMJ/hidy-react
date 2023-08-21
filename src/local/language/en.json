@@ -204,8 +204,8 @@
       "macrobenthos": "Macrobenthos",
       "source": "ODB Bio-ocean Database",
       "source2": "Detailed sources labeled on each point.",
-      "description1": "The Bio-Ocean Database compiles Taiwan's marine trawling data, including Ocean Conservation Administration (OCA) or National Science and Technology Council (NSC) sponsored research projects, academic papers, researcher contributions, and global databases.",
-      "description2": "Mouse hover shows sampling date, location, data source, and topic. Click to display species, and taxon rank. <group> means mixture",
+      "description1": "The Bio-Ocean Database compiles Taiwan's marine trawling data. ODB dataset includes National Science and Technology Council (NSC) sponsored research projects, academic papers, researcher contributions, and global databases; Ocean Conservation Administration (OCA) dataset includes its sponsored research projects.",
+      "description2": "Mouse hover shows sampling date, location, data source, and topic. Click to display species, and taxon rank. <group> means unidentified to the specific taxonomic group.",
       "description3": "To apply detailed data, please contact ODB technicians.",
       "others": "Advanced Tools"
     },

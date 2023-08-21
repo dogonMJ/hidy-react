@@ -51,7 +51,7 @@ export const OdbMicroplastics = () => {
   const [sliderLon, setSliderLon] = useState<number[]>([109, 135]);
   const [clusterLevel, setClusterLevel] = useState<number>(8)
 
-  const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: L.Layer) => {
+  const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layers: L.LayerGroup) => {
     const property = feature.properties
     const content = (
       <Box>
@@ -87,13 +87,18 @@ export const OdbMicroplastics = () => {
           {property.bibliographicCitation}
         </Typography>
       </Box>)
-    layer.bindPopup(renderToString(content) + renderToString(refernce))
-    layer.bindTooltip(renderToString(content))
+    layers.getLayers().forEach((layer: L.Layer) => {
+      layer.bindPopup(renderToString(content) + renderToString(refernce))
+      layer.bindTooltip(renderToString(content))
+    })
   }
 
-  const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlang: LatLng) => {
+  const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlng: LatLng) => {
     const density = feature.properties.densityClass as string
-    return new L.CircleMarker(latlang, { radius: 4, weight: 2, color: levelList[density].color })
+    const marker = new L.CircleMarker(latlng, { radius: 4, weight: 2, color: levelList[density].color })
+    const shiftedMarker = new L.CircleMarker([latlng.lat, latlng.lng + 360], { radius: 4, weight: 2, color: levelList[density].color })
+    const markerGroup = L.layerGroup([marker, shiftedMarker]);
+    return markerGroup
   }
 
   const handleLevelChange = (event: SelectChangeEvent<typeof levels>) => {

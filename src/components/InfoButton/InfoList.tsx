@@ -557,7 +557,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`OdbData.odbBio`)}</b><br />
-          {t('OdbData.Bio.description1')}<br />
+          {t('OdbData.Bio.description1')}<br /><br />
           {t('OdbData.Bio.description2')}<br /><br />
           <b>{t('DataInfo.source')}:</b> <br />
           <a target="_blank" href="https://www.odb.ntu.edu.tw/bio/bio-ocean-database/" rel="noreferrer">{t('OdbData.Bio.source')}</a>; {t('OdbData.Bio.source2')}<br />
