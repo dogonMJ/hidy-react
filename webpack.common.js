@@ -3,16 +3,24 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 require('dotenv').config({ path: './.env' });
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
 
 module.exports = {
   entry: {
     app: './src/index.tsx',
+    // sw: './src/service-worker.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'bundle.js',
+    // filename: 'bundle.js',
     clean: true,
     assetModuleFilename: 'assets/[hash][ext]',
+    filename: ({ runtime }) => {
+      if (runtime === 'sw') {
+        return '[name].js';
+      }
+      return 'bundle.js';
+    },
   },
   module: {
     //rules的值是一個陣列可以存放多個loader物件
@@ -55,6 +63,10 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       "process.env": JSON.stringify(process.env)
+    }),
+    new InjectManifest({
+      swSrc: './src/service-worker.ts',
+      swDest: 'sw.js',
     })
   ],
   resolve: {

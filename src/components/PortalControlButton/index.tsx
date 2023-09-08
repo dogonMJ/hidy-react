@@ -23,10 +23,10 @@ export const PortalControlButton: React.FC<ControlButtonProps> = (props) => {
   L.DomEvent.disableClickPropagation(container)
 
   useEffect(() => {
-    if (position === "topleft" || position === "topright") {
-      const targetDiv = document.getElementsByClassName(positionClass)[0]
-      setContainer(targetDiv)
-    }
+    // if (position === "topleft" || position === "topright") {
+    const targetDiv = document.getElementsByClassName(positionClass)[0]
+    setContainer(targetDiv)
+    // }
   }, [])
   return createPortal(
     <div className={className} {...rest} tabIndex={-1}>

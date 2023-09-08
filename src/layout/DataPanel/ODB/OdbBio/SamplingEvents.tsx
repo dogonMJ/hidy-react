@@ -3,6 +3,8 @@ import { useState, useEffect, useRef, SyntheticEvent } from "react";
 import { renderToString } from 'react-dom/server';
 import { GeoJSON, useMap } from "react-leaflet"
 import { LatLng } from "leaflet"
+import { useSelector } from "react-redux";
+import { RootState } from "store/store"
 import { SelectChangeEvent } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import * as geojson from 'geojson';
@@ -14,6 +16,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import MarkerCluster from '@changey/react-leaflet-markercluster'
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { RenderIf } from "components/RenderIf/RenderIf";
+import FormatCoordinate from "components/FormatCoordinate";
 import { BioTableAtPoint } from "./BioTableAtPoint";
 import { category23 } from "./utils";
 
@@ -38,6 +41,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const ref = useRef<any>()
   const refCluster = useRef<any>()
   const map = useMap()
+  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [topics, setTopics] = useState<string[]>([])
   const [taxon, setTaxon] = useState<string>('')
   const [taxaList, setTaxaList] = useState<string[]>([''])
@@ -60,19 +64,21 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     if (property.canonicalName) {
       content = (
         <Box>
+          {/* {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br /> */}
+          <FormatCoordinate coords={feature.geometry.coordinates} format={latlonFormat} /><br />
           {t('OdbData.date')}: {property.eventDate}<br />
-          {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br />
-          {t('OdbData.Bio.topic')}: {property.dataTopic}<br />
-          {t('OdbData.Bio.rank')}: {property.taxonRank}<br />
+          {t('OdbData.Bio.topic')}: {t(`OdbData.Bio.${property.dataTopic}`)}<br />
+          {t('OdbData.Bio.rank')}: {t(`OdbData.Bio.${property.taxonRank}`)}<br />
           {t('OdbData.Bio.name')}: {property.canonicalName}
         </Box>
       )
     } else {
       content = (
         <Box>
+          {/* {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br /> */}
+          <FormatCoordinate coords={feature.geometry.coordinates} format={latlonFormat} /><br />
           {t('OdbData.date')}: {property.eventDate}<br />
-          {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br />
-          {t('OdbData.Bio.topic')}: {property.dataTopic}
+          {t('OdbData.Bio.topic')}: {t(`OdbData.Bio.${property.dataTopic}`)}
         </Box>
       )
     }

@@ -1,9 +1,8 @@
 import 'leaflet'
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
+import { useRef } from 'react';
+import { useDispatch } from "react-redux";
 import { coordInputSlice } from "store/slice/mapSlice";
-import { LayersControl, MapContainer, ZoomControl } from 'react-leaflet'
+import { MapContainer, ZoomControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
@@ -21,33 +20,20 @@ import 'leaflet-measure/dist/leaflet-measure.css';
 import { account } from 'Utils/UtilsAccount'
 import { SignInControl } from 'components/SignInControl';
 import { CustomScaleControl } from 'components/CustomScaleControl';
-import { ScaleUnitType } from 'types'
 import { ScreenshotControl } from 'components/ScreenshotControl';
 import { Graticule } from 'components/Graticule/index';
 import { Stack } from '@mui/material';
 declare const L: any;
 
-interface UnitSwitch {
-  [index: string]: ScaleUnitType
-}
-const unitSwitch: UnitSwitch = {
-  'metric': 'nautical',
-  'nautical': 'imperial',
-  'imperial': 'metric',
-}
-
 const LeafletMap = () => {
   const mapRef = useRef<any>()
-  const ref = useRef<any>()
   const dispatch = useDispatch()
   const timeNow = new Date()
-  const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
     dispatch(coordInputSlice.actions.userInfo(userInfo))
   }
   checkLogin()
-
   return (
     <>
       <Flatpickr
@@ -66,7 +52,6 @@ const LeafletMap = () => {
       />
       <MapContainer
         ref={mapRef}
-        key={scaleUnit} //to update map
         id='mapContainer'
         className='mapContainer'
         center={[23.5, 121]}
@@ -91,13 +76,7 @@ const LeafletMap = () => {
           <ScreenshotControl position="topright" />
           <SeafloorControl />
         </Stack>
-        <CustomScaleControl
-          ref={ref}
-          metric={scaleUnit === 'metric' ? true : false}
-          nautical={scaleUnit === 'nautical' ? true : false}
-          imperial={scaleUnit === 'imperial' ? true : false}
-          onClick={() => dispatch(coordInputSlice.actions.scaleUnitSwitch(scaleUnit))}
-        />
+        <CustomScaleControl />
         <MouseCoordinates />
         <DataPanel />
         <DragDrop />

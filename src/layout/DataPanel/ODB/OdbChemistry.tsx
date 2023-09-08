@@ -2,8 +2,12 @@ import 'leaflet'
 import { useEffect, useRef, useState } from "react"
 import { GeoJSON } from "react-leaflet"
 import { LatLng } from "leaflet"
+import { renderToString } from 'react-dom/server';
+import { useSelector } from "react-redux";
+import { RootState } from "store/store"
 import { Box, Checkbox, FormControlLabel, Slider, Typography, Grid, Divider } from '@mui/material'
 import { useTranslation } from "react-i18next";
+import FormatCoordinate from "components/FormatCoordinate";
 import * as geojson from 'geojson';
 import Flatpickr from "react-flatpickr";
 import 'flatpickr/dist/plugins/monthSelect/style.css'
@@ -24,6 +28,7 @@ export const OdbChemistry = () => {
   const ref = useRef<any>()
   const refCluster = useRef<any>()
   const { t } = useTranslation()
+  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [data, setData] = useState<any>()
   const [lat, setLat] = useState<number[]>([3, 33]);
   const [lon, setLon] = useState<number[]>([106, 128]);
@@ -113,13 +118,24 @@ export const OdbChemistry = () => {
   const onEachFeature = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
     if (feature.geometry.type === 'Point') {
       const property = feature.properties
-      const content = `${property.ship}-${property.cruise}<br>
-    ${property.date} ${property.time}<br>
-    Location: ${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}<br>
-    Depths (m): ${handleJsonStringList(property.depths).join(', ')}<br>
-    Parameters: ${handleJsonStringList(property.parameters).join(', ')}
-    `
-      layer.bindTooltip(content)
+      const content = (
+        <Box>
+          <FormatCoordinate coords={feature.geometry.coordinates} format={latlonFormat} /><br />
+          {t('OdbData.date')}: {property.date} {property.time}<br />
+          {t('OdbData.chemistryList.cruise')}: {property.ship}-{property.cruise}<br />
+          {t('OdbData.depth')}: {handleJsonStringList(property.depths).join(', ')} m<br />
+          {t('OdbData.chemistryList.para')}: {handleJsonStringList(property.parameters).join(', ')}
+        </Box>
+      )
+      layer.bindTooltip(renderToString(content))
+      //   const property = feature.properties
+      //   const content = `${property.ship}-${property.cruise}<br>
+      // ${property.date} ${property.time}<br>
+      // Location: ${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}<br>
+      // Depths (m): ${handleJsonStringList(property.depths).join(', ')}<br>
+      // Parameters: ${handleJsonStringList(property.parameters).join(', ')}
+      // `
+      // layer.bindTooltip(content)
     }
   }
   const styleFunc = () => {
@@ -174,7 +190,7 @@ export const OdbChemistry = () => {
           refCluster.current.addLayers(ref.current.getLayers())
         }
       })
-  }, [lat, lon, depthIndex, date, parameters])
+  }, [lat, lon, depthIndex, date, parameters, t])
 
   return (
     <>

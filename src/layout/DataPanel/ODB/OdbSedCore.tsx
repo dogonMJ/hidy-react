@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { coor, Legend } from 'types';
 import L, { LatLng } from 'leaflet';
+import { Box } from '@mui/material';
 import { LegendControl } from "components/LeafletLegend"
 import { useTranslation } from 'react-i18next';
 import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
@@ -11,28 +12,32 @@ export const OdbSedCore = () => {
   const { t } = useTranslation()
   const [data, setData] = useState<any>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState<string | JSX.Element>('')
 
   const sedColors: Legend = {
     'SG': {
       "color": "#ff7800",
-      "description": t('OdbData.sedCoreLegend.SG')
+      "description": t('OdbData.sedCore.SG')
     },
     'GC': {
       "color": "#5bc2e7",
-      "description": t('OdbData.sedCoreLegend.GC')
+      "description": t('OdbData.sedCore.GC')
     },
-    'B': {
+    'BC': {
       "color": "#8fce00",
-      "description": t('OdbData.sedCoreLegend.B')
+      "description": t('OdbData.sedCore.BC')
     },
-    'GHP': {
-      "color": "#8e7cc3",
-      "description": t('OdbData.sedCoreLegend.GHP')
-    },
+    // 'GHP': {
+    //   "color": "#8e7cc3",
+    //   "description": t('OdbData.sedCore.GHP')
+    // },
     'PC': {
       "color": "#ffed00",
-      "description": t('OdbData.sedCoreLegend.PC')
+      "description": t('OdbData.sedCore.PC')
+    },
+    'MC': {
+      "color": "#8e7cc3",
+      "description": t('OdbData.sedCore.MC')
     },
   }
   const contents: string[] = []
@@ -41,18 +46,35 @@ export const OdbSedCore = () => {
   })
 
   const mouseOver = (e: any) => {
+    const geometry = e.layer.feature.geometry
     const property = e.layer.feature.properties
-    const content = `Type:\n${property.instruid_tw}\n\t${property.instruid_en} (${property.instruid_ab})\nData Time:\n${property.tim0}\nCruise: ${property.ship}-${property.cruise}\nSite: ${property.sn}\nPI: ${property.PI}`
-    setPosition({ lat: property.latitude, lng: property.longitude })
+    const content = (
+      // <Box>
+      //   {t('OdbData.sedCore.type')}:{t(`OdbData.sedCore.${property.instruid_ab}`)}<br />
+      //   {t('OdbData.sedCore.dataTime')}:{property.tim0}<br />
+      //   {t('OdbData.sedCore.cr')}: {property.ship}-{property.cruise}<br />
+      //   {t('OdbData.sedCore.site')}: {property.sn}<br />
+      //   {t('OdbData.sedCore.PI')}: {property.PI}
+      // </Box>
+      <Box>
+        {t('OdbData.sedCore.type')}:{t(`OdbData.sedCore.${property.device}`)}<br />
+        {t('OdbData.sedCore.dataTime')}:{property.date}<br />
+        {t('OdbData.sedCore.cr')}: {property.name}<br />
+        {t('OdbData.sedCore.site')}: {property.station}<br />
+        {t('OdbData.sedCore.cast')}: {property.cast}<br />
+        {t('OdbData.sedCore.bottom_d')}: {property.bottom_dep}<br />
+        {t('OdbData.sedCore.lower_d')}: {property.lower_dept}
+      </Box>
+    )
+    setPosition({ lat: geometry.coordinates[1], lng: geometry.coordinates[0] })
     setContent(content)
   }
-
   const pointToLayer = (f: any, latlang: LatLng) => {
     return new L.CircleMarker(latlang)
   }
 
   const styleFunc = (feature: any) => {
-    const instrument = feature.properties.instruid_ab
+    const instrument = feature.properties.device
     if (instrument) {
       return {
         color: sedColors[instrument].color,
@@ -70,7 +92,7 @@ export const OdbSedCore = () => {
     }
   }
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/sedcore.json`)
+    fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/sedcore_OR1.json`)
       .then((response) => response.json())
       .then((json) => {
         setData(json)

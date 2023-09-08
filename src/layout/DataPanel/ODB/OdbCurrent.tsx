@@ -2,7 +2,8 @@ import { GeoJSON } from 'react-leaflet'
 import { useEffect, useState, useRef } from 'react'
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
-import { coor, SliderMarks, StringObject } from 'types';
+import { Box } from '@mui/material';
+import { coor, SliderMarks } from 'types';
 import 'leaflet'
 import 'leaflet-canvas-markers'
 import { DepthMeter } from 'components/DepthlMeter';
@@ -10,7 +11,8 @@ import { LegendControl } from "components/LeafletLegend"
 import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
 // import ArrowRight from 'assets/images/straight-right-arrow.svg';
 import Arrow from 'assets/images/ArrowUp.svg'
-
+import { useTranslation } from 'react-i18next';
+import { periodTransform } from 'Utils/UtilsODB';
 declare const L: any;
 
 // const legendColors: StringObject = {
@@ -32,15 +34,7 @@ adcpDepths.forEach((depth, i) => {
     })
   }
 })
-const periodTransform: StringObject = {
-  'avg': '0',
-  'NE': '13',
-  'SW': '4',
-  'spring': '15',
-  'summer': '16',
-  'fall': '17',
-  'winter': '18'
-}
+
 const calSpd = (u: number, v: number) => Math.sqrt(u ** 2 + v ** 2)
 const calDir = (u: number, v: number) => {
   const dir = 90 - Math.atan2(v, u) * 180 / Math.PI;
@@ -53,9 +47,10 @@ const calDir = (u: number, v: number) => {
 
 export const OdbCurrent = () => {
   const ref = useRef<any>()
+  const { t } = useTranslation()
   const [data, setData] = useState<any>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState<string | JSX.Element>('')
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
   const legendContent = `<img src=${Arrow} height=20 width=10><span style="margin-left:8px;">0.5 m/s</span>`
@@ -66,10 +61,18 @@ export const OdbCurrent = () => {
     const v = Number(property.v)
     const spd = calSpd(u, v)
     const dir = calDir(u, v)
+    const content = (
+      <Box>
+        {t('OdbData.spd')}: {spd.toFixed(3)} m/s<br />
+        {t('OdbData.dir')}: {dir.toFixed(3)}<br />
+        {t('OdbData.u')}: {u.toFixed(3)} m/s<br />
+        {t('OdbData.v')}: {v.toFixed(3)} m/s<br />
+        {t('OdbData.count')}: {property.count}
+      </Box>
+    )
     setPosition(e.latlng)
-    setContent(`speed: ${spd.toFixed(3)} m/s\nu: ${u.toFixed(3)} m/s\nv: ${v.toFixed(3)} m/s\ndirection: ${dir.toFixed(1)}\ncount: ${property.count}`)
+    setContent(content)
   }
-
   const pointToLayer = (feature: any, layer: L.LatLng) => {
     const property = feature.properties
     const u = Number(property.u)
@@ -90,8 +93,8 @@ export const OdbCurrent = () => {
   }
   useEffect(() => {
     const depth = depthMeterValue ? adcpDepths[depthMeterValue] ? -adcpDepths[depthMeterValue] : 20 : 20
-    const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?dep0=${depth}&dep_mode=exact&format=geojson&mode=${periodTransform[period]}&append=u,v,count&mean_threshold=10`
-    // const url = `https://odbpo.oc.ntu.edu.tw/static/figs/odb/adcp/adcp_grid15moa_${period}${depth}.json`
+    const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&format=geojson&mode=${periodTransform[period]}&append=u,v,count&mean_threshold=10`
+
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
@@ -99,7 +102,7 @@ export const OdbCurrent = () => {
         ref.current.clearLayers()
         ref.current.addData(json)
       })
-  }, [depthMeterValue, period])
+  }, [depthMeterValue, period, t])
 
   return (
     <>

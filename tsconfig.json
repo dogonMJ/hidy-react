@@ -22,6 +22,8 @@
     "baseUrl": "src", //add
   },
   "include": [
-    "src"
+    "src",
+    "src/service-worker.ts",
+    "public/sw.js"
   ]
 }

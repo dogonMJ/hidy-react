@@ -57,6 +57,7 @@ const ProcWMS = (props: Urls) => {
 
   if (noTileCached(tileProps, key)) {
     tileProps.push(propsWMS(api, time, key, depth))
+    console.log(tileProps)
   }
 
   const clearPreload = () => {

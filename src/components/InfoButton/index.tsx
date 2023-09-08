@@ -37,7 +37,7 @@ const InfoButton = (props: InfoButtonProps) => {
         onClose={handleClose}
         anchorOrigin={anchorOrigin}
         transformOrigin={transformOrigin}
-        sx={{ maxWidth: '65vw' }}
+        sx={{ maxWidth: '50vw' }}
       >
         <InfoList dataId={dataId} />
       </Popover>

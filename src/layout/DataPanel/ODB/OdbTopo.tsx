@@ -83,7 +83,7 @@ Object.keys(sedColors).forEach((key) => {
 })
 contents.unshift('<string>Depth (m)</string>')
 export const OdbTopo = React.memo((props: { opacity: number }) => {
-  const url = 'https://seaimage.oc.ntu.edu.tw/geoserver/odb/wms?'
+  const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbgeo/wms?`
   const params = {
     layers: 'odb:topo_hidy',
     transparent: true,

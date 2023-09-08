@@ -1,7 +1,7 @@
 {
   "GHRSST_L4_MUR_Sea_Surface_Temperature": {
-    "type": "wmts",
-    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi",
+    "type": "wms",
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi",
     "layer": "GHRSST_L4_MUR_Sea_Surface_Temperature",
     "duration": "P1D",
     "style": "default",

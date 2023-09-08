@@ -47,7 +47,7 @@ export const LineChart = forwardRef((
             onMouseLeave={enableMapAction}
             style={{
               backgroundColor: '#e0e0e0',
-              width: 800,
+              width: layout.width,
               height: 50,
             }}
           >

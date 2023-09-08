@@ -1,10 +1,13 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Select, OutlinedInput, Box, Chip, MenuItem, Slider, Typography, Stack, Divider, Link } from "@mui/material"
 import { useState, useEffect, useRef, SyntheticEvent } from "react";
 import { renderToString } from 'react-dom/server';
+import { useSelector } from "react-redux";
+import { RootState } from "store/store"
 import { GeoJSON } from "react-leaflet"
 import { LatLng } from "leaflet"
 import { SelectChangeEvent } from "@mui/material";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
+import FormatCoordinate from "components/FormatCoordinate";
 import * as geojson from 'geojson';
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import Flatpickr from "react-flatpickr";
@@ -12,7 +15,6 @@ import 'flatpickr/dist/plugins/monthSelect/style.css'
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
 import { useTranslation } from "react-i18next";
-
 
 declare const L: any;
 
@@ -40,6 +42,7 @@ export const OdbMicroplastics = () => {
   const { t } = useTranslation()
   const ref = useRef<any>()
   const refCluster = useRef<any>()
+  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [levels, setLevels] = useState<string[]>([])
   const [dataset, setDataset] = useState('all')
   const [openAlert, setOpenAlert] = useState(false)
@@ -55,11 +58,12 @@ export const OdbMicroplastics = () => {
     const property = feature.properties
     const content = (
       <Box>
+        {/* {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br /> */}
+        <FormatCoordinate coords={feature.geometry.coordinates} format={latlonFormat} /><br />
         {t('OdbData.date')}: {property.eventDate}<br />
-        {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br />
         {t('OdbData.plastic.type')}: {property.measurementType}<br />
         {t('OdbData.plastic.concentration')}:
-        {" "}{property.densityClass} {" "}
+        {" "}{t(`OdbData.plastic.${property.densityClass}`)} {" "}
         <b style={{
           background: levelList[property.densityClass].color,
           color: levelList[property.densityClass].color

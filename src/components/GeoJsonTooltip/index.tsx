@@ -6,19 +6,20 @@ import { coor } from "types";
 import { TooltipProps } from "react-leaflet";
 import FormatCoordinate from "components/FormatCoordinate";
 
-export const GeoJsonTooltip = (props: { position: coor | null | undefined, content: string, tooltipProps?: TooltipProps }) => {
+export const GeoJsonTooltip = (props: { position: coor | null | undefined, content: string | JSX.Element, tooltipProps?: TooltipProps }) => {
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
-  if (props.position) {
+  const { position, content, tooltipProps } = props
+  if (position) {
     return (
-      <Tooltip {...props.tooltipProps}>
-        <FormatCoordinate coords={props.position} format={latlonFormat} /><br />
-        <span style={{ whiteSpace: 'pre-line' }}>{props.content}</span>
+      <Tooltip {...tooltipProps}>
+        <FormatCoordinate coords={position} format={latlonFormat} /><br />
+        {typeof content === 'string' ? <span style={{ whiteSpace: 'pre-line' }}>{content}</span> : content}
       </Tooltip>
     )
   } else {
     return (
-      <Tooltip {...props.tooltipProps}>
-        <span style={{ whiteSpace: 'pre-line' }}>{props.content}</span>
+      <Tooltip {...tooltipProps}>
+        {typeof content === 'string' ? <span style={{ whiteSpace: 'pre-line' }}>{content}</span> : content}
       </Tooltip>
     )
   }

@@ -1,9 +1,10 @@
-// @ts-ignore
 import { useMap } from "react-leaflet";
+import { memo } from "react";
+// @ts-ignore
 import "./leaflet.latlng-graticule.js"
 declare const L: any;
 
-export const Graticule = () => {
+export const Graticule = memo(() => {
   const map = useMap()
   const graticule = new L.latlngGraticule({
     showLabel: true,
@@ -22,7 +23,7 @@ export const Graticule = () => {
   })
   graticule.addTo(map);
   return null
-}
+})
 
 
 

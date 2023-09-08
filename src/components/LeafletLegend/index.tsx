@@ -1,9 +1,10 @@
 import { Control, ControlOptions, DomUtil } from "leaflet";
 import { useMap } from "react-leaflet";
 import { useEffect } from "react";
+import { createRoot } from "react-dom/client";
 
 interface LegendProps extends ControlOptions {
-  legendContent: string
+  legendContent: string | JSX.Element
   legendClassNames?: string
 }
 
@@ -12,7 +13,12 @@ export const LegendControl = (props: LegendProps) => {
   const legend = new Control(props)
   legend.onAdd = () => {
     const div = DomUtil.create('div', `legendbg ${props.legendClassNames}`);
-    div.innerHTML = props.legendContent
+    if (typeof props.legendContent === 'string') {
+      div.innerHTML = props.legendContent
+    } else {
+      const root = createRoot(div)
+      root.render(props.legendContent)
+    }
     return div;
   }
   useEffect(() => {

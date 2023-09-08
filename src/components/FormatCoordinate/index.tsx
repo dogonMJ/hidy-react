@@ -1,4 +1,5 @@
 import { coor } from 'types'
+import { Position } from 'geojson';
 const sign = (degree: number, direction: string) => {
   if (degree < 0) {
     return direction[0]
@@ -33,10 +34,13 @@ const toDD = (degree: number) => {
   return `${D}\u00B0`
 }
 
+function isPosition(coords: coor | Position): coords is Position {
+  return Array.isArray(coords) && coords.length === 2;
+}
+const FormatCoordinate = (props: { coords: coor | Position, format: string }) => {
+  const lat = isPosition(props.coords) ? props.coords[1] : props.coords.lat
+  let lon = isPosition(props.coords) ? props.coords[0] : props.coords.lng
 
-const FormatCoordinate = (props: { coords: coor, format: string }) => {
-  const lat = props.coords.lat
-  let lon = props.coords.lng
   const mutiple = Math.floor(lon / 360)
   if (mutiple >= 0) {
     lon = lon - 360 * mutiple
@@ -44,7 +48,6 @@ const FormatCoordinate = (props: { coords: coor, format: string }) => {
     lon = lon + 360 * Math.abs(mutiple)
   }
   if (lon > 180) { lon -= 360 }
-
   switch (props.format) {
     case 'latlon-dd':
       return <span>{toDD(lat)}, {toDD(lon)}</span>

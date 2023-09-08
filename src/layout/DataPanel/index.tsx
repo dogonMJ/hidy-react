@@ -46,7 +46,7 @@ const DataPanel = () => {
     APIlayers: <APILayers />,
     CWBsites: <ToggleCWB />,
     Animated: <AnimatedCurrents />,
-    SatData: <SatelliteData />,
+    // SatData: <SatelliteData />,
     OdbData: <ODB />,
     CPlanLayers: <CPlanLayers />,
     StatMean: <StatisticMean />,

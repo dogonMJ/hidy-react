@@ -398,18 +398,6 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
         </Typography >
       )
-    case 'odbCurrent':
-      return (
-        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`OdbData.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/adcp/" rel="noreferrer">物理海洋海流資料</a><br />
-          {t('DataInfo.productID')}: sadcp_grid15moa<br />
-          {t('DataInfo.spatialRange')}: 18 ~ 27°N, 117 ~ 125°E<br />
-          {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
-          {t('DataInfo.temporalRange')}: 1991 ~ 2021<br />
-          {t('DataInfo.others')}: {t('OdbData.others')}<br />
-        </Typography >
-      )
     case 'CPlanLayers':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
@@ -419,16 +407,112 @@ const InfoList = (props: { dataId: string }) => {
           <span>{t('CPlanLayers.tip')}</span><br />
         </Typography >
       )
+    case 'odbTopo':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.${props.dataId}`)}</b><br />
+          {t('OdbData.topo.description')}<br /><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/bathy/" rel="noreferrer">{t('OdbData.topo.source')}</a><br />
+          {t('DataInfo.spatialRange')}: 2 ~ 35°N, 105 ~ 135°E (500m); 21 ~ 26°N, 119 ~ 123°E (200m)<br />
+          {t('DataInfo.spatialRes')}: 200m, 500m <br />
+          {t('DataInfo.temporalRange')}: 1989 ~ {t('DataInfo.3yr')}<br />
+        </Typography >
+      )
+    case 'odbCtd':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.${props.dataId}`)}</b><br />
+          {t('OdbData.CTD.description')}<br /><br />
+          {t('OdbData.des_season')}<br /><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/ctd/" rel="noreferrer">{t('OdbData.CTD.source')}</a><br />
+          {t('DataInfo.productID')}: ctd_grid15moa<br />
+          {t('DataInfo.spatialRange')}: 18 ~ 27°N, 117 ~ 125°E<br />
+          {t('DataInfo.spatialRes')}: 0.25° × 0.25° <br />
+          {t('DataInfo.temporalRange')}: 1985 ~ {t('DataInfo.3yr')}<br />
+          {t('DataInfo.others')}: <a target="_blank" href="https://ecodata.odb.ntu.edu.tw/api/" rel="noreferrer">ODB Open API</a>{t('OdbData.CTD.others')}
+        </Typography >
+      )
+    case 'odbGravity':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.${props.dataId}`)}</b><br />
+          {t('OdbData.gravity.description')}<br /><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/gravity/" rel="noreferrer">{t('OdbData.gravity.source')}</a>
+        </Typography >
+      )
+    case 'odbCurrent':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.${props.dataId}`)}</b><br />
+          {t('OdbData.current.description')}<br /><br />
+          {t('OdbData.des_season')}<br /><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/adcp/" rel="noreferrer">{t('OdbData.current.source')}</a><br />
+          {t('DataInfo.productID')}: sadcp_grid15moa<br />
+          {t('DataInfo.spatialRange')}: 18 ~ 27°N, 117 ~ 125°E<br />
+          {t('DataInfo.spatialRes')}: 0.25° × 0.25° × 10 m <br />
+          {t('DataInfo.temporalRange')}: 1991 ~ 2021<br />
+          {t('DataInfo.others')}: <a target="_blank" href="https://ecodata.odb.ntu.edu.tw/api/" rel="noreferrer">ODB Open API</a>{t('OdbData.current.others')}
+        </Typography >
+      )
+    case 'odbSedCore':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.odbSedCore`)}</b><br />
+          {t('OdbData.sedCore.description')}<br /><br />
+          <b>{t('DataInfo.source')}: </b><a target="_blank" href="https://www.odb.ntu.edu.tw/coresite/sample-page/" rel="noreferrer">{t('OdbData.sedCore.source')}</a><br />
+        </Typography >
+      )
+    case 'odbMarineHeatwave':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.odbMarineHeatwave`)}</b><br />
+          {t('OdbData.mhw.description1')}<br />
+          <img src='https://eco.odb.ntu.edu.tw/pub/MHW/assets/hobday_2018.jpg' alt="" loading="lazy" width={336} height={200} /><br />
+          {t('OdbData.mhw.description2')}<br /><br />
+          <b>{t('DataInfo.spatialRange')}: </b>{t('DataInfo.globe')}<br />
+          <b>{t('DataInfo.spatialRes')}: </b>0.25° × 0.25°<br />
+          <b>{t('DataInfo.temporalRange')}: </b>1982/01 ~ {t('DataInfo.lastMonth')} <br />
+          <b>{t('DataInfo.temporalRes')}: </b>{t('DataInfo.monthly')} (P1M)<br />
+          <b>{t('DataInfo.updateFreq')}: </b>{t('DataInfo.monthly')}<br />
+          <b>{t('DataInfo.source')}: </b><a target="_blank" href="https://eco.odb.ntu.edu.tw/pub/MHW/" rel="noreferrer">{t('OdbData.mhw.source')}</a><br />
+          <b>{t('DataInfo.others')}:</b><br />
+          {t('OdbData.mhw.description3')}
+        </Typography >
+      )
     case 'odbChemistry':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`OdbData.odbChemistry`)}</b><br />
-          {t('OdbData.chemistryList.description')}<br />
+          {t('OdbData.chemistryList.description')}<br /><br />
           <b>{t('DataInfo.source')}:</b> <br />
           <a target="_blank" href={`${t('OdbData.chemistryList.siteUrl')}`} rel="noreferrer">{t('OdbData.chemistryList.siteName')}</a><br />
-          {t('OdbData.chemistryList.source')}<br />
           <b>{t('DataInfo.others')}:</b> <br />
           {t('OdbData.chemistryList.others')}: <a target="_blank" href="https://chemview.odb.ntu.edu.tw/" rel="noreferrer">ODB Marine Chemistry Viewer</a><br />
+        </Typography >
+      )
+    case 'odbBio':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.odbBio`)}</b><br />
+          {t('OdbData.Bio.description1')}<br /><br />
+          {t('OdbData.Bio.description2')}<br /><br />
+          <b>{t('DataInfo.source')}:</b> <br />
+          <a target="_blank" href="https://www.odb.ntu.edu.tw/bio/bio-ocean-database/" rel="noreferrer">{t('OdbData.Bio.source')}</a>; {t('OdbData.Bio.source2')}<br />
+          <b>{t('DataInfo.others')}:</b><br />
+          {t('OdbData.Bio.description3')}<br />
+          {t('OdbData.Bio.others')}: <a target="_blank" href="https://bio.odb.ntu.edu.tw/query/" rel="noreferrer">BioQuery and OpenAPI</a>
+        </Typography >
+      )
+    case 'odbMicroPlastic':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`OdbData.odbMicroPlastic`)}</b><br />
+          {t('OdbData.plastic.description1')}<br /><br />
+          <b>{t('DataInfo.source')}:</b><br />
+          <a target="_blank" href="https://www.ncei.noaa.gov/products/microplastics" rel="noreferrer">NCEI Marine Microplastics</a><br />
+          {t('OdbData.plastic.description2')}<br />
+          <a target="_blank" href="https://www.oca.gov.tw/ch/home.jsp?id=394&parentpath=0,299" rel="noreferrer">{t('OdbData.plastic.OCAfull')}</a><br />
+          {t('OdbData.plastic.description3')}<br />
         </Typography >
       )
     case 'StatMeanLongterm':
@@ -522,7 +606,7 @@ const InfoList = (props: { dataId: string }) => {
       )
     case 'draw':
       return (
-        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', width: '45vw' }}>
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', width: '35vw' }}>
           {t('draw.source')}: <a target="_blank" href="https://doi.org/10.5285/e0f0bb80-ab44-2739-e053-6c86abc0289c" rel="noreferrer">GEBCO Compilation Group (2022) GEBCO_2022 Grid</a><br />
           {t('draw.info')}<br />
           {t('draw.polyline')}<br />
@@ -540,30 +624,6 @@ const InfoList = (props: { dataId: string }) => {
           {t('screenshot.info.input')}<br />
           <Crop fontSize='small' />/<PanTool fontSize='small' /> : {t('screenshot.info.draw')}<br />
           <Download fontSize='small' /> : {t('screenshot.info.download')}
-        </Typography >
-      )
-    case 'odbMicroPlastic':
-      return (
-        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`OdbData.odbMicroPlastic`)}</b><br />
-          <b>{t('DataInfo.source')}:</b><br />
-          <a target="_blank" href="https://www.ncei.noaa.gov/products/microplastics" rel="noreferrer">NCEI Marine Microplastics</a><br />
-          {t('OdbData.plastic.description1')}<br />
-          <a target="_blank" href="https://www.oca.gov.tw/ch/home.jsp?id=394&parentpath=0,299" rel="noreferrer">{t('OdbData.plastic.OCAfull')}</a><br />
-          {t('OdbData.plastic.description2')}<br />
-        </Typography >
-      )
-    case 'odbBio':
-      return (
-        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`OdbData.odbBio`)}</b><br />
-          {t('OdbData.Bio.description1')}<br /><br />
-          {t('OdbData.Bio.description2')}<br /><br />
-          <b>{t('DataInfo.source')}:</b> <br />
-          <a target="_blank" href="https://www.odb.ntu.edu.tw/bio/bio-ocean-database/" rel="noreferrer">{t('OdbData.Bio.source')}</a>; {t('OdbData.Bio.source2')}<br />
-          <b>{t('DataInfo.others')}:</b><br />
-          {t('OdbData.Bio.description3')}<br />
-          {t('OdbData.Bio.others')}: <a target="_blank" href="https://bio.odb.ntu.edu.tw/query/" rel="noreferrer">BioQuery and OpenAPI</a>
         </Typography >
       )
   }

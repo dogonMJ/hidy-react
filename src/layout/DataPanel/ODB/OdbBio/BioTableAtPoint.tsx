@@ -52,8 +52,8 @@ export const BioTableAtPoint = forwardRef((props: { eventID: string, citation: S
         <Table size="small" stickyHeader>
           <TableHead>
             <TableRow >
-              <TableCell style={{ backgroundColor: '#f5f5f5' }}>Rank</TableCell>
-              <TableCell style={{ backgroundColor: '#f5f5f5' }}>Name</TableCell>
+              <TableCell style={{ backgroundColor: '#f5f5f5' }}>{t('OdbData.Bio.rank')}</TableCell>
+              <TableCell style={{ backgroundColor: '#f5f5f5' }}>{t('OdbData.Bio.name')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -62,7 +62,7 @@ export const BioTableAtPoint = forwardRef((props: { eventID: string, citation: S
                 return (
                   <TableRow key={i}>
                     <TableCell scope="row" style={{ textAlign: 'left' }}>
-                      {data.taxonRank}
+                      {t(`OdbData.Bio.${data.taxonRank}`)}
                     </TableCell>
                     <TableCell style={{ textAlign: 'left' }}>
                       {data.canonicalName}

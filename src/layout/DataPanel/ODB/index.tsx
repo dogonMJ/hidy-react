@@ -15,6 +15,7 @@ import { OdbSedCore } from './OdbSedCore';
 import { OdbChemistry } from './OdbChemistry';
 import { OdbBio } from './OdbBio';
 import { OdbMicroplastics } from './OdbMicroPlastics';
+import { OdbMarineHeatwave } from './OdbMarineHeatwave';
 import { SubSelection } from 'components/SubSelection';
 import { ComponentList } from 'types';
 
@@ -62,7 +63,7 @@ export const ODB = () => {
     odbTopo: <OdbTopo opacity={1} />,
     odbCtd: <>
       <SubSelection select={type} handleChange={handleCtdChange}>
-        {creatSelection(['t', 'sal', 'density'], 'OdbData')}
+        {creatSelection(['temperature', 'salinity', 'density', 'transmission', 'fluorescence', 'oxygen'], 'OdbData')}
       </SubSelection>
       <RenderIf isTrue={!checked.includes('odbCurrent')}>
         <SubSelection select={period} handleChange={handleCurChange}>
@@ -79,6 +80,7 @@ export const ODB = () => {
       <OdbCurrent />
     </>,
     odbSedCore: <OdbSedCore />,
+    odbMarineHeatwave: <OdbMarineHeatwave />,
     odbChemistry: <OdbChemistry />,
     odbBio: <OdbBio />,
     odbMicroPlastic: < OdbMicroplastics />,
