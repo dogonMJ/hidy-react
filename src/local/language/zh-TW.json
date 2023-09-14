@@ -127,7 +127,7 @@
     "odbCurrent": "海流",
     "odbGravity": "重力",
     "odbSedCore": "沉積物及岩心採樣點位",
-    "odbCtd": "鹽溫深儀",
+    "odbCtd": "鹽溫深儀及附掛探針",
     "odbChemistry": "海洋化學",
     "odbBio": "生物資料",
     "odbMicroPlastic": "塑膠微粒",
@@ -170,6 +170,7 @@
       "description": "本圖層為ODB彙整國內研究船以單音束測深銀儀測得之水深資料輔以GEBCO之15弧秒水深資料製成。更詳細資料申請請洽下方網站。"
     },
     "CTD": {
+      "secondPar": "深度剖面對比參數",
       "density": "密度 (kg/m\u00B3)",
       "temperature": "溫度 (\u00B0C)",
       "salinity": "鹽度 (psu)",
@@ -179,10 +180,12 @@
       "opacity": "圖層不透明度",
       "mask": "不顯示範圍外資料",
       "rev": "反轉",
-      "interval": "資料級距",
+      "segment": "資料分段",
       "thresholds": "資料範圍",
       "source": "ODB物理海洋水文與化學資料",
-      "description": "本圖層為ODB彙整國內研究船之鹽溫深儀(Conductivity-Temperature-Depth Profiler, CTD)所得的資料構成。本圖層展示各網格點內不同深度、季節的平均水溫、鹽度及海水密度資料。更詳細資料申請及下載請洽下方網站。",
+      "description": "本圖層為ODB彙整國內研究船之鹽溫深儀(Conductivity-Temperature-Depth Profiler, CTD)及附掛探針所得的資料構成。本圖層展示各網格點內不同深度、季節的各項資料(由於法規規定，只展示資料數量>=3之平均值)。更詳細儀器資訊、資料申請方法及下載請洽下方網站。",
+      "description2": "上方選像可切換參數及季節。可由左方欄位調整資料分段、圖面色階、資料範圍以及圖層不透明度。其中分段為資料範圍內之間等分，為0時呈現大於最大值及小於等於最小值之兩色。第一次切換參數時資料範圍會為預設，之後即為使用者自訂。",
+      "description3": "點選圖面資料可繪製垂直剖面圖，可由左側欄位切換第二個對比參數項目。",
       "others": "可介接CTD的GeoJSON格式資料。"
     },
     "gravity": {
@@ -518,5 +521,8 @@
       "draw": "切換框選/一般模式。",
       "download": "下載截圖，若無框選畫面則下載整個畫面。若圖層尚未載入完畢，截圖亦不會完整。"
     }
+  },
+  "alert": {
+    "fetchFail": "資料擷取出現問題，請稍候或詢問技術員。"
   }
 }

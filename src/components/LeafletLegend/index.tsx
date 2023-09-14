@@ -1,6 +1,6 @@
 import { Control, ControlOptions, DomUtil } from "leaflet";
 import { useMap } from "react-leaflet";
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { createRoot } from "react-dom/client";
 
 interface LegendProps extends ControlOptions {
@@ -8,7 +8,7 @@ interface LegendProps extends ControlOptions {
   legendClassNames?: string
 }
 
-export const LegendControl = (props: LegendProps) => {
+export const LegendControl = memo((props: LegendProps) => {
   const map = useMap()
   const legend = new Control(props)
   legend.onAdd = () => {
@@ -28,4 +28,4 @@ export const LegendControl = (props: LegendProps) => {
     }
   }, [props.legendContent])
   return null
-}
+})

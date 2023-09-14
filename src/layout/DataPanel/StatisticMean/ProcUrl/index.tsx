@@ -75,6 +75,7 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
           <FormControl sx={{ m: 1, minWidth: 240 }} size="small">
             <InputLabel >{t('StatMean.timePeriod')}</InputLabel>
             <Select
+              name={'StatMean-url-timePeriod'}
               value={timePeriod}
               label="TimePeriods"
               onChange={handleTimePeriod}
@@ -94,6 +95,7 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <InputLabel>{t('StatMean.year')}</InputLabel>
             <Select
+              name={'StatMean-url-year'}
               value={year}
               label="year"
               onChange={handleYear}
@@ -106,6 +108,7 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <InputLabel>{t('StatMean.month')}</InputLabel>
             <Select
+              name={'StatMean-url-month'}
               value={month}
               label="Month"
               onChange={handleMonth}

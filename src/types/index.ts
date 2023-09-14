@@ -70,3 +70,5 @@ export type BioFilter = "topic" | "taxon"
 export interface ComponentList {
     [key: string]: JSX.Element
 }
+
+export type Palette = 'plasma' | 'viridis' | 'magma' | 'coolwarm' | 'bwr' | 'jet' | 'YlGnBu' | 'YlOrRd'

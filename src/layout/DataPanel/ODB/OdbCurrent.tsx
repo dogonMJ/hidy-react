@@ -13,6 +13,8 @@ import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
 import Arrow from 'assets/images/ArrowUp.svg'
 import { useTranslation } from 'react-i18next';
 import { periodTransform } from 'Utils/UtilsODB';
+import { AlertSlide } from 'components/AlertSlide/AlertSlide';
+
 declare const L: any;
 
 // const legendColors: StringObject = {
@@ -51,6 +53,7 @@ export const OdbCurrent = () => {
   const [data, setData] = useState<any>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [content, setContent] = useState<string | JSX.Element>('')
+  const [warning, setWarning] = useState(false)
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
   const legendContent = `<img src=${Arrow} height=20 width=10><span style="margin-left:8px;">0.5 m/s</span>`
@@ -102,6 +105,7 @@ export const OdbCurrent = () => {
         ref.current.clearLayers()
         ref.current.addData(json)
       })
+      .catch(() => setWarning(true))
   }, [depthMeterValue, period, t])
 
   return (
@@ -111,6 +115,9 @@ export const OdbCurrent = () => {
       </GeoJSON>
       <DepthMeter values={adcpDepths} marks={marks} />
       <LegendControl position='bottomleft' legendContent={legendContent} />
+      <AlertSlide open={warning} setOpen={setWarning} severity='error'>
+        {t('alert.fetchFail')}
+      </AlertSlide>
     </>
   )
 }

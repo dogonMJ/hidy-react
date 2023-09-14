@@ -33,7 +33,7 @@ export const OdbCTD = () => {
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [content, setContent] = useState<string | JSX.Element>('')
   const [data, setData] = useState<any>()
-  const type = useSelector((state: RootState) => state.coordInput.OdbCtdSelection)
+  const type = useSelector((state: RootState) => state.odbCtdStates.selection)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
   const depth = depthMeterValue || depthMeterValue === 0 ? ctdDepths[depthMeterValue] ? -ctdDepths[depthMeterValue] : 5 : 5

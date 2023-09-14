@@ -57,7 +57,6 @@ const ProcWMS = (props: Urls) => {
 
   if (noTileCached(tileProps, key)) {
     tileProps.push(propsWMS(api, time, key, depth))
-    console.log(tileProps)
   }
 
   const clearPreload = () => {
@@ -99,7 +98,7 @@ const ProcWMS = (props: Urls) => {
       </LayerGroup>
       <ShowData layergroup={ref.current} layerId={layerId} identifier={props.Identifier} datetime={time} elevation={depth} param={api} />
       <RenderIf isTrue={is3D(props.Identifier)}>
-        <DepthMeter values={depths} marks={getMarks('m', depths)} />
+        <DepthMeter values={depths} marks={getMarks('', depths)} />
       </RenderIf>
     </>
   )

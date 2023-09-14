@@ -67,14 +67,32 @@ export const periodTransform: StringObject = {
   'winter': '13'
 }
 
+// export const ctdDepthMeterProps = () => {
+//   const ctdDepths = Array.from(Array(20), (e, i) => i * -5 - 5).concat(Array.from(Array(16), (e, i) => i * -25 - 125)).concat(Array.from(Array(10), (e, i) => i * -50 - 550)).reverse()
+//   const marks: SliderMarks[] = []
+//   ctdDepths.forEach((depth, i) => {
+//     if ((depth >= -100 && depth % 25 === 0) || (depth < -100 && depth % 200 === 0) || depth === -5) {
+//       marks.push({
+//         value: i,
+//         label: `${depth.toString()} m`
+//       })
+//     } else {
+//       marks.push({
+//         value: i,
+//         label: ``
+//       })
+//     }
+//   })
+//   return { ctdDepths, marks }
+// }
 export const ctdDepthMeterProps = () => {
-  const ctdDepths = Array.from(Array(20), (e, i) => i * -5 - 5).concat(Array.from(Array(16), (e, i) => i * -25 - 125)).concat(Array.from(Array(10), (e, i) => i * -50 - 550)).reverse()
+  const ctdDepths = [...Array(101)].map((e, i) => i * 10).reverse()
   const marks: SliderMarks[] = []
   ctdDepths.forEach((depth, i) => {
-    if ((depth >= -100 && depth % 25 === 0) || (depth < -100 && depth % 200 === 0) || depth === -5) {
+    if (depth % 100 === 0 || depth === 0) {
       marks.push({
         value: i,
-        label: `${depth.toString()} m`
+        label: depth === 0 ? `${depth.toString()}` : `-${depth.toString()}`
       })
     } else {
       marks.push({
@@ -85,7 +103,6 @@ export const ctdDepthMeterProps = () => {
   })
   return { ctdDepths, marks }
 }
-
 export const palettes: { [key: string]: string[] } = {
   plasma: ["#0d0887", "#220690", "#330597", "#41049d", "#5002a2", "#5c01a6", "#6a00a8", "#7701a8", "#8405a7", "#8f0da4", "#9c179e", "#a62098", "#b12a90", "#ba3388", "#c33d80", "#cc4778", "#d35171", "#da5b69", "#e16462", "#e76f5a", "#ed7953", "#f2844b", "#f68f44", "#fa9b3d", "#fca636", "#fdb42f", "#fec029", "#fcce25", "#f9dc24", "#f5eb27", "#f0f921"],
   coolwarm: ["#3b4cc0", "#455bcd", "#4f69d9", "#5978e3", "#6485ec", "#7092f3", "#7b9ff9", "#87aafc", "#93b5fe", "#9fbeff", "#aac7fd", "#b5cefa", "#c0d4f5", "#cad8ee", "#d4dbe6", "#dddddd", "#e5d8d1", "#ecd2c4", "#f2cbb7", "#f5c2aa", "#f7b89c", "#f7ad8f", "#f5a081", "#f29374", "#ee8468", "#e7755b", "#e0654f", "#d75344", "#cc403a", "#c12a30", "#b40426"],
@@ -95,4 +112,11 @@ export const palettes: { [key: string]: string[] } = {
   viridis: ['#440154', '#470d60', '#481a6c', '#482475', '#472f7d', '#443983', '#414487', '#3d4d8a', '#39568c', '#355f8d', '#31688e', '#2d708e', '#2a788e', '#27808e', '#23888e', '#21918c', '#1f988b', '#1fa188', '#22a884', '#2ab07f', '#35b779', '#44bf70', '#54c568', '#67cc5c', '#7ad151', '#90d743', '#a5db36', '#bddf26', '#d2e21b', '#eae51a', '#fde725'],
   YlOrRd: ['#ffffcc', '#fffac0', '#fff5b5', '#fff1a9', '#ffec9d', '#ffe692', '#fee187', '#fedc7c', '#fed470', '#fec965', '#febf5a', '#feb54f', '#feab49', '#fea145', '#fd9740', '#fd8d3c', '#fd7c37', '#fc6b32', '#fc5b2e', '#fa4b29', '#f43d25', '#ed2f22', '#e6211e', '#de171d', '#d41020', '#ca0923', '#c00225', '#b10026', '#a10026', '#900026', '#800026'],
   YlGnBu: ['#ffffd9', '#fafdce', '#f5fbc4', '#f1f9b9', '#eaf7b1', '#e0f3b2', '#d6efb3', '#ccebb4', '#bde5b5', '#aadeb7', '#97d6b9', '#84cfbb', '#73c8bd', '#62c2bf', '#52bcc2', '#41b6c4', '#37acc3', '#2ea2c2', '#2498c1', '#1d8ebe', '#1f80b8', '#2072b2', '#2165ab', '#2258a5', '#234da0', '#24429b', '#253795', '#1f2f88', '#172978', '#102368', '#081d58'],
+}
+
+export const sortXY = (pairs: { x: number, y: number }[]) => {
+  pairs.sort((a, b) => a.y - b.y);
+  const x = pairs.map((pair: { x: number, y: number }) => pair.x)
+  const y = pairs.map((pair: { x: number, y: number }) => -pair.y)
+  return { x, y }
 }

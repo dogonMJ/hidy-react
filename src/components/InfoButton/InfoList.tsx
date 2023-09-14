@@ -423,6 +423,8 @@ const InfoList = (props: { dataId: string }) => {
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`OdbData.${props.dataId}`)}</b><br />
           {t('OdbData.CTD.description')}<br /><br />
+          {t('OdbData.CTD.description2')}<br />
+          {t('OdbData.CTD.description3')}<br /><br />
           {t('OdbData.des_season')}<br /><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/ctd/" rel="noreferrer">{t('OdbData.CTD.source')}</a><br />
           {t('DataInfo.productID')}: ctd_grid15moa<br />

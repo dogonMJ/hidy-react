@@ -90,7 +90,7 @@ export const PlotProfile = (props: { url: string, coord: string | undefined, tex
   return (
     <>
       <RenderIf isTrue={open}>
-        <LineChart ref={plotRef} plotProps={plotProps} setOpen={setOpen} />
+        <LineChart ref={plotRef} paneName="statMeanProfile" plotProps={plotProps} setOpen={setOpen} />
       </RenderIf>
     </>
   )

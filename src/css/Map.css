@@ -145,6 +145,8 @@ input {
 .js-plotly-plot .plotly .modebar {
   left: 0;
   top: -30px !important;
+  width: 230px;
+  height: 30px;
 }
 
 .modebar-group {

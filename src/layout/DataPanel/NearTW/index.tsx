@@ -36,11 +36,13 @@ const ToggleCWB = () => {
           return (
             <ListItem
               key={value}
+
               disablePadding
             >
               <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                 <ListItemIcon>
                   <Switch
+                    id={`switch-${value}`}
                     edge="start"
                     checked={checked.indexOf(value) !== -1}
                     tabIndex={-1}

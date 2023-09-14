@@ -8,6 +8,7 @@ import { RootState } from "store/store"
 import { Box, Checkbox, FormControlLabel, Slider, Typography, Grid, Divider } from '@mui/material'
 import { useTranslation } from "react-i18next";
 import FormatCoordinate from "components/FormatCoordinate";
+import { AlertSlide } from 'components/AlertSlide/AlertSlide';
 import * as geojson from 'geojson';
 import Flatpickr from "react-flatpickr";
 import 'flatpickr/dist/plugins/monthSelect/style.css'
@@ -35,6 +36,7 @@ export const OdbChemistry = () => {
   const [depthIndex, setDepthIndex] = useState<number[]>([0, depthList.length - 1]);
   const [date, setDate] = useState<string[]>(['19881218', '20161231'])
   const [parameters, setParameters] = useState<string[]>(['none'])
+  const [warning, setWarning] = useState(false)
   const varList: { [key: string]: { [key: string]: string } } = {
     'Sal': {
       name: t('OdbData.chemistryList.Sal'),
@@ -190,6 +192,7 @@ export const OdbChemistry = () => {
           refCluster.current.addLayers(ref.current.getLayers())
         }
       })
+      .catch(() => setWarning(true))
   }, [lat, lon, depthIndex, date, parameters, t])
 
   return (
@@ -287,6 +290,9 @@ export const OdbChemistry = () => {
       >
         <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>
+      <AlertSlide open={warning} setOpen={setWarning} severity='error'>
+        {t('alert.fetchFail')}
+      </AlertSlide>
     </>
   )
 }

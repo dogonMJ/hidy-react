@@ -46,6 +46,7 @@ export const WMSSelector = () => {
                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                   <ListItemIcon>
                     <Switch
+                      id={`switch-WMSSelector-${value}`}
                       edge="start"
                       checked={checked.indexOf(value) !== -1}
                       tabIndex={-1}

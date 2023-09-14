@@ -71,8 +71,10 @@ export const StatisticMean = () => {
     <>
       <Box sx={{ margin: 1 }}>
         <FormControl sx={{ m: 1, minWidth: 240 }} size="small">
-          <InputLabel >{t('StatMean.parameter')}</InputLabel>
+          <InputLabel id="statmean-para-label">{t('StatMean.parameter')}</InputLabel>
           <Select
+            labelId="statmean-para-label"
+            name="statmean-parameter"
             value={parameter}
             label="Parameters"
             onChange={handleParameter}
@@ -86,7 +88,7 @@ export const StatisticMean = () => {
         <Stack direction="row" spacing={1} alignItems="center">
           <InfoButton dataId="StatMeanLongterm" />
           <Typography style={{ marginLeft: -5 }}>{t('StatMean.longterm')}</Typography>
-          <PeriodSwitch onChange={handlePeriodSwitch} />
+          <PeriodSwitch id={`switch-statmena-period`} onChange={handlePeriodSwitch} />
           <Typography>{t('StatMean.monthly')}</Typography>
           <InfoButton dataId="StatMeanMonthly" />
         </Stack>
@@ -98,7 +100,7 @@ export const StatisticMean = () => {
         <Stack direction="row" spacing={1} alignItems="center">
           <InfoButton dataId="StatMeanContour" />
           <Typography style={{ marginLeft: -5 }}>{t('StatMean.contour')}</Typography>
-          <PeriodSwitch onChange={handleType} />
+          <PeriodSwitch id={`switch-statmena-type`} onChange={handleType} />
           <Typography>{t('StatMean.profile')}</Typography>
           <InfoButton dataId="StatMeanProfile" />
         </Stack>
@@ -106,8 +108,10 @@ export const StatisticMean = () => {
       <RenderIf isTrue={!profile && varList[parameter].name !== 'StatMean.close'}>
         <Box sx={{ margin: 1 }}>
           <FormControl sx={{ m: 1, minWidth: 240 }} size="small">
-            <InputLabel >{t('StatMean.depth')}</InputLabel>
+            <InputLabel id="statmean-depth-label">{t('StatMean.depth')}</InputLabel>
             <Select
+              name="statmean-depth"
+              labelId="statmean-depth-label"
               value={depth.toString()}
               label="Depths"
               onChange={handleDepth}

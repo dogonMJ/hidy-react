@@ -200,7 +200,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
     getData()
   }, [coords])
   return (
-    <LineChart ref={plotRef} plotProps={plotProps} setOpen={setOpen} hover={hover} unhover={unHover} />
+    <LineChart ref={plotRef} paneName="seafloorProfile" plotProps={plotProps} setOpen={setOpen} hover={hover} unhover={unHover} />
   )
 
 }

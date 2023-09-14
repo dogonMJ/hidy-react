@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/store"
 import { coordInputSlice } from "store/slice/mapSlice";
+import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem, ToggleButton } from '@mui/material';
 import { Divider, Switch } from "@mui/material";
@@ -23,12 +24,12 @@ export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const [checked, setChecked] = useState<string[]>([]);
-  const type = useSelector((state: RootState) => state.coordInput.OdbCtdSelection)
+  const type = useSelector((state: RootState) => state.odbCtdStates.selection)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
 
   const handleCtdChange = (event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
     if (newSelect) {
-      dispatch(coordInputSlice.actions.OdbCtdSelection(newSelect))
+      dispatch(odbCtdSlice.actions.Selection(newSelect))
     }
   };
 
@@ -102,6 +103,7 @@ export const ODB = () => {
                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                   <ListItemIcon>
                     <Switch
+                      id={`switch-ODB-${value}`}
                       edge="start"
                       checked={checked.indexOf(value) !== -1}
                       tabIndex={-1}

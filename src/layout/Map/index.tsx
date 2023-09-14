@@ -37,6 +37,7 @@ const LeafletMap = () => {
   return (
     <>
       <Flatpickr
+        id={'dateTimePicker'}
         className='dateTimePicker'
         data-enable-time
         // value={datetime}

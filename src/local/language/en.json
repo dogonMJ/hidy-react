@@ -127,7 +127,7 @@
     "odbCurrent": "Current",
     "odbGravity": "Gravity",
     "odbSedCore": "Sediment and Core Sampling Sites",
-    "odbCtd": "CTD",
+    "odbCtd": "CTD and other sensors",
     "odbChemistry": "Marine Chemistry",
     "odbBio": "Biological Data",
     "odbMicroPlastic": "Microplastics",
@@ -138,7 +138,7 @@
     "salinity": "Salinity",
     "transmission": "Transmission",
     "fluorescence": "Fluorescence",
-    "oxygen": "Oxygen",
+    "oxygen": "Dissolved Oxygen",
     "spd": "Speed",
     "dir": "Direction",
     "u": "Eastward Speed (u)",
@@ -170,19 +170,22 @@
       "description": "This layer represents compiled bathymetric data from single-beam echo sounder survey by research vessels, supplemented by GEBCO's 15 arc-second bathymetric data. For further information or data acquisition, please refer to the data source website."
     },
     "CTD": {
+      "secondPar": "Comparison parameter for depth profile",
       "density": "Density (kg/m\u00B3)",
       "temperature": "Temperature (\u00B0C)",
       "salinity": "Salinity (psu)",
       "transmission": "Transmission (%)",
       "fluorescence": "Fluorescence (μg/l)",
-      "oxygen": "Oxygen (μM)",
+      "oxygen": "Dissolved Oxygen (μM)",
       "opacity": "Opacity",
       "mask": "Mask out-of-range values",
       "rev": "Reverse",
-      "interval": "Intervals",
+      "segment": "Segmentation",
       "thresholds": "Thresholds",
       "source": "ODB CTD data",
-      "description": "This layer consolidates data obtained from Conductivity-Temperature-Depth Profilers (CTD) aboard our research vessels. It presents averaged data on water temperature, salinity, and water density within each grid at various depths. For additional information or data acquisition, please refer to the data source website.",
+      "description": "This layer consolidates data obtained from Conductivity-Temperature-Depth Profilers (CTD) aboard our research vessels. It presents averaged data (data count >=3 due to regulations) within each grid at various depths. For additional information or data acquisition, please refer to the data source website.",
+      "description2": "The top menu allows you to switch parameters and seasons. You can adjust data segment, color scales, data ranges, and layer opacity from the left panel. 'Data splitting' divides the data range and shows two colors when set to 0, indicating values above the maximum and below or equal to the minimum. The parameter defaults to its initial settings when first switched, but can be customized by the user thereafter.",
+      "description3": "Clicking on the data grid on map creates a vertical profile plot. You can switch a second parameter for comparison from the left-side panel.",
       "others": " includes CTD API for GeoJSON format data."
     },
     "gravity": {
@@ -518,5 +521,8 @@
       "draw": "Toggle selection and regular mode.",
       "download": "Download a screenshot of the selected area, or the entire screen if no selection is made.\n Incomplete layer loading results in an incomplete screenshot."
     }
+  },
+  "alert": {
+    "fetchFail": "Data fetching issue. Please wait or contact tech support."
   }
 }

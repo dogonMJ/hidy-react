@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, SyntheticEvent, ChangeEvent, memo } from 'react'
+import { useEffect, useRef, useState, SyntheticEvent, ChangeEvent, memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
+import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { GeoJSON } from 'react-leaflet'
 import { Box, Checkbox, Divider, MenuItem, Select, Slider, Stack, TextField, Typography, SelectChangeEvent } from '@mui/material';
 import { FeatureCollection, Point } from 'geojson'
@@ -13,17 +14,21 @@ import * as geojson from 'geojson';
 import { renderToString } from 'react-dom/server';
 import { VerticalPlot } from 'components/VerticalPlot/VerticalPlot';
 import { RenderIf } from 'components/RenderIf/RenderIf';
+import { AlertSlide } from 'components/AlertSlide/AlertSlide';
+import { Palette } from 'types';
+
 
 const ctdDepths = ctdDepthMeterProps().ctdDepths
 const marks = ctdDepthMeterProps().marks
 
 const LegendCTD = memo((props: { palette: string[], interval: number, min: number, max: number, title: string }) => {
   const { palette, interval, min, max, title } = props
-  const offset = interval ? 210 / (interval + 2) : 105
+  const fullWidth = 180
+  const offset = interval ? fullWidth / (interval + 2) : fullWidth / 2
   return (
     <Box>
       <Typography variant="caption">{title}</Typography>
-      <ColorPalette palette={palette} interval={interval} />
+      <ColorPalette palette={palette} interval={interval} fullLength={fullWidth} />
       <Stack
         direction={'row'}
         justifyContent="space-between"
@@ -47,22 +52,41 @@ const reversePalette = (palette: string[], reverse: boolean) => reverse ? [...pa
 
 export const OdbCTD = () => {
   const ref = useRef<any>()
+  const hasEffectRun = useRef<{ [key: string]: boolean }>({ temperature: true, salinity: false, });
   const { t } = useTranslation()
-  const [data, setData] = useState<any>()
-  const [sliderInterval, setSliderInterval] = useState(20)
-  const [interval, setInterval] = useState(20)
-  const [minValue, setMinValue] = useState(0)
-  const [maxValue, setMaxValue] = useState(30)
-  const [opacity, setOpacity] = useState(100)
-  const [mask, setMask] = useState(false)
-  const [palette, setPalette] = useState('plasma')
-  const [reverse, setReverse] = useState(false)
-  const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
-  const [openVertical, setOpenVertical] = useState(false)
-  const type = useSelector((state: RootState) => state.coordInput.OdbCtdSelection)
+  const dispatch = useDispatch()
+  const type = useSelector((state: RootState) => state.odbCtdStates.selection)
   const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
   const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
-  const depth = depthMeterValue || depthMeterValue === 0 ? ctdDepths[depthMeterValue] ? -ctdDepths[depthMeterValue] : 5 : 5
+  const palette = useSelector((state: RootState) => state.odbCtdStates.palette)
+  const mask = useSelector((state: RootState) => state.odbCtdStates.mask)
+  const reverse = useSelector((state: RootState) => state.odbCtdStates.reverse)
+  const interval = useSelector((state: RootState) => state.odbCtdStates.interval)
+  const minValue = useSelector((state: RootState) => state.odbCtdStates.min)
+  const maxValue = useSelector((state: RootState) => state.odbCtdStates.max)
+  const opacity = useSelector((state: RootState) => state.odbCtdStates.opacity)
+  const [data, setData] = useState<any>()
+  const [sliderInterval, setSliderInterval] = useState(interval)
+  const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
+  const [openVertical, setOpenVertical] = useState(false)
+  const [warning, setWarning] = useState(false)
+
+  const depth = depthMeterValue >= 0 ? ctdDepths[depthMeterValue] : ctdDepths[ctdDepths.length - 1]
+  const mode = periodTransform[period]
+  const legend = useMemo(() =>
+    <LegendControl
+      position='bottomleft'
+      legendContent={
+        <LegendCTD
+          palette={reversePalette(palettes[palette], reverse)}
+          interval={interval}
+          min={minValue}
+          max={maxValue}
+          title={t(`OdbData.CTD.${type}`)}
+        />
+      }
+    />
+    , [palette, interval, maxValue, minValue, type, reverse, t])
 
   const onEachFeature = (feature: geojson.Feature<geojson.Polygon, any>, layer: any) => {
     const property = feature.properties
@@ -90,20 +114,48 @@ export const OdbCTD = () => {
     })
   }
 
-  const handlePaletteChange = (event: SelectChangeEvent) => setPalette(event.target.value as string)
-  const handleOpacityChange = (event: Event, newValue: number | number[]) => setOpacity(newValue as number)
+  const handlePaletteChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.Palette(event.target.value as Palette))
+  const handleOpacityChange = (event: Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.Opacity(newValue as number))
   const handleIntervalChange = (event: Event, newValue: number | number[]) => setSliderInterval(newValue as number)
-  const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => setInterval(newValue as number)
-  const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => setMinValue(Number(event.target.value))
-  const handleMaxChange = (event: ChangeEvent<HTMLInputElement>) => setMaxValue(Number(event.target.value))
+  const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.Interval(newValue as number))
+  const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => dispatch(odbCtdSlice.actions.Min(Number(event.target.value)))
+  const handleMaxChange = (event: ChangeEvent<HTMLInputElement>) => dispatch(odbCtdSlice.actions.Max(Number(event.target.value)))
   const handleMinMaxBlur = () => {
     if (minValue > maxValue) {
-      setMinValue(maxValue)
-      setMaxValue(minValue)
+      dispatch(odbCtdSlice.actions.Min(Number(maxValue)))
+      dispatch(odbCtdSlice.actions.Max(Number(minValue)))
     }
   }
+
   useEffect(() => {
-    const mode = periodTransform[period]
+    if (!hasEffectRun.current[type]) {
+      //default value
+      switch (type) {
+        case 'salinity':
+          dispatch(odbCtdSlice.actions.Min(34))
+          dispatch(odbCtdSlice.actions.Max(35))
+          break
+        case 'density':
+          dispatch(odbCtdSlice.actions.Min(21))
+          dispatch(odbCtdSlice.actions.Max(28))
+          break
+        case 'transmission':
+          dispatch(odbCtdSlice.actions.Min(0))
+          dispatch(odbCtdSlice.actions.Max(100))
+          break
+        case 'fluorescence':
+          dispatch(odbCtdSlice.actions.Min(0))
+          dispatch(odbCtdSlice.actions.Max(0.3))
+          break
+        case 'oxygen':
+          dispatch(odbCtdSlice.actions.Min(50))
+          dispatch(odbCtdSlice.actions.Max(220))
+          break
+      }
+      hasEffectRun.current[type] = true
+    }
+  }, [type])
+  useEffect(() => {
     fetch(`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&mode=${mode}&format=geojson&append=temperature,salinity,density,fluorescence,transmission,oxygen,count`)
       .then((response) => response.json())
       .then((json: FeatureCollection) => {
@@ -119,14 +171,15 @@ export const OdbCTD = () => {
         ref.current.clearLayers()
         ref.current.addData(json)
       })
-  }, [t, depth, period])
+      .catch((e) => setWarning(true))
+  }, [t, depth, mode])
 
   return (
     <>
       <Divider variant="middle" />
       <Box sx={{ margin: 2 }}>
         <Typography variant="subtitle2" gutterBottom>
-          {t('OdbData.CTD.interval')}
+          {t('OdbData.CTD.segment')}
         </Typography>
         <Slider
           value={sliderInterval}
@@ -141,13 +194,14 @@ export const OdbCTD = () => {
         />
         <Stack direction='row' alignItems='center' marginLeft={0}>
           <Select
+            name='ODB-CTD-palette'
             size='small'
             value={palette}
             onChange={handlePaletteChange}
             sx={{ marginLeft: 2.1, marginBottom: 2 }}
           >
-            <MenuItem value='viridis'><ColorPalette palette={reversePalette(palettes['viridis'], reverse)} interval={interval} /></MenuItem>
             <MenuItem value='plasma'><ColorPalette palette={reversePalette(palettes['plasma'], reverse)} interval={interval} /></MenuItem>
+            <MenuItem value='viridis'><ColorPalette palette={reversePalette(palettes['viridis'], reverse)} interval={interval} /></MenuItem>
             <MenuItem value='magma'><ColorPalette palette={reversePalette(palettes['magma'], reverse)} interval={interval} /></MenuItem>
             <MenuItem value='coolwarm'><ColorPalette palette={reversePalette(palettes['coolwarm'], reverse)} interval={interval} /></MenuItem>
             <MenuItem value='bwr'><ColorPalette palette={reversePalette(palettes['bwr'], reverse)} interval={interval} /></MenuItem>
@@ -155,7 +209,7 @@ export const OdbCTD = () => {
             <MenuItem value='YlGnBu'><ColorPalette palette={reversePalette(palettes['YlGnBu'], reverse)} interval={interval} /></MenuItem>
             <MenuItem value='YlOrRd'><ColorPalette palette={reversePalette(palettes['YlOrRd'], reverse)} interval={interval} /></MenuItem>
           </Select>
-          <Checkbox size="small" sx={{ pr: '2px', pt: '4px' }} checked={reverse} onChange={() => setReverse(!reverse)} />
+          <Checkbox id='ODB-CTD-reverse' size="small" sx={{ pr: '2px', pt: '4px' }} checked={reverse} onChange={() => dispatch(odbCtdSlice.actions.Reverse(!reverse))} />
           <Typography variant="caption">
             {t('OdbData.CTD.rev')}
           </Typography>
@@ -190,7 +244,7 @@ export const OdbCTD = () => {
           />
         </Stack>
         <Stack direction='row' alignItems='center' marginLeft={9}>
-          <Checkbox size="small" sx={{ pr: '2px', pt: '4px' }} checked={mask} onChange={() => setMask(!mask)} />
+          <Checkbox id='ODB-CTD-mask' size="small" sx={{ pr: '2px', pt: '4px' }} checked={mask} onChange={() => dispatch(odbCtdSlice.actions.Mask(!mask))} />
           <Typography variant="caption" >
             {t('OdbData.CTD.mask')}
           </Typography>
@@ -209,7 +263,6 @@ export const OdbCTD = () => {
           sx={{ width: '85%', marginLeft: 2.1 }}
         />
       </Box>
-      <Divider variant="middle" />
       <GeoJSON
         ref={ref}
         data={data}
@@ -233,10 +286,14 @@ export const OdbCTD = () => {
           }
         }} />
       <DepthMeter values={ctdDepths} marks={marks} />
-      <LegendControl position='bottomleft' legendContent={<LegendCTD palette={reversePalette(palettes[palette], reverse)} interval={interval} min={minValue} max={maxValue} title={t(`OdbData.CTD.${type}`)} />} />
+      {legend}
       <RenderIf isTrue={openVertical}>
-        <VerticalPlot lat={ptData.lat} lng={ptData.lng} mode={periodTransform[period]} setOpen={setOpenVertical} />
+        <VerticalPlot lat={ptData.lat} lng={ptData.lng} mode={mode} parameter={type} setOpen={setOpenVertical} />
       </RenderIf>
+      <Divider variant="middle" />
+      <AlertSlide open={warning} setOpen={setWarning} severity='error'>
+        {t('alert.fetchFail')}
+      </AlertSlide>
     </>
   )
 }
