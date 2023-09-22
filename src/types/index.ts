@@ -1,3 +1,5 @@
+import * as geojson from 'geojson'
+
 export type coor = {
     lat: number;
     lng: number;
@@ -72,3 +74,43 @@ export interface ComponentList {
 }
 
 export type Palette = 'plasma' | 'viridis' | 'magma' | 'coolwarm' | 'bwr' | 'jet' | 'YlGnBu' | 'YlOrRd'
+export const isPalette = (p: any): p is Palette => ['plasma', 'viridis', 'magma', 'coolwarm', 'bwr', 'jet', 'YlGnBu', 'YlOrRd'].includes(p)
+export type CtdParameters = "temperature" | "salinity" | "density" | "fluorescence" | "transmission" | "oxygen"
+export const isCtdParameter = (p: any): p is CtdParameters => ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",].includes(p)
+
+export interface VerticalPlotProps {
+    lat: number
+    lng: number
+    mode: string
+    parameter: string
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export interface CtdProperties {
+    time_period: string
+    depth: number
+    count?: number
+    temperature?: number
+    salinity?: number
+    density?: number
+    fluorescence?: number
+    transmission?: number
+    oxygen?: number
+}
+
+export interface AdcpProperties {
+    time_period: string
+    depth: number
+    count?: number
+    u?: number
+    v?: number
+}
+
+export interface AdcpFeature extends geojson.Feature {
+    properties: AdcpProperties
+}
+
+export interface CtdFeature extends geojson.Feature {
+    properties: CtdProperties
+}
+

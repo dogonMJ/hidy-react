@@ -4,7 +4,7 @@ import { SliderMarks } from 'types'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import React, { forwardRef, useState } from 'react';
 import { SxProps, Theme } from '@mui/material/styles';
-import { coordInputSlice } from "store/slice/mapSlice";
+import { coordInputSlice } from 'store/slice/mapSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
 const preventHorizontalKeyboardNavigation = (event: React.KeyboardEvent) => {
@@ -36,20 +36,17 @@ const ValueLabelComponent = (props: ValueLabelComponentProps) => {
   )
 }
 
-// const MarkComponent = (props)=>{
-
-// }
-
-export const DepthMeterSlider = (props: { values: number[], marks: SliderMarks[] }) => {
+export const DepthMeterSlider = (props: { values: number[], marks: SliderMarks[], user?: any }) => {
   const dispatch = useDispatch()
   const { values, marks } = props
   const maxValue = values.length - 1
-  const [value, setValue] = useState(-1)
+  const defaultValue = useSelector((state: RootState) => state.coordInput.depthMeterValue[props.user])
+  const [value, setValue] = useState(defaultValue)
   const handleChange = (event: Event, value: any) => {
     setValue(value)
   }
   const handleChangeCommitted = (event: any, value: number | number[]) => {
-    dispatch(coordInputSlice.actions.depthMeterValue(value as number))
+    dispatch(coordInputSlice.actions.DepthMeterValue([props.user, value as number]))
   }
   return (
     <Slider
@@ -60,7 +57,7 @@ export const DepthMeterSlider = (props: { values: number[], marks: SliderMarks[]
       valueLabelDisplay="auto"
       min={0}
       max={maxValue}
-      value={value === -1 ? maxValue : value}
+      value={value}
       scale={x => values[x]}
       valueLabelFormat={x => `${Math.round(x * 10) / 10}m`}
       marks={marks}
@@ -69,10 +66,6 @@ export const DepthMeterSlider = (props: { values: number[], marks: SliderMarks[]
       onChange={handleChange}
       onChangeCommitted={handleChangeCommitted}
       sx={{
-        // zIndex: 700,
-        // '& input[type="range"]': {
-        //   WebkitAppearance: 'slider-vertical',
-        // },
         '& .MuiSlider-thumb': {
           '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
             boxShadow: '0 0 0 0px rgba(58, 133, 137, 0.16)',

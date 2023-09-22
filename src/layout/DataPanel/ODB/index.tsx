@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/store"
 import { coordInputSlice } from "store/slice/mapSlice";
-import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { useTranslation } from "react-i18next";
-import { List, ListItemButton, ListItemIcon, ListItemText, ListItem, ToggleButton } from '@mui/material';
+import { List, ListItemButton, ListItemIcon, ListItemText, ListItem, } from '@mui/material';
 import { Divider, Switch } from "@mui/material";
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import InfoButton from "components/InfoButton";
@@ -20,24 +19,17 @@ import { OdbMarineHeatwave } from './OdbMarineHeatwave';
 import { SubSelection } from 'components/SubSelection';
 import { ComponentList } from 'types';
 
+const seasons = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
+
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const [checked, setChecked] = useState<string[]>([]);
-  const type = useSelector((state: RootState) => state.odbCtdStates.selection)
-  const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
+  const period = useSelector((state: RootState) => state.coordInput.OdbSeasonSelection)
 
-  const handleCtdChange = (event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
-    if (newSelect) {
-      dispatch(odbCtdSlice.actions.Selection(newSelect))
-    }
-  };
-
-  const handleCurChange = (event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
-    if (newSelect) {
-      dispatch(coordInputSlice.actions.OdbCurSelection(newSelect))
-    }
-  };
+  const handleSeasonChange = useCallback((event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
+    newSelect && dispatch(coordInputSlice.actions.OdbSeasonSelection(newSelect))
+  }, [])
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -49,35 +41,17 @@ export const ODB = () => {
     setChecked(newChecked);
   };
 
-  const creatSelection = (value: string[] | number[], transParentNode?: string) => {
-    const res = value.map((value) => {
-      const translation = `${transParentNode}.${value}`
-      return (
-        <ToggleButton value={value} key={value}>
-          {t(translation)}
-        </ToggleButton>
-      )
-    })
-    return res
-  }
   const componentList: ComponentList = {
     odbTopo: <OdbTopo opacity={1} />,
     odbCtd: <>
-      <SubSelection select={type} handleChange={handleCtdChange}>
-        {creatSelection(['temperature', 'salinity', 'density', 'transmission', 'fluorescence', 'oxygen'], 'OdbData')}
-      </SubSelection>
       <RenderIf isTrue={!checked.includes('odbCurrent')}>
-        <SubSelection select={period} handleChange={handleCurChange}>
-          {creatSelection(['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter'], 'OdbData')}
-        </SubSelection>
+        <SubSelection select={period} handleChange={handleSeasonChange} values={seasons} transParentNode='OdbData' />
       </RenderIf>
       <OdbCTD />
     </>,
     odbGravity: <OdbGravity opacity={1} />,
     odbCurrent: <>
-      <SubSelection select={period} handleChange={handleCurChange}>
-        {creatSelection(['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter'], 'OdbData')}
-      </SubSelection>
+      <SubSelection select={period} handleChange={handleSeasonChange} values={seasons} transParentNode='OdbData' />
       <OdbCurrent />
     </>,
     odbSedCore: <OdbSedCore />,
@@ -87,6 +61,16 @@ export const ODB = () => {
     odbMicroPlastic: < OdbMicroplastics />,
     // WebMaps: <SatelliteWebMaps cache={cache} />
   }
+  // useEffect(() => {
+  //   const queryString = window.location.search
+  //   const urlParams = new URLSearchParams(queryString);
+  //   const ons: any = []
+  //   for (let key of urlParams.keys()) {
+  //     ons.push(key)
+  //   }
+  //   console.log(ons)
+  //   ons && setChecked(ons)
+  // }, [])
   return (
     <>
       <Divider variant="middle" />

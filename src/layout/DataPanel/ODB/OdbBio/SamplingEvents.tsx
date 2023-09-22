@@ -37,7 +37,7 @@ const dateToApiString = (dateObj: Date) => {
 
 export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }) => {
   const { dataset, filter } = props
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const ref = useRef<any>()
   const refCluster = useRef<any>()
   const map = useMap()
@@ -69,7 +69,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           {t('OdbData.date')}: {property.eventDate}<br />
           {t('OdbData.Bio.topic')}: {t(`OdbData.Bio.${property.dataTopic}`)}<br />
           {t('OdbData.Bio.rank')}: {t(`OdbData.Bio.${property.taxonRank}`)}<br />
-          {t('OdbData.Bio.name')}: {property.canonicalName}
+          {t('OdbData.Bio.name')}: {i18n.language === 'zh-TW' ? `${property.canonicalName} ${property.chineseName}` : property.canonicalName}
         </Box>
       )
     } else {
@@ -117,7 +117,9 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     );
   }
 
-  const handleTaxaChange = (event: any, value: string) => setTaxon(value);
+  const handleTaxaChange = (event: any, value: string) => {
+    setTaxon(value)
+  };
 
   const handleDateChange = (newDate: Date[]) => {
     if (newDate.length === 1) {
@@ -288,6 +290,10 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
             onChange={handleTaxaChange}
             inputValue={inputValue}
             onInputChange={(_, newInputValue) => {
+              if (!newInputValue) {
+                refCluster.current.clearLayers()
+                ref.current.clearLayers()
+              }
               setInputValue(newInputValue)
             }}
             renderInput={(params) => (

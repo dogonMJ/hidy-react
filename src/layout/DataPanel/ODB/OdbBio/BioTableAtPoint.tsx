@@ -16,8 +16,8 @@ const boxStyle = {
   overflow: 'auto'
 };
 
-const rankList = ["kingdom", "phylum", "subphylum", "infraphylum", "division", "class", "subclass", "infraclass", "order", "suborder",
-  "infraorder", "family", "subfamily", "infrafamily", "genus", "subgenus", "species", "subspecies", "<group>"]
+const rankList = ["kingdom", "subkingdom", "infrakingdom", "phylum", "subphylum", "infraphylum", "parvphylum", "gigaclass", "megaclass", "superclass", "class", "subclass", "infraclass",
+  "subterclass", "superorder", "order", "suborder", "infraorder", "parvorder", "superfamily", "family", "subfamily", "tribe", "genus", "subgenus", "species", "subspecies", "<group>"]
 
 const rankOrder = rankList.reduce((acc, currentValue, index) => {
   acc[currentValue] = index + 1;
@@ -26,7 +26,7 @@ const rankOrder = rankList.reduce((acc, currentValue, index) => {
 
 export const BioTableAtPoint = forwardRef((props: { eventID: string, citation: StringObject }, ref) => {
   const { eventID, citation } = props
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [dataArray, setDataArray] = useState<StringObject[]>([])
 
   const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxlist/${eventID}`
@@ -65,7 +65,7 @@ export const BioTableAtPoint = forwardRef((props: { eventID: string, citation: S
                       {t(`OdbData.Bio.${data.taxonRank}`)}
                     </TableCell>
                     <TableCell style={{ textAlign: 'left' }}>
-                      {data.canonicalName}
+                      {i18n.language === 'zh-TW' ? `${data.canonicalName} ${data.chineseName}` : data.canonicalName}
                     </TableCell>
                   </TableRow>
                 )

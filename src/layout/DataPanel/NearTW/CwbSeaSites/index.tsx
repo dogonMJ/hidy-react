@@ -62,7 +62,7 @@ const CwbSeaSites = () => {
       .then((response) => response.json())
       .then((data) => {
         const stationInfo = {} as DataArray;
-        data.cwbdata.Resources.Resource.Data.SeaSurfaceObs.Location.forEach((location: SiteInfo) => {
+        data.cwaopendata.Resources.Resource.Data.SeaSurfaceObs.Location.forEach((location: SiteInfo) => {
           const { StationID, StationLatitude, StationLongitude, StationName, StationNameEN } = location.Station;
           stationInfo[StationID] = {
             StationID,

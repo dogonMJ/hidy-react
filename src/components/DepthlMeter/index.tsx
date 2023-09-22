@@ -5,7 +5,7 @@ import { SliderMarks } from 'types'
 import { DepthMeterSlider } from 'components/DepthlMeter/DepthMeterSlider'
 import { memo, useState } from 'react';
 
-export const DepthMeter = memo((props: { values: number[], marks: SliderMarks[] }) => {
+export const DepthMeter = memo((props: { values: number[], marks: SliderMarks[], user?: any }) => {
   const mapContainer = document.getElementById('mapContainer')
   const map = useMap()
   const [isEnter, setIsEnter] = useState(false)
@@ -38,10 +38,10 @@ export const DepthMeter = memo((props: { values: number[], marks: SliderMarks[] 
               padding: '15px 5px',
               top: '585px',
               height: 'calc(70vh - 400px)',
-              // backgroundColor: 'rgba(255,255,255,0.7)',
-              backgroundColor: isEnter ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.7)',
+              backgroundColor: 'rgba(255,255,255,1)',
+              // backgroundColor: isEnter ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.7)',
             }}>
-            <DepthMeterSlider values={props.values} marks={props.marks} />
+            <DepthMeterSlider values={props.values} marks={props.marks} user={props.user} />
           </Paper>
         </Box>
         , mapContainer)

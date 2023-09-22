@@ -25,7 +25,6 @@ interface OnOff {
   [key: string]: boolean
 }
 
-
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -83,6 +82,16 @@ const DataPanel = () => {
     // L.DomEvent.disableClickPropagation(ref.current);
     L.DomEvent.disableScrollPropagation(ref.current);
   })
+  // useEffect(() => {
+  //   const queryString = window.location.search
+  //   const urlParams = new URLSearchParams(queryString);
+  //   const ons = urlParams.get('data')?.split(',')
+  //   ons?.forEach((on) => {
+  //     onOff[on] = true
+  //   })
+  //   ons && setOpen(true)
+  //   console.log(urlParams.get('data'), onOff)
+  // }, [])
   return (
     <div
       ref={ref}

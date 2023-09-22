@@ -42,7 +42,6 @@ export const SignIn = (props: { setOpen: any, setSignUpOpen: any, setResetPwdOpe
   return (
     <Container component="main" maxWidth="xs" sx={{ width: '80%', }}>
       <CssBaseline />
-      {/* <button onClick={() => account.test()}>dfafdasfas</button> */}
       <Box
         sx={{
           display: 'flex',

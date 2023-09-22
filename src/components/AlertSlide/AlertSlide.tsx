@@ -5,7 +5,7 @@ import { ReactNode, useEffect } from "react";
 export const AlertSlide = (props: { open: boolean, setOpen: any, severity?: AlertColor, timeout?: number, children?: ReactNode, icon?: ReactNode }) => {
   const { open, setOpen, severity, timeout = 3000, children, icon } = { ...props }
   useEffect(() => {
-    if (timeout) {
+    if (open && timeout) {
       const timer = setTimeout(() => setOpen(false), timeout)
       return () => clearTimeout(timer)
     }

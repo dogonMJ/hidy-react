@@ -10,9 +10,6 @@ interface ToolTip {
   east: number | null
   composite: string | null
 }
-const createUrl = (indetifier: string, date: string) => {
-  return `https://odbgo.oc.ntu.edu.tw/odbargo/static/data/json/${indetifier}/${date}.json`
-}
 
 const changeDate = (datetime: string) => {
   // 008_046 time coverage 12:00~12:00(+1) UTC
@@ -25,16 +22,17 @@ const changeDate = (datetime: string) => {
   }
 }
 
-const AnimatedLayers = (props: { indetifier: string, time: string }) => {
+const AnimatedLayers = (props: { identifier: string, time: string }) => {
+  const { identifier, time } = props
+
   const canvasRef = useRef<any>(null)
   const windy = useRef<any>()
   const map = useMap()
   const [topLeft, setTopLeft] = useState({ top: 0, left: 0 })
   const [toolTip, setToolTip] = useState<ToolTip>({ lat: null, lng: null, north: null, east: null, composite: null })
 
-  const identifier = props.indetifier
-  const date = changeDate(props.time)
-  const url = createUrl(identifier, date)
+  const date = changeDate(time)
+  const url = `https://odbgo.oc.ntu.edu.tw/odbargo/static/data/json/${identifier}/${date}.json`
   const loadWindy = async (jsonUrl: string) => {
     if (windy.current) {
       windy.current.stop()
@@ -66,6 +64,9 @@ const AnimatedLayers = (props: { indetifier: string, time: string }) => {
   }
   useEffect(() => {
     adjustXY(map.getPixelBounds(), map.getPixelOrigin())
+    return () => {
+      sessionStorage.removeItem('jsonData')
+    }
   }, [])
   useEffect(() => {
     // adjustXY(map.getPixelBounds(), map.getPixelOrigin())

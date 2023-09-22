@@ -86,7 +86,7 @@ export const screenshot = async (map: Map, bounds: LatLngBounds) => {
     height,
     useCORS: true,
     ignoreElements: (element) => {
-      const ignoreClass = ['leaflet-control-container', 'leaflet-pane leaflet-clip-pane']
+      const ignoreClass = ['leaflet-pane leaflet-clip-pane', 'leaflet-top leaflet-right']
       const ignoreId = ['mouseCoordinates', 'dataPanel']
       if (ignoreClass.includes(element.className) || ignoreId.includes(element.id)) { return true } else { return false }
     }

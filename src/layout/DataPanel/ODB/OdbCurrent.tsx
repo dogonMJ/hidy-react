@@ -1,80 +1,66 @@
 import { GeoJSON } from 'react-leaflet'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, } from 'react'
+import { renderToString } from 'react-dom/server';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { Box } from '@mui/material';
-import { coor, SliderMarks } from 'types';
+import * as geojson from 'geojson'
 import 'leaflet'
 import 'leaflet-canvas-markers'
 import { DepthMeter } from 'components/DepthlMeter';
 import { LegendControl } from "components/LeafletLegend"
-import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
-// import ArrowRight from 'assets/images/straight-right-arrow.svg';
-import Arrow from 'assets/images/ArrowUp.svg'
-import { useTranslation } from 'react-i18next';
-import { periodTransform } from 'Utils/UtilsODB';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-
+import Arrow from 'assets/images/ArrowUp.svg'
+import { periodTransform, calSpd, calDir, adcpDepthMeterProps } from 'Utils/UtilsODB';
+import { RenderIf } from 'components/RenderIf/RenderIf';
+import { AdcpProfile } from 'components/VerticalPlot/AdcpProfile';
 declare const L: any;
-
+const adcpDepths = adcpDepthMeterProps().adcpDepths
+const marks = adcpDepthMeterProps().marks
 // const legendColors: StringObject = {
 //   '&#x27A1; 1 m/s': "#e69138",
 // }
-
-const adcpDepths = Array.from(Array(31), (e, i) => i * -10).slice(2).reverse()
-const marks: SliderMarks[] = []
-adcpDepths.forEach((depth, i) => {
-  if (depth % 50 === 0 || depth === -20) {
-    marks.push({
-      value: i,
-      label: `${depth.toString()} m`
-    })
-  } else {
-    marks.push({
-      value: i,
-      label: ``
-    })
-  }
-})
-
-const calSpd = (u: number, v: number) => Math.sqrt(u ** 2 + v ** 2)
-const calDir = (u: number, v: number) => {
-  const dir = 90 - Math.atan2(v, u) * 180 / Math.PI;
-  if (dir < 0) {
-    return dir + 360
-  } else {
-    return dir
-  }
-}
 
 export const OdbCurrent = () => {
   const ref = useRef<any>()
   const { t } = useTranslation()
   const [data, setData] = useState<any>()
-  const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
-  const [content, setContent] = useState<string | JSX.Element>('')
   const [warning, setWarning] = useState(false)
-  const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
-  const period = useSelector((state: RootState) => state.coordInput.OdbCurSelection)
-  const legendContent = `<img src=${Arrow} height=20 width=10><span style="margin-left:8px;">0.5 m/s</span>`
+  const [openVertical, setOpenVertical] = useState(false)
+  const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
+  // const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
+  const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue['odbCurrent'])
+  const period = useSelector((state: RootState) => state.coordInput.OdbSeasonSelection)
+  // const depth = depthMeterValue > 0 ? adcpDepths[depthMeterValue] : adcpDepths[adcpDepths.length - 1]
+  const depth = adcpDepths[depthMeterValue]
+  const mode = periodTransform[period]
 
-  const mouseOver = (e: any) => {
-    const property = e.layer.feature.properties
+  const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: any) => {
+    const property = feature.properties
+    const coord = feature.geometry.coordinates
     const u = Number(property.u)
     const v = Number(property.v)
     const spd = calSpd(u, v)
     const dir = calDir(u, v)
     const content = (
       <Box>
-        {t('OdbData.spd')}: {spd.toFixed(3)} m/s<br />
-        {t('OdbData.dir')}: {dir.toFixed(3)}<br />
-        {t('OdbData.u')}: {u.toFixed(3)} m/s<br />
-        {t('OdbData.v')}: {v.toFixed(3)} m/s<br />
+        {coord[1]}, {coord[0]}<br />
+        {t('OdbData.current.spd')}: {spd.toFixed(3)}<br />
+        {t('OdbData.current.dir')}: {dir.toFixed(3)}<br />
+        {t('OdbData.current.u')}: {u.toFixed(3)}<br />
+        {t('OdbData.current.v')}: {v.toFixed(3)}<br />
         {t('OdbData.count')}: {property.count}
       </Box>
     )
-    setPosition(e.latlng)
-    setContent(content)
+    layer.bindTooltip(renderToString(content))
+    layer.on('click', () => {
+      setPtData({
+        lat: coord[1],
+        lng: coord[0],
+      })
+      setOpenVertical(true)
+    })
   }
   const pointToLayer = (feature: any, layer: L.LatLng) => {
     const property = feature.properties
@@ -85,7 +71,6 @@ export const OdbCurrent = () => {
     const marker = L.canvasMarker(layer, {
       radius: 20,
       img: {
-        // <a href="https://www.flaticon.com/free-icons/arrow" title="arrow icons">Arrow icons created by Freepik - Flaticon</a>
         url: Arrow,    //image link
         size: [size / 2, size],     //image size ( default [40, 40] )
         rotate: angle,         //image base rotate ( default 0 )
@@ -95,9 +80,7 @@ export const OdbCurrent = () => {
     return marker
   }
   useEffect(() => {
-    const depth = depthMeterValue ? adcpDepths[depthMeterValue] ? -adcpDepths[depthMeterValue] : 20 : 20
-    const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&format=geojson&mode=${periodTransform[period]}&append=u,v,count&mean_threshold=10`
-
+    const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&format=geojson&mode=${mode}&append=u,v,count&mean_threshold=10`
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
@@ -106,15 +89,17 @@ export const OdbCurrent = () => {
         ref.current.addData(json)
       })
       .catch(() => setWarning(true))
-  }, [depthMeterValue, period, t])
+  }, [depth, mode, t])
 
   return (
     <>
-      <GeoJSON ref={ref} data={data} pointToLayer={pointToLayer} eventHandlers={{ mouseover: mouseOver }} >
-        <GeoJsonTooltip position={position} content={content} />
-      </GeoJSON>
-      <DepthMeter values={adcpDepths} marks={marks} />
-      <LegendControl position='bottomleft' legendContent={legendContent} />
+      {/* <GeoJSON ref={ref} data={data} pointToLayer={pointToLayer} eventHandlers={{ mouseover: mouseOver }} > */}
+      <GeoJSON ref={ref} data={data} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
+      <RenderIf isTrue={openVertical}>
+        <AdcpProfile lat={ptData.lat} lng={ptData.lng} mode={mode} parameter={'spd'} setOpen={setOpenVertical} />
+      </RenderIf>
+      <DepthMeter values={adcpDepths} marks={marks} user={'odbCurrent'} />
+      <LegendControl position='bottomleft' legendContent={`<img src=${Arrow} height=20 width=10><span style="margin-left:8px;">0.5 m/s</span>`} />
       <AlertSlide open={warning} setOpen={setWarning} severity='error'>
         {t('alert.fetchFail')}
       </AlertSlide>

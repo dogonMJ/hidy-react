@@ -30,7 +30,7 @@ const AnimatedCurrents = () => {
       <RenderIf isTrue={identifier !== 'close'}>
         <Pane name="canvas" style={{ zIndex: 400 }}>
           <AnimatedLayers
-            indetifier={identifier}
+            identifier={identifier}
             time={datetime}
           />
         </Pane>

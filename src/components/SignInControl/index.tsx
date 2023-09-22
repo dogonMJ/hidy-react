@@ -1,11 +1,9 @@
-import { useState, useRef, createElement } from "react";
+import { useState, useRef } from "react";
 import 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw.css'
-import { Box, DialogContent, IconButton, Slide, Paper, Stack } from "@mui/material";
+import { DialogContent, IconButton, Slide, Paper, Stack } from "@mui/material";
 import { Dialog } from '@mui/material';
 import { SignIn } from "layout/Account/SignIn"
-import LoginIcon from '@mui/icons-material/Login';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Avatar from '@mui/material/Avatar';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
