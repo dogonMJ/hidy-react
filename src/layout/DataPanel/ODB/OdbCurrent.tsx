@@ -15,6 +15,8 @@ import Arrow from 'assets/images/ArrowUp.svg'
 import { periodTransform, calSpd, calDir, adcpDepthMeterProps } from 'Utils/UtilsODB';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AdcpProfile } from 'components/VerticalPlot/AdcpProfile';
+import { LineProfile } from 'components/VerticalPlot/LineProfile';
+
 declare const L: any;
 const adcpDepths = adcpDepthMeterProps().adcpDepths
 const marks = adcpDepthMeterProps().marks

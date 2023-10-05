@@ -1,11 +1,11 @@
-import { Select, OutlinedInput, Box, Chip, MenuItem, Slider, Typography, Autocomplete, TextField, Modal, Link } from "@mui/material"
+import { Select, Box, Chip, MenuItem, Slider, Typography, Autocomplete, TextField, Modal, Link, FormControl, InputLabel } from "@mui/material"
 import { useState, useEffect, useRef, SyntheticEvent } from "react";
 import { renderToString } from 'react-dom/server';
 import { GeoJSON, useMap } from "react-leaflet"
 import { LatLng } from "leaflet"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
-import { SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent, Popper, styled, autocompleteClasses } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import * as geojson from 'geojson';
 import Flatpickr from "react-flatpickr";
@@ -18,8 +18,9 @@ import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { RenderIf } from "components/RenderIf/RenderIf";
 import FormatCoordinate from "components/FormatCoordinate";
 import { BioTableAtPoint } from "./BioTableAtPoint";
-import { category23 } from "./utils";
-
+import { dateToBioApiString, category23 } from "Utils/UtilsODB";
+import { LargeFixedSizeListComponent } from "./LargeFixedSizeListComponent";
+import { odbBioSlice } from "store/slice/odbBioSlice";
 declare const L: any;
 
 const topicList = {
@@ -30,28 +31,35 @@ const topicList = {
   "zooplankton": { color: category23[4] },
 } as { [key: string]: StringObject }
 
-const dateToApiString = (dateObj: Date) => {
-  dateObj.setTime(dateObj.getTime() + 8 * 3600000)
-  return dateObj.toISOString().split('T')[0]
-}
+const StyledPopper = styled(Popper)({
+  [`& .${autocompleteClasses.listbox}`]: {
+    boxSizing: 'border-box',
+    '& ul': {
+      padding: 0,
+      margin: 0,
+    },
+  },
+});
 
 export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }) => {
   const { dataset, filter } = props
   const { t, i18n } = useTranslation()
+  const dispatch = useDispatch()
   const ref = useRef<any>()
   const refCluster = useRef<any>()
+  const url = useRef('')
   const map = useMap()
+  const bioDateRange = useSelector((state: RootState) => state.odbBioStates.bioDateRange)
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [topics, setTopics] = useState<string[]>([])
   const [taxon, setTaxon] = useState<string>('')
   const [taxaList, setTaxaList] = useState<string[]>([''])
   const [openAlert, setOpenAlert] = useState(false)
   const [data, setData] = useState<any>()
-  const [date, setDate] = useState<string[]>([])
   const [lat, setLat] = useState<number[]>([10, 40]);
   const [lon, setLon] = useState<number[]>([109, 135]);
-  const [sliderLat, setSliderLat] = useState<number[]>([10, 40]);
-  const [sliderLon, setSliderLon] = useState<number[]>([109, 135]);
+  const [sliderLat, setSliderLat] = useState<number[]>(lat);
+  const [sliderLon, setSliderLon] = useState<number[]>(lon);
   const [eventID, setEventID] = useState<string>('')
   const [cite, setCite] = useState<StringObject>({ cite: '', source: '' })
   const [clusterLevel, setClusterLevel] = useState<number>(8)
@@ -117,18 +125,18 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     );
   }
 
-  const handleTaxaChange = (event: any, value: string) => {
-    setTaxon(value)
+  const handleTaxaChange = (event: any, value: string | null) => {
+    value ? setTaxon(value) : setTaxon('')
   };
 
   const handleDateChange = (newDate: Date[]) => {
     if (newDate.length === 1) {
-      const dt = dateToApiString(newDate[0])
-      setDate([dt, dt])
+      const dt = dateToBioApiString(newDate[0])
+      dispatch(odbBioSlice.actions.BioDateRange([dt, dt]))
     } else {
-      const from = dateToApiString(newDate[0])
-      const to = dateToApiString(newDate[1])
-      setDate([from, to])
+      const from = dateToBioApiString(newDate[0])
+      const to = dateToBioApiString(newDate[1])
+      dispatch(odbBioSlice.actions.BioDateRange([from, to]))
     }
   }
   const handleLatChange = (event: Event, newValue: number | number[]) => {
@@ -156,19 +164,19 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   };
 
   useEffect(() => {
-    let url = ''
     if (filter === 'topic') {
       const topic = topics.toString() ? topics.toString() : ' '
-      url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/event/${dataset}?topic=${topic}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${date[0]}&endDate=${date[1]}`
+      url.current = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/event/${dataset}?topic=${topic}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${bioDateRange[0]}&endDate=${bioDateRange[1]}`
     } else if (filter === 'taxon') {
-      url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxa/${dataset}/${taxon}?minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${date[0]}&endDate=${date[1]}`
+      url.current = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxa/${dataset}/${taxon}?minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${bioDateRange[0]}&endDate=${bioDateRange[1]}`
     }
-    fetch(url)
+    fetch(url.current)
       .then(res => res.json())
       .then(json => {
         if (json.length === 0) {
           refCluster.current.clearLayers()
           ref.current.clearLayers()
+          setData(null)
           setOpenAlert(true)
         } else {
           setData(json)
@@ -178,7 +186,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           refCluster.current.addLayers(ref.current.getLayers())
         }
       })
-  }, [taxon, topics, dataset, lon, lat, date, filter, t])
+  }, [filter, dataset, topics, taxon, lat, lon, bioDateRange, t])
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxopt/${dataset}`)
@@ -197,12 +205,13 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
             className='chemDatePickr'
             onChange={handleDateChange}
             options={{
+              defaultDate: bioDateRange,
               allowInput: true,
               weekNumbers: false,
               minDate: '1965-06-29',
-              dateFormat: 'Y-M-d',
-              altFormat: 'Y-M-d',
-              ariaDateFormat: 'Y-M-d',
+              dateFormat: 'Y-m-d',
+              altFormat: 'Y-m-d',
+              ariaDateFormat: 'Y-m-d',
               mode: "range",
             }}
           />
@@ -250,34 +259,38 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.select')}{t('OdbData.Bio.topic')}
           </Typography>
-          <Select
-            multiple
-            fullWidth
-            size="small"
-            value={topics}
-            onChange={handleTopicChange}
-            input={<OutlinedInput label="Topics" />}
-            renderValue={(selected) => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={t(`OdbData.Bio.${value}`)} />
-                ))}
-              </Box>
-            )}
-            sx={{
-              maxWidth: 344
-            }}
-          >
-            {Object.keys(topicList).map((topic) => (
-              <MenuItem
-                key={topic}
-                value={topic}
-              >
-                <Typography sx={{ backgroundColor: topicList[topic].color, color: topicList[topic].color }}>&nbsp;&nbsp;</Typography>&nbsp;&nbsp;
-                {t(`OdbData.Bio.${topic}`)}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl fullWidth size="small">
+            <InputLabel id='topic-label'>{t(`OdbData.Bio.topic`)}</InputLabel>
+            <Select
+              multiple
+              fullWidth
+              id='topic-label'
+              label={t(`OdbData.Bio.topic`)}
+              size="small"
+              value={topics}
+              onChange={handleTopicChange}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={t(`OdbData.Bio.${value}`)} />
+                  ))}
+                </Box>
+              )}
+              sx={{
+                maxWidth: 344
+              }}
+            >
+              {Object.keys(topicList).map((topic) => (
+                <MenuItem
+                  key={topic}
+                  value={topic}
+                >
+                  <Typography sx={{ backgroundColor: topicList[topic].color, color: topicList[topic].color }}>&nbsp;&nbsp;</Typography>&nbsp;&nbsp;
+                  {t(`OdbData.Bio.${topic}`)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </RenderIf>
         <RenderIf isTrue={filter === 'taxon'}>
           <Typography variant="subtitle2" gutterBottom>
@@ -286,16 +299,31 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           <Autocomplete
             freeSolo
             disableClearable
+            disableListWrap
+            // disablePortal
+            size="small"
             options={taxaList.map((taxon) => taxon)}
             onChange={handleTaxaChange}
+            onFocus={() => {
+              const panel = document.getElementById("navBar")
+              panel!.style.overflow = 'hidden'
+            }}
+            onBlur={() => {
+              const panel = document.getElementById("navBar")
+              panel!.style.overflow = 'auto'
+            }}
+            PopperComponent={StyledPopper}
+            ListboxComponent={LargeFixedSizeListComponent}
             inputValue={inputValue}
             onInputChange={(_, newInputValue) => {
               if (!newInputValue) {
                 refCluster.current.clearLayers()
                 ref.current.clearLayers()
+                setTaxon('')
               }
               setInputValue(newInputValue)
             }}
+            renderOption={(props, option, state) => [props, option, state.index] as React.ReactNode}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -306,6 +334,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
                 }}
               />
             )}
+
           />
         </RenderIf>
         <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {t('OdbData.nodata')} </AlertSlide>

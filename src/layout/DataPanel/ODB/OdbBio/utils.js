@@ -1,3 +1,5 @@
+// utils for chart.js
+
 export function mergeOptions (options, defaults) {
   if (options) options = JSON.parse(JSON.stringify(options));
   else options = {};
@@ -56,19 +58,6 @@ function roundTo(number, to, inverse) {
   if (inverse) return Math.round(number * to) / to;
   else return Math.round(number / to) * to;
 }
-
-//D:\GitHub\hidy-react\node_modules\d3\src\scale\category.js
-export const d3_category10 = [
-  0x1f77b4, 0xff7f0e, 0x2ca02c, 0xd62728, 0x9467bd,
-  0x8c564b, 0xe377c2, 0x7f7f7f, 0xbcbd22, 0x17becf
-].map(value => '#' + value.toString(16));
-// d3_category20+3
-export const category23 = [
-  0x1f77b4, 0xaec7e8, 0xff7f0e, 0xffbb78, 0x2ca02c, 0x98df8a, 0xd62728, 0xff9896, 0x9467bd, 0xc5b0d5,
-  0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5,
-  0xffff33, 0xa65628, 0xf781bf
-].map(value => '#' + value.toString(16));
-
 
 //   module.exports.mergeOptions = mergeOptions;
 //   module.exports.toArray = toArray;

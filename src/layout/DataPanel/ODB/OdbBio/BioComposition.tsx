@@ -7,7 +7,7 @@ import { BioDataset, BioFilter } from 'types'
 import { Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { SwitchSameColor } from "components/SwitchSameColor";
 import { LegendControl } from 'components/LeafletLegend';
-import { category23 } from './utils.js';
+import { category23 } from 'Utils/UtilsODB';
 import * as geojson from 'geojson';
 // import { MiniCharts } from './PieChart.js'
 import './charts.js'

@@ -50,8 +50,8 @@ export const OdbMicroplastics = () => {
   const [date, setDate] = useState<string[]>([])
   const [lat, setLat] = useState<number[]>([10, 40]);
   const [lon, setLon] = useState<number[]>([109, 135]);
-  const [sliderLat, setSliderLat] = useState<number[]>([10, 40]);
-  const [sliderLon, setSliderLon] = useState<number[]>([109, 135]);
+  const [sliderLat, setSliderLat] = useState<number[]>(lat);
+  const [sliderLon, setSliderLon] = useState<number[]>(lon);
   const [clusterLevel, setClusterLevel] = useState<number>(8)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layers: L.LayerGroup) => {

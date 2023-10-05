@@ -7,6 +7,7 @@ import { PlotProfile } from "../PlotProfile";
 import { varList, avgTimeList } from "../varList";
 import { useDispatch } from "react-redux";
 import { coordInputSlice } from "store/slice/mapSlice";
+import { LineProfile } from "components/VerticalPlot/LineProfile";
 
 const years = Array.from({ length: 26 }, (v, i) => (i + 1993).toString())
 
@@ -129,6 +130,8 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
       </RenderIf>
       <RenderIf isTrue={profile && url.includes('zsect') && parameter}>
         <PlotProfile url={url} coord={coord} text={text} />
+        {/* <LineProfile url={`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=105&lon1=135&lat0=${(Number(coord) / 100).toFixed(2)}&mode=0&dep_mode=10&format=json&append=temperature`} text={{ unit: 'xxx', title: 'ds' }} /> */}
+        {/* <LineProfile url={`https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=105&lon1=135&lat0=${(Number(coord) / 100).toFixed(2)}&dep_mode=exact&format=json&mean_threshold=10&append=u%2Cv%2Ccount`} text={{ unit: 'xxx', title: 'ds' }} /> */}
       </RenderIf>
     </>
   )

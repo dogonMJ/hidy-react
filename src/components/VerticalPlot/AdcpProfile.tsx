@@ -1,23 +1,16 @@
 import { useEffect, useRef, useState, memo } from 'react'
 import { LineChart } from 'components/LineChart';
 import { PlotParams } from "react-plotly.js";
-import { sortXY } from 'Utils/UtilsODB';
-import { Select, MenuItem, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'store/store';
-import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
 import { VerticalPlotProps, AdcpFeature } from 'types';
-import { calSpd } from 'Utils/UtilsODB';
+import { calSpd, calDir } from 'Utils/UtilsODB';
 
-
-const parameters = ["u", "v", "spd",]
 
 export const AdcpProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, parameter, setOpen }) => {
   const ref = useRef(null)
   const { t } = useTranslation()
-  const dispatch = useDispatch()
   const [warning, setWarning] = useState(false)
   const [plotProps, setPlotProps] = useState<PlotParams>({
     data: [],
@@ -89,8 +82,7 @@ export const AdcpProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, 
 
         json.features.sort((a: AdcpFeature, b: AdcpFeature) => a.properties.depth - b.properties.depth)
         const spd = json.features.map((feature: AdcpFeature) => calSpd(feature.properties.u as number, feature.properties.v as number))
-        const v = json.features.map((feature: AdcpFeature) => feature.properties.v)
-        const u = json.features.map((feature: AdcpFeature) => feature.properties.u)
+        const dir = json.features.map((feature: AdcpFeature) => calDir(feature.properties.u as number, feature.properties.v as number))
         const y = json.features.map((feature: AdcpFeature) => -feature.properties.depth)
         plotProps.data = [{
           x: spd,
@@ -98,15 +90,11 @@ export const AdcpProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, 
           type: 'scatter',
           name: t(`OdbData.current.spd`),
         }, {
-          x: v,
+          x: dir,
           y: y,
           type: 'scatter',
-          name: t(`OdbData.current.v`),
-        }, {
-          x: u,
-          y: y,
-          type: 'scatter',
-          name: t(`OdbData.current.u`),
+          xaxis: 'x2',
+          name: t(`OdbData.current.dir`),
         },]
 
         const newProps = Object.assign({}, plotProps)

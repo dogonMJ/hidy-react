@@ -142,6 +142,7 @@ const DataPanel = () => {
             padding: 0
           }}
           component="nav"
+          id='navBar'
           aria-labelledby="nested-list-subheader"
         // onMouseEnter={enterPanel}
         // onMouseLeave={leavePanel}
