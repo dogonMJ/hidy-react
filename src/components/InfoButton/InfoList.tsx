@@ -143,7 +143,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 10:00 (UTC+8)<br />
           {t('DataInfo.others')}: <br />
           <a target="_blank" href="https://catalogue.marine.copernicus.eu/documents/PUM/CMEMS-SL-PUM-008-032-068.pdf" rel="noreferrer">{t('Animated.info')}</a><br />
-          <i>Generated using E.U. Copernicus Marine Service Information;
+          <i>Generated using E.U. Copernicus Marine Service Information:
             <a target="_blank" href="https://doi.org/10.48670/moi-00149" rel="noreferrer">https://doi.org/10.48670/moi-00149</a>
           </i><br />
         </Typography>
@@ -162,7 +162,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 10:00 (UTC+8)<br />
           {t('DataInfo.others')}: <br />
           <a target="_blank" href="https://catalogue.marine.copernicus.eu/documents/PUM/CMEMS-SL-PUM-008-032-068.pdf" rel="noreferrer">{t('Animated.info')}</a><br />
-          <i>Generated using E.U. Copernicus Marine Service Information;
+          <i>Generated using E.U. Copernicus Marine Service Information:
             <a target="_blank" href="https://doi.org/10.48670/moi-00149" rel="noreferrer">https://doi.org/10.48670/moi-00149</a>
           </i><br />
         </Typography>

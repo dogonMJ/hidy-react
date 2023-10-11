@@ -61,16 +61,15 @@ export const ODB = () => {
     odbMicroPlastic: < OdbMicroplastics />,
     // WebMaps: <SatelliteWebMaps cache={cache} />
   }
-  // useEffect(() => {
-  //   const queryString = window.location.search
-  //   const urlParams = new URLSearchParams(queryString);
-  //   const ons: any = []
-  //   for (let key of urlParams.keys()) {
-  //     ons.push(key)
-  //   }
-  //   console.log(ons)
-  //   ons && setChecked(ons)
-  // }, [])
+  useEffect(() => {
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString);
+    const ons: any = []
+    for (let key of urlParams.keys()) {
+      ons.push(key)
+    }
+    ons && setChecked(ons)
+  }, [])
   return (
     <>
       <Divider variant="middle" />
