@@ -79,7 +79,7 @@ const LeafletMap = () => {
         <div id={'LengendContainer'} style={{ display: 'flex', flexDirection: 'column-reverse', position: 'absolute', bottom: 25, zIndex: 1000 }}></div>
         <Stack direction="column">
           <SignInControl />
-          <ShareControl />
+          {/* <ShareControl /> */}
           <LanguageControl />
           <MyBaseLayers />
           <ZoomControl position="topright" />

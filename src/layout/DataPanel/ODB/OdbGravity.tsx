@@ -1,8 +1,7 @@
-import { TileLayer } from 'react-leaflet'
 import { WMSTileLayer } from 'react-leaflet'
 import React from 'react'
 import { LegendControl } from 'components/LeafletLegend';
-import GracityLegend from 'assets/images/colorbar_gravity.png'
+import GravityLegend from 'assets/images/colorbar_gravity.png'
 
 export const OdbGravity = React.memo((props: { opacity: number }) => {
   const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbgeo/wms?`
@@ -16,7 +15,7 @@ export const OdbGravity = React.memo((props: { opacity: number }) => {
   return (
     <>
       <WMSTileLayer url={url} params={params} opacity={props.opacity} />
-      {/* <LegendControl position='bottomleft' legendContent={contents.join('<br>')} legendClassNames={'topoLegend'} /> */}
+      <LegendControl position='bottomleft' legendContent={`<img src=${GravityLegend} alt="legend" style="width:320px;margin:-5px"/>`} legendClassNames={'topoLegend'} />
     </>
   )
 })
