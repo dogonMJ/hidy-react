@@ -29,7 +29,7 @@ const PopupTemplate = (props: { weatherData: any, stationId: string }) => {
   weatherData.weatherElement.forEach((element: Element) => {
     weatherElements[element.elementName] = element.elementValue
   })
-  const link = "https://www.cwb.gov.tw/V8/" + t('CWBsites.sitelang') + "/W/OBS_Station.html?ID=" + stationId.slice(0, -1)
+  const link = "https://www.cwa.gov.tw/V8/" + t('CWBsites.sitelang') + "/W/OBS_Station.html?ID=" + stationId.slice(0, -1)
   return (
     <table>
       <caption>
