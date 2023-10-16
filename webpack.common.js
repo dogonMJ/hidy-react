@@ -19,7 +19,7 @@ module.exports = {
       if (runtime === 'sw') {
         return '[name].js';
       }
-      return 'bundle.js';
+      return 'bundle.[hash].js';
     },
   },
   module: {
