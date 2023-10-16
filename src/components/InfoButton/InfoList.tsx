@@ -312,7 +312,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
           {t('DataInfo.productID')}: <span>M-B0071</span><br />
           {t('DataInfo.variable')}:橫向流速、直向流速<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -327,7 +327,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
           {t('DataInfo.productID')}: <span>M-B0071</span><br />
           {t('DataInfo.variable')}:橫向流速、直向流速<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -342,7 +342,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
           {t('DataInfo.productID')}: <span>M-B0071海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海表溫度<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -357,7 +357,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海表鹽度<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -372,7 +372,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:流速<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -387,7 +387,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海高<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />

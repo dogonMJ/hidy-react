@@ -36,8 +36,8 @@
   "CWBsites": {
     "title": "Marine/Meteorological Data Near Taiwan",
     "subheader": "Latest Data",
-    "cwb": "Central Weather Bureau",
-    "cwbopendata": "Central Weather Bureau Open Weather Data",
+    "cwb": "Central Weather Administration",
+    "cwbopendata": "Central Weather Administration Open Weather Data",
     "sitelang": "E",
     "sea": "Current Sea Surface Condition",
     "weather": "Current Weather Conditions",
@@ -349,8 +349,8 @@
     "m": "m",
     "km": "km",
     "mean": "mean",
-    "cwbRadar": "CWB Radar",
-    "cwbOpenData": "CWB Open Data",
+    "cwbRadar": "CWA Radar",
+    "cwbOpenData": "CWA Open Data",
     "madtDes": "使用",
     "3yr": "Jan. 1st 3 years ago"
   },

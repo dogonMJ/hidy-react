@@ -36,8 +36,8 @@
   "CWBsites": {
     "title": "台灣周遭海氣象",
     "subheader": "最新資料",
-    "cwb": "中央氣象局",
-    "cwbopendata": "中央氣象局開放資料平台",
+    "cwb": "中央氣象署",
+    "cwbopendata": "中央氣象署開放資料平台",
     "sitelang": "C",
     "sea": "即時海況",
     "weather": "目前天氣",
@@ -349,8 +349,8 @@
     "m": "公尺",
     "km": "公里",
     "mean": "平均",
-    "cwbRadar": "中央氣象局雷達回波",
-    "cwbOpenData": "中央氣象局資料開放平台",
+    "cwbRadar": "中央氣象署雷達回波",
+    "cwbOpenData": "中央氣象署資料開放平台",
     "madtDes": "使用",
     "3yr": "3年前1/1"
   },
