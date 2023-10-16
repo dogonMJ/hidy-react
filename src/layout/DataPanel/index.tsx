@@ -2,7 +2,6 @@ import { useState, Fragment, useEffect, useRef } from 'react';
 import 'leaflet'
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "store/store"
-import { coordInputSlice } from 'store/slice/mapSlice';
 import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
@@ -18,6 +17,7 @@ import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
 import { WMSSelector } from './WMSSelector';
 import { ComponentList } from 'types';
+import { mapSlice } from 'store/slice/mapSlice';
 
 declare const L: any
 
@@ -39,7 +39,7 @@ const DataPanel = () => {
   const ref = useRef<any>()
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
+  const userInfo = useSelector((state: RootState) => state.map.userInfo);
 
   const itemList: ComponentList = {
     APIlayers: <APILayers />,
@@ -60,13 +60,13 @@ const DataPanel = () => {
   const [open, setOpen] = useState(false);
 
   const enterPanel = () => {
-    dispatch(coordInputSlice.actions.enterPanel(true))
+    dispatch(mapSlice.actions.enterPanel(true))
     // map.scrollWheelZoom.enable()
     map.dragging.disable()
 
   }
   const leavePanel = () => {
-    dispatch(coordInputSlice.actions.enterPanel(false))
+    dispatch(mapSlice.actions.enterPanel(false))
     // map.scrollWheelZoom.disable()
     map.dragging.enable()
   }

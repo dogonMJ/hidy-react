@@ -1,7 +1,6 @@
 import 'leaflet'
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useDispatch } from "react-redux";
-import { coordInputSlice } from "store/slice/mapSlice";
 import { MapContainer, ZoomControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
@@ -25,6 +24,7 @@ import { CustomScaleControl } from 'components/CustomScaleControl';
 import { ScreenshotControl } from 'components/ScreenshotControl';
 import { Graticule } from 'components/Graticule/index';
 import { ShareControl } from 'components/ShareControl/indext';
+import { mapSlice } from 'store/slice/mapSlice';
 
 declare const L: any;
 
@@ -38,7 +38,7 @@ const LeafletMap = () => {
   const timeNow = new Date()
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
-    dispatch(coordInputSlice.actions.userInfo(userInfo))
+    dispatch(mapSlice.actions.userInfo(userInfo))
   }
 
   checkLogin()
@@ -50,7 +50,7 @@ const LeafletMap = () => {
         className='dateTimePicker'
         data-enable-time
         // value={datetime}
-        onChange={([datetime]) => dispatch(coordInputSlice.actions.changeDatetime(datetime.toISOString()))}
+        onChange={([datetime]) => dispatch(mapSlice.actions.changeDatetime(datetime.toISOString()))}
         options={{
           defaultDate: defaultDate,
           maxDate: timeNow.setDate(timeNow.getDate() + 9),

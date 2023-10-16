@@ -40,7 +40,7 @@ export const ClipScreenshot = () => {
   const map = useMap()
   const { t } = useTranslation()
   const rectRef = useRef<any>()
-  const enterPanel = useSelector((state: RootState) => state.coordInput.enterPanel);
+  const enterPanel = useSelector((state: RootState) => state.map.enterPanel);
   const [clippingMode, setClippingMode] = useState(false)
   const [inputCoords, setInputCoords] = useState<(string | number)[]>(['', '', '', ''])
   const [selection, setSelection] = useState<Selections>({

@@ -85,11 +85,7 @@
     "bottomT": "海床位溫分析及預報",
     "mlotst": "混合層厚度分析及預報",
     "zos": "相對大地水準面海表面高分析及預報",
-    "3dsea_water_velocity": "海水速度分析及預報",
-    "alert": {
-      "range": "不在時間範圍內",
-      "loading": "圖層載入中"
-    }
+    "3dsea_water_velocity": "海水速度分析及預報"
   },
   "Animated": {
     "title": "流速動畫",
@@ -150,7 +146,6 @@
     "dataset": "資料集",
     "filter": "篩選",
     "select": "選擇",
-    "nodata": "無資料",
     "all": "所有",
     "OCA": "海保署",
     "NCEI": "美國NCEI",
@@ -225,8 +220,7 @@
       "moderate": "中等 (閾值~2倍閾值)",
       "strong": "強烈 (2倍閾值~3倍閾值)",
       "severe": "嚴重 (3倍閾值~4倍閾值)",
-      "extreme": "極端 (>4倍閾值)",
-      "alert": "不在資料時間範圍內"
+      "extreme": "極端 (>4倍閾值)"
     },
     "chemistryList": {
       "siteName": "ODB海洋化學資料庫",
@@ -534,6 +528,10 @@
     }
   },
   "alert": {
-    "fetchFail": "資料擷取出現問題，請稍候或詢問技術員。"
+    "fetchFailChem": "請選取時間範圍和至少一個參數和",
+    "fetchFail": "資料擷取錯誤，請檢查選項",
+    "range": "不在時間範圍內",
+    "loading": "圖層載入中",
+    "nodata": "無資料"
   }
 }

@@ -291,7 +291,7 @@ export const OdbChemistry = () => {
         <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>
       <AlertSlide open={warning} setOpen={setWarning} severity='error'>
-        {t('alert.fetchFail')}
+        {t('alert.fetchFailChem')}
       </AlertSlide>
     </>
   )

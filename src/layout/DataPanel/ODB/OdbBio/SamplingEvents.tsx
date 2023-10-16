@@ -49,7 +49,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const refCluster = useRef<any>()
   const url = useRef('')
   const map = useMap()
-  const bioDateRange = useSelector((state: RootState) => state.odbBioStates.bioDateRange)
+  const bioDateRange = useSelector((state: RootState) => state.odbBio.bioDateRange)
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [topics, setTopics] = useState<string[]>([])
   const [taxon, setTaxon] = useState<string>('')
@@ -337,7 +337,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
 
           />
         </RenderIf>
-        <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {t('OdbData.nodata')} </AlertSlide>
+        <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {t('alert.nodata')} </AlertSlide>
       </Box>
       <MarkerCluster
         ref={refCluster}

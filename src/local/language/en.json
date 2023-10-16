@@ -85,11 +85,7 @@
     "bottomT": "Sea Water Potential Temperature Analysis and Forecast at Sea Floor",
     "mlotst": "Ocean Mixed Layer Thickness Defined by Sigma Theta Analysis and Forecast",
     "zos": "Sea Surface Height Above Geoid Analysis and Forecast",
-    "3dsea_water_velocity": "Sea Water Velocity Analysis and Forecast",
-    "alert": {
-      "range": "Not in time range",
-      "loading": "Loading"
-    }
+    "3dsea_water_velocity": "Sea Water Velocity Analysis and Forecast"
   },
   "Animated": {
     "title": "Animated",
@@ -150,7 +146,6 @@
     "dataset": "Dataset",
     "filter": "Filter",
     "select": "Select ",
-    "nodata": "No Data",
     "all": "All",
     "OCA": "OCA, Taiwan",
     "NCEI": "NCEI, USA",
@@ -225,8 +220,7 @@
       "moderate": "Moderate (threshold~2x)",
       "strong": "Strong (2x~3x)",
       "severe": "Severe (3x~4x)",
-      "extreme": "Extreme (>4x)",
-      "alert": "Not in time range"
+      "extreme": "Extreme (>4x)"
     },
     "chemistryList": {
       "siteName": "ODB Marine Chemistry Database",
@@ -534,6 +528,10 @@
     }
   },
   "alert": {
-    "fetchFail": "Data fetching issue. Please wait or contact tech support."
+    "fetchFailChem": "Please select time range and at least one parameter.",
+    "fetchFail": "Data fetch fail, please check options.",
+    "range": "Not in time range",
+    "loading": "Loading",
+    "nodata": "No Data"
   }
 }

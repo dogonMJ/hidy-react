@@ -9,7 +9,7 @@ import { varList } from "./varList"
 import InfoButton from "components/InfoButton";
 import { SwitchSameColor } from "components/SwitchSameColor";
 import { useDispatch } from "react-redux";
-import { coordInputSlice } from "store/slice/mapSlice";
+import { mapSlice } from "store/slice/mapSlice";
 const depths = [0, 10, 20, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500]
 
 const PeriodSwitch = SwitchSameColor()
@@ -29,7 +29,7 @@ export const StatisticMean = () => {
   const [gridCoord, setGridCoord] = useState<string>('')
 
   const handleMouseLeave = () => {
-    dispatch(coordInputSlice.actions.enterPanel(false))
+    dispatch(mapSlice.actions.enterPanel(false))
     // map.scrollWheelZoom.enable()
     // map.dragging.enable()
   }

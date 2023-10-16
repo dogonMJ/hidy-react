@@ -32,7 +32,7 @@ export const DrawShapes = () => {
   const featureRef = useRef<any>()
   const [coordsProfile, setCoordsProfile] = useState<LatLng[]>([])
   const [renderProfile, setRenderProfile] = useState(false)
-  const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
+  const scaleUnit = useSelector((state: RootState) => state.map.scaleUnit);
   const readableDistance = (distanceInMeters: number) => L.GeometryUtil.readableDistance(
     distanceInMeters,
     scaleUnit === 'metric' ? true : false,

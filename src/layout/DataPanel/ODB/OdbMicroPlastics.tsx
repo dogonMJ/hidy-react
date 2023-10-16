@@ -273,7 +273,7 @@ export const OdbMicroplastics = () => {
               </MenuItem>
             ))}
           </Select>
-          <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {t('OdbData.nodata')} </AlertSlide>
+          <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {t('alert.nodata')} </AlertSlide>
         </Stack>
       </Box>
       <MarkerCluster

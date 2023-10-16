@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/store"
-import { coordInputSlice } from "store/slice/mapSlice";
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem, } from '@mui/material';
 import { Divider, Switch } from "@mui/material";
@@ -18,6 +17,7 @@ import { OdbMicroplastics } from './OdbMicroPlastics';
 import { OdbMarineHeatwave } from './OdbMarineHeatwave';
 import { SubSelection } from 'components/SubSelection';
 import { ComponentList } from 'types';
+import { mapSlice } from 'store/slice/mapSlice';
 
 const seasons = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
 
@@ -25,10 +25,10 @@ export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const [checked, setChecked] = useState<string[]>([]);
-  const period = useSelector((state: RootState) => state.coordInput.OdbSeasonSelection)
+  const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
 
   const handleSeasonChange = useCallback((event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
-    newSelect && dispatch(coordInputSlice.actions.OdbSeasonSelection(newSelect))
+    newSelect && dispatch(mapSlice.actions.OdbSeasonSelection(newSelect))
   }, [])
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);

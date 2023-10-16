@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMapEvent } from 'react-leaflet'
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
-import { coordInputSlice } from "store/slice/mapSlice";
+import { coordInputSlice } from "store/slice/coordInputSlice";
 import { coor } from 'types';
 import CoordinatesInput from "layout/MouseCoordinates/CoordinatesInput"
 import FormatCoordinate from "components/FormatCoordinate";
@@ -10,6 +10,7 @@ import PinnedMarker from "layout/MouseCoordinates/PinnedMarker";
 import MoveableMarker from "layout/MouseCoordinates/MoveableMarker";
 import { IconButton, Paper } from '@mui/material';
 import { LocationOff, LocationOn, SyncAlt } from '@mui/icons-material';
+import { mapSlice } from "store/slice/mapSlice";
 
 const MouseCoordinates = () => {
   const dispatch = useDispatch()
@@ -33,10 +34,10 @@ const MouseCoordinates = () => {
     ));
   }
   const handleMouseEnter = () => {
-    dispatch(coordInputSlice.actions.enterPanel(true))
+    dispatch(mapSlice.actions.enterPanel(true))
   }
   const handleMouseLeave = () => {
-    dispatch(coordInputSlice.actions.enterPanel(false))
+    dispatch(mapSlice.actions.enterPanel(false))
   }
   return (
     <Paper

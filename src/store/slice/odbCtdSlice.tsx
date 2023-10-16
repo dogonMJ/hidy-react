@@ -17,7 +17,7 @@ interface OdbCtdStates {
   range: { [key: string]: { min: number, max: number } }
 }
 export const odbCtdSlice = createSlice({
-  name: "odbCtdStates",
+  name: "odbCtd",
   initialState: {
     selection: query && query.par && isCtdParameter(query.par) ? query.par : 'temperature',
     profileSecondPar: query && query.par2 && isCtdParameter(query.par2) ? query.par2 : 'salinity',

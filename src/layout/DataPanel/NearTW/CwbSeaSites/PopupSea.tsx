@@ -23,7 +23,7 @@ const PopupTemplate = (props: { weatherData: any, station: Station }) => {
   const weatherElements = weatherData[station.StationID].WeatherElements
   const datatime = weatherData[station.StationID].DateTime
 
-  const link = "https://www.cwb.gov.tw/V8/C/M/OBS_Marine_plot.html?MID=" + station.StationID
+  const link = "https://www.cwa.gov.tw/V8/C/M/OBS_Marine_plot.html?MID=" + station.StationID
   const { t } = useTranslation()
   return (
     <table>

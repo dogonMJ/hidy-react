@@ -171,13 +171,13 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`CWBsites.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwb.gov.tw/index" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
+          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwa.gov.tw/index" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
           {t('DataInfo.productID')}:<br />
           <span style={{ paddingLeft: '1rem' }}>
-            資料:<a target="_blank" href="https://opendata.cwb.gov.tw/dataset/observation/O-B0075-001" rel="noreferrer">O-B0075-001</a>
+            資料:<a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-B0075-001" rel="noreferrer">O-B0075-001</a>
           </span><br />
           <span style={{ paddingLeft: '1rem' }}>
-            站位:<a target="_blank" href="https://opendata.cwb.gov.tw/dataset/observation/O-B0076-001" rel="noreferrer">O-B0076-001</a>
+            站位:<a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-B0076-001" rel="noreferrer">O-B0076-001</a>
           </span><br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hourly')}<br />
           {t('DataInfo.updateFreq')}: 4/{t('DataInfo.hr')}<br />
@@ -188,8 +188,8 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`CWBsites.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwb.gov.tw/index" rel="noreferrer"> {t('CWBsites.cwbopendata')}</a><br />
-          {t('DataInfo.productID')}: <a target="_blank" href="https://opendata.cwb.gov.tw/dataset/observation/O-A0001-001" rel="noreferrer">O-A0001-001</a><br />
+          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwa.gov.tw/index" rel="noreferrer"> {t('CWBsites.cwbopendata')}</a><br />
+          {t('DataInfo.productID')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-A0001-001" rel="noreferrer">O-A0001-001</a><br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hourly')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.hourly')}<br />
           {t('DataInfo.timezone')}: UTC+8
@@ -199,7 +199,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`CWBsites.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href={"https://www.cwb.gov.tw/V8/" + t('CWBsites.sitelang') + "/W/OBS_Radar.html"} rel="noreferrer">{t('CWBsites.cwb')}</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href={"https://www.cwa.gov.tw/V8/" + t('CWBsites.sitelang') + "/W/OBS_Radar.html"} rel="noreferrer">{t('CWBsites.cwb')}</a><br />
           {t('DataInfo.spatialRes')}: 1 {t('DataInfo.km')}<br />
           {t('DataInfo.temporalRes')}: 10 {t('DataInfo.min')}<br />
           {t('DataInfo.updateFreq')}: ~15 {t('DataInfo.min')}<br />
@@ -312,7 +312,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwb.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWB Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071</span><br />
           {t('DataInfo.variable')}:橫向流速、直向流速<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -327,7 +327,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwb.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWB Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071</span><br />
           {t('DataInfo.variable')}:橫向流速、直向流速<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -342,7 +342,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwb.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWB Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海表溫度<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -357,7 +357,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwb.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWB Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海表鹽度<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -372,7 +372,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwb.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWB Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:流速<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
@@ -387,7 +387,7 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwb.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWB Open Data</a><br />
+          {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海高<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />

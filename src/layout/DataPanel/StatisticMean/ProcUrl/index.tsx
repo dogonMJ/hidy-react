@@ -6,8 +6,9 @@ import { PlotContour } from "../PlotContour";
 import { PlotProfile } from "../PlotProfile";
 import { varList, avgTimeList } from "../varList";
 import { useDispatch } from "react-redux";
-import { coordInputSlice } from "store/slice/mapSlice";
+import { coordInputSlice } from "store/slice/coordInputSlice";
 import { LineProfile } from "components/VerticalPlot/LineProfile";
+import { mapSlice } from "store/slice/mapSlice";
 
 const years = Array.from({ length: 26 }, (v, i) => (i + 1993).toString())
 
@@ -22,7 +23,7 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
   const [text, setText] = useState({})
 
   const handleMouseLeave = () => {
-    dispatch(coordInputSlice.actions.enterPanel(false))
+    dispatch(mapSlice.actions.enterPanel(false))
     // map.scrollWheelZoom.enable()
     // map.dragging.enable()
   }

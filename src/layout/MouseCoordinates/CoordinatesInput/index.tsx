@@ -1,7 +1,7 @@
 import { useMap, useMapEvents } from "react-leaflet"
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store"
-import { coordInputSlice } from "../../../store/slice/mapSlice";
+import { coordInputSlice } from "../../../store/slice/coordInputSlice";
 import { useTranslation } from "react-i18next";
 import { TextField, IconButton, Paper } from '@mui/material';
 import { GpsFixed, AddLocationAlt, AdsClick } from '@mui/icons-material';

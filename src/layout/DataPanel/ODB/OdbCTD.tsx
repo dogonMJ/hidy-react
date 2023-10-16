@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { GeoJSON } from 'react-leaflet'
-import { Box, Checkbox, Divider, MenuItem, Select, Slider, Stack, TextField, Typography, SelectChangeEvent, Button, FormControlLabel, ToggleButton } from '@mui/material';
+import { Box, Checkbox, Divider, MenuItem, Select, Slider, Stack, TextField, Typography, SelectChangeEvent, Button, FormControlLabel } from '@mui/material';
 import { FeatureCollection, Point } from 'geojson'
 import { createIntervalList, findInterval, getColorWithInterval, point2polygon, periodTransform, ctdDepthMeterProps, palettes, defaultCtdRange } from 'Utils/UtilsODB';
 import { DepthMeter } from 'components/DepthlMeter';
@@ -55,17 +55,17 @@ export const OdbCTD = () => {
   const ref = useRef<any>()
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const type = useSelector((state: RootState) => state.odbCtdStates.selection)
-  const period = useSelector((state: RootState) => state.coordInput.OdbSeasonSelection)
+  const type = useSelector((state: RootState) => state.odbCtd.selection)
+  const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
   // const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
-  const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue['odbCtd'])
-  const palette = useSelector((state: RootState) => state.odbCtdStates.palette)
-  const mask = useSelector((state: RootState) => state.odbCtdStates.mask)
-  const reverse = useSelector((state: RootState) => state.odbCtdStates.reverse)
-  const interval = useSelector((state: RootState) => state.odbCtdStates.interval)
-  const fixRange = useSelector((state: RootState) => state.odbCtdStates.fixRange)
-  const minmax = useSelector((state: RootState) => state.odbCtdStates.range)
-  const opacity = useSelector((state: RootState) => state.odbCtdStates.opacity)
+  const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['odbCtd'])
+  const palette = useSelector((state: RootState) => state.odbCtd.palette)
+  const mask = useSelector((state: RootState) => state.odbCtd.mask)
+  const reverse = useSelector((state: RootState) => state.odbCtd.reverse)
+  const interval = useSelector((state: RootState) => state.odbCtd.interval)
+  const fixRange = useSelector((state: RootState) => state.odbCtd.fixRange)
+  const minmax = useSelector((state: RootState) => state.odbCtd.range)
+  const opacity = useSelector((state: RootState) => state.odbCtd.opacity)
   const [data, setData] = useState<any>()
   const [sliderInterval, setSliderInterval] = useState(interval)
   const [ptData, setPtData] = useState({ lat: 121, lng: 20 })

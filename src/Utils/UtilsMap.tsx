@@ -19,6 +19,7 @@ export const defaultURLParams = {
   odb: {
     ctd: {},
     adcp: {},
+    bio: {},
   }
 }
 

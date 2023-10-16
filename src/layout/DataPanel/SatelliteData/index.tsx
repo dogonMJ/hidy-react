@@ -10,7 +10,7 @@ const optionList = ['close', 'madt', 'msla', 'chla']
 const SatelliteData = () => {
   const ref = useRef<any>(null)
   const [identifier, setIdentifier] = useState('close')
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const datetime = useSelector((state: RootState) => state.map.datetime);
   const date = datetime.replace(/T.*|-/g, '')
 
   const handleToggle = (value: string) => () => {

@@ -26,7 +26,7 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
   const ref = useRef(null)
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const secondPar = useSelector((state: RootState) => state.odbCtdStates.profileSecondPar)
+  const secondPar = useSelector((state: RootState) => state.odbCtd.profileSecondPar)
   const [warning, setWarning] = useState(false)
   const [plotProps, setPlotProps] = useState<CustomPlotParams>({
     data: [],

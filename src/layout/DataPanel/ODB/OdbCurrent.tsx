@@ -31,8 +31,8 @@ export const OdbCurrent = () => {
   const [warning, setWarning] = useState(false)
   const [openVertical, setOpenVertical] = useState(false)
   const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
-  const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue['odbCurrent'])
-  const period = useSelector((state: RootState) => state.coordInput.OdbSeasonSelection)
+  const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['odbCurrent'])
+  const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
   const depth = adcpDepths[depthMeterValue]
   const mode = periodTransform[period]
 

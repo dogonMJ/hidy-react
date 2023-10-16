@@ -23,7 +23,7 @@ const defaultOptions = [
 export const LayerSelector = () => {
   const { t } = useTranslation()
   const map = useMap()
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime).split('.')[0] + 'Z';
+  const datetime = useSelector((state: RootState) => state.map.datetime).split('.')[0] + 'Z';
   const [selectedURL, setSelectedURL] = useState(defaultOptions[0].value);
   const [urlOptions, setUrlOptions] = useState(defaultOptions)
   const [urlInput, setUrlInput] = useState('');

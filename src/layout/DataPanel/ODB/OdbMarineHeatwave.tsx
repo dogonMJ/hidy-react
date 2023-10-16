@@ -11,7 +11,7 @@ export const OdbMarineHeatwave = () => {
   const { t } = useTranslation()
   const [notInRange, setNotInRange] = useState<boolean>(false)
   const [timespan, setTimespan] = useState([new Date(), new Date()])
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const datetime = useSelector((state: RootState) => state.map.datetime);
   const month = datetime.slice(0, 7)
   const url = `https://ecodata.odb.ntu.edu.tw/geoserver/gwc/service/wmts?service=WMTS&version=1.0.0&request=GetTile&layer=marineheatwave:mhw&style=polygon_level&tilerow={y}&tilecol={x}&tilematrix=EPSG:900913:{z}&tilematrixset=EPSG:900913&format=image/png&Time=${month}`
   const legned: Legend = {
@@ -64,7 +64,7 @@ export const OdbMarineHeatwave = () => {
 
   return (
     <>
-      <AlertSlide open={notInRange} setOpen={setNotInRange} severity='error' timeout={3000} > {t('OdbData.mhw.alert')} </AlertSlide>
+      <AlertSlide open={notInRange} setOpen={setNotInRange} severity='error' timeout={3000} > {t('alert.range')} </AlertSlide>
       <TileLayer url={url} />
       <LegendControl position='bottomleft' legendContent={legnedContents.join('<br>')} legendClassNames={'sedLegend'} />
     </>

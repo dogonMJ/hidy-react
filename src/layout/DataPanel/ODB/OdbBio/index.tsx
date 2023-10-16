@@ -8,6 +8,9 @@ import { SamplingEvents } from "./SamplingEvents";
 import { BioComposition } from "./BioComposition";
 import { BioDataset, BioFilter } from "types";
 import { SwitchSameColor } from "components/SwitchSameColor";
+import { useDispatch, useSelector } from "react-redux";
+import { odbBioSlice } from "store/slice/odbBioSlice";
+import { RootState } from "store/store";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,14 +36,14 @@ const ModeSwitch = SwitchSameColor()
 
 export const OdbBio = () => {
   const { t } = useTranslation()
-  const [tabNum, setTabNum] = useState(0)
+  const dispatch = useDispatch()
+  const tabNum = useSelector((state: RootState) => state.odbBio.tabNum)
   const [dataset, setDataset] = useState<BioDataset>("all")
   const [filter, setFilter] = useState<BioFilter>('topic')
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabNum(newValue);
+  const handleTabChange = () => {
+    dispatch(odbBioSlice.actions.switchTab())
   }
-
   const handleDatasetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDataset((event.target as HTMLInputElement).value as BioDataset);
   };

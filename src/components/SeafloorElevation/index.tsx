@@ -17,7 +17,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
   const { coords, setOpen } = props
   const plotRef = useRef<any>()
   const map = useMap()
-  const scaleUnit = useSelector((state: RootState) => state.coordInput.scaleUnit);
+  const scaleUnit = useSelector((state: RootState) => state.map.scaleUnit);
   const [plotProps, setPlotProps] = useState<PlotParams>({
     data: [],
     layout: {

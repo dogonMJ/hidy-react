@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { coordInputSlice } from "./slice/mapSlice";
+import { coordInputSlice } from "./slice/coordInputSlice";
 import { odbCtdSlice } from './slice/odbCtdSlice';
 import { odbBioSlice } from './slice/odbBioSlice';
+import { mapSlice } from './slice/mapSlice';
 
 export const store = configureStore({
   reducer: {
+    [mapSlice.name]: mapSlice.reducer,
     [coordInputSlice.name]: coordInputSlice.reducer,
     [odbCtdSlice.name]: odbCtdSlice.reducer,
     [odbBioSlice.name]: odbBioSlice.reducer,

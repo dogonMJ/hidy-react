@@ -15,7 +15,7 @@ const CwbSeaForecast = () => {
   const [identifier, setIdentifier] = useState('close')
   const [identifier2, setIdentifier2] = useState('close')
   const [jsonData, setJsonData] = useState(null)
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const datetime = useSelector((state: RootState) => state.map.datetime);
   const date = datetime.replace(/T|-|:/g, '').substring(0, 10)
 
   const handleToggle = (value: string) => () => {

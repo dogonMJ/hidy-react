@@ -3,7 +3,9 @@ import { IconButton } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 import { useMap } from "react-leaflet";
 import { useSelector } from "react-redux";
-import { RootState } from "store/store";
+import { RootState, store } from "store/store";
+import { odbBioSlice } from "store/slice/odbBioSlice";
+import { memo } from "react";
 
 const flattenObject = (obj: any, parentKey = "") => {
   let queryArr: any = [];
@@ -28,36 +30,34 @@ const flattenObject = (obj: any, parentKey = "") => {
 
   return queryArr.join(";");
 }
-const queryObject: { [key: string]: any } = {}
-const defaultObject: { [key: string]: any } = {
-  map: {
-    z: 7,
-    c: [23.5, 121],
-    d: new Date()
-  },
-  odbTopo: false,
-  odbGravity: false,
-  odbCtd: {
-    par: 'temperature',
-    par2: 'salinity',
-    p: 'plasma',
-    m: false,
-    r: false,
-    f: false,
-    i: 20,
-    o: 100,
-    max: 30,
+
+const findModified = (originalObject: any, modifiedObject: any) => {
+  const modifiedElements: any = {};
+  for (const key in modifiedObject) {
+    if (originalObject[key] !== modifiedObject[key]) {
+      modifiedElements[key] = {};
+      for (const k in modifiedObject[key]) {
+        if (originalObject[key][k] !== modifiedObject[key][k] && k !== 'userInfo') {
+          modifiedElements[key][k] = modifiedObject[key][k]
+        }
+      }
+    }
   }
+  return modifiedElements;
 }
-export const ShareControl = () => {
+
+export const ShareControl = memo(() => {
   const map = useMap()
-  const date = useSelector((state: RootState) => state.coordInput.datetime)
+  const defaultStates = store.getState()
+  console.log(defaultStates)
   const handleClick = () => {
-    queryObject.map.z = map.getZoom()
-    queryObject.map.c = [map.getCenter().lat, map.getCenter().lng]
-    queryObject.map.d = new Date(date).toISOString()
-    const res = flattenObject(queryObject)
-    console.log(queryObject, res)
+    const states = store.getState();
+    const modified = findModified(defaultStates, states)
+    modified.map = { ...modified.map, z: map.getZoom(), c: [map.getCenter().lat, map.getCenter().lng], }
+
+    const res = flattenObject(modified)
+    console.log(modified, res)
+    console.log(defaultStates, store.getState())
   }
   return (
     <PortalControlButton position="topright" className='leaflet-control' order="unshift">
@@ -75,4 +75,4 @@ export const ShareControl = () => {
       </div>
     </PortalControlButton>
   )
-}
+})
