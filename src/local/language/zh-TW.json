@@ -509,7 +509,7 @@
     "del": "刪除："
   },
   "translation": {
-    "title": "切換語言"
+    "title": "Switch Language"
   },
   "screenshot": {
     "title": "畫面截圖",
@@ -533,5 +533,11 @@
     "range": "不在時間範圍內",
     "loading": "圖層載入中",
     "nodata": "無資料"
+  },
+  "share": {
+    "title": "分享畫面",
+    "copy": "複製網址",
+    "refresh": "更新網址",
+    "clear": "清除瀏覽器網址"
   }
 }

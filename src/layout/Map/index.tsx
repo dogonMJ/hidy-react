@@ -1,6 +1,6 @@
 import 'leaflet'
 import { useRef } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MapContainer, ZoomControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
@@ -18,13 +18,14 @@ import { SeafloorControl } from 'components/SeafloorControl';
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
 import { account } from 'Utils/UtilsAccount'
-import { readUrlQuery } from "Utils/UtilsMap";
+import { readUrlQuery } from "Utils/UtilsStates";
 import { SignInControl } from 'components/SignInControl';
 import { CustomScaleControl } from 'components/CustomScaleControl';
 import { ScreenshotControl } from 'components/ScreenshotControl';
 import { Graticule } from 'components/Graticule/index';
 import { ShareControl } from 'components/ShareControl/indext';
 import { mapSlice } from 'store/slice/mapSlice';
+import { RootState } from 'store/store';
 
 declare const L: any;
 
@@ -34,7 +35,8 @@ const LeafletMap = () => {
   const defaultOptions = readUrlQuery('map')
   const defaultZoom = defaultOptions && defaultOptions.z ? Number(defaultOptions.z) : 7
   const defaultCenter = defaultOptions && defaultOptions.c ? JSON.parse(defaultOptions.c) : [23.5, 121]
-  const defaultDate = defaultOptions && defaultOptions.d ? new Date(defaultOptions.d) : new Date()
+  // const defaultDate = defaultOptions && defaultOptions.d ? new Date(defaultOptions.d) : new Date()
+  const defaultDate = useSelector((state: RootState) => state.map.datetime)
   const timeNow = new Date()
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
@@ -50,7 +52,7 @@ const LeafletMap = () => {
         className='dateTimePicker'
         data-enable-time
         // value={datetime}
-        onChange={([datetime]) => dispatch(mapSlice.actions.changeDatetime(datetime.toISOString()))}
+        onChange={([datetime]) => dispatch(mapSlice.actions.setDatetime(datetime.toISOString()))}
         options={{
           defaultDate: defaultDate,
           maxDate: timeNow.setDate(timeNow.getDate() + 9),

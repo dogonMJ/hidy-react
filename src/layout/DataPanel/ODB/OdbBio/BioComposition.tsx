@@ -103,7 +103,7 @@ export const BioComposition = (props: { dataset: BioDataset, filter: BioFilter }
     <>
       <Stack direction="row" spacing={1} alignItems="center">
         <Typography variant="subtitle2" gutterBottom>1&deg; {t('OdbData.Bio.grid')} </Typography>
-        <GridSwitch onChange={handleGridSwitch} />
+        <GridSwitch onChange={handleGridSwitch} checked={grid === 2} />
         <Typography variant="subtitle2" gutterBottom>2&deg; {t('OdbData.Bio.grid')} </Typography>
       </Stack>
       <Pane name='pieCharts' style={{ zIndex: 600 }}>

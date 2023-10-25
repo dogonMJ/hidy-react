@@ -509,7 +509,7 @@
     "del": "Delete："
   },
   "translation": {
-    "title": "Switch Language"
+    "title": "切換語言"
   },
   "screenshot": {
     "title": "Screenshot",
@@ -533,5 +533,11 @@
     "range": "Not in time range",
     "loading": "Loading",
     "nodata": "No Data"
+  },
+  "share": {
+    "title": "Share View",
+    "copy": "Copy",
+    "refresh": "Update",
+    "clear": "Clear browser URL"
   }
 }

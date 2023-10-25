@@ -55,7 +55,7 @@ export const OdbCTD = () => {
   const ref = useRef<any>()
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const type = useSelector((state: RootState) => state.odbCtd.selection)
+  const type = useSelector((state: RootState) => state.odbCtd.par)
   const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
   // const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
   const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['odbCtd'])
@@ -63,7 +63,7 @@ export const OdbCTD = () => {
   const mask = useSelector((state: RootState) => state.odbCtd.mask)
   const reverse = useSelector((state: RootState) => state.odbCtd.reverse)
   const interval = useSelector((state: RootState) => state.odbCtd.interval)
-  const fixRange = useSelector((state: RootState) => state.odbCtd.fixRange)
+  const fixRange = useSelector((state: RootState) => state.odbCtd.fix)
   const minmax = useSelector((state: RootState) => state.odbCtd.range)
   const opacity = useSelector((state: RootState) => state.odbCtd.opacity)
   const [data, setData] = useState<any>()
@@ -117,26 +117,26 @@ export const OdbCTD = () => {
     })
   }
 
-  const handlePaletteChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.Palette(event.target.value as Palette))
-  const handleOpacityChange = (event: Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.Opacity(newValue as number))
+  const handlePaletteChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPalette(event.target.value as Palette))
+  const handleOpacityChange = (event: Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setOpacity(newValue as number))
   const handleIntervalChange = (event: Event, newValue: number | number[]) => setSliderInterval(newValue as number)
-  const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.Interval(newValue as number))
+  const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setInterval(newValue as number))
   const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (fixRange) {
       parameters.forEach((parameter) => {
-        dispatch(odbCtdSlice.actions.Range({ par: parameter, min: Number(event.target.value) }))
+        dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: Number(event.target.value) }))
       })
     } else {
-      dispatch(odbCtdSlice.actions.Range({ par: type, min: Number(event.target.value) }))
+      dispatch(odbCtdSlice.actions.setRange({ par: type, min: Number(event.target.value) }))
     }
   }
   const handleMaxChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (fixRange) {
       parameters.forEach((parameter) => {
-        dispatch(odbCtdSlice.actions.Range({ par: parameter, max: Number(event.target.value) }))
+        dispatch(odbCtdSlice.actions.setRange({ par: parameter, max: Number(event.target.value) }))
       })
     } else {
-      dispatch(odbCtdSlice.actions.Range({ par: type, max: Number(event.target.value) }))
+      dispatch(odbCtdSlice.actions.setRange({ par: type, max: Number(event.target.value) }))
     }
   }
   const handleMinMaxBlur = () => {
@@ -145,26 +145,26 @@ export const OdbCTD = () => {
     if (min > max) {
       if (fixRange) {
         parameters.forEach((parameter) => {
-          dispatch(odbCtdSlice.actions.Range({ par: parameter, min: max, max: min }))
+          dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: max, max: min }))
         })
       } else {
-        dispatch(odbCtdSlice.actions.Range({ par: type, min: max, max: min }))
+        dispatch(odbCtdSlice.actions.setRange({ par: type, min: max, max: min }))
       }
     }
   }
   const handleFixRange = () => {
     if (!fixRange) {
       parameters.forEach((parameter) => {
-        dispatch(odbCtdSlice.actions.Range({ par: parameter, min: minmax[type].min, max: minmax[type].max }))
+        dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: minmax[type].min, max: minmax[type].max }))
       })
     }
-    dispatch(odbCtdSlice.actions.FixRange(!fixRange))
+    dispatch(odbCtdSlice.actions.setFixRange(!fixRange))
   }
 
   const handleDefaultRange = () => {
-    dispatch(odbCtdSlice.actions.FixRange(false))
+    dispatch(odbCtdSlice.actions.setFixRange(false))
     parameters.forEach((parameter) => {
-      dispatch(odbCtdSlice.actions.Range({ par: parameter, min: defaultCtdRange[parameter].min, max: defaultCtdRange[parameter].max }))
+      dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: defaultCtdRange[parameter].min, max: defaultCtdRange[parameter].max }))
     })
   }
 
@@ -188,7 +188,7 @@ export const OdbCTD = () => {
   }, [t, depth, mode])
 
   const handleCtdChange = useCallback((event: React.MouseEvent<HTMLElement>, newSelect: CtdParameters,) => {
-    newSelect && dispatch(odbCtdSlice.actions.Selection(newSelect))
+    newSelect && dispatch(odbCtdSlice.actions.setSelection(newSelect))
   }, []);
 
   return (
@@ -227,7 +227,7 @@ export const OdbCTD = () => {
             <MenuItem value='YlGnBu'><ColorPalette palette={reversePalette(palettes['YlGnBu'], reverse)} interval={interval} /></MenuItem>
             <MenuItem value='YlOrRd'><ColorPalette palette={reversePalette(palettes['YlOrRd'], reverse)} interval={interval} /></MenuItem>
           </Select>
-          <Checkbox id='ODB-CTD-reverse' size="small" sx={{ pr: '2px', pt: '4px' }} checked={reverse} onChange={() => dispatch(odbCtdSlice.actions.Reverse(!reverse))} />
+          <Checkbox id='ODB-CTD-reverse' size="small" sx={{ pr: '2px', pt: '4px' }} checked={reverse} onChange={() => dispatch(odbCtdSlice.actions.setReverse(!reverse))} />
           <Typography variant="caption">
             {t('OdbData.CTD.rev')}
           </Typography>
@@ -287,7 +287,7 @@ export const OdbCTD = () => {
             </Stack>
             <FormControlLabel
               label={<Typography variant="caption" >{t('OdbData.CTD.mask')}</Typography>}
-              control={<Checkbox id='ODB-CTD-mask' size="small" sx={{ p: '2px' }} checked={mask} onChange={() => dispatch(odbCtdSlice.actions.Mask(!mask))} />}
+              control={<Checkbox id='ODB-CTD-mask' size="small" sx={{ p: '2px' }} checked={mask} onChange={() => dispatch(odbCtdSlice.actions.setMask(!mask))} />}
             />
           </Stack>
         </Stack>

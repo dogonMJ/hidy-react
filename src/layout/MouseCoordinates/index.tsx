@@ -10,35 +10,23 @@ import PinnedMarker from "layout/MouseCoordinates/PinnedMarker";
 import MoveableMarker from "layout/MouseCoordinates/MoveableMarker";
 import { IconButton, Paper } from '@mui/material';
 import { LocationOff, LocationOn, SyncAlt } from '@mui/icons-material';
-import { mapSlice } from "store/slice/mapSlice";
+import { useMapDragScroll } from "hooks/useMapDragScroll";
 
 const MouseCoordinates = () => {
   const dispatch = useDispatch()
+  const { setDrag } = useMapDragScroll()
   const inputActiveState = useSelector((state: RootState) => state.coordInput.active)
   const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
   const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [coords, setCoords] = useState<coor>({ lat: 0, lng: 0 });
 
-  useMapEvent('mousemove', (evt) => {
-    setCoords(evt.latlng)
-  })
-  const toggleInput = () => {
-    dispatch(coordInputSlice.actions.switchActive(
-      !inputActiveState
-    ));
-  }
-  const switchFormat = () => {
-    dispatch(coordInputSlice.actions.switchFormat(
-      latlonFormat
-    ));
-  }
-  const handleMouseEnter = () => {
-    dispatch(mapSlice.actions.enterPanel(true))
-  }
-  const handleMouseLeave = () => {
-    dispatch(mapSlice.actions.enterPanel(false))
-  }
+  useMapEvent('mousemove', (evt) => setCoords(evt.latlng))
+  const toggleInput = () => dispatch(coordInputSlice.actions.switchActive(!inputActiveState));
+  const switchFormat = () => dispatch(coordInputSlice.actions.switchFormat(latlonFormat));
+  const handleMouseEnter = () => setDrag(false)
+  const handleMouseLeave = () => setDrag(true)
+
   return (
     <Paper
       id='mouseCoordinates'

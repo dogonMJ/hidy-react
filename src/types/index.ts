@@ -65,9 +65,17 @@ export interface ElevationInfo {
 
 export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"
 
-export type BioDataset = "all" | "odb" | "oca"
-
-export type BioFilter = "topic" | "taxon"
+// export type BioDataset = "all" | "odb" | "oca"
+export enum BioDataset {
+    all = "all",
+    odb = "odb",
+    oca = "oca"
+}
+// export type BioFilter = "topic" | "taxon"
+export enum BioFilter {
+    topic = 'topic',
+    taxon = 'taxon'
+}
 
 export interface ComponentList {
     [key: string]: JSX.Element

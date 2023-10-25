@@ -22,13 +22,3 @@ export const defaultURLParams = {
     bio: {},
   }
 }
-
-export const readUrlQuery = (key: string) => {
-  const urlParams = new URLSearchParams(window.location.search)
-  const options = urlParams.get(key)?.split(';').reduce((acc: any, pair) => {
-    const [key, value] = pair.split(/:(.*)/s);
-    acc[key] = value;
-    return acc;
-  }, {});
-  return options
-}

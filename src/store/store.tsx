@@ -3,6 +3,7 @@ import { coordInputSlice } from "./slice/coordInputSlice";
 import { odbCtdSlice } from './slice/odbCtdSlice';
 import { odbBioSlice } from './slice/odbBioSlice';
 import { mapSlice } from './slice/mapSlice';
+import { onoffsSlice } from './slice/onoffsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     [coordInputSlice.name]: coordInputSlice.reducer,
     [odbCtdSlice.name]: odbCtdSlice.reducer,
     [odbBioSlice.name]: odbBioSlice.reducer,
+    [onoffsSlice.name]: onoffsSlice.reducer,
   },
 });
 

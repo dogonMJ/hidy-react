@@ -1,29 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ScaleUnitType } from 'types'
+import { readUrlQuery, } from "Utils/UtilsStates";
 import { unitSwitch } from "Utils/UtilsMap";
 
+const query = readUrlQuery('map')
 const d = new Date()
+type Lang = 'zh-TW' | 'en'
 
 export interface inputstate {
   datetime: string
-  animateIdent: string
-  // depthMeterValue: number
-  // elevations: number[]
   OdbSeasonSelection: string
   userInfo: { [key: string]: any }
   scaleUnit: ScaleUnitType
-  enterPanel: boolean
   depthMeterValue: any
 }
 export const mapSlice = createSlice({
   name: "map",
   initialState: {
-    datetime: d.toISOString(),
-    animateIdent: "close",
+    datetime: query && query.datetime ? query.datetime : d.toISOString(),
     OdbSeasonSelection: 'avg',
     userInfo: {},
     scaleUnit: 'metric',
-    enterPanel: false,
     depthMeterValue: {
       'odbCtd': 99,
       'odbCurrent': 49,
@@ -31,11 +28,11 @@ export const mapSlice = createSlice({
     },
   } as inputstate,
   reducers: {
-    changeDatetime: (state, action: PayloadAction<string>) => {
+    setDatetime: (state, action: PayloadAction<string>) => {
       state.datetime = action.payload
     },
-    animateIdentifier: (state, action: PayloadAction<string>) => {
-      state.animateIdent = action.payload
+    setLang: (state, action: PayloadAction<Lang>) => {
+      state.datetime = action.payload
     },
     OdbSeasonSelection: (state, action: PayloadAction<string>) => {
       state.OdbSeasonSelection = action.payload
@@ -45,9 +42,6 @@ export const mapSlice = createSlice({
     },
     scaleUnitSwitch: (state, action: PayloadAction<ScaleUnitType>) => {
       state.scaleUnit = unitSwitch[action.payload]
-    },
-    enterPanel: (state, action: PayloadAction<boolean>) => {
-      state.enterPanel = action.payload
     },
     DepthMeterValue: (state, action: PayloadAction<[string, number]>) => {
       const user = action.payload[0]

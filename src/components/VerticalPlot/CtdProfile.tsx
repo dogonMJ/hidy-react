@@ -26,7 +26,7 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
   const ref = useRef(null)
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const secondPar = useSelector((state: RootState) => state.odbCtd.profileSecondPar)
+  const secondPar = useSelector((state: RootState) => state.odbCtd.pPar2)
   const [warning, setWarning] = useState(false)
   const [plotProps, setPlotProps] = useState<CustomPlotParams>({
     data: [],
@@ -136,7 +136,7 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
           sx={{ marginLeft: 2.1, marginBottom: 2 }}
           defaultValue={'temperature'}
           value={secondPar}
-          onChange={(event) => dispatch(odbCtdSlice.actions.ProfileSecondPar(event.target.value))}
+          onChange={(event) => dispatch(odbCtdSlice.actions.setProfileSecondPar(event.target.value))}
         >
           {parameters.map((par, index) => {
             return <MenuItem key={index} value={par}>{t(`OdbData.CTD.${par}`)}</MenuItem>

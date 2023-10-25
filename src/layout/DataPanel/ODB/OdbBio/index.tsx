@@ -38,17 +38,17 @@ export const OdbBio = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const tabNum = useSelector((state: RootState) => state.odbBio.tabNum)
-  const [dataset, setDataset] = useState<BioDataset>("all")
-  const [filter, setFilter] = useState<BioFilter>('topic')
-
+  const dataset = useSelector((state: RootState) => state.odbBio.dataset)
+  const filter = useSelector((state: RootState) => state.odbBio.filter)
   const handleTabChange = () => {
     dispatch(odbBioSlice.actions.switchTab())
   }
   const handleDatasetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDataset((event.target as HTMLInputElement).value as BioDataset);
+    dispatch(odbBioSlice.actions.setDataset((event.target as HTMLInputElement).value as BioDataset))
   };
   const handleModeSwitch = () => {
-    setFilter(filter === 'topic' ? 'taxon' : 'topic')
+    // dispatch(odbBioSlice.actions.setFilter(filter === 'topic' ? 'taxon' : 'topic'))
+    dispatch(odbBioSlice.actions.setFilter(filter === BioFilter.topic ? BioFilter.taxon : BioFilter.topic))
   }
   return (
     <>
@@ -76,7 +76,7 @@ export const OdbBio = () => {
             <FormLabel>{t('OdbData.filter')}</FormLabel>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="subtitle2" gutterBottom>{t('OdbData.Bio.by')}{t('OdbData.Bio.topic')}</Typography>
-              <ModeSwitch onChange={handleModeSwitch} />
+              <ModeSwitch onChange={handleModeSwitch} checked={filter === 'taxon'} />
               <Typography variant="subtitle2" gutterBottom>{t('OdbData.Bio.by')}{t('OdbData.Bio.taxon')}</Typography>
             </Stack>
           </FormControl>

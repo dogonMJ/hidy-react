@@ -18,13 +18,14 @@ import { OdbMarineHeatwave } from './OdbMarineHeatwave';
 import { SubSelection } from 'components/SubSelection';
 import { ComponentList } from 'types';
 import { mapSlice } from 'store/slice/mapSlice';
+import { onoffsSlice } from 'store/slice/onoffsSlice';
 
 const seasons = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
 
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const [checked, setChecked] = useState<string[]>([]);
+  const checked = useSelector((state: RootState) => state.switches.checkedOdb)
   const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
 
   const handleSeasonChange = useCallback((event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
@@ -38,7 +39,8 @@ export const ODB = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    setChecked(newChecked);
+    dispatch(onoffsSlice.actions.setOdbChecked(newChecked))
+    // setChecked(newChecked);
   };
 
   const componentList: ComponentList = {
@@ -61,15 +63,7 @@ export const ODB = () => {
     odbMicroPlastic: < OdbMicroplastics />,
     // WebMaps: <SatelliteWebMaps cache={cache} />
   }
-  useEffect(() => {
-    const queryString = window.location.search
-    const urlParams = new URLSearchParams(queryString);
-    const ons: any = []
-    for (let key of urlParams.keys()) {
-      ons.push(key)
-    }
-    ons && setChecked(ons)
-  }, [])
+
   return (
     <>
       <Divider variant="middle" />

@@ -18,6 +18,7 @@ import { ShipTrack } from './ShipTrack';
 import { WMSSelector } from './WMSSelector';
 import { ComponentList } from 'types';
 import { mapSlice } from 'store/slice/mapSlice';
+import { useMapDragScroll } from 'hooks/useMapDragScroll';
 
 declare const L: any
 
@@ -35,7 +36,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const DataPanel = () => {
-  const map = useMap()
+  // const map = useMap()
+  const { setDrag } = useMapDragScroll()
   const ref = useRef<any>()
   const { t } = useTranslation()
   const dispatch = useDispatch()
@@ -59,17 +61,8 @@ const DataPanel = () => {
   const [openSwitch, setOpenSwitch] = useState(onOff)
   const [open, setOpen] = useState(false);
 
-  const enterPanel = () => {
-    dispatch(mapSlice.actions.enterPanel(true))
-    // map.scrollWheelZoom.enable()
-    map.dragging.disable()
-
-  }
-  const leavePanel = () => {
-    dispatch(mapSlice.actions.enterPanel(false))
-    // map.scrollWheelZoom.disable()
-    map.dragging.enable()
-  }
+  const enterPanel = () => setDrag(false)
+  const leavePanel = () => setDrag(true)
 
   const handleDrawerOpen = () => setOpen(true)
   const handleDrawerClose = () => setOpen(false)
