@@ -3,8 +3,8 @@ import 'leaflet'
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
-import { List, Collapse, Drawer, Button, Divider, IconButton, styled, } from '@mui/material';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material'
+import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typography, Modal, Card, CardHeader, CardContent, Link } from '@mui/material';
+import { ChevronLeft, ChevronRight, MenuRounded } from '@mui/icons-material'
 import { useMap, } from 'react-leaflet';
 import { DataPanelItem } from 'components/DataPanelItem';
 import ToggleCWB from 'layout/DataPanel/NearTW';
@@ -19,6 +19,9 @@ import { WMSSelector } from './WMSSelector';
 import { ComponentList } from 'types';
 import { mapSlice } from 'store/slice/mapSlice';
 import { useMapDragScroll } from 'hooks/useMapDragScroll';
+import ODBlogo from 'assets/images/logo192.png'
+import { Box } from '@mui/system';
+import { About } from 'components/About';
 
 declare const L: any
 
@@ -35,31 +38,30 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'space-between',
 }));
 
+const itemList: ComponentList = {
+  APIlayers: <APILayers />,
+  CWBsites: <ToggleCWB />,
+  Animated: <AnimatedCurrents />,
+  // SatData: <SatelliteData />,
+  OdbData: <ODB />,
+  CPlanLayers: <CPlanLayers />,
+  StatMean: <StatisticMean />,
+  WMSSelector: < WMSSelector />,
+  // WebMaps: <SatelliteWebMaps cache={cache} />
+}
+const secLevelAll: ComponentList = {
+  ShipTrack: <ShipTrack />
+}
+const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
+
 const DataPanel = () => {
-  // const map = useMap()
   const { setDrag } = useMapDragScroll()
   const ref = useRef<any>()
   const { t } = useTranslation()
-  const dispatch = useDispatch()
   const userInfo = useSelector((state: RootState) => state.map.userInfo);
-
-  const itemList: ComponentList = {
-    APIlayers: <APILayers />,
-    CWBsites: <ToggleCWB />,
-    Animated: <AnimatedCurrents />,
-    // SatData: <SatelliteData />,
-    OdbData: <ODB />,
-    CPlanLayers: <CPlanLayers />,
-    StatMean: <StatisticMean />,
-    WMSSelector: < WMSSelector />,
-    // WebMaps: <SatelliteWebMaps cache={cache} />
-  }
-  const secLevelAll: ComponentList = {
-    ShipTrack: <ShipTrack />
-  }
-  const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
   const [openSwitch, setOpenSwitch] = useState(onOff)
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [openAbout, setOpenAbout] = useState({ about: false, contact: false })
 
   const enterPanel = () => setDrag(false)
   const leavePanel = () => setDrag(true)
@@ -70,6 +72,10 @@ const DataPanel = () => {
     openSwitch[item] = !openSwitch[item]
     setOpenSwitch({ ...openSwitch })
   }
+
+  const handleAbout = () => setOpenAbout({ about: !openAbout.about, contact: false })
+  const handleContact = () => setOpenAbout({ about: false, contact: !openAbout.contact })
+
 
   useEffect(() => {
     // L.DomEvent.disableClickPropagation(ref.current);
@@ -92,22 +98,25 @@ const DataPanel = () => {
       onMouseEnter={enterPanel}
       onMouseLeave={leavePanel}
     >
-      <Button
-        onClick={handleDrawerOpen}
-        endIcon={<ChevronRight />}
-        variant="contained"
-        sx={{
-          zIndex: 1000,
-          margin: '5px',
-          background: 'white',
-          color: 'black',
-          ":hover": {
-            background: '#e0e0e0',
-          },
-        }}
-      >
-        {t('dataPanel')}
-      </Button>
+      <Stack sx={{ width: 190 }}>
+        <Button
+          onClick={handleDrawerOpen}
+          endIcon={<ChevronRight />}
+          variant="contained"
+          sx={{
+            width: 50,
+            zIndex: 1000,
+            margin: '5px',
+            background: 'white',
+            color: '#282828dd',
+            ":hover": {
+              background: '#e0e0e0',
+            },
+          }}
+        >
+          <MenuRounded />
+        </Button>
+      </Stack>
       <Drawer
         anchor='left'
         open={open}
@@ -117,12 +126,25 @@ const DataPanel = () => {
           sx: {
             maxHeight: 'calc(100% - 140px)',
             height: 'auto',
-            marginLeft: '0px'
+            marginLeft: '0px',
+            borderEndEndRadius: 5
           }
         }}
       >
         <DrawerHeader>
-          {t('dataPanel')}
+          <img src={ODBlogo} alt={'ODB'} style={{ width: 35, marginLeft: 10 }} />
+          <Stack alignItems={'center'}>
+            <Typography
+              component={'div'}
+              sx={{ fontFamily: 'Fugaz One', fontSize: 20 }}>
+              Hidy Viewer 2
+            </Typography>
+            <Typography
+              variant={'caption'}
+              sx={{ fontFamily: 'Kosugi Maru', fontSize: 12 }}>
+              {t('siteSubtitle')}
+            </Typography>
+          </Stack>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeft />
           </IconButton>
@@ -137,8 +159,6 @@ const DataPanel = () => {
           component="nav"
           id='navBar'
           aria-labelledby="nested-list-subheader"
-        // onMouseEnter={enterPanel}
-        // onMouseLeave={leavePanel}
         >
           {
             Object.keys(itemList).map((item) => {
@@ -177,9 +197,16 @@ const DataPanel = () => {
               )
             })
           }
+
         </List>
+        <Divider />
+        <Box sx={{ paddingInlineEnd: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Button variant='text' size='small' onClick={handleAbout} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('about.title')}</Button>
+          <Button variant='text' size='small' onClick={handleContact} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('contact.title')}</Button>
+        </Box>
       </Drawer>
-    </div>
+      <About open={openAbout} setOpen={setOpenAbout} />
+    </div >
   )
 }
 

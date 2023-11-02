@@ -37,6 +37,7 @@ export const OdbChemistry = () => {
   const [date, setDate] = useState<string[]>(['19881218', '20161231'])
   const [parameters, setParameters] = useState<string[]>(['none'])
   const [warning, setWarning] = useState(false)
+  const [alertMessage, setAlertMessage] = useState(t('alert.fetchFail'))
   const varList: { [key: string]: { [key: string]: string } } = {
     'Sal': {
       name: t('OdbData.chemistryList.Sal'),
@@ -177,22 +178,32 @@ export const OdbChemistry = () => {
   }
 
   useEffect(() => {
-    const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbchem/bottlehidy?lat_from=${lat[0]}&lat_to=${lat[1]}&lon_from=${lon[0]}&lon_to=${lon[1]}&dep1=${depthList[depthIndex[0]]}&dep2=${depthList[depthIndex[1]]}&var=${parameters.join(',')}&date_from=${date[0]}&date_to=${date[1]}`
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        if (json === 'No result') {
-          refCluster.current.clearLayers()
-          ref.current.clearLayers()
-        } else {
-          setData(json)
-          refCluster.current.clearLayers()
-          ref.current.clearLayers()
-          ref.current.addData(json)
-          refCluster.current.addLayers(ref.current.getLayers())
-        }
-      })
-      .catch(() => setWarning(true))
+    if (parameters.length === 1) {
+      setWarning(true)
+      setAlertMessage(t('alert.noSelect'))
+    } else {
+      const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbchem/bottlehidy?lat_from=${lat[0]}&lat_to=${lat[1]}&lon_from=${lon[0]}&lon_to=${lon[1]}&dep1=${depthList[depthIndex[0]]}&dep2=${depthList[depthIndex[1]]}&var=${parameters.join(',')}&date_from=${date[0]}&date_to=${date[1]}`
+      fetch(url)
+        .then((response) => response.json())
+        .then((json) => {
+          if (json === 'No result') {
+            refCluster.current.clearLayers()
+            ref.current.clearLayers()
+            setWarning(true)
+            setAlertMessage(t('alert.noData'))
+          } else {
+            setData(json)
+            refCluster.current.clearLayers()
+            ref.current.clearLayers()
+            ref.current.addData(json)
+            refCluster.current.addLayers(ref.current.getLayers())
+          }
+        })
+        .catch(() => {
+          setWarning(true)
+          setAlertMessage(t('alert.fetchFail'))
+        })
+    }
   }, [lat, lon, depthIndex, date, parameters, t])
 
   return (
@@ -291,7 +302,7 @@ export const OdbChemistry = () => {
         <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>
       <AlertSlide open={warning} setOpen={setWarning} severity='error'>
-        {t('alert.fetchFailChem')}
+        {alertMessage}
       </AlertSlide>
     </>
   )

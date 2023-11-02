@@ -1,10 +1,8 @@
 import { useState, useRef } from "react";
 import 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw.css'
-import { DialogContent, IconButton, Slide, Paper, Stack } from "@mui/material";
-import { Dialog } from '@mui/material';
+import { Dialog, DialogContent, IconButton, Slide, Paper, Stack, Avatar } from "@mui/material";
 import { SignIn } from "layout/Account/SignIn"
-import Avatar from '@mui/material/Avatar';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { UserBanner } from "layout/Account/UserBanner";

@@ -5,6 +5,7 @@ import { ImageOverlay } from "react-leaflet";
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { ShowCwbForecast } from "./ShowCwbForecast";
+import { Divider } from "@mui/material";
 
 const optionList = ['close', 'cwbsst', 'cwbpsu', 'cwbsla', 'cwbspd']
 const optionList2 = ['close', 'cwbcur', 'cwbdir']
@@ -74,6 +75,7 @@ const CwbSeaForecast = () => {
         group='CwbSeaForecast'
         optionList={optionList2}
       />
+      <Divider variant="middle" sx={{ width: '80%', marginLeft: '16%', }} flexItem light />
       <DataPanelRadioList
         identifier={identifier}
         handleClick={handleToggle}

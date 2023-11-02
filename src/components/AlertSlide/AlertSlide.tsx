@@ -1,8 +1,9 @@
-import { Alert, AlertColor, Slide } from "@mui/material";
+import { Alert, Slide } from "@mui/material";
 import { createPortal } from "react-dom";
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
+import { AlertSlideType } from "types";
 
-export const AlertSlide = (props: { open: boolean, setOpen: any, severity?: AlertColor, timeout?: number, children?: ReactNode, icon?: ReactNode }) => {
+export const AlertSlide = (props: AlertSlideType) => {
   const { open, setOpen, severity, timeout = 3000, children, icon } = { ...props }
   useEffect(() => {
     if (open && timeout) {

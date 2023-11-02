@@ -25,7 +25,7 @@ export const MyBaseLayers = memo(() => {
                 <BaseLayer name='GEBCO Grid shaded relief'>
                     <WMSTileLayer
                         id='baseLayer'
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        attribution='<a href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b">GEBCO Compilation Group (2023) GEBCO 2023 Grid</a>'
                         url="https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?"
                         crossOrigin="anonymous"
                         params={{
@@ -37,7 +37,7 @@ export const MyBaseLayers = memo(() => {
                 <BaseLayer name='GEBCO Grid colour-shaded for elevation including under ice topography'>
                     <WMSTileLayer
                         id='baseLayer'
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        attribution='<a href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b">GEBCO Compilation Group (2023) GEBCO 2023 Grid</a>'
                         url="https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?"
                         crossOrigin="anonymous"
                         params={{
@@ -49,7 +49,7 @@ export const MyBaseLayers = memo(() => {
                 <BaseLayer name='GEBCO Grid based on measured data only'>
                     <WMSTileLayer
                         id='baseLayer'
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        attribution='<a href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b">GEBCO Compilation Group (2023) GEBCO 2023 Grid</a>'
                         url="https://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv?"
                         crossOrigin="anonymous"
                         params={{
@@ -62,4 +62,3 @@ export const MyBaseLayers = memo(() => {
         </LayersControl >
     )
 })
-//TYLES=default&FEATUREINFO=false&service=WMS&request=GetMap&version=1.1.1&width=256&height=256&srs=EPSG%3A3857

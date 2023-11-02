@@ -21,6 +21,7 @@ import { BioTableAtPoint } from "./BioTableAtPoint";
 import { dateToBioApiString, category23 } from "Utils/UtilsODB";
 import { LargeFixedSizeListComponent } from "./LargeFixedSizeListComponent";
 import { odbBioSlice } from "store/slice/odbBioSlice";
+import { useAlert } from "hooks/useAlert";
 declare const L: any;
 
 const topicList = {
@@ -49,6 +50,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const refCluster = useRef<any>()
   const url = useRef('')
   const map = useMap()
+  const { openAlert, setOpenAlert, alertMessage, showAlert } = useAlert()
   const bioDateRange = useSelector((state: RootState) => state.odbBio.dateRange)
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const lat = useSelector((state: RootState) => state.odbBio.latRange)
@@ -57,7 +59,6 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const taxon = useSelector((state: RootState) => state.odbBio.taxon)
   const clusterLevel = useSelector((state: RootState) => state.odbBio.cluster)
   const [taxaList, setTaxaList] = useState<string[]>([''])
-  const [openAlert, setOpenAlert] = useState(false)
   const [data, setData] = useState<any>()
   const [sliderLat, setSliderLat] = useState<number[]>(lat);
   const [sliderLon, setSliderLon] = useState<number[]>(lon);
@@ -130,7 +131,9 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   };
 
   const handleDateChange = (newDate: Date[]) => {
-    if (newDate.length === 1) {
+    if (newDate.length === 0) {
+      showAlert(t('alert.noDate'))
+    } else if (newDate.length === 1) {
       const dt = dateToBioApiString(newDate[0])
       dispatch(odbBioSlice.actions.setDateRange([dt, dt]))
     } else {
@@ -164,28 +167,37 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   };
 
   useEffect(() => {
-    if (filter === 'topic') {
-      const topic = topics.toString() ? topics.toString() : ' '
-      url.current = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/event/${dataset}?topic=${topic}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${bioDateRange[0]}&endDate=${bioDateRange[1]}`
-    } else if (filter === 'taxon') {
-      url.current = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxa/${dataset}/${taxon}?minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${bioDateRange[0]}&endDate=${bioDateRange[1]}`
+    if (bioDateRange.length < 2) {
+      showAlert(t('alert.noDate'))
+    } else if (topics.length === 0) {
+      showAlert(t('alert.noSelect'))
+    } else {
+      if (filter === 'topic') {
+        const topic = topics.toString() ? topics.toString() : ' '
+        url.current = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/event/${dataset}?topic=${topic}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${bioDateRange[0]}&endDate=${bioDateRange[1]}`
+      } else if (filter === 'taxon') {
+        url.current = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxa/${dataset}/${taxon}?minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${bioDateRange[0]}&endDate=${bioDateRange[1]}`
+      }
+      fetch(url.current)
+        .then(res => res.json())
+        .then(json => {
+          if (json.length === 0) {
+            refCluster.current.clearLayers()
+            ref.current.clearLayers()
+            setData(null)
+            showAlert(t('alert.noData'))
+          } else {
+            setData(json)
+            refCluster.current.clearLayers()
+            ref.current.clearLayers()
+            ref.current.addData(json)
+            refCluster.current.addLayers(ref.current.getLayers())
+          }
+        })
+        .catch(() => {
+          showAlert(t('alert.fetchFail'))
+        })
     }
-    fetch(url.current)
-      .then(res => res.json())
-      .then(json => {
-        if (json.length === 0) {
-          refCluster.current.clearLayers()
-          ref.current.clearLayers()
-          // setData(null)
-          setOpenAlert(true)
-        } else {
-          // setData(json)
-          refCluster.current.clearLayers()
-          ref.current.clearLayers()
-          ref.current.addData(json)
-          refCluster.current.addLayers(ref.current.getLayers())
-        }
-      })
   }, [filter, dataset, topics, taxon, lat, lon, bioDateRange, t])
 
   useEffect(() => {
@@ -257,7 +269,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
         />
         <RenderIf isTrue={filter === 'topic'}>
           <Typography variant="subtitle2" gutterBottom>
-            {t('OdbData.select')}{t('OdbData.Bio.topic')}
+            {t('OdbData.select')}{t('OdbData.Bio.topic')}{t(`muti`)}
           </Typography>
           <FormControl fullWidth size="small">
             <InputLabel id='topic-label'>{t(`OdbData.Bio.topic`)}</InputLabel>
@@ -337,7 +349,9 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
 
           />
         </RenderIf>
-        <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {t('alert.nodata')} </AlertSlide>
+        <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} >
+          {alertMessage}
+        </AlertSlide>
       </Box>
       <MarkerCluster
         ref={refCluster}

@@ -1,4 +1,6 @@
 import * as geojson from 'geojson'
+import { AlertColor } from '@mui/material';
+import { ReactNode } from 'react';
 
 export type coor = {
     lat: number;
@@ -122,3 +124,11 @@ export interface CtdFeature extends geojson.Feature {
     properties: CtdProperties
 }
 
+export interface AlertSlideType {
+    open: boolean,
+    setOpen: any,
+    severity?: AlertColor,
+    timeout?: number,
+    children?: ReactNode,
+    icon?: ReactNode
+}
