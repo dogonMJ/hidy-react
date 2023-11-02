@@ -15,6 +15,7 @@ import 'flatpickr/dist/plugins/monthSelect/style.css'
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
 import { useTranslation } from "react-i18next";
+import { useAlert } from "hooks/useAlert";
 
 declare const L: any;
 
@@ -42,10 +43,11 @@ export const OdbMicroplastics = () => {
   const { t } = useTranslation()
   const ref = useRef<any>()
   const refCluster = useRef<any>()
+  const { openAlert, alertMessage, setOpenAlert, showAlert } = useAlert()
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [levels, setLevels] = useState<string[]>([])
   const [dataset, setDataset] = useState('all')
-  const [openAlert, setOpenAlert] = useState(false)
+  // const [openAlert, setOpenAlert] = useState(false)
   const [data, setData] = useState<any>()
   const [date, setDate] = useState<string[]>([])
   const [lat, setLat] = useState<number[]>([10, 40]);
@@ -115,7 +117,9 @@ export const OdbMicroplastics = () => {
   };
 
   const handleDateChange = (newDate: Date[]) => {
-    if (newDate.length === 1) {
+    if (newDate.length === 0) {
+      showAlert(t('alert.noDate'))
+    } else if (newDate.length === 1) {
       const dt = dateToApiString(newDate[0])
       setDate([dt, dt])
     } else {
@@ -143,26 +147,33 @@ export const OdbMicroplastics = () => {
     refCluster.current.addLayers(ref.current.getLayers())
   }
   useEffect(() => {
-    if (levels.toString()) {
-      const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/litter/${dataset}?level=${levels.toString()}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${date[0]}&endDate=${date[1]}`
-      fetch(url)
-        .then(res => res.json())
-        .then(json => {
-          if (json.length === 0) {
-            refCluster.current.clearLayers()
-            ref.current.clearLayers()
-            setOpenAlert(true)
-          } else {
-            setData(json)
-            refCluster.current.clearLayers()
-            ref.current.clearLayers()
-            ref.current.addData(json)
-            refCluster.current.addLayers(ref.current.getLayers())
-          }
-        })
+    if (date.length < 2) {
+      showAlert(t('alert.noDate'))
+    } else if (levels.length === 0) {
+      showAlert(t('alert.noSelect'))
     } else {
-      refCluster.current.clearLayers()
-      ref.current.clearLayers()
+      if (levels.toString()) {
+        const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/litter/${dataset}?level=${levels.toString()}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${date[0]}&endDate=${date[1]}`
+        fetch(url)
+          .then(res => res.json())
+          .then(json => {
+            if (json.length === 0) {
+              refCluster.current.clearLayers()
+              ref.current.clearLayers()
+              showAlert(t('alert.noData'))
+            } else {
+              setData(json)
+              refCluster.current.clearLayers()
+              ref.current.clearLayers()
+              ref.current.addData(json)
+              refCluster.current.addLayers(ref.current.getLayers())
+            }
+          })
+          .catch(() => showAlert(t('alert.fetchFail')))
+      } else {
+        refCluster.current.clearLayers()
+        ref.current.clearLayers()
+      }
     }
   }, [levels, dataset, lon, lat, date, t])
 
@@ -196,9 +207,9 @@ export const OdbMicroplastics = () => {
                 allowInput: true,
                 weekNumbers: false,
                 minDate: '1972-04-20',
-                dateFormat: 'Y-M-d',
-                altFormat: 'Y-M-d',
-                ariaDateFormat: 'Y-M-d',
+                dateFormat: 'Y-m-d',
+                altFormat: 'Y-m-d',
+                ariaDateFormat: 'Y-m-d',
                 mode: "range",
               }}
             />
@@ -243,7 +254,7 @@ export const OdbMicroplastics = () => {
             sx={{ width: '85%', marginLeft: 2.1 }}
           />
           <Typography variant="subtitle2" gutterBottom>
-            {t('OdbData.select')}{t('OdbData.plastic.concentration')} ({t('OdbData.plastic.pieces')}/m<sup>3</sup>)
+            {t('OdbData.select')}{t('OdbData.plastic.concentration')} ({t('OdbData.plastic.pieces')}/m<sup>3</sup>){t(`muti`)}
           </Typography>
           <Select
             multiple
@@ -273,7 +284,7 @@ export const OdbMicroplastics = () => {
               </MenuItem>
             ))}
           </Select>
-          <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {t('OdbData.nodata')} </AlertSlide>
+          <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {alertMessage} </AlertSlide>
         </Stack>
       </Box>
       <MarkerCluster

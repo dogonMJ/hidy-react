@@ -8,27 +8,8 @@ import { SamplingEvents } from "./SamplingEvents";
 import { BioComposition } from "./BioComposition";
 import { BioDataset, BioFilter } from "types";
 import { SwitchSameColor } from "components/SwitchSameColor";
+import { CustomTabPanel } from "components/CustomTabPanel";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-const CustomTabPanel = (props: TabPanelProps) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && children}
-    </div>
-  );
-}
 const ModeSwitch = SwitchSameColor()
 
 export const OdbBio = () => {

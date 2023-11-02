@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import TranslateIcon from '@mui/icons-material/Translate';
+import TranslateRoundedIcon from '@mui/icons-material/TranslateRounded';
 import { IconButton } from '@mui/material';
 import { useTranslation } from "react-i18next";
 
@@ -38,7 +38,7 @@ export const SwitchLang = () => {
           // fontWeight: 900
         }}
       >
-        <TranslateIcon fontSize="small" />
+        <TranslateRoundedIcon fontSize="small" />
         {/* {t('switchLang')} */}
       </IconButton>
     </div>

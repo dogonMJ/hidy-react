@@ -35,6 +35,7 @@ const LeafletMap = () => {
   const defaultZoom = defaultOptions && defaultOptions.z ? Number(defaultOptions.z) : 7
   const defaultCenter = defaultOptions && defaultOptions.c ? JSON.parse(defaultOptions.c) : [23.5, 121]
   const defaultDate = defaultOptions && defaultOptions.d ? new Date(defaultOptions.d) : new Date()
+  // const defaultDate = useSelector((state: RootState) => state.map.datetime)
   const timeNow = new Date()
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()
