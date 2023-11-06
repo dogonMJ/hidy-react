@@ -464,10 +464,10 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t('DataInfo.source')}: </b><a target="_blank" href="https://www.odb.ntu.edu.tw/coresite/sample-page/" rel="noreferrer">{t('OdbData.sedCore.source')}</a><br />
         </Typography >
       )
-    case 'odbMarineHeatwave':
+    case 'odbMHW':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`OdbData.odbMarineHeatwave`)}</b><br />
+          <b>{t(`OdbData.odbMHW`)}</b><br />
           {t('OdbData.mhw.description1')}<br />
           <img src='https://eco.odb.ntu.edu.tw/pub/MHW/assets/hobday_2018.jpg' alt="" loading="lazy" width={336} height={200} /><br />
           {t('OdbData.mhw.description2')}<br /><br />
@@ -481,10 +481,10 @@ const InfoList = (props: { dataId: string }) => {
           {t('OdbData.mhw.description3')}
         </Typography >
       )
-    case 'odbChemistry':
+    case 'odbChem':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`OdbData.odbChemistry`)}</b><br />
+          <b>{t(`OdbData.odbChem`)}</b><br />
           {t('OdbData.chemistryList.description')}<br /><br />
           <b>{t('DataInfo.source')}:</b> <br />
           <a target="_blank" href={`${t('OdbData.chemistryList.siteUrl')}`} rel="noreferrer">{t('OdbData.chemistryList.siteName')}</a><br />
@@ -505,10 +505,10 @@ const InfoList = (props: { dataId: string }) => {
           {t('OdbData.Bio.others')}: <a target="_blank" href="https://bio.odb.ntu.edu.tw/query/" rel="noreferrer">BioQuery and OpenAPI</a>
         </Typography >
       )
-    case 'odbMicroPlastic':
+    case 'odbMP':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`OdbData.odbMicroPlastic`)}</b><br />
+          <b>{t(`OdbData.odbMP`)}</b><br />
           {t('OdbData.plastic.description1')}<br /><br />
           <b>{t('DataInfo.source')}:</b><br />
           <a target="_blank" href="https://www.ncei.noaa.gov/products/microplastics" rel="noreferrer">NCEI Marine Microplastics</a><br />

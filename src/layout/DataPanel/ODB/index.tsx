@@ -15,22 +15,15 @@ import { OdbChemistry } from './OdbChemistry';
 import { OdbBio } from './OdbBio';
 import { OdbMicroplastics } from './OdbMicroPlastics';
 import { OdbMarineHeatwave } from './OdbMarineHeatwave';
-import { SubSelection } from 'components/SubSelection';
 import { ComponentList } from 'types';
-import { mapSlice } from 'store/slice/mapSlice';
 import { onoffsSlice } from 'store/slice/onoffsSlice';
 
-const seasons = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
 
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const checked = useSelector((state: RootState) => state.switches.checkedOdb)
-  const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
 
-  const handleSeasonChange = useCallback((event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
-    newSelect && dispatch(mapSlice.actions.OdbSeasonSelection(newSelect))
-  }, [])
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -40,27 +33,18 @@ export const ODB = () => {
       newChecked.splice(currentIndex, 1);
     }
     dispatch(onoffsSlice.actions.setOdbChecked(newChecked))
-    // setChecked(newChecked);
   };
 
   const componentList: ComponentList = {
     odbTopo: <OdbTopo opacity={1} />,
-    odbCtd: <>
-      <RenderIf isTrue={!checked.includes('odbCurrent')}>
-        <SubSelection select={period} handleChange={handleSeasonChange} values={seasons} transParentNode='OdbData' />
-      </RenderIf>
-      <OdbCTD />
-    </>,
+    odbCtd: <OdbCTD />,
     odbGravity: <OdbGravity opacity={1} />,
-    odbCurrent: <>
-      <SubSelection select={period} handleChange={handleSeasonChange} values={seasons} transParentNode='OdbData' />
-      <OdbCurrent />
-    </>,
+    odbCurrent: <OdbCurrent />,
     odbSedCore: <OdbSedCore />,
-    odbMarineHeatwave: <OdbMarineHeatwave />,
-    odbChemistry: <OdbChemistry />,
+    odbMHW: <OdbMarineHeatwave />,
+    odbChem: <OdbChemistry />,
     odbBio: <OdbBio />,
-    odbMicroPlastic: < OdbMicroplastics />,
+    odbMP: < OdbMicroplastics />,
     // WebMaps: <SatelliteWebMaps cache={cache} />
   }
 

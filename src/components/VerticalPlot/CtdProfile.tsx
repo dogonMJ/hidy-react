@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store/store';
 import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-import { VerticalPlotProps, CtdFeature, CtdProperties } from 'types';
+import { VerticalPlotProps, CtdFeature, CtdProperties, CtdParameters } from 'types';
 
 interface CustomAxis extends Plotly.LayoutAxis, Plotly.Axis {
   ticklabelposition: "outside" | "inside" | "outside top" | "inside top" | "outside left" | "inside left" | "outside right" | "inside right" | "outside bottom" | "inside bottom"
@@ -136,7 +136,7 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
           sx={{ marginLeft: 2.1, marginBottom: 2 }}
           defaultValue={'temperature'}
           value={secondPar}
-          onChange={(event) => dispatch(odbCtdSlice.actions.setProfileSecondPar(event.target.value))}
+          onChange={(event) => dispatch(odbCtdSlice.actions.setProfileSecondPar(event.target.value as CtdParameters))}
         >
           {parameters.map((par, index) => {
             return <MenuItem key={index} value={par}>{t(`OdbData.CTD.${par}`)}</MenuItem>

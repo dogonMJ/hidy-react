@@ -126,10 +126,10 @@
     "odbGravity": "Gravity",
     "odbSedCore": "Sediment and Core Sampling Sites",
     "odbCtd": "CTD and other sensors",
-    "odbChemistry": "Marine Chemistry",
+    "odbChem": "Marine Chemistry",
     "odbBio": "Biological Data",
-    "odbMicroPlastic": "Microplastics",
-    "odbMarineHeatwave": "Marine Heatwave Levels",
+    "odbMP": "Microplastics",
+    "odbMHW": "Marine Heatwave Levels",
     "depth": "Depth",
     "density": "Density",
     "temperature": "Temperature",
@@ -163,6 +163,7 @@
       "description": "This layer represents compiled bathymetric data from single-beam echo sounder survey by research vessels, supplemented by GEBCO's 15 arc-second bathymetric data. For further information or data acquisition, please refer to the data source website."
     },
     "CTD": {
+      "selection": "Parameters and seasons",
       "secondPar": "Comparison parameter for depth profile",
       "density": "Density (kg/m\u00B3)",
       "temperature": "Temperature (\u00B0C)",
@@ -179,7 +180,7 @@
       "fixRange": "Fix Range",
       "source": "ODB CTD data",
       "description": "This layer consolidates data obtained from Conductivity-Temperature-Depth Profilers (CTD) aboard our research vessels. It presents averaged data (data count >=3 due to regulations) within each grid at various depths. For additional information or data acquisition, please refer to the data source website.",
-      "description2": "The top menu allows you to switch parameters and seasons. You can adjust data segment, color scales, data ranges, and layer opacity from the left panel. 'Data splitting' divides the data range and shows two colors when set to 0, indicating values above the maximum and below or equal to the minimum. The parameter defaults to its initial settings when first switched, but can be customized by the user thereafter.",
+      "description2": "You can customize parameter, season, data segment, color scales, data ranges, and layer opacity from the left panel. 'Data splitting' divides the data range and shows two colors when set to 0, indicating values above the maximum and below or equal to the minimum. The parameter defaults to its initial settings when first switched, but can be customized by the user thereafter.",
       "description3": "Clicking on the data grid on map creates a vertical profile plot. You can switch a second parameter for comparison from the left-side panel.",
       "others": " includes CTD API for GeoJSON format data."
     },
@@ -188,6 +189,7 @@
       "description": "ODB-compiled gravity data collected by OR1. For detailed information and application, please refer to the website below."
     },
     "current": {
+      "selection": "Parameters",
       "source": "ODB Current Data (Ch.)",
       "description": "This layer combines data collected by Shipboard Acoustic Doppler Current Profilers (SADCP) aboard our research vessels. It displays average data when the number of data points is >= to 3. For further information or data acquisition, please refer to the data source website.",
       "others": " includes SADCP API for GeoJSON format data.",
@@ -219,6 +221,7 @@
       "description1": "Monthly global marine heatwave level map created by ODB.\nChange the month on the calendar above to switch layer. May require an extended period of time.",
       "description2": "Figure above (modified from Hobday et al. (2018)) describes how levels were categorized. Please refer to the ODB Marine Heatwave website for detailed calculation.",
       "description3": "For detailed calculation methods and definitions, please refer to the ODB Marine Heatwave website. The website also provides API and data downloads monthly mean sea surface temperature (SST), SST anomalies, marine heatwave levels, and themal displacements at a global resolution of 0.25° x 0.25°.",
+      "ice": "Sea ice (>15 days)",
       "moderate": "Moderate (threshold~2x)",
       "strong": "Strong (2x~3x)",
       "severe": "Severe (3x~4x)",
@@ -591,5 +594,11 @@
   "contact": {
     "title": "Contact Us",
     "content": "Whether you have questions, suggestions, or just want to share a photo of your doggo, please don't hesitate to get in touch with us:"
+  },
+  "share": {
+    "title": "Share View",
+    "copy": "Copy",
+    "refresh": "Update",
+    "clear": "Clear browser URL"
   }
 }

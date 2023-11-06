@@ -19,17 +19,24 @@ const defaultStates: any = store.getState()
 
 export const ShareControl = memo(() => {
   const map = useMap()
-  const { setDrag, setScroll } = useMapDragScroll()
+  const { setDragNScroll } = useMapDragScroll()
   const { t } = useTranslation()
   const [showBanner, setShowBanner] = useState(false)
   const [newUrl, setNewUrl] = useState('')
+  const [newQRUrl, setNewQRUrl] = useState(newUrl)
   const datetime = useSelector((state: RootState) => state.map.datetime)
   const { i18n } = useTranslation()
 
   const getShareUrl = useCallback(() => {
     const states: any = store.getState();
-    const switches = states.switches.checkedOdb
-    const modified = findModified(defaultStates, states, switches)
+    const switches = states.switches.checkedOdb //已開選項
+
+    const modified = findModified(defaultStates, states, switches) //和預設不同選項
+    //單選選項
+    const modKeys = Object.keys(modified)
+    const singleOptions = switches.filter((x: string) => !modKeys.includes(x))
+    singleOptions.forEach((key: string) => { modified[key] = {} })
+    //地圖選項
     modified.map = {
       lang: i18n.language,
       z: map.getZoom(),
@@ -37,18 +44,18 @@ export const ShareControl = memo(() => {
       datetime: datetime,
       ...modified.map,
     }
+    //網址原有選項
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString);
     urlParams.forEach((value, key) => {
-      if (modified[key]) {
+      if (modified[key]) { //網址原有選項被改變
         const original = readUrlQuery(key)
         Object.entries(original).forEach(([k, v]) => {
           if (modified[key][k] === undefined) {
             modified[key][k] = v
           }
         })
-      }
-      else {
+      } else { //網址原有選項未改變，直接拉到新網址
         if (switches.includes(key)) {
           modified[key] = readUrlQuery(key)
         }
@@ -60,23 +67,20 @@ export const ShareControl = memo(() => {
   const handleClick = () => {
     const res = getShareUrl()
     setNewUrl(`${window.location.origin}${window.location.pathname}?${res.slice(1)}`)
+    setNewQRUrl(`${window.location.origin}${window.location.pathname}?${res.slice(1)}`)
     // window.history.replaceState({}, '', `${window.location.origin}${window.location.pathname}`)
     setShowBanner(!showBanner)
   }
   const handleRefresh = () => {
     const res = getShareUrl()
     setNewUrl(`${window.location.origin}${window.location.pathname}?${res.slice(1)}`)
+    setNewQRUrl(`${window.location.origin}${window.location.pathname}?${res.slice(1)}`)
   }
   const handleCopy = () => navigator.clipboard.writeText(newUrl)
   const handleClear = () => window.history.replaceState({}, '', `${window.location.origin}${window.location.pathname}`)
-  const handleMouseEnter = () => {
-    setScroll(false)
-    setDrag(false)
-  }
-  const handleMouseOut = () => {
-    setScroll(true)
-    setDrag(true)
-  }
+  const handleMouseEnter = () => setDragNScroll(false)
+  const handleMouseOut = () => setDragNScroll(true)
+  const handleQRBlur = () => setNewQRUrl(newUrl)
 
   return (
     <>
@@ -116,7 +120,7 @@ export const ShareControl = memo(() => {
               }
             />
             <CardMedia sx={{ display: 'flex', justifyContent: 'center', padding: 1 }}>
-              <QRCodeCanvas value={newUrl} size={93} />
+              <QRCodeCanvas value={newQRUrl} size={93} />
             </CardMedia>
             <CardContent sx={{ paddingBottom: 0, paddingTop: 0 }}>
               <TextField
@@ -127,6 +131,7 @@ export const ShareControl = memo(() => {
                 // defaultValue={newUrl}
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
+                onBlur={handleQRBlur}
               />
             </CardContent>
             <CardActions sx={{ paddingY: 0.7, paddingLeft: 2 }} >

@@ -7,29 +7,27 @@ import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { GeoJSON } from 'react-leaflet'
 import { Box, Checkbox, Divider, MenuItem, Select, Slider, Stack, TextField, Typography, SelectChangeEvent, Button, FormControlLabel } from '@mui/material';
 import { FeatureCollection, Point } from 'geojson'
-import { createIntervalList, findInterval, getColorWithInterval, point2polygon, periodTransform, ctdDepthMeterProps, palettes, defaultCtdRange } from 'Utils/UtilsODB';
+import * as geojson from 'geojson';
+import { createIntervalList, findInterval, getColorWithInterval, point2polygon, periodTransform, ctdDepthMeterProps, palettes, defaultCtdRange, ctdPar, periods } from 'Utils/UtilsODB';
 import { DepthMeter } from 'components/DepthlMeter';
 import { LegendControl } from 'components/LeafletLegend';
 import { ColorPalette } from 'components/ColorPalette/ColorPalette';
-import * as geojson from 'geojson';
 import { CtdProfile } from 'components/VerticalPlot/CtdProfile';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
 import { CtdParameters, Palette } from 'types';
-import { SubSelection } from 'components/SubSelection';
 
-const parameters = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",]
 const ctdDepths = ctdDepthMeterProps().ctdDepths
 const marks = ctdDepthMeterProps().marks
 
 const LegendCTD = memo((props: { palette: string[], interval: number, min: number, max: number, title: string }) => {
   const { palette, interval, min, max, title } = props
-  const fullWidth = 180
-  const offset = interval ? fullWidth / (interval + 2) : fullWidth / 2
+  const FULLWIDTH = 180
+  const offset = interval ? FULLWIDTH / (interval + 2) : FULLWIDTH / 2
   return (
     <Box>
       <Typography variant="caption">{title}</Typography>
-      <ColorPalette palette={palette} interval={interval} fullLength={fullWidth} />
+      <ColorPalette palette={palette} interval={interval} fullLength={FULLWIDTH} />
       <Stack
         direction={'row'}
         justifyContent="space-between"
@@ -56,8 +54,7 @@ export const OdbCTD = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const type = useSelector((state: RootState) => state.odbCtd.par)
-  const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
-  // const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue)
+  const period = useSelector((state: RootState) => state.odbCtd.period)
   const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['odbCtd'])
   const palette = useSelector((state: RootState) => state.odbCtd.palette)
   const mask = useSelector((state: RootState) => state.odbCtd.mask)
@@ -66,13 +63,11 @@ export const OdbCTD = () => {
   const fixRange = useSelector((state: RootState) => state.odbCtd.fix)
   const minmax = useSelector((state: RootState) => state.odbCtd.range)
   const opacity = useSelector((state: RootState) => state.odbCtd.opacity)
-  const [data, setData] = useState<any>()
   const [sliderInterval, setSliderInterval] = useState(interval)
   const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
   const [openVertical, setOpenVertical] = useState(false)
   const [warning, setWarning] = useState(false)
 
-  // const depth = depthMeterValue >= 0 ? ctdDepths[depthMeterValue] : ctdDepths[ctdDepths.length - 1]
   const depth = ctdDepths[depthMeterValue]
   const mode = periodTransform[period]
 
@@ -123,7 +118,7 @@ export const OdbCTD = () => {
   const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setInterval(newValue as number))
   const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (fixRange) {
-      parameters.forEach((parameter) => {
+      ctdPar.forEach((parameter) => {
         dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: Number(event.target.value) }))
       })
     } else {
@@ -132,7 +127,7 @@ export const OdbCTD = () => {
   }
   const handleMaxChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (fixRange) {
-      parameters.forEach((parameter) => {
+      ctdPar.forEach((parameter) => {
         dispatch(odbCtdSlice.actions.setRange({ par: parameter, max: Number(event.target.value) }))
       })
     } else {
@@ -144,7 +139,7 @@ export const OdbCTD = () => {
     const max = minmax[type].max
     if (min > max) {
       if (fixRange) {
-        parameters.forEach((parameter) => {
+        ctdPar.forEach((parameter) => {
           dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: max, max: min }))
         })
       } else {
@@ -154,7 +149,7 @@ export const OdbCTD = () => {
   }
   const handleFixRange = () => {
     if (!fixRange) {
-      parameters.forEach((parameter) => {
+      ctdPar.forEach((parameter) => {
         dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: minmax[type].min, max: minmax[type].max }))
       })
     }
@@ -163,10 +158,13 @@ export const OdbCTD = () => {
 
   const handleDefaultRange = () => {
     dispatch(odbCtdSlice.actions.setFixRange(false))
-    parameters.forEach((parameter) => {
+    ctdPar.forEach((parameter) => {
       dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: defaultCtdRange[parameter].min, max: defaultCtdRange[parameter].max }))
     })
   }
+
+  const handleTypeChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setSelection(event.target.value as CtdParameters))
+  const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPeriod(event.target.value as string))
 
   useEffect(() => {
     fetch(`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&mode=${mode}&format=geojson&append=temperature,salinity,density,fluorescence,transmission,oxygen,count`)
@@ -180,22 +178,47 @@ export const OdbCTD = () => {
           const polygon = point2polygon(point)
           feature.geometry = polygon
         })
-        setData(json)
         ref.current.clearLayers()
         ref.current.addData(json)
       })
       .catch((e) => setWarning(true))
   }, [t, depth, mode])
 
-  const handleCtdChange = useCallback((event: React.MouseEvent<HTMLElement>, newSelect: CtdParameters,) => {
-    newSelect && dispatch(odbCtdSlice.actions.setSelection(newSelect))
-  }, []);
-
   return (
     <>
-      <SubSelection select={type} handleChange={handleCtdChange} values={parameters} transParentNode='OdbData' />
       <Divider variant="middle" />
       <Box sx={{ margin: 2 }}>
+        <Typography variant="subtitle2" gutterBottom>
+          {t('OdbData.CTD.selection')}
+        </Typography>
+        <Stack direction='row' spacing={2} sx={{ ml: 2.1, mb: 2 }}>
+          <Select
+            labelId="ctdpar-label"
+            size='small'
+            label='gf'
+            value={type}
+            onChange={handleTypeChange}
+            defaultValue='temperature'
+          >
+            {
+              ctdPar.map((par: string) => {
+                return <MenuItem key={`ctd-${par}`} value={par}>{t(`OdbData.CTD.${par}`)}</MenuItem>
+              })
+            }
+          </Select>
+          <Select
+            size='small'
+            value={period}
+            onChange={handlePeriodChange}
+            defaultValue='avg'
+          >
+            {
+              periods.map((period: string) => {
+                return <MenuItem key={`ctd-${period}`} value={period}>{t(`OdbData.${period}`)}</MenuItem>
+              })
+            }
+          </Select>
+        </Stack>
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.CTD.segment')}
         </Typography>
@@ -307,7 +330,7 @@ export const OdbCTD = () => {
       </Box >
       <GeoJSON
         ref={ref}
-        data={data}
+        data={{ type: 'Feature' }}
         onEachFeature={onEachFeature}
         style={(feature: any) => {
           const properties = feature.properties

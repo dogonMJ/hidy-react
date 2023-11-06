@@ -47,14 +47,13 @@ export const OdbMicroplastics = () => {
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
   const [levels, setLevels] = useState<string[]>([])
   const [dataset, setDataset] = useState('all')
-  // const [openAlert, setOpenAlert] = useState(false)
-  const [data, setData] = useState<any>()
   const [date, setDate] = useState<string[]>([])
   const [lat, setLat] = useState<number[]>([10, 40]);
   const [lon, setLon] = useState<number[]>([109, 135]);
   const [sliderLat, setSliderLat] = useState<number[]>(lat);
   const [sliderLon, setSliderLon] = useState<number[]>(lon);
   const [clusterLevel, setClusterLevel] = useState<number>(8)
+  const [dateClose, setDateClose] = useState(true)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layers: L.LayerGroup) => {
     const property = feature.properties
@@ -146,11 +145,13 @@ export const OdbMicroplastics = () => {
     refCluster.current.clearLayers()
     refCluster.current.addLayers(ref.current.getLayers())
   }
+  const handleDateClose = () => setDateClose(true)
+  const handleDateOpen = () => setDateClose(false)
   useEffect(() => {
     if (date.length < 2) {
       showAlert(t('alert.noDate'))
     } else if (levels.length === 0) {
-      showAlert(t('alert.noSelect'))
+      if (dateClose) { showAlert(t('alert.noSelect')) } //避免alert關閉時re-render讓輸入框跳掉
     } else {
       if (levels.toString()) {
         const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/litter/${dataset}?level=${levels.toString()}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${date[0]}&endDate=${date[1]}`
@@ -162,7 +163,7 @@ export const OdbMicroplastics = () => {
               ref.current.clearLayers()
               showAlert(t('alert.noData'))
             } else {
-              setData(json)
+              // setData(json)
               refCluster.current.clearLayers()
               ref.current.clearLayers()
               ref.current.addData(json)
@@ -203,10 +204,13 @@ export const OdbMicroplastics = () => {
             <Flatpickr
               className='chemDatePickr'
               onChange={handleDateChange}
+              onClose={handleDateClose}
+              onOpen={handleDateOpen}
               options={{
                 allowInput: true,
                 weekNumbers: false,
                 minDate: '1972-04-20',
+                maxDate: new Date(),
                 dateFormat: 'Y-m-d',
                 altFormat: 'Y-m-d',
                 ariaDateFormat: 'Y-m-d',
@@ -292,7 +296,7 @@ export const OdbMicroplastics = () => {
         disableClusteringAtZoom={clusterLevel}
         maxClusterRadius={60}
       >
-        <GeoJSON ref={ref} data={data} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
+        <GeoJSON ref={ref} data={{ type: 'Feature' }} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>
     </>
   )

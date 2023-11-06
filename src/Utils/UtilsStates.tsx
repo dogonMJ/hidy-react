@@ -33,7 +33,9 @@ export const flattenObject = (obj: any, parentKey = "") => {
     if (obj.hasOwnProperty(key)) {
       let currentKey = parentKey ? `${parentKey}.${key}` : key;
       if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
-        queryArr.push(`&${key}=${flattenObject(obj[key], currentKey)}`);
+        Object.keys(obj[key]).length === 0 ?
+          queryArr.push(`&${key}`) :
+          queryArr.push(`&${key}=${flattenObject(obj[key], currentKey)}`)
       } else if (Array.isArray(obj[key])) {
         parentKey ?
           queryArr.push(`${key}:[${obj[key].join(",")}]`) :

@@ -34,7 +34,7 @@ export const OdbCTD = () => {
   const [content, setContent] = useState<string | JSX.Element>('')
   const [data, setData] = useState<any>()
   const type = useSelector((state: RootState) => state.odbCtd.par)
-  const period = useSelector((state: RootState) => state.map.OdbSeasonSelection)
+  const period = useSelector((state: RootState) => state.odbCur.period)
   const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue)
   const depth = depthMeterValue || depthMeterValue === 0 ? ctdDepths[depthMeterValue] ? -ctdDepths[depthMeterValue] : 5 : 5
   const url = `${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/ctd/ctd_grid15moa_${type}_${period}${depth}.png`

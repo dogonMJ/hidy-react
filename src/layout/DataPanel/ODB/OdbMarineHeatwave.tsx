@@ -15,6 +15,10 @@ export const OdbMarineHeatwave = () => {
   const month = datetime.slice(0, 7)
   const url = `https://ecodata.odb.ntu.edu.tw/geoserver/gwc/service/wmts?service=WMTS&version=1.0.0&request=GetTile&layer=marineheatwave:mhw&style=polygon_level&tilerow={y}&tilecol={x}&tilematrix=EPSG:900913:{z}&tilematrixset=EPSG:900913&format=image/png&Time=${month}`
   const legned: Legend = {
+    'ice': {
+      "color": "#c6e0fe",
+      "description": t('OdbData.mhw.ice')
+    },
     'moderate': {
       "color": "#f5c268",
       "description": t('OdbData.mhw.moderate')

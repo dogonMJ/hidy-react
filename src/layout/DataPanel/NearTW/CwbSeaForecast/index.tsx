@@ -6,16 +6,22 @@ import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { ShowCwbForecast } from "./ShowCwbForecast";
 import { Divider } from "@mui/material";
+import { useAlert } from "hooks/useAlert";
+import { AlertSlide } from "components/AlertSlide/AlertSlide";
+import { useTranslation } from "react-i18next";
 
 const optionList = ['close', 'cwbsst', 'cwbpsu', 'cwbsla', 'cwbspd']
 const optionList2 = ['close', 'cwbcur', 'cwbdir']
 const getUrl = (identifier: string, date: string) => `${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbforecast/epsg3857_${identifier}_${date}.png`
+
 const CwbSeaForecast = () => {
   const ref = useRef<any>(null)
   const ref2 = useRef<any>(null)
+  const { t } = useTranslation()
   const [identifier, setIdentifier] = useState('close')
   const [identifier2, setIdentifier2] = useState('close')
   const [jsonData, setJsonData] = useState(null)
+  const { openAlert, alertMessage, setOpenAlert, showAlert } = useAlert()
   const datetime = useSelector((state: RootState) => state.map.datetime);
   const date = datetime.replace(/T|-|:/g, '').substring(0, 10)
 
@@ -64,6 +70,15 @@ const CwbSeaForecast = () => {
         })
         .catch((e) => {
           setJsonData(null)
+          if (ref.current) {
+            ref.current.setUrl()
+            ref.current.setOpacity(0)
+          }
+          if (ref2.current) {
+            ref2.current.setUrl()
+            ref2.current.setOpacity(0)
+          }
+          showAlert(t('alert.notInTime'))
         })
     }
   }, [date, identifier, identifier2])
@@ -86,11 +101,12 @@ const CwbSeaForecast = () => {
         <ShowCwbForecast data={jsonData} bounds={[[6.95, 109.95], [36.05, 126.05]]} />
       </RenderIf>
       <RenderIf isTrue={identifier2 !== 'close'}>
-        <ImageOverlay ref={ref2} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={3} />
+        <ImageOverlay ref={ref2} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={3} opacity={0} />
       </RenderIf>
       <RenderIf isTrue={identifier !== 'close'}>
-        <ImageOverlay ref={ref} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={2} />
+        <ImageOverlay ref={ref} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={2} opacity={0} />
       </RenderIf>
+      <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {alertMessage} </AlertSlide>
     </>
   );
 }

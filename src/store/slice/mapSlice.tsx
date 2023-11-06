@@ -9,7 +9,6 @@ type Lang = 'zh-TW' | 'en'
 
 export interface inputstate {
   datetime: string
-  OdbSeasonSelection: string
   userInfo: { [key: string]: any }
   scaleUnit: ScaleUnitType
   depthMeterValue: any
@@ -18,7 +17,6 @@ export const mapSlice = createSlice({
   name: "map",
   initialState: {
     datetime: query && query.datetime ? query.datetime : d.toISOString(),
-    OdbSeasonSelection: 'avg',
     userInfo: {},
     scaleUnit: 'metric',
     depthMeterValue: {
@@ -33,9 +31,6 @@ export const mapSlice = createSlice({
     },
     setLang: (state, action: PayloadAction<Lang>) => {
       state.datetime = action.payload
-    },
-    OdbSeasonSelection: (state, action: PayloadAction<string>) => {
-      state.OdbSeasonSelection = action.payload
     },
     userInfo: (state, action: PayloadAction<{ [key: string]: any }>) => {
       state.userInfo = action.payload

@@ -66,6 +66,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const [cite, setCite] = useState<StringObject>({ cite: '', source: '' })
   const [openModal, setOpenModal] = useState(false)
   const [inputValue, setInputValue] = useState(taxon)
+  const [dateClose, setDateClose] = useState(true)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: L.Layer) => {
     const property = feature.properties
@@ -165,12 +166,14 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     setEventID('')
     setOpenModal(false)
   };
+  const handleDateClose = () => setDateClose(true)
+  const handleDateOpen = () => setDateClose(false)
 
   useEffect(() => {
     if (bioDateRange.length < 2) {
       showAlert(t('alert.noDate'))
     } else if (topics.length === 0) {
-      showAlert(t('alert.noSelect'))
+      if (dateClose) { showAlert(t('alert.noSelect')) }
     } else {
       if (filter === 'topic') {
         const topic = topics.toString() ? topics.toString() : ' '
@@ -216,11 +219,14 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           <Flatpickr
             className='chemDatePickr'
             onChange={handleDateChange}
+            onClose={handleDateClose}
+            onOpen={handleDateOpen}
             options={{
               defaultDate: bioDateRange,
               allowInput: true,
               weekNumbers: false,
               minDate: '1965-06-29',
+              maxDate: new Date(),
               dateFormat: 'Y-m-d',
               altFormat: 'Y-m-d',
               ariaDateFormat: 'Y-m-d',
