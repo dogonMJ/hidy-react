@@ -1,60 +1,71 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CtdParameters, Palette, isCtdParameter, isPalette } from 'types'
 import { defaultCtdRange } from "Utils/UtilsODB";
-import { readUrlQuery } from "Utils/UtilsMap";
+import { readUrlQuery } from "Utils/UtilsStates";
 
-const query = readUrlQuery('odbCtd')
+const query: any = readUrlQuery('odbCtd')
 
 interface OdbCtdStates {
-  selection: CtdParameters
-  profileSecondPar: string
+  par: CtdParameters
+  pX2: CtdParameters | 'close'
+  pY: CtdParameters | 'depth'
+  period: string
   palette: Palette
   mask: boolean
   reverse: boolean
-  fixRange: boolean
+  fix: boolean
   interval: number
   opacity: number
   range: { [key: string]: { min: number, max: number } }
 }
+
 export const odbCtdSlice = createSlice({
-  name: "odbCtdStates",
+  name: "odbCtd",
   initialState: {
-    selection: query && query.par && isCtdParameter(query.par) ? query.par : 'temperature',
-    profileSecondPar: query && query.par2 && isCtdParameter(query.par2) ? query.par2 : 'salinity',
-    palette: query && query.p && isPalette(query.p) ? query.p : 'plasma',
-    mask: query && query.m === 'true' ? true : false,
-    reverse: query && query.r === 'true' ? true : false,
-    fixRange: query && query.f === 'true' ? true : false,
-    interval: query && Number(query.i) >= 0 && Number(query.i) <= 30 ? Number(query.i) : 20,
-    opacity: query && query.o ? Number(query.o) : 100,
+    par: query && query.par && isCtdParameter(query.par) ? query.par : 'temperature',
+    pX2: query && query.pX2 && isCtdParameter(query.pX2) ? query.pX2 : 'salinity',
+    pY: query && query.pY && isCtdParameter(query.pY) ? query.pY : 'depth',
+    period: query && query.period ? query.period : 'avg',
+    palette: query && query.palette && isPalette(query.palette) ? query.palette : 'plasma',
+    mask: query && query.mask === 'true' ? true : false,
+    reverse: query && query.reverse === 'true' ? true : false,
+    fix: query && query.fixRange === 'true' ? true : false,
+    interval: query && Number(query.interval) >= 0 && Number(query.interval) <= 30 ? Number(query.interval) : 20,
+    opacity: query && query.opacity ? Number(query.opacity) : 100,
     range: defaultCtdRange,
   } as OdbCtdStates,
   reducers: {
-    Selection: (state, action: PayloadAction<CtdParameters>) => {
-      state.selection = action.payload
+    setSelection: (state, action: PayloadAction<CtdParameters>) => {
+      state.par = action.payload
     },
-    ProfileSecondPar: (state, action: PayloadAction<string>) => {
-      state.profileSecondPar = action.payload
+    setPeriod: (state, action: PayloadAction<string>) => {
+      state.period = action.payload
     },
-    Palette: (state, action: PayloadAction<Palette>) => {
+    setProfileX2Par: (state, action: PayloadAction<CtdParameters | 'close'>) => {
+      state.pX2 = action.payload
+    },
+    setProfileYPar: (state, action: PayloadAction<CtdParameters | 'depth'>) => {
+      state.pY = action.payload
+    },
+    setPalette: (state, action: PayloadAction<Palette>) => {
       state.palette = action.payload
     },
-    Mask: (state, action: PayloadAction<boolean>) => {
+    setMask: (state, action: PayloadAction<boolean>) => {
       state.mask = action.payload
     },
-    Reverse: (state, action: PayloadAction<boolean>) => {
+    setReverse: (state, action: PayloadAction<boolean>) => {
       state.reverse = action.payload
     },
-    FixRange: (state, action: PayloadAction<boolean>) => {
-      state.fixRange = action.payload
+    setFixRange: (state, action: PayloadAction<boolean>) => {
+      state.fix = action.payload
     },
-    Interval: (state, action: PayloadAction<number>) => {
+    setInterval: (state, action: PayloadAction<number>) => {
       state.interval = action.payload
     },
-    Opacity: (state, action: PayloadAction<number>) => {
+    setOpacity: (state, action: PayloadAction<number>) => {
       state.opacity = action.payload
     },
-    Range: (state, action: PayloadAction<{ par: string, min?: number, max?: number }>) => {
+    setRange: (state, action: PayloadAction<{ par: string, min?: number, max?: number }>) => {
       if (action.payload.min || action.payload.min === 0) {
         state.range[action.payload.par].min = action.payload.min
       }

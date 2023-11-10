@@ -11,10 +11,14 @@ export const OdbMarineHeatwave = () => {
   const { t } = useTranslation()
   const [notInRange, setNotInRange] = useState<boolean>(false)
   const [timespan, setTimespan] = useState([new Date('1985-01-01'), new Date()])
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const datetime = useSelector((state: RootState) => state.map.datetime);
   const month = datetime.slice(0, 7)
   const url = `https://ecodata.odb.ntu.edu.tw/geoserver/gwc/service/wmts?service=WMTS&version=1.0.0&request=GetTile&layer=marineheatwave:mhw&style=polygon_level&tilerow={y}&tilecol={x}&tilematrix=EPSG:900913:{z}&tilematrixset=EPSG:900913&format=image/png&Time=${month}`
   const legned: Legend = {
+    'ice': {
+      "color": "#c6e0fe",
+      "description": t('OdbData.mhw.ice')
+    },
     'moderate': {
       "color": "#f5c268",
       "description": t('OdbData.mhw.moderate')

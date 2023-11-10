@@ -9,7 +9,8 @@ import { varList } from "./varList"
 import InfoButton from "components/InfoButton";
 import { SwitchSameColor } from "components/SwitchSameColor";
 import { useDispatch } from "react-redux";
-import { coordInputSlice } from "store/slice/mapSlice";
+import { mapSlice } from "store/slice/mapSlice";
+import { useMapDragScroll } from "hooks/useMapDragScroll";
 const depths = [0, 10, 20, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500]
 
 const PeriodSwitch = SwitchSameColor()
@@ -20,7 +21,7 @@ const gridStyle = {
 
 export const StatisticMean = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
+  const { setDrag } = useMapDragScroll()
   const [parameter, setParameter] = useState('close')
   const [monthly, setMonthly] = useState(false)
   const [profile, setProfile] = useState(false)
@@ -28,11 +29,7 @@ export const StatisticMean = () => {
   const [girdLines, setGridLines] = useState<any>()
   const [gridCoord, setGridCoord] = useState<string>('')
 
-  const handleMouseLeave = () => {
-    dispatch(coordInputSlice.actions.enterPanel(false))
-    // map.scrollWheelZoom.enable()
-    // map.dragging.enable()
-  }
+  const handleMouseLeave = () => setDrag(true)
   const handleParameter = (event: SelectChangeEvent) => {
     setParameter(event.target.value)
   }

@@ -10,7 +10,6 @@ import { GeoJsonTooltip } from 'components/GeoJsonTooltip';
 export const OdbSedCore = () => {
   const ref = useRef<any>()
   const { t } = useTranslation()
-  const [data, setData] = useState<any>()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [content, setContent] = useState<string | JSX.Element>('')
 
@@ -95,7 +94,6 @@ export const OdbSedCore = () => {
     fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/odb/sedcore_OR1.json`)
       .then((response) => response.json())
       .then((json) => {
-        setData(json)
         ref.current.clearLayers()
         ref.current.addData(json)
       });
@@ -103,7 +101,7 @@ export const OdbSedCore = () => {
 
   return (
     <>
-      <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} eventHandlers={{ mouseover: mouseOver }}>
+      <GeoJSON ref={ref} data={{ type: 'Feature' }} style={styleFunc} pointToLayer={pointToLayer} eventHandlers={{ mouseover: mouseOver }}>
         <GeoJsonTooltip position={position} content={content} tooltipProps={{ className: 'sedCoreTooltip' }} />
       </GeoJSON>
       <LegendControl position='bottomleft' legendContent={contents.join('<br>')} legendClassNames={'sedLegend'} />

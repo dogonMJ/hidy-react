@@ -51,21 +51,22 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const url = useRef('')
   const map = useMap()
   const { openAlert, setOpenAlert, alertMessage, showAlert } = useAlert()
-  const bioDateRange = useSelector((state: RootState) => state.odbBioStates.bioDateRange)
+  const bioDateRange = useSelector((state: RootState) => state.odbBio.dateRange)
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
-  const [topics, setTopics] = useState<string[]>([])
-  const [taxon, setTaxon] = useState<string>('')
+  const lat = useSelector((state: RootState) => state.odbBio.latRange)
+  const lon = useSelector((state: RootState) => state.odbBio.lonRange)
+  const topics = useSelector((state: RootState) => state.odbBio.topics)
+  const taxon = useSelector((state: RootState) => state.odbBio.taxon)
+  const clusterLevel = useSelector((state: RootState) => state.odbBio.cluster)
   const [taxaList, setTaxaList] = useState<string[]>([''])
   const [data, setData] = useState<any>()
-  const [lat, setLat] = useState<number[]>([10, 40]);
-  const [lon, setLon] = useState<number[]>([109, 135]);
   const [sliderLat, setSliderLat] = useState<number[]>(lat);
   const [sliderLon, setSliderLon] = useState<number[]>(lon);
   const [eventID, setEventID] = useState<string>('')
   const [cite, setCite] = useState<StringObject>({ cite: '', source: '' })
-  const [clusterLevel, setClusterLevel] = useState<number>(8)
   const [openModal, setOpenModal] = useState(false)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(taxon)
+  const [dateClose, setDateClose] = useState(true)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: L.Layer) => {
     const property = feature.properties
@@ -121,13 +122,13 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
 
   const handleTopicChange = (event: SelectChangeEvent<typeof topics>) => {
     const { target: { value } } = event
-    setTopics(
+    dispatch(odbBioSlice.actions.setTopics(
       typeof value === 'string' ? value.split(',') : value,
-    );
+    ))
   }
 
   const handleTaxaChange = (event: any, value: string | null) => {
-    value ? setTaxon(value) : setTaxon('')
+    value ? dispatch(odbBioSlice.actions.setTaxon(value)) : dispatch(odbBioSlice.actions.setTaxon(''))
   };
 
   const handleDateChange = (newDate: Date[]) => {
@@ -135,11 +136,11 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
       showAlert(t('alert.noDate'))
     } else if (newDate.length === 1) {
       const dt = dateToBioApiString(newDate[0])
-      dispatch(odbBioSlice.actions.BioDateRange([dt, dt]))
+      dispatch(odbBioSlice.actions.setDateRange([dt, dt]))
     } else {
       const from = dateToBioApiString(newDate[0])
       const to = dateToBioApiString(newDate[1])
-      dispatch(odbBioSlice.actions.BioDateRange([from, to]))
+      dispatch(odbBioSlice.actions.setDateRange([from, to]))
     }
   }
   const handleLatChange = (event: Event, newValue: number | number[]) => {
@@ -149,13 +150,13 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     setSliderLon(newValue as number[]);
   };
   const handleLatChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
-    setLat(newValue as number[]);
+    dispatch(odbBioSlice.actions.setLat(newValue as number[]))
   };
   const handleLonChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
-    setLon(newValue as number[]);
+    dispatch(odbBioSlice.actions.setLon(newValue as number[]))
   };
   const handleClusterLevelChange = (event: Event, newValue: number | number[]) => {
-    setClusterLevel(newValue as number)
+    dispatch(odbBioSlice.actions.setCluster(newValue as number))
     refCluster.current.options.disableClusteringAtZoom = newValue
     refCluster.current.clearLayers()
     refCluster.current.addLayers(ref.current.getLayers())
@@ -165,12 +166,14 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     setEventID('')
     setOpenModal(false)
   };
+  const handleDateClose = () => setDateClose(true)
+  const handleDateOpen = () => setDateClose(false)
 
   useEffect(() => {
     if (bioDateRange.length < 2) {
       showAlert(t('alert.noDate'))
     } else if (topics.length === 0) {
-      showAlert(t('alert.noSelect'))
+      if (dateClose) { showAlert(t('alert.noSelect')) }
     } else {
       if (filter === 'topic') {
         const topic = topics.toString() ? topics.toString() : ' '
@@ -216,11 +219,14 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
           <Flatpickr
             className='chemDatePickr'
             onChange={handleDateChange}
+            onClose={handleDateClose}
+            onOpen={handleDateOpen}
             options={{
               defaultDate: bioDateRange,
               allowInput: true,
               weekNumbers: false,
               minDate: '1965-06-29',
+              maxDate: new Date(),
               dateFormat: 'Y-m-d',
               altFormat: 'Y-m-d',
               ariaDateFormat: 'Y-m-d',
@@ -331,7 +337,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
               if (!newInputValue) {
                 refCluster.current.clearLayers()
                 ref.current.clearLayers()
-                setTaxon('')
+                dispatch(odbBioSlice.actions.setTaxon(''))
               }
               setInputValue(newInputValue)
             }}
@@ -355,7 +361,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
       </Box>
       <MarkerCluster
         ref={refCluster}
-        disableClusteringAtZoom={12}
+        disableClusteringAtZoom={clusterLevel}
       >
         <GeoJSON key={filter} ref={ref} data={data} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>

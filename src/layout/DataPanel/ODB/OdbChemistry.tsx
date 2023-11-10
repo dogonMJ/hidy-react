@@ -15,6 +15,7 @@ import 'flatpickr/dist/plugins/monthSelect/style.css'
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
+import { useAlert } from 'hooks/useAlert';
 
 
 declare const L: any;
@@ -29,15 +30,15 @@ export const OdbChemistry = () => {
   const ref = useRef<any>()
   const refCluster = useRef<any>()
   const { t } = useTranslation()
+  const { openAlert, alertMessage, setOpenAlert, showAlert } = useAlert()
   const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
-  const [data, setData] = useState<any>()
   const [lat, setLat] = useState<number[]>([3, 33]);
   const [lon, setLon] = useState<number[]>([106, 128]);
   const [depthIndex, setDepthIndex] = useState<number[]>([0, depthList.length - 1]);
   const [date, setDate] = useState<string[]>(['19881218', '20161231'])
   const [parameters, setParameters] = useState<string[]>(['none'])
-  const [warning, setWarning] = useState(false)
-  const [alertMessage, setAlertMessage] = useState(t('alert.fetchFail'))
+  const [dateClose, setDateClose] = useState(true)
+
   const varList: { [key: string]: { [key: string]: string } } = {
     'Sal': {
       name: t('OdbData.chemistryList.Sal'),
@@ -177,10 +178,14 @@ export const OdbChemistry = () => {
     }
   }
 
+  const handleDateClose = () => setDateClose(true)
+  const handleDateOpen = () => setDateClose(false)
+
   useEffect(() => {
-    if (parameters.length === 1) {
-      setWarning(true)
-      setAlertMessage(t('alert.noSelect'))
+    if (date.length === 0) {
+      showAlert(t('alert.noDate'))
+    } else if (parameters.length === 1) {
+      if (dateClose) { showAlert(t('alert.noSelect')) }
     } else {
       const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbchem/bottlehidy?lat_from=${lat[0]}&lat_to=${lat[1]}&lon_from=${lon[0]}&lon_to=${lon[1]}&dep1=${depthList[depthIndex[0]]}&dep2=${depthList[depthIndex[1]]}&var=${parameters.join(',')}&date_from=${date[0]}&date_to=${date[1]}`
       fetch(url)
@@ -189,10 +194,8 @@ export const OdbChemistry = () => {
           if (json === 'No result') {
             refCluster.current.clearLayers()
             ref.current.clearLayers()
-            setWarning(true)
-            setAlertMessage(t('alert.noData'))
+            showAlert(t('alert.noData'))
           } else {
-            setData(json)
             refCluster.current.clearLayers()
             ref.current.clearLayers()
             ref.current.addData(json)
@@ -200,8 +203,7 @@ export const OdbChemistry = () => {
           }
         })
         .catch(() => {
-          setWarning(true)
-          setAlertMessage(t('alert.fetchFail'))
+          showAlert(t('alert.fetchFail'))
         })
     }
   }, [lat, lon, depthIndex, date, parameters, t])
@@ -217,6 +219,8 @@ export const OdbChemistry = () => {
           <Flatpickr
             className='chemDatePickr'
             onChange={handleDateChange}
+            onClose={handleDateClose}
+            onOpen={handleDateOpen}
             options={{
               allowInput: true,
               weekNumbers: false,
@@ -299,9 +303,9 @@ export const OdbChemistry = () => {
         ref={refCluster}
         disableClusteringAtZoom={12}
       >
-        <GeoJSON ref={ref} data={data} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
+        <GeoJSON ref={ref} data={{ type: 'Feature' }} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>
-      <AlertSlide open={warning} setOpen={setWarning} severity='error'>
+      <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error'>
         {alertMessage}
       </AlertSlide>
     </>

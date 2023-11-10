@@ -1,4 +1,4 @@
-import { SliderMarks, StringObject } from 'types'
+import { CtdParameters, SliderMarks, StringObject } from 'types'
 import { Point, Polygon } from 'geojson'
 
 export const createIntervalList = (min: number, max: number, length: number) => {
@@ -103,15 +103,6 @@ export const adcpDepthMeterProps = () => {
   return { adcpDepths, marks }
 }
 
-export const periodTransform: StringObject = {
-  'avg': '0',
-  'NE': '17',
-  'SW': '18',
-  'spring': '14',
-  'summer': '15',
-  'fall': '16',
-  'winter': '13'
-}
 export const palettes: { [key: string]: string[] } = {
   plasma: ["#0d0887", "#220690", "#330597", "#41049d", "#5002a2", "#5c01a6", "#6a00a8", "#7701a8", "#8405a7", "#8f0da4", "#9c179e", "#a62098", "#b12a90", "#ba3388", "#c33d80", "#cc4778", "#d35171", "#da5b69", "#e16462", "#e76f5a", "#ed7953", "#f2844b", "#f68f44", "#fa9b3d", "#fca636", "#fdb42f", "#fec029", "#fcce25", "#f9dc24", "#f5eb27", "#f0f921"],
   coolwarm: ["#3b4cc0", "#455bcd", "#4f69d9", "#5978e3", "#6485ec", "#7092f3", "#7b9ff9", "#87aafc", "#93b5fe", "#9fbeff", "#aac7fd", "#b5cefa", "#c0d4f5", "#cad8ee", "#d4dbe6", "#dddddd", "#e5d8d1", "#ecd2c4", "#f2cbb7", "#f5c2aa", "#f7b89c", "#f7ad8f", "#f5a081", "#f29374", "#ee8468", "#e7755b", "#e0654f", "#d75344", "#cc403a", "#c12a30", "#b40426"],
@@ -138,6 +129,17 @@ export const calDir = (u: number, v: number) => {
   return dir < 0 ? dir + 360 : dir
 }
 
+export const ctdPar = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",]
+export const periods = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
+export const periodTransform: StringObject = {
+  'avg': '0',
+  'NE': '17',
+  'SW': '18',
+  'spring': '14',
+  'summer': '15',
+  'fall': '16',
+  'winter': '13'
+}
 ///// Bio /////
 
 export const dateToBioApiString = (dateObj: Date) => {

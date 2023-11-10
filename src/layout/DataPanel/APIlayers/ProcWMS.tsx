@@ -45,7 +45,7 @@ const depths = [-5727.9169921875, -5274.7841796875, -4833.291015625, -4405.22412
 const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
 
 const ProcWMS = (props: Urls) => {
-  const depthMeterValue = useSelector((state: RootState) => state.coordInput.depthMeterValue['cmems'])
+  const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['cmems'])
   const ref = useRef<L.LayerGroup>(null)
   const [layerId, setLayerId] = useState<number | null>(null)
   const [tileProps, setTileProps] = useState<TileProp[]>([])

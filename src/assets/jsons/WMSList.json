@@ -138,7 +138,7 @@
   },
   "zos": {
     "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_PT1H-m?",
     "layer": "zos",
     "duration": "PT1H30",
     "style": "boxfill/redblue",

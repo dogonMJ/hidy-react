@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { LatLngBounds, LatLngBoundsLiteral, LatLng } from "leaflet";
-import { useMapEvents, Rectangle, useMap, Pane } from "react-leaflet";
-import { RootState } from "store/store";
-import { useSelector } from "react-redux";
+import { useMapEvents, Rectangle, useMap, LayerGroup } from "react-leaflet";
 import 'leaflet'
 import { useTranslation } from "react-i18next";
 import { screenshot } from "Utils/UtilsScreenshot";
 import { Box, ButtonGroup, Grid, IconButton, Stack, TextField } from "@mui/material";
 import { Download, Crop, PanTool } from '@mui/icons-material'
+import { useMapDragScroll } from "hooks/useMapDragScroll";
 
 interface Selections {
   bounds: LatLngBounds | null;
@@ -40,7 +39,7 @@ export const ClipScreenshot = () => {
   const map = useMap()
   const { t } = useTranslation()
   const rectRef = useRef<any>()
-  const enterPanel = useSelector((state: RootState) => state.coordInput.enterPanel);
+  const { setDrag } = useMapDragScroll()
   const [clippingMode, setClippingMode] = useState(false)
   const [inputCoords, setInputCoords] = useState<(string | number)[]>(['', '', '', ''])
   const [selection, setSelection] = useState<Selections>({
@@ -51,8 +50,9 @@ export const ClipScreenshot = () => {
 
   useMapEvents({
     "mousedown": (e) => {
-      if (!map || !clippingMode || enterPanel) return;
-      map.dragging.disable()
+      // if (!map || !clippingMode || enterPanel) return;
+      if (!map || !clippingMode) return;
+      setDrag(false)
       const startPoint = map.mouseEventToLatLng(e.originalEvent);
       setSelection({
         startPoint: startPoint,
@@ -104,7 +104,7 @@ export const ClipScreenshot = () => {
   const handleMode = () => {
     if (clippingMode) {
       setClippingMode(false)
-      map.dragging.enable()
+      setDrag(true)
       map.getContainer().style.cursor = ''
       setSelection({
         isDragging: false,
@@ -113,7 +113,7 @@ export const ClipScreenshot = () => {
       })
     } else {
       setClippingMode(true)
-      map.dragging.disable()
+      setDrag(false)
       map.getContainer().style.cursor = 'crosshair'
     }
   }
@@ -141,7 +141,7 @@ export const ClipScreenshot = () => {
     }
     if (newBounds) {
       setClippingMode(true)
-      map.dragging.disable()
+      setDrag(false)
       map.getContainer().style.cursor = 'crosshair'
       map.fitBounds(newBounds)
     }
@@ -155,7 +155,7 @@ export const ClipScreenshot = () => {
   }
   useEffect(() => {
     return () => {
-      map.dragging.enable()
+      setDrag(true)
       setClippingMode(false)
     }
   }, [])
@@ -283,9 +283,9 @@ export const ClipScreenshot = () => {
       </Stack >
       {
         selection.bounds?.isValid() &&
-        <Pane name='clip' >
+        <LayerGroup pane="clip">
           <Rectangle ref={rectRef} bounds={selection.bounds} />
-        </Pane>
+        </LayerGroup>
       }
     </>
   );

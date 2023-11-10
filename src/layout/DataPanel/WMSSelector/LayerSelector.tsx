@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import {
@@ -15,15 +15,20 @@ import { checkServiceType } from "Utils/UtilsURL";
 import { ServiceType } from "types"
 import { useMap, useMapEvents } from "react-leaflet";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
-
-const defaultOptions = [
-  { value: 'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi', label: 'NASA GIBS WMS' },
-];
+import { setOptions } from "leaflet";
 
 export const LayerSelector = () => {
   const { t } = useTranslation()
   const map = useMap()
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime).split('.')[0] + 'Z';
+  const defaultOptions = [
+    { value: 'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi', label: 'NASA GIBS WMS' },
+    { value: 'https://wmts.nlsc.gov.tw/wmts', label: t('WMSSelector.nlsc') },
+    { value: 'https://data.csrsr.ncu.edu.tw/SP/wmts', label: t('WMSSelector.csrsr1') },
+    { value: 'https://data.csrsr.ncu.edu.tw/SP_TW_FC/wmts', label: t('WMSSelector.csrsr2') },
+    { value: 'https://data.csrsr.ncu.edu.tw/SP_PH/wmts', label: t('WMSSelector.csrsr3') },
+    { value: 'https://data.csrsr.ncu.edu.tw/SP_PH_FC/wmts', label: t('WMSSelector.csrsr4') },
+  ]
+  const datetime = useSelector((state: RootState) => state.map.datetime).split('.')[0] + 'Z';
   const [selectedURL, setSelectedURL] = useState(defaultOptions[0].value);
   const [urlOptions, setUrlOptions] = useState(defaultOptions)
   const [urlInput, setUrlInput] = useState('');
@@ -39,6 +44,8 @@ export const LayerSelector = () => {
   const [loadingLayers, setLoadingLayers] = useState(false)
   const [matrixSetLevel, setMatrixSetLevel] = useState(25)
   const [openZoomAlert, setOpenZoomAlert] = useState(false)
+
+
 
   useMapEvents({
     'zoomend': () => {
@@ -168,6 +175,12 @@ export const LayerSelector = () => {
     load: () => setLoadingLayers(false),
     loading: () => setLoadingLayers(true)
   }
+
+  useEffect(() => {
+    const defaultUrls = defaultOptions.map(option => option.value)
+    const newAdded = urlOptions.filter(option => !defaultUrls.includes(option.value))
+    setUrlOptions([...newAdded, ...defaultOptions])
+  }, [t])
   return (
     <>
       <Stack>

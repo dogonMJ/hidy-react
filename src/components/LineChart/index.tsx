@@ -45,7 +45,7 @@ export const LineChart = forwardRef((
         defaultPosition={{ x: layerCenterPoint.x + offset.x, y: layerCenterPoint.y + offset.y }}
         disabled={disableDrag}
       >
-        <div ref={nodeRef} >
+        <div ref={nodeRef} id={props.paneName}>
           <div
             onMouseLeave={enableMapAction}
             onMouseEnter={disableMapAction}
@@ -92,7 +92,6 @@ export const LineChart = forwardRef((
               }}
             />
           </div>
-
         </div>
       </Draggable >
     </Pane >

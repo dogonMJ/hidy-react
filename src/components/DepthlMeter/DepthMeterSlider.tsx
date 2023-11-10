@@ -4,9 +4,9 @@ import { SliderMarks } from 'types'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import React, { forwardRef, useState } from 'react';
 import { SxProps, Theme } from '@mui/material/styles';
-import { coordInputSlice } from 'store/slice/mapSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
+import { mapSlice } from 'store/slice/mapSlice';
 const preventHorizontalKeyboardNavigation = (event: React.KeyboardEvent) => {
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     event.preventDefault();
@@ -40,13 +40,13 @@ export const DepthMeterSlider = (props: { values: number[], marks: SliderMarks[]
   const dispatch = useDispatch()
   const { values, marks } = props
   const maxValue = values.length - 1
-  const defaultValue = useSelector((state: RootState) => state.coordInput.depthMeterValue[props.user])
+  const defaultValue = useSelector((state: RootState) => state.map.depthMeterValue[props.user])
   const [value, setValue] = useState(defaultValue)
   const handleChange = (event: Event, value: any) => {
     setValue(value)
   }
   const handleChangeCommitted = (event: any, value: number | number[]) => {
-    dispatch(coordInputSlice.actions.DepthMeterValue([props.user, value as number]))
+    dispatch(mapSlice.actions.DepthMeterValue([props.user, value as number]))
   }
   return (
     <Slider

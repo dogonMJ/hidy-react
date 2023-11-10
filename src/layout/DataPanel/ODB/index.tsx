@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/store"
-import { coordInputSlice } from "store/slice/mapSlice";
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem, } from '@mui/material';
 import { Divider, Switch } from "@mui/material";
@@ -16,20 +15,15 @@ import { OdbChemistry } from './OdbChemistry';
 import { OdbBio } from './OdbBio';
 import { OdbMicroplastics } from './OdbMicroPlastics';
 import { OdbMarineHeatwave } from './OdbMarineHeatwave';
-import { SubSelection } from 'components/SubSelection';
 import { ComponentList } from 'types';
+import { onoffsSlice } from 'store/slice/onoffsSlice';
 
-const seasons = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
 
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const [checked, setChecked] = useState<string[]>([]);
-  const period = useSelector((state: RootState) => state.coordInput.OdbSeasonSelection)
+  const checked = useSelector((state: RootState) => state.switches.checked)
 
-  const handleSeasonChange = useCallback((event: React.MouseEvent<HTMLElement>, newSelect: string,) => {
-    newSelect && dispatch(coordInputSlice.actions.OdbSeasonSelection(newSelect))
-  }, [])
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -38,38 +32,22 @@ export const ODB = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    setChecked(newChecked);
+    dispatch(onoffsSlice.actions.setChecked(newChecked))
   };
 
   const componentList: ComponentList = {
     odbTopo: <OdbTopo opacity={1} />,
-    odbCtd: <>
-      <RenderIf isTrue={!checked.includes('odbCurrent')}>
-        <SubSelection select={period} handleChange={handleSeasonChange} values={seasons} transParentNode='OdbData' />
-      </RenderIf>
-      <OdbCTD />
-    </>,
+    odbCtd: <OdbCTD />,
     odbGravity: <OdbGravity opacity={1} />,
-    odbCurrent: <>
-      <SubSelection select={period} handleChange={handleSeasonChange} values={seasons} transParentNode='OdbData' />
-      <OdbCurrent />
-    </>,
+    odbCurrent: <OdbCurrent />,
     odbSedCore: <OdbSedCore />,
-    odbMarineHeatwave: <OdbMarineHeatwave />,
-    odbChemistry: <OdbChemistry />,
+    odbMHW: <OdbMarineHeatwave />,
+    odbChem: <OdbChemistry />,
     odbBio: <OdbBio />,
-    odbMicroPlastic: < OdbMicroplastics />,
+    odbMP: < OdbMicroplastics />,
     // WebMaps: <SatelliteWebMaps cache={cache} />
   }
-  useEffect(() => {
-    const queryString = window.location.search
-    const urlParams = new URLSearchParams(queryString);
-    const ons: any = []
-    for (let key of urlParams.keys()) {
-      ons.push(key)
-    }
-    ons && setChecked(ons)
-  }, [])
+
   return (
     <>
       <Divider variant="middle" />

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store/store';
 import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-import { VerticalPlotProps, CtdFeature, CtdProperties } from 'types';
+import { VerticalPlotProps, CtdFeature, CtdProperties, CtdParameters } from 'types';
 
 interface CustomAxis extends Plotly.LayoutAxis, Plotly.Axis {
   ticklabelposition: "outside" | "inside" | "outside top" | "inside top" | "outside left" | "inside left" | "outside right" | "inside right" | "outside bottom" | "inside bottom"
@@ -26,7 +26,9 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
   const ref = useRef(null)
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const secondPar = useSelector((state: RootState) => state.odbCtdStates.profileSecondPar)
+  const x2Par = useSelector((state: RootState) => state.odbCtd.pX2)
+  const yPar = useSelector((state: RootState) => state.odbCtd.pY)
+  const period = useSelector((state: RootState) => state.odbCtd.period)
   const [warning, setWarning] = useState(false)
   const [plotProps, setPlotProps] = useState<CustomPlotParams>({
     data: [],
@@ -41,15 +43,17 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
       modebar: {
         remove: ['lasso2d']
       },
+      showlegend: true,
       legend: {
         orientation: "h",
         x: 0.5,
+        y: -0.07,
         xanchor: 'center'
       },
       margin: {
         b: 50,
         t: 50,
-        r: 20,
+        r: 30,
         l: 70
       },
       xaxis: {
@@ -57,12 +61,14 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
         color: '#1f77b4',
         hoverformat: '.3f',
         side: 'top',
+        mirror: true,
       },
       xaxis2: {
         linewidth: 1,
         color: '#ff7f0e',
         hoverformat: '.3f',
         overlaying: 'x',
+
       },
       yaxis: {
         showline: true,
@@ -78,67 +84,88 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
       displayModeBar: true,
     }
   })
-  const url = `https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=${lng}&lat0=${lat}&mode=${mode}&dep_mode=exact&format=geojson&append=${parameter},${secondPar}`
+  const url = `https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=${lng}&lat0=${lat}&mode=${mode}&dep_mode=exact&format=geojson&append=${parameter},${x2Par},${yPar}`
   useEffect(() => {
     fetch(url)
       .then(resp => resp.json())
       .then(json => {
         plotProps.layout.title = {
-          text: `${lat} \u00B0N, ${lng} \u00B0E`,
+          text: `${lat} \u00B0N, ${lng} \u00B0E  ${t(`OdbData.${period}`)}`,
           font: {
             size: 12
           }
         }
+
         if (plotProps.layout.yaxis?.title) {
-          plotProps.layout.yaxis.title = { text: `${t('OdbData.depth')} (m)`, standoff: 0 }
-        }
-        if (plotProps.layout.xaxis?.title) {
-          plotProps.layout.xaxis.title = { text: parameter, standoff: 0 }
-        }
-        if (plotProps.layout.xaxis2?.title) {
-          plotProps.layout.xaxis2.title = { text: secondPar, standoff: 0 }
+          plotProps.layout.yaxis.title = { text: `${t(`OdbData.CTD.${yPar}`)}`, standoff: 0 }
         }
 
         json.features.sort((a: CtdFeature, b: CtdFeature) => a.properties.depth - b.properties.depth)
         const x1 = json.features.map((feature: CtdFeature) => feature.properties[parameter as keyof CtdProperties])
-        const x2 = json.features.map((feature: CtdFeature) => feature.properties[secondPar as keyof CtdProperties])
-        const y = json.features.map((feature: CtdFeature) => -feature.properties.depth)
+        const y = json.features.map((feature: CtdFeature) => yPar === 'depth' ? -feature.properties.depth : feature.properties[yPar as keyof CtdProperties])
 
-        plotProps.data = [{
-          x: x1,
-          y: y,
-          type: 'scatter',
-          name: t(`OdbData.CTD.${parameter}`),
-        },
-        {
-          x: x2,
-          y: y,
-          type: 'scatter',
-          xaxis: 'x2',
-          name: t(`OdbData.CTD.${secondPar}`),
+        if (x2Par === 'close') {
+          plotProps.data = [{
+            x: x1,
+            y: y,
+            type: 'scatter',
+            name: t(`OdbData.CTD.${parameter}`),
+            hovertemplate: '%{x}',
+          },]
+
+        } else {
+          const x2 = json.features.map((feature: CtdFeature) => feature.properties[x2Par as keyof CtdProperties])
+          // const y = json.features.map((feature: CtdFeature) => -feature.properties.depth)
+          plotProps.data = [{
+            x: x1,
+            y: y,
+            type: 'scatter',
+            name: t(`OdbData.CTD.${parameter}`),
+          },
+          {
+            x: x2,
+            y: y,
+            type: 'scatter',
+            xaxis: 'x2',
+            name: t(`OdbData.CTD.${x2Par}`),
+          }]
         }
-        ]
         const newProps = Object.assign({}, plotProps)
         setPlotProps(newProps)
       })
       .catch(() => { })
-  }, [url, parameter, secondPar, t])
+  }, [url, parameter, x2Par, yPar, t])
 
   return (
     <>
       <Box sx={{ marginLeft: 2 }}>
         <Typography variant="subtitle2" gutterBottom>
-          {t('OdbData.CTD.secondPar')}
+          {t('OdbData.CTD.yPar')}
+        </Typography>
+        <Select
+          size='small'
+          name='ODB-CTD-prof_y'
+          sx={{ marginLeft: 2.1, marginBottom: 2 }}
+          defaultValue={'temperature'}
+          value={yPar}
+          onChange={(event) => dispatch(odbCtdSlice.actions.setProfileYPar(event.target.value as CtdParameters))}
+        >
+          {['depth', ...parameters].map((par, index) => {
+            return <MenuItem key={index} value={par}>{t(`OdbData.CTD.${par}`)}</MenuItem>
+          })}
+        </Select>
+        <Typography variant="subtitle2" gutterBottom>
+          {t('OdbData.CTD.x2Par')}
         </Typography>
         <Select
           size='small'
           name='ODB-CTD-prof_para'
           sx={{ marginLeft: 2.1, marginBottom: 2 }}
           defaultValue={'temperature'}
-          value={secondPar}
-          onChange={(event) => dispatch(odbCtdSlice.actions.ProfileSecondPar(event.target.value))}
+          value={x2Par}
+          onChange={(event) => dispatch(odbCtdSlice.actions.setProfileX2Par(event.target.value as CtdParameters))}
         >
-          {parameters.map((par, index) => {
+          {['close', ...parameters].map((par, index) => {
             return <MenuItem key={index} value={par}>{t(`OdbData.CTD.${par}`)}</MenuItem>
           })}
         </Select>

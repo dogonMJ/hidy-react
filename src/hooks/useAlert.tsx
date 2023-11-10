@@ -1,13 +1,13 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useCallback } from "react";
 
 export const useAlert = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<ReactNode>('');
 
-  const showAlert = (message: ReactNode) => {
+  const showAlert = useCallback((message: ReactNode) => {
     setAlertMessage(message);
     setOpenAlert(true);
-  };
+  }, [])
 
   const hideAlert = () => {
     setOpenAlert(false);
@@ -21,4 +21,4 @@ export const useAlert = () => {
     showAlert,
     hideAlert,
   };
-};
+}

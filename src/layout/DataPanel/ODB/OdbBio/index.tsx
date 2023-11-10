@@ -8,25 +8,28 @@ import { SamplingEvents } from "./SamplingEvents";
 import { BioComposition } from "./BioComposition";
 import { BioDataset, BioFilter } from "types";
 import { SwitchSameColor } from "components/SwitchSameColor";
+import { useDispatch, useSelector } from "react-redux";
+import { odbBioSlice } from "store/slice/odbBioSlice";
+import { RootState } from "store/store";
 import { CustomTabPanel } from "components/CustomTabPanel";
 
 const ModeSwitch = SwitchSameColor()
 
 export const OdbBio = () => {
   const { t } = useTranslation()
-  const [tabNum, setTabNum] = useState(0)
-  const [dataset, setDataset] = useState<BioDataset>("all")
-  const [filter, setFilter] = useState<BioFilter>('topic')
-
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabNum(newValue);
+  const dispatch = useDispatch()
+  const tabNum = useSelector((state: RootState) => state.odbBio.tabNum)
+  const dataset = useSelector((state: RootState) => state.odbBio.dataset)
+  const filter = useSelector((state: RootState) => state.odbBio.filter)
+  const handleTabChange = () => {
+    dispatch(odbBioSlice.actions.switchTab())
   }
-
   const handleDatasetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDataset((event.target as HTMLInputElement).value as BioDataset);
+    dispatch(odbBioSlice.actions.setDataset((event.target as HTMLInputElement).value as BioDataset))
   };
   const handleModeSwitch = () => {
-    setFilter(filter === 'topic' ? 'taxon' : 'topic')
+    // dispatch(odbBioSlice.actions.setFilter(filter === 'topic' ? 'taxon' : 'topic'))
+    dispatch(odbBioSlice.actions.setFilter(filter === BioFilter.topic ? BioFilter.taxon : BioFilter.topic))
   }
   return (
     <>
@@ -54,7 +57,7 @@ export const OdbBio = () => {
             <FormLabel>{t('OdbData.filter')}</FormLabel>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="subtitle2" gutterBottom>{t('OdbData.Bio.by')}{t('OdbData.Bio.topic')}</Typography>
-              <ModeSwitch onChange={handleModeSwitch} />
+              <ModeSwitch onChange={handleModeSwitch} checked={filter === 'taxon'} />
               <Typography variant="subtitle2" gutterBottom>{t('OdbData.Bio.by')}{t('OdbData.Bio.taxon')}</Typography>
             </Stack>
           </FormControl>

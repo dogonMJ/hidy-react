@@ -35,15 +35,15 @@
   "longitude": "Longitude",
   "remove": "Remove",
   "dataPanel": "Data Layers",
-  "CWBsites": {
+  "CWAsites": {
     "title": "Marine/Meteorological Data Near Taiwan",
     "subheader": "Latest Data",
-    "cwb": "Central Weather Administration",
-    "cwbopendata": "Central Weather Administration Open Weather Data",
+    "cwb": "Central Weather Bureau",
+    "cwbopendata": "Central Weather Bureau Open Weather Data",
     "sitelang": "E",
-    "sea": "Current Sea Surface Condition",
-    "weather": "Current Weather Conditions",
-    "radar": "Radar",
+    "cwaSea": "Current Sea Surface Condition",
+    "cwaWeather": "Current Weather Conditions",
+    "cwaRadar": "Radar",
     "airtemp": "Air Temperature",
     "seatemp": "Sea Temperature",
     "airpres": "Air Pressure",
@@ -78,8 +78,8 @@
     "slaOthers": "Altimeter satellite gridded Sea Level Anomalies (SLA, i.e. sea surface height above sea level) computed with respect to a twenty-year (1993, 2012) mean.\nThe gridded SLA is estimated by Optimal Interpolation, merging the measurement from the different altimeter missions available.",
     "adt": "Sea surface height above geoid (Absolute Dynamic Topography)",
     "adtOthers": "The Absolute Dynamic Topography (ADT, i.e. sea surface height above geoid) is the instantaneous height above the Geoid.\nADT products were derived from SLA data.",
-    "CHL": "Ocean chlorophyll-a mass concentration (NRT)",
-    "chlOthers": "Products were interpolated based on a multi sensors/algorithms approach to provide the best estimate.\nThis NRT product provided one day after satellite acquisition.",
+    "CHL": "Ocean chlorophyll-a mass concentration",
+    "chlOthers": "Products were interpolated based on a multi sensors/algorithms approach to provide the best estimate.\nThis product provided one day after satellite acquisition.",
     "instOthers": "Updated daily with date D-18h to D+48h.",
     "3dinst_thetao": "Sea Water Potential Temperature Analysis and Forecast (+48h)",
     "3dinst_so": "Sea Water Salinity Analysis and Forecast (+48h)",
@@ -87,11 +87,7 @@
     "bottomT": "Sea Water Potential Temperature Analysis and Forecast at Sea Floor",
     "mlotst": "Ocean Mixed Layer Thickness Defined by Sigma Theta Analysis and Forecast",
     "zos": "Sea Surface Height Above Geoid Analysis and Forecast",
-    "3dsea_water_velocity": "Sea Water Velocity Analysis and Forecast",
-    "alert": {
-      "range": "Not in time range",
-      "loading": "Loading"
-    }
+    "3dsea_water_velocity": "Sea Water Velocity Analysis and Forecast"
   },
   "Animated": {
     "title": "Animated",
@@ -103,15 +99,15 @@
   "SatData": {
     "title": "Reprocessed Satellite Data"
   },
-  "CwbSeaForecast": {
+  "CwaSeaForecast": {
     "subheader": "Model Forecast",
     "close": "Close",
-    "cwbcur": "Surface Current",
-    "cwbsst": "Sea Surface Temperature",
-    "cwbdir": "Surface Current Direction",
-    "cwbpsu": "Surface Salinity",
-    "cwbspd": "Surface Current Speed",
-    "cwbsla": "Surface Height",
+    "cwacur": "Surface Current",
+    "cwasst": "Sea Surface Temperature",
+    "cwadir": "Surface Current Direction",
+    "cwapsu": "Surface Salinity",
+    "cwaspd": "Surface Current Speed",
+    "cwasla": "Surface Height",
     "lat": "Data Latitude",
     "lon": "Data Longitude",
     "sst": "Surface Temperature (\u2103)",
@@ -130,10 +126,10 @@
     "odbGravity": "Gravity",
     "odbSedCore": "Sediment and Core Sampling Sites",
     "odbCtd": "CTD and other sensors",
-    "odbChemistry": "Marine Chemistry",
+    "odbChem": "Marine Chemistry",
     "odbBio": "Biological Data",
-    "odbMicroPlastic": "Microplastics",
-    "odbMarineHeatwave": "Marine Heatwave Levels",
+    "odbMP": "Microplastics",
+    "odbMHW": "Marine Heatwave Levels",
     "depth": "Depth",
     "density": "Density",
     "temperature": "Temperature",
@@ -167,7 +163,11 @@
       "description": "This layer represents compiled bathymetric data from single-beam echo sounder survey by research vessels, supplemented by GEBCO's 15 arc-second bathymetric data. For further information or data acquisition, please refer to the data source website."
     },
     "CTD": {
-      "secondPar": "Comparison parameter for depth profile",
+      "selection": "Parameters and seasons",
+      "close": "Close",
+      "yPar": "Vertical(y) axis parameter",
+      "x2Par": "The second horizontal(x) axis parameter",
+      "depth": "Depth (m)",
       "density": "Density (kg/m\u00B3)",
       "temperature": "Temperature (\u00B0C)",
       "salinity": "Salinity (psu)",
@@ -183,7 +183,7 @@
       "fixRange": "Fix Range",
       "source": "ODB CTD data",
       "description": "This layer consolidates data obtained from Conductivity-Temperature-Depth Profilers (CTD) aboard our research vessels. It presents averaged data (data count >=3 due to regulations) within each grid at various depths. For additional information or data acquisition, please refer to the data source website.",
-      "description2": "The top menu allows you to switch parameters and seasons. You can adjust data segment, color scales, data ranges, and layer opacity from the left panel. 'Data splitting' divides the data range and shows two colors when set to 0, indicating values above the maximum and below or equal to the minimum. The parameter defaults to its initial settings when first switched, but can be customized by the user thereafter.",
+      "description2": "You can customize parameter, season, data segment, color scales, data ranges, and layer opacity from the left panel. 'Data splitting' divides the data range and shows two colors when set to 0, indicating values above the maximum and below or equal to the minimum. The parameter defaults to its initial settings when first switched, but can be customized by the user thereafter.",
       "description3": "Clicking on the data grid on map creates a vertical profile plot. You can switch a second parameter for comparison from the left-side panel.",
       "others": " includes CTD API for GeoJSON format data."
     },
@@ -192,6 +192,7 @@
       "description": "ODB-compiled gravity data collected by OR1. For detailed information and application, please refer to the website below."
     },
     "current": {
+      "selection": "Parameters",
       "source": "ODB Current Data (Ch.)",
       "description": "This layer combines data collected by Shipboard Acoustic Doppler Current Profilers (SADCP) aboard our research vessels. It displays average data when the number of data points is >= to 3. For further information or data acquisition, please refer to the data source website.",
       "others": " includes SADCP API for GeoJSON format data.",
@@ -223,6 +224,7 @@
       "description1": "Monthly global marine heatwave level map created by ODB.\nChange the month on the calendar above to switch layer. May require an extended period of time.",
       "description2": "Figure above (modified from Hobday et al. (2018)) describes how levels were categorized. Please refer to the ODB Marine Heatwave website for detailed calculation.",
       "description3": "For detailed calculation methods and definitions, please refer to the ODB Marine Heatwave website. The website also provides API and data downloads monthly mean sea surface temperature (SST), SST anomalies, marine heatwave levels, and themal displacements at a global resolution of 0.25° x 0.25°.",
+      "ice": "Sea ice (>15 days)",
       "moderate": "Moderate (threshold~2x)",
       "strong": "Strong (2x~3x)",
       "severe": "Severe (3x~4x)",
@@ -344,13 +346,14 @@
     "daily": "Daily",
     "hourly": "Hourly",
     "instant": "Instantaneous",
+    "week": "week",
     "hr": "hr",
     "min": "min",
     "m": "m",
     "km": "km",
     "mean": "mean",
-    "cwbRadar": "CWA Radar",
-    "cwbOpenData": "CWA Open Data",
+    "cwbRadar": "CWB Radar",
+    "cwbOpenData": "CWB Open Data",
     "madtDes": "使用",
     "3yr": "Jan. 1st 3 years ago"
   },
@@ -485,6 +488,11 @@
     "selectLayer": "Select Layer",
     "clearLayer": "Clear Layer",
     "opacity": "Opacity",
+    "nlsc": "NLSC Taiwan Map Service",
+    "csrsr1": "NCU CSRSR Taiwan true-color",
+    "csrsr2": "NCU CSRSR Taiwan false-color",
+    "csrsr3": "NCU CSRSR Penghu true-color",
+    "csrsr4": "NCU CSRSR Penghu false-color",
     "alert": {
       "dupOption": "Duplicate input",
       "inputError": "check WMS/WMTS or URL",
@@ -512,10 +520,12 @@
     "circle": "Circle: Left-click and drag from a point to create a circle; release to complete.\n\tHover for info at the center: 'r' for radius, 'c' for circumference, 'A' for area",
     "marker": "Single Point: Left-click to add a point.\n\tHover for info: 'ele' for elevation.",
     "edit": "Edit：",
-    "del": "Delete："
+    "del": "Delete：",
+    "ele": "Elevation",
+    "dist": "Distance"
   },
   "translation": {
-    "title": "Switch Language"
+    "title": "切換語言"
   },
   "screenshot": {
     "title": "Screenshot",
@@ -534,66 +544,6 @@
     }
   },
   "alert": {
-    "fetchFail": "Data fetching issue. Please wait or contact tech support.",
-    "noSelect": "Please select parameters",
-    "noDate": "Please select Date",
-    "noData": "No Data",
-    "notInTime": "Not in time range"
-  },
-  "about": {
-    "title": "About Hidy",
-    "site": {
-      "title": "About Hidy",
-      "p1": "This site is an integrated data display platform developed and maintained by the <0>National Science and Technology Commission's (NSTC) Ocean Data Bank (ODB)</0>. Its primary purpose is to showcase ODB's open data and other ocean data required by various sectors, including industry, government, and academia.",
-      "p2": "ODB, established and operated by the <0>Institute of Oceanography, National Taiwan University</0> on behalf of the NSTC, dedicated to the primary mission of aggregating data from various domestic research vessels, including New Ocean Researcher <1>1</1>, <2>2</2>, <3>3</3>, Ocean Researcher 1, 2, 3, Fishery Researcher 1, and Ocean Researcher 5. We analyzes, organizes, and presents the accumulated investigation findings from these vessels over the years, providing data inquiries and applications within the national marine research community.",
-      "p3": "Due to security requirements, this platform only displays processed data and does not provide data requests and downloads. If you have such needs, please refer to the <0>regulations</0> and <1>apply to ODB</1>.",
-      "p4": "Google Chrome is recommended browser with a screen resolution of 1280x720 or higher for the best browsing experience. This site also supports Firefox, Microsoft Edge, Safari, and other browsers, but there may be slightly different from the original design. We do not recommend browsing on mobile devices (phones and tablets) as this site has not been optimized for a mobile experience.",
-      "p5": "If you have any questions or suggestions, please feel free to contact us: "
-    },
-    "acc": {
-      "title": "About Account",
-      "p1": "ODB SSO is the single sign-on system for all ODB services.",
-      "p2": "Registration: Click on the person icon in the upper right corner of this site, then select 'Create new account' at the bottom of the displayed panel, and follow the steps to create an account and verify your email. The personal information you provide is solely for system identification purposes.<br/>**Administrative units, principal investigators (PIs), and others with special permissions granted by NSTC, please <0>contact us</0>.",
-      "p3": "Login: Click on the person icon in the upper right corner of this site, and enter the username and password to log in. If 'Auto login' is not selected, automatic login will occur upon closing the browser. If selected, automatic login will be performed within a certain timeframe.",
-      "p4": "Cookies on this site are used to record account activities. Kindly remember to log out when finished using public devices. If the username and password are correct but logging in is unsuccessful, consider clearing the cookies or reaching out to us."
-    },
-    "link": {
-      "title": "Links",
-      "aboutOdb": "ODB Related",
-      "aboutShip": "Research Vessels Related",
-      "odb": "Ocean Data Bank (ODB), National Science and Technology Council (NSTC)",
-      "odb2": "ODB Official Website",
-      "odbnews": "ODB Newsletter (Ch.)",
-      "odbnews2": "Aperiodic updates on ODB activities",
-      "old2": "Legacy Hidy Viewer",
-      "report": "Cruise Reports (Ch.)",
-      "report2": "Historic cruise report (OR1, 2, 3, and NOR1, 2, 3)",
-      "cplan2": "Cruise Planning Tools",
-      "chemview2": "Marine Chemistry Data Viewer",
-      "mhw2": "Global Marine Heatwave Data",
-      "bioquery2": "Query app for Bio-Ocean Database and integrated OpenAPI for advanced analysis",
-      "copkey2": "Calanoid Copepods Classification Key",
-      "seats2": "Southeast Asian Time-series station",
-      "pco2": "Partial Pressure of Carbon Dioxide (Ch.)",
-      "pco22": "ODB pCO2 data Website",
-      "rose": "Ocean Current Rose Diagram (Ch.)",
-      "rose2": "Aggregated ODB Current Rose Diagram",
-      "ctd": "CTD Data (Ch.)",
-      "ctd2": "Aggregated ODB CTD Data",
-      "adcp": "Ocean Current Data (Ch.)",
-      "adcp2": "Aggregated ODB ADCP Data",
-      "gwr": "Superconducting Gravimeter Data (Ch.)",
-      "gwr2": "Ministry of the Interior's Superconducting Gravimeter Data in ODB",
-      "nor1": "R/V New Ocean Researcher 1 (NOR1) (Ch.)",
-      "nor1inst": "Marine Exploration Instrument Center, NTU (Ch.)",
-      "nor2": "R/V New Ocean Researcher 2 (NOR2)",
-      "nor2inst": "Precious Instrument Center of New Ocean Researcher 2 (Ch.)",
-      "nor3": "R/V New Ocean Researcher 3 (NOR3)",
-      "nor3inst": "NOR3 Marine Instrument Center (Ch.)"
-    }
-  },
-  "contact": {
-    "title": "Contact Us",
-    "content": "Whether you have questions, suggestions, or just want to share a photo of your doggo, please don't hesitate to get in touch with us:"
+    "fetchFail": "Data fetching issue. Please wait or contact tech support."
   }
 }

@@ -11,7 +11,7 @@ import { ResetPassword } from "layout/Account/ResetPassword"
 import { PortalControlButton } from "components/PortalControlButton";
 
 export const SignInControl = () => {
-  const userInfo = useSelector((state: RootState) => state.coordInput.userInfo);
+  const userInfo = useSelector((state: RootState) => state.map.userInfo);
   const [showSignInPanel, setShowSignInPanel] = useState(false)
   const [showSignUpPanel, setShowSignUpPanel] = useState(false)
   const [showResetPwdPanel, setShowResetPwdPanel] = useState(false)

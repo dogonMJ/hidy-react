@@ -25,7 +25,7 @@ const getLegendUrl = (layerIdentifier: string) => {
 const APILayers = () => {
   const { t } = useTranslation()
   const [identifier, setIdentifier] = useState("close")
-  const datetime = useSelector((state: RootState) => state.coordInput.datetime);
+  const datetime = useSelector((state: RootState) => state.map.datetime);
   const handleToggle = (value: string) => () => {
     setIdentifier(value)
   };

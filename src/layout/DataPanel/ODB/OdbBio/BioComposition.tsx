@@ -11,6 +11,9 @@ import { category23 } from 'Utils/UtilsODB';
 import * as geojson from 'geojson';
 // import { MiniCharts } from './PieChart.js'
 import './charts.js'
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import { odbBioSlice } from 'store/slice/odbBioSlice';
 
 declare const L: any
 
@@ -18,12 +21,14 @@ const GridSwitch = SwitchSameColor()
 
 export const BioComposition = (props: { dataset: BioDataset, filter: BioFilter }) => {
   const { t } = useTranslation()
+  const dispatch = useDispatch()
   const { dataset, filter } = props
   const ref = useRef<any>()
-  const [grid, setGrid] = useState<1 | 2>(1)
-  const [data, setData] = useState<any>()
+  const grid = useSelector((state: RootState) => state.odbBio.compGrid)
   const [legendContent, setLegendContent] = useState<string[]>([])
-  const handleGridSwitch = () => grid === 1 ? setGrid(2) : setGrid(1)
+  const data: any = null
+
+  const handleGridSwitch = () => dispatch(odbBioSlice.actions.switchCompGird())
 
   const onEachFeature = useCallback((feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
     if (feature.geometry.type === 'Point') {
@@ -75,11 +80,11 @@ export const BioComposition = (props: { dataset: BioDataset, filter: BioFilter }
   }
 
   useEffect(() => {
+
     fetch(`https://seaimage.oc.ntu.edu.tw/occapi/grid/${dataset}/${grid}/${filter}`)
       .then(response => response.json())
       .then(json => {
-        ref.current.clearLayers()
-        setData(json)
+        ref.current.clearLayers().addData(json)
         const legend: string[] = []
         if (filter === 'topic') {
           Object.keys(json[0].properties.data).forEach((name, i) => {
@@ -91,7 +96,6 @@ export const BioComposition = (props: { dataset: BioDataset, filter: BioFilter }
           })
         }
         setLegendContent(legend)
-        ref.current.addData(json)
       })
   }, [grid, filter, dataset, t])
 
@@ -99,7 +103,7 @@ export const BioComposition = (props: { dataset: BioDataset, filter: BioFilter }
     <>
       <Stack direction="row" spacing={1} alignItems="center">
         <Typography variant="subtitle2" gutterBottom>1&deg; {t('OdbData.Bio.grid')} </Typography>
-        <GridSwitch onChange={handleGridSwitch} />
+        <GridSwitch onChange={handleGridSwitch} checked={grid === 2} />
         <Typography variant="subtitle2" gutterBottom>2&deg; {t('OdbData.Bio.grid')} </Typography>
       </Stack>
       <Pane name='pieCharts' style={{ zIndex: 600 }}>
