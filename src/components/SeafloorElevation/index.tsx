@@ -5,6 +5,7 @@ import { coor } from "types";
 import { PlotParams } from "react-plotly.js";
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
+import { useTranslation } from "react-i18next";
 // old source: ETOPO5 edited by Kuo, details need to be checked. E:\Depth and E:\drifter
 declare const L: any
 
@@ -17,6 +18,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
   const { coords, setOpen } = props
   const plotRef = useRef<any>()
   const map = useMap()
+  const { t } = useTranslation()
   const scaleUnit = useSelector((state: RootState) => state.map.scaleUnit);
   const [plotProps, setPlotProps] = useState<PlotParams>({
     data: [],
@@ -33,10 +35,10 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
         t: 25
       },
       xaxis: {
-        title: {
-          text: scaleUnit === 'imperial' ? 'Distance (mi)' : scaleUnit === 'nautical' ? 'Distance (nm)' : 'Distance (km)',
-          standoff: 10
-        },
+        // title: {
+        //   text: scaleUnit === 'imperial' ? `${t('draw.dist')} (mi)` : scaleUnit === `nautical` ? `${t('draw.dist')} (nm)` : `${t('draw.dist')} (km)`,
+        //   standoff: 10
+        // },
         // fixedrange: true,
         showspikes: true,
         spikemode: 'across',
@@ -46,10 +48,10 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
         hoverformat: '.2f'
       },
       yaxis: {
-        title: {
-          text: scaleUnit === 'imperial' ? 'Elevation (ft)' : 'Elevation (m)',
-          standoff: 5
-        },
+        // title: {
+        //   text: scaleUnit === 'imperial' ? `${t('draw.ele')} (ft)` : `${t('draw.ele')} (m)`,
+        //   standoff: 5
+        // },
       }
     },
     config: {
@@ -193,12 +195,21 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
           plotRef.current.updatePlotly()
         }
       }]
+
+      plotProps.layout.yaxis!.title = {
+        text: scaleUnit === 'imperial' ? `${t('draw.ele')} (ft)` : `${t('draw.ele')} (m)`,
+        standoff: 4
+      }
+      plotProps.layout.xaxis!.title = {
+        text: scaleUnit === 'imperial' ? `${t('draw.dist')} (mi)` : scaleUnit === `nautical` ? `${t('draw.dist')} (nm)` : `${t('draw.dist')} (km)`,
+        standoff: 10
+      }
       // update plot
       const newProps = Object.assign({}, plotProps)
       setPlotProps(newProps)
     }
     getData()
-  }, [coords])
+  }, [coords, t, scaleUnit])
   return (
     <LineChart ref={plotRef} paneName="seafloorProfile" plotProps={plotProps} setOpen={setOpen} hover={hover} unhover={unHover} />
   )

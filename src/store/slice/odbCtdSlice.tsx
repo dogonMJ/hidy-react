@@ -7,7 +7,8 @@ const query: any = readUrlQuery('odbCtd')
 
 interface OdbCtdStates {
   par: CtdParameters
-  pPar2: CtdParameters
+  pX2: CtdParameters | 'close'
+  pY: CtdParameters | 'depth'
   period: string
   palette: Palette
   mask: boolean
@@ -22,7 +23,8 @@ export const odbCtdSlice = createSlice({
   name: "odbCtd",
   initialState: {
     par: query && query.par && isCtdParameter(query.par) ? query.par : 'temperature',
-    pPar2: query && query.pPar2 && isCtdParameter(query.pPar2) ? query.pPar2 : 'salinity',
+    pX2: query && query.pX2 && isCtdParameter(query.pX2) ? query.pX2 : 'salinity',
+    pY: query && query.pY && isCtdParameter(query.pY) ? query.pY : 'depth',
     period: query && query.period ? query.period : 'avg',
     palette: query && query.palette && isPalette(query.palette) ? query.palette : 'plasma',
     mask: query && query.mask === 'true' ? true : false,
@@ -39,8 +41,11 @@ export const odbCtdSlice = createSlice({
     setPeriod: (state, action: PayloadAction<string>) => {
       state.period = action.payload
     },
-    setProfileSecondPar: (state, action: PayloadAction<CtdParameters>) => {
-      state.pPar2 = action.payload
+    setProfileX2Par: (state, action: PayloadAction<CtdParameters | 'close'>) => {
+      state.pX2 = action.payload
+    },
+    setProfileYPar: (state, action: PayloadAction<CtdParameters | 'depth'>) => {
+      state.pY = action.payload
     },
     setPalette: (state, action: PayloadAction<Palette>) => {
       state.palette = action.payload

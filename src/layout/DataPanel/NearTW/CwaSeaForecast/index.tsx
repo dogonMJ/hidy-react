@@ -1,23 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { ImageOverlay } from "react-leaflet";
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from "components/RenderIf/RenderIf";
-import { ShowCwbForecast } from "./ShowCwbForecast";
+import { ShowCwaForecast } from "./ShowCwaForecast";
 import { Divider } from "@mui/material";
 import { useAlert } from "hooks/useAlert";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { useTranslation } from "react-i18next";
 
-const optionList = ['close', 'cwbsst', 'cwbpsu', 'cwbsla', 'cwbspd']
-const optionList2 = ['close', 'cwbcur', 'cwbdir']
+const optionList = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd']
+const optionList2 = ['close', 'cwacur', 'cwadir']
 const getUrl = (identifier: string, date: string) => `${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbforecast/epsg3857_${identifier}_${date}.png`
 
-const CwbSeaForecast = () => {
+export const CwaSeaForecast = () => {
   const ref = useRef<any>(null)
   const ref2 = useRef<any>(null)
   const { t } = useTranslation()
+  const dispatch = useDispatch()
+  const identifiers = useSelector((state: RootState) => state.switches.checked)
   const [identifier, setIdentifier] = useState('close')
   const [identifier2, setIdentifier2] = useState('close')
   const [jsonData, setJsonData] = useState(null)
@@ -87,18 +89,18 @@ const CwbSeaForecast = () => {
       <DataPanelRadioList
         identifier={identifier2}
         handleClick={handleToggle2}
-        group='CwbSeaForecast'
+        group='CwaSeaForecast'
         optionList={optionList2}
       />
       <Divider variant="middle" sx={{ width: '80%', marginLeft: '16%', }} flexItem light />
       <DataPanelRadioList
         identifier={identifier}
         handleClick={handleToggle}
-        group='CwbSeaForecast'
+        group='CwaSeaForecast'
         optionList={optionList}
       />
       <RenderIf isTrue={(identifier !== 'close' || identifier2 !== 'close') && jsonData}>
-        <ShowCwbForecast data={jsonData} bounds={[[6.95, 109.95], [36.05, 126.05]]} />
+        <ShowCwaForecast data={jsonData} bounds={[[6.95, 109.95], [36.05, 126.05]]} />
       </RenderIf>
       <RenderIf isTrue={identifier2 !== 'close'}>
         <ImageOverlay ref={ref2} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={3} opacity={0} />
@@ -110,5 +112,3 @@ const CwbSeaForecast = () => {
     </>
   );
 }
-
-export default CwbSeaForecast

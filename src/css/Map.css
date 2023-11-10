@@ -143,11 +143,15 @@ input {
   max-width: 12rem;
 }
 
-.js-plotly-plot .plotly .modebar {
+.modebar {
   left: 0;
   top: -30px !important;
-  width: 230px;
+  width: 225px;
   height: 30px;
+}
+
+#seafloorProfile .modebar {
+  width: 260px;
 }
 
 .modebar-group {

@@ -8,7 +8,7 @@ imgList.forEach((i) => {
   urlList.unshift(`${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbdata/R${i}.png`)
 })
 
-const CwbRadar = () => {
+export const CwaRadar = () => {
   const [imgUrl, setImgUrl] = useState<string>(urlList[0]);
   const [index, setIndex] = useState(0);
   useEffect(() => {
@@ -27,5 +27,3 @@ const CwbRadar = () => {
     <ImageOverlay url={imgUrl} crossOrigin='anonymous' bounds={[[17.75, 115], [29.25, 126.5]]} zIndex={500} />
   )
 }
-
-export default CwbRadar

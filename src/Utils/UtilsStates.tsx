@@ -14,6 +14,7 @@ export const readUrlQuery = (key: string) => {
 
 export const findModified = (originalObject: any, modifiedObject: any, ons: string[]) => {
   const modifiedElements: any = {};
+  console.log(ons)
   for (const key in modifiedObject) {
     if ((originalObject[key] !== modifiedObject[key] || ons.includes(key)) && key !== 'switches') {
       modifiedElements[key] = {};
@@ -49,8 +50,8 @@ export const flattenObject = (obj: any, parentKey = "") => {
       }
     }
   }
-
-  return queryArr.join(";");
+  const string = queryArr.join(";")
+  return string.replaceAll(';&', '&').replaceAll('=&', '&')
 }
 
 export const toIETF = (inputString: string) => {

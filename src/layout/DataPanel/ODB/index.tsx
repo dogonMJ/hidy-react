@@ -22,7 +22,7 @@ import { onoffsSlice } from 'store/slice/onoffsSlice';
 export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const checked = useSelector((state: RootState) => state.switches.checkedOdb)
+  const checked = useSelector((state: RootState) => state.switches.checked)
 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
@@ -32,7 +32,7 @@ export const ODB = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    dispatch(onoffsSlice.actions.setOdbChecked(newChecked))
+    dispatch(onoffsSlice.actions.setChecked(newChecked))
   };
 
   const componentList: ComponentList = {

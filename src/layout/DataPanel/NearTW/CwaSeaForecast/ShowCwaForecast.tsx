@@ -20,7 +20,7 @@ const calIndex = (position: coor, bounds: number[][], resolution: number) => {
 }
 const isNumber = (data: any, digit: number) => isNaN(data) ? data : data.toFixed(digit)
 
-export const ShowCwbForecast = (props: { data: any, bounds: number[][] }) => {
+export const ShowCwaForecast = (props: { data: any, bounds: number[][] }) => {
   const { t } = useTranslation()
   const [position, setPosition] = useState<coor>({ lat: 0, lng: 0 })
   const [content, setContent] = useState<string>()
@@ -31,15 +31,15 @@ export const ShowCwbForecast = (props: { data: any, bounds: number[][] }) => {
       if (index) {
         const rawData = props.data.data[index]
         setContent(
-          `${t('CwbSeaForecast.lat')}: ${rawData[0]}
-          ${t('CwbSeaForecast.lon')}: ${rawData[1]}
-          ${t('CwbSeaForecast.sst')}: ${isNumber(rawData[2], 3)}
-          ${t('CwbSeaForecast.sal')}: ${isNumber(rawData[8], 2)}
-          ${t('CwbSeaForecast.ssh')}: ${isNumber(rawData[7], 3)}
-          ${t('CwbSeaForecast.dir')}: ${isNumber(rawData[6], 2)}
-          ${t('CwbSeaForecast.spd')}: ${isNumber(rawData[5], 4)}
-          ${t('CwbSeaForecast.east')}: ${isNumber(rawData[3], 4)}
-          ${t('CwbSeaForecast.north')}: ${isNumber(rawData[4], 4)}
+          `${t('CwaSeaForecast.lat')}: ${rawData[0]}
+          ${t('CwaSeaForecast.lon')}: ${rawData[1]}
+          ${t('CwaSeaForecast.sst')}: ${isNumber(rawData[2], 3)}
+          ${t('CwaSeaForecast.sal')}: ${isNumber(rawData[8], 2)}
+          ${t('CwaSeaForecast.ssh')}: ${isNumber(rawData[7], 3)}
+          ${t('CwaSeaForecast.dir')}: ${isNumber(rawData[6], 2)}
+          ${t('CwaSeaForecast.spd')}: ${isNumber(rawData[5], 4)}
+          ${t('CwaSeaForecast.east')}: ${isNumber(rawData[3], 4)}
+          ${t('CwaSeaForecast.north')}: ${isNumber(rawData[4], 4)}
         `
         )
       } else {

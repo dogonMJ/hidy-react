@@ -33,7 +33,7 @@ const icon = new L.divIcon({
   html: renderToString(<WavesIcon style={{ color: '#ED6C02' }} />)
 })
 
-const CwbSeaSites = () => {
+export const CwaSeaSites = () => {
   const [weatherElement, setWeatherElement] = useState<any>({
     'siteInfo': {},
     'siteData': {},
@@ -104,4 +104,3 @@ const CwbSeaSites = () => {
 
   )
 }
-export default CwbSeaSites

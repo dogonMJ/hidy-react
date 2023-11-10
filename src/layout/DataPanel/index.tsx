@@ -7,7 +7,7 @@ import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typ
 import { ChevronLeft, ChevronRight, MenuRounded } from '@mui/icons-material'
 import { useMap, } from 'react-leaflet';
 import { DataPanelItem } from 'components/DataPanelItem';
-import ToggleCWB from 'layout/DataPanel/NearTW';
+import { ToggleCWA } from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
 import SatelliteData from 'layout/DataPanel/SatelliteData';
@@ -40,7 +40,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const itemList: ComponentList = {
   APIlayers: <APILayers />,
-  CWBsites: <ToggleCWB />,
+  CWAsites: <ToggleCWA />,
   Animated: <AnimatedCurrents />,
   // SatData: <SatelliteData />,
   OdbData: <ODB />,

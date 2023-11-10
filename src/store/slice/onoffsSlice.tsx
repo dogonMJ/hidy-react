@@ -4,17 +4,19 @@ const urlParams = new URLSearchParams(window.location.search)
 const keys = Array.from(urlParams.keys())
 
 interface OnoffStates {
-  checkedOdb: string[]
+  checked: string[]
+  cwaForecast1: string[]
+
 }
 
 export const onoffsSlice = createSlice({
   name: "switches",
   initialState: {
-    checkedOdb: keys ? keys.filter((key) => key.startsWith('odb')) : [],
+    checked: keys ? keys : [],
   } as OnoffStates,
   reducers: {
-    setOdbChecked: (state, action: PayloadAction<string[]>) => {
-      state.checkedOdb = action.payload
+    setChecked: (state, action: PayloadAction<string[]>) => {
+      state.checked = action.payload
     },
   }
 });

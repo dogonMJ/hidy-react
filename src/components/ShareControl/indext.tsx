@@ -7,7 +7,6 @@ import ClearAllIcon from '@mui/icons-material/ClearAll';
 import { useMap } from "react-leaflet";
 import { useSelector } from "react-redux";
 import { RootState, store } from "store/store";
-import { odbBioSlice } from "store/slice/odbBioSlice";
 import { memo, useCallback, useState } from "react";
 import { readUrlQuery, findModified, flattenObject } from "Utils/UtilsStates";
 import { Close } from "@mui/icons-material";
@@ -29,7 +28,7 @@ export const ShareControl = memo(() => {
 
   const getShareUrl = useCallback(() => {
     const states: any = store.getState();
-    const switches = states.switches.checkedOdb //已開選項
+    const switches = states.switches.checked //已開選項
 
     const modified = findModified(defaultStates, states, switches) //和預設不同選項
     //單選選項

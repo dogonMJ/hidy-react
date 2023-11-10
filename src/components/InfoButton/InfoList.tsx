@@ -107,7 +107,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.dataset')}:cmems_obs-oc_glo_bgc-plankton_nrt_l4-gapfree-multi-4km_P1D<br />
           {t('DataInfo.variable')}: mass_concentration_of_chlorophyll_a_in_sea_water (CHL)<br />
           {t('DataInfo.spatialRes')}: 4{t('DataInfo.km')} × 4{t('DataInfo.km')}<br />
-          {t('DataInfo.temporalRange')}: 2022-08-22 ~ <br />
+          {t('DataInfo.temporalRange')}: ~ 1 {t('DataInfo.week')}  <br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 22:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
@@ -167,11 +167,11 @@ const InfoList = (props: { dataId: string }) => {
           </i><br />
         </Typography>
       )
-    case 'sea':
+    case 'cwaSea':
       return (
         <Typography sx={{ p: 2 }}>
-          <b>{t(`CWBsites.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwa.gov.tw/index" rel="noreferrer">{t('CWBsites.cwbopendata')}</a><br />
+          <b>{t(`CWAsites.${props.dataId}`)}</b><br />
+          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwa.gov.tw/index" rel="noreferrer">{t('CWAsites.cwaopendata')}</a><br />
           {t('DataInfo.productID')}:<br />
           <span style={{ paddingLeft: '1rem' }}>
             資料:<a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-B0075-001" rel="noreferrer">O-B0075-001</a>
@@ -184,22 +184,22 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.timezone')}: UTC+8
         </Typography>
       )
-    case 'weather':
+    case 'cwaWeather':
       return (
         <Typography sx={{ p: 2 }}>
-          <b>{t(`CWBsites.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwa.gov.tw/index" rel="noreferrer"> {t('CWBsites.cwbopendata')}</a><br />
+          <b>{t(`CWAsites.${props.dataId}`)}</b><br />
+          {t('DataInfo.source')}:<a target="_blank" href="https://opendata.cwa.gov.tw/index" rel="noreferrer"> {t('CWAsites.cwaopendata')}</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-A0001-001" rel="noreferrer">O-A0001-001</a><br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hourly')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.hourly')}<br />
           {t('DataInfo.timezone')}: UTC+8
         </Typography>
       )
-    case 'radar':
+    case 'cwaRadar':
       return (
         <Typography sx={{ p: 2 }}>
-          <b>{t(`CWBsites.${props.dataId}`)}</b><br />
-          {t('DataInfo.source')}: <a target="_blank" href={"https://www.cwa.gov.tw/V8/" + t('CWBsites.sitelang') + "/W/OBS_Radar.html"} rel="noreferrer">{t('CWBsites.cwb')}</a><br />
+          <b>{t(`CWAsites.${props.dataId}`)}</b><br />
+          {t('DataInfo.source')}: <a target="_blank" href={"https://www.cwa.gov.tw/V8/" + t('CWAsites.sitelang') + "/W/OBS_Radar.html"} rel="noreferrer">{t('CWAsites.cwa')}</a><br />
           {t('DataInfo.spatialRes')}: 1 {t('DataInfo.km')}<br />
           {t('DataInfo.temporalRes')}: 10 {t('DataInfo.min')}<br />
           {t('DataInfo.updateFreq')}: ~15 {t('DataInfo.min')}<br />
@@ -212,10 +212,10 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00016" rel="noreferrer">GLOBAL_ANALYSIS_FORECAST_PHY_001_024</a><br />
-          {t('DataInfo.dataset')}:global-analysis-forecast-phy-001-024-3dinst-thetao<br />
+          {t('DataInfo.dataset')}:cmems_mod_glo_phy-thetao_anfc_0.083deg_PT6H-i<br />
           {t('DataInfo.variable')}:sea_water_potential_temperature (thetao)<br />
           {t('DataInfo.spatialRes')}: 0.083° × 0.083°<br />
-          {t('DataInfo.temporalRange')}: 2019-01-01 ~ <br />
+          {t('DataInfo.temporalRange')}: 2020-11-01 ~ <br />
           {t('DataInfo.temporalRes')}: 6{t('DataInfo.hr')} {t('DataInfo.instant')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 12:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
@@ -229,10 +229,10 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00016" rel="noreferrer">GLOBAL_ANALYSIS_FORECAST_PHY_001_024</a><br />
-          {t('DataInfo.dataset')}:global-analysis-forecast-phy-001-024-3dinst-so<br />
+          {t('DataInfo.dataset')}:cmems_mod_glo_phy-so_anfc_0.083deg_PT6H-i<br />
           {t('DataInfo.variable')}:sea_water_salinity (so)<br />
           {t('DataInfo.spatialRes')}: 0.083° × 0.083°<br />
-          {t('DataInfo.temporalRange')}: 2019-01-01 ~ <br />
+          {t('DataInfo.temporalRange')}: 2020-11-01 ~ <br />
           {t('DataInfo.temporalRes')}: 6{t('DataInfo.hr')} {t('DataInfo.instant')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 12:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
@@ -246,11 +246,11 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00016" rel="noreferrer">GLOBAL_ANALYSIS_FORECAST_PHY_001_024</a><br />
-          {t('DataInfo.dataset')}:global-analysis-forecast-phy-001-024<br />
+          {t('DataInfo.dataset')}:cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i<br />
           {t('DataInfo.variable')}:sea_water_velocity<br />
           {t('DataInfo.spatialRes')}: 0.083° × 0.083°<br />
-          {t('DataInfo.temporalRange')}: 2019-01-01 ~ <br />
-          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
+          {t('DataInfo.temporalRange')}: 2020-11-01 ~ <br />
+          {t('DataInfo.temporalRes')}: 6{t('DataInfo.hr')} {t('DataInfo.instant')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 12:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
           {t('APIlayers.allOthers')}<br />
@@ -263,11 +263,11 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00016" rel="noreferrer">GLOBAL_ANALYSIS_FORECAST_PHY_001_024</a><br />
-          {t('DataInfo.dataset')}:global-analysis-forecast-phy-001-024<br />
-          {t('DataInfo.variable')}:sea_water_potential_temperature_at_sea_floor (bottomT)<br />
+          {t('DataInfo.dataset')}:cmems_mod_glo_phy_anfc_0.083deg_P1D-m<br />
+          {t('DataInfo.variable')}:sea_water_potential_temperature_at_sea_floor (tob)<br />
           {t('DataInfo.spatialRes')}: 0.083° × 0.083°<br />
-          {t('DataInfo.temporalRange')}: 2019-01-01 ~ <br />
-          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
+          {t('DataInfo.temporalRange')}: 2020-11-01 ~ <br />
+          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}  {t('DataInfo.mean')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 12:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
           {t('APIlayers.allOthers')}<br />
@@ -280,11 +280,11 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00016" rel="noreferrer">GLOBAL_ANALYSIS_FORECAST_PHY_001_024</a><br />
-          {t('DataInfo.dataset')}:global-analysis-forecast-phy-001-024<br />
-          {t('DataInfo.variable')}:mlotst<br />
+          {t('DataInfo.dataset')}:cmems_mod_glo_phy_anfc_0.083deg_P1D-m<br />
+          {t('DataInfo.variable')}:ocean_mixed_layer_thickness_defined_by_sigma_theta (mlotst)<br />
           {t('DataInfo.spatialRes')}: 0.083° × 0.083°<br />
-          {t('DataInfo.temporalRange')}: 2019-01-01 ~ <br />
-          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}<br />
+          {t('DataInfo.temporalRange')}: 2020-11-01 ~ <br />
+          {t('DataInfo.temporalRes')}: {t('DataInfo.daily')}  {t('DataInfo.mean')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 12:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
           {t('APIlayers.allOthers')}<br />
@@ -297,21 +297,21 @@ const InfoList = (props: { dataId: string }) => {
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://marine.copernicus.eu/" rel="noreferrer">E.U. Copernicus Marine Service Information</a><br />
           {t('DataInfo.productID')}: <a target="_blank" href="https://doi.org/10.48670/moi-00016" rel="noreferrer">GLOBAL_ANALYSIS_FORECAST_PHY_001_024</a><br />
-          {t('DataInfo.dataset')}:global-analysis-forecast-phy-001-024-hourly-t-u-v-ssh<br />
-          {t('DataInfo.variable')}:zos<br />
+          {t('DataInfo.dataset')}:cmems_mod_glo_phy_anfc_0.083deg_PT1H-m<br />
+          {t('DataInfo.variable')}:sea_surface_height_above_geoid (zos)<br />
           {t('DataInfo.spatialRes')}: 0.083° × 0.083°<br />
-          {t('DataInfo.temporalRange')}: 2019-01-01 ~ <br />
-          {t('DataInfo.temporalRes')}: {t('DataInfo.hr')} {t('DataInfo.mean')}<br />
+          {t('DataInfo.temporalRange')}: 2020-11-01 ~ <br />
+          {t('DataInfo.temporalRes')}: 1{t('DataInfo.hr')} {t('DataInfo.mean')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 12:00 (UTC)<br />
           {t('DataInfo.others')}: <br />
           {t('APIlayers.allOthers')}<br />
           {t('APIlayers.dailyOthers')}<br />
         </Typography >
       )
-    case 'cwbcur':
+    case 'cwacur':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
+          <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071</span><br />
           {t('DataInfo.variable')}:橫向流速、直向流速<br />
@@ -320,13 +320,13 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 73 hours<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hr')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 14:00 (+08:00)<br />
-          {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
+          {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwbdir':
+    case 'cwadir':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
+          <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071</span><br />
           {t('DataInfo.variable')}:橫向流速、直向流速<br />
@@ -335,13 +335,13 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 73 hours<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hr')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 14:00 (+08:00)<br />
-          {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
+          {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwbsst':
+    case 'cwasst':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
+          <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海表溫度<br />
@@ -350,13 +350,13 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 73 hours<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hr')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 14:00 (+08:00)<br />
-          {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
+          {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwbpsu':
+    case 'cwapsu':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
+          <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海表鹽度<br />
@@ -365,13 +365,13 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 73 hours<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hr')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 14:00 (+08:00)<br />
-          {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
+          {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwbspd':
+    case 'cwaspd':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
+          <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:流速<br />
@@ -380,13 +380,13 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 73 hours<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hr')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 14:00 (+08:00)<br />
-          {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
+          {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwbsla':
+    case 'cwasla':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          <b>{t(`CwbSeaForecast.${props.dataId}`)}</b><br />
+          <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics?page=1" rel="noreferrer">中央氣象局開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071 海流模式-臺灣海域海流預報數值模式資料</span><br />
           {t('DataInfo.variable')}:海高<br />
@@ -395,7 +395,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.temporalRange')}: 73 hours<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.hr')}<br />
           {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 14:00 19:00 (+08:00)<br />
-          {t('DataInfo.others')}: {t('CwbSeaForecast.others')}<br />
+          {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
     case 'CPlanLayers':
@@ -602,14 +602,16 @@ const InfoList = (props: { dataId: string }) => {
       )
     case 'urlType':
       return (
-        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', wordWrap: "break-word" }}>
           {t('WMSSelector.description.urlType')}
         </Typography >
       )
     case 'draw':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', width: '35vw' }}>
+          {t('draw.title')}<br />
           {t('draw.source')}: <a target="_blank" href="https://doi.org/10.5285/e0f0bb80-ab44-2739-e053-6c86abc0289c" rel="noreferrer">GEBCO Compilation Group (2022) GEBCO_2022 Grid</a><br />
+          {t('draw.resolution')}<br />
           {t('draw.info')}<br />
           {t('draw.polyline')}<br />
           {t('draw.polygon')}<br />
