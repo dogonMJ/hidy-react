@@ -36,7 +36,7 @@ const DataToolTip = (props: { position: coor, content: any }) => {
       <CircleMarker center={props.position} radius={3} pathOptions={pointStyle} />
       <Tooltip >
         <FormatCoordinate coords={props.position} format={latlonFormat} /><br />
-        <span style={{ whiteSpace: 'pre-line' }}>{props.content}</span>
+        <span style={{ whiteSpace: 'pre-line', }}>{props.content}</span>
       </Tooltip>
     </CircleMarker >
   )

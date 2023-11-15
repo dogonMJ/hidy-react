@@ -16,6 +16,7 @@ import { CtdProfile } from 'components/VerticalPlot/CtdProfile';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
 import { CtdParameters, Palette } from 'types';
+import { OpacitySlider } from 'components/OpacitySlider';
 
 const ctdDepths = ctdDepthMeterProps().ctdDepths
 const marks = ctdDepthMeterProps().marks
@@ -314,10 +315,10 @@ export const OdbCTD = () => {
             />
           </Stack>
         </Stack>
-        <Typography variant="subtitle2" gutterBottom>
+        {/* <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.CTD.opacity')}
-        </Typography>
-        <Slider
+        </Typography> */}
+        {/* <Slider
           value={opacity}
           onChange={handleOpacityChange}
           min={0}
@@ -326,7 +327,8 @@ export const OdbCTD = () => {
           defaultValue={100}
           valueLabelDisplay="auto"
           sx={{ width: '85%', marginLeft: 2.1 }}
-        />
+        /> */}
+        <OpacitySlider opacity={opacity} onChange={handleOpacityChange} />
       </Box >
       <GeoJSON
         ref={ref}

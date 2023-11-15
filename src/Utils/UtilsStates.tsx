@@ -14,7 +14,6 @@ export const readUrlQuery = (key: string) => {
 
 export const findModified = (originalObject: any, modifiedObject: any, ons: string[]) => {
   const modifiedElements: any = {};
-  console.log(ons)
   for (const key in modifiedObject) {
     if ((originalObject[key] !== modifiedObject[key] || ons.includes(key)) && key !== 'switches') {
       modifiedElements[key] = {};

@@ -245,7 +245,7 @@ export const OdbMicroplastics = () => {
             sx={{ width: '85%', marginLeft: 2.1 }}
           />
           <Typography variant="subtitle2" gutterBottom>
-            {t('OdbData.plastic.cluster')}
+            {t('clusterLevel')}
           </Typography>
           <Slider
             value={clusterLevel}

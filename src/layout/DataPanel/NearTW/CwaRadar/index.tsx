@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 const imgList = Array.from(Array(13), (e, i) => i + 10)
 const urlList: string[] = []
 imgList.forEach((i) => {
-  // urlList.unshift('https://odbpo.oc.ntu.edu.tw/static/figs/cwbdata/R' + i + '.png')
-  urlList.unshift(`${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbdata/R${i}.png`)
+  urlList.unshift(`${process.env.REACT_APP_PROXY_BASE}/data/figs/cwadata/R${i}.png`)
 })
 
 export const CwaRadar = () => {

@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 
 const optionList = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd']
 const optionList2 = ['close', 'cwacur', 'cwadir']
-const getUrl = (identifier: string, date: string) => `${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbforecast/epsg3857_${identifier}_${date}.png`
+const getUrl = (identifier: string, date: string) => `${process.env.REACT_APP_PROXY_BASE}/data/figs/cwaforecast/epsg3857_${identifier}_${date}.png`
 
 export const CwaSeaForecast = () => {
   const ref = useRef<any>(null)
@@ -65,7 +65,7 @@ export const CwaSeaForecast = () => {
   }, [datetime, identifier, identifier2])
   useEffect(() => {
     if (identifier !== 'close' || identifier2 !== 'close') {
-      fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/cwbforecast/data_${date}.json`)
+      fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/cwaforecast/data_${date}.json`)
         .then((response) => response.json())
         .then((json) => {
           setJsonData(json)

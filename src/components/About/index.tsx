@@ -6,7 +6,7 @@ import { Trans, useTranslation } from "react-i18next"
 
 interface AboutType {
   open: { [key: string]: boolean }
-  setOpen: Dispatch<SetStateAction<{ about: boolean, contact: boolean }>>
+  setOpen: Dispatch<SetStateAction<{ about: boolean, contact: boolean, news: boolean }>>
 }
 const links: { [key: string]: string } = {
   old: 'https://odbgo.oc.ntu.edu.tw/odbargo/',
@@ -46,7 +46,7 @@ export const About = (props: AboutType) => {
     <>
       <Modal
         open={open['about']}
-        onClose={() => setOpen({ about: false, contact: false })}
+        onClose={() => setOpen({ about: false, contact: false, news: false })}
       >
         <Box
           sx={{
@@ -151,7 +151,7 @@ export const About = (props: AboutType) => {
       </Modal >
       <Modal
         open={open['contact']}
-        onClose={() => setOpen({ about: false, contact: false })}
+        onClose={() => setOpen({ about: false, contact: false, news: false })}
       >
         <Box
           sx={{
@@ -165,11 +165,36 @@ export const About = (props: AboutType) => {
           }}
         >
           <Card>
-            <CardHeader title={t('contact.title')} />
+            <CardHeader title={t('contact.title')} sx={{ pb: 0 }} />
             <CardContent>
               <Typography variant='body1'>
                 {t('contact.content')}<br />
                 <Link href={`mailto:r04228026@ntu.edu.tw`}>r04228026@ntu.edu.tw</Link>
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
+      </Modal>
+      <Modal
+        open={open['news']}
+        onClose={() => setOpen({ about: false, contact: false, news: false })}
+      >
+        <Box
+          sx={{
+            position: 'absolute' as 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            borderRadius: 1,
+            p: 4,
+          }}
+        >
+          <Card>
+            <CardHeader title={t('news.title')} sx={{ pb: 0 }} />
+            <CardContent>
+              <Typography variant='body1' sx={{ textIndent: -30, paddingLeft: 4 }}>
+                {t('news.content')}<br />
               </Typography>
             </CardContent>
           </Card>

@@ -35,11 +35,12 @@
   "longitude": "Longitude",
   "remove": "Remove",
   "dataPanel": "Data Layers",
+  "clusterLevel": "Data Cluster Level",
   "CWAsites": {
     "title": "Marine/Meteorological Data Near Taiwan",
     "subheader": "Latest Data",
-    "cwb": "Central Weather Bureau",
-    "cwbopendata": "Central Weather Bureau Open Weather Data",
+    "cwa": "Central Weather Administration",
+    "cwaopendata": "Central Weather Administration Open Weather Data",
     "sitelang": "E",
     "cwaSea": "Current Sea Surface Condition",
     "cwaWeather": "Current Weather Conditions",
@@ -52,17 +53,19 @@
     "waveprd": "Wave Period",
     "winddir": "Wind Direction",
     "windspd": "Wind Speed",
-    "maxwspd": "Max. Wind Speed",
+    "windlvl": "Wind Scale",
+    "maxwspd": "Gust Speed",
+    "maxwlvl": "Gust Scale",
     "currdir": "Current Direction",
     "currspd": "Current Speed",
     "tidehgt": "Tide Height",
     "tidelvl": "Tide Level",
     "Rhumd": "Relative Humidity",
-    "airtemp_H_day": "Highest, Day",
-    "airtemp_L_day": "Lowest, Day",
-    "prec_day": "Accumulated Rainfall, Day",
-    "maxwindspd_hour": "Gust, Hour",
-    "BS": "BS"
+    "airtemp_H_day": "Highest Air Temperature, today",
+    "airtemp_L_day": "Lowest Air Temperature, today",
+    "prec_day": "Accumulated Precipitation, today",
+    "maxwindspd_hour": "Peak Gust, hour",
+    "BS": " bft "
   },
   "APIlayers": {
     "title": "Satellite Image",
@@ -313,7 +316,6 @@
       "description2": "The NCEI Marine Microplastics product provides access to aggregated global data on microplastics in marine settings.",
       "description3": "Project surveys by Ocean Conservation Administration (OCA), Ocean Affairs Council.",
       "OCAfull": "OCA projects (Ch.)",
-      "cluster": "Data Cluster Level",
       "concentration": "Concentration Level",
       "pieces": "pieces",
       "Very Low": "Very Low",
@@ -352,8 +354,8 @@
     "m": "m",
     "km": "km",
     "mean": "mean",
-    "cwbRadar": "CWB Radar",
-    "cwbOpenData": "CWB Open Data",
+    "cwaRadar": "CWA Radar",
+    "cwaOpenData": "CWA Open Data",
     "madtDes": "使用",
     "3yr": "Jan. 1st 3 years ago"
   },
@@ -472,13 +474,16 @@
     }
   },
   "WMSSelector": {
-    "title": "Integrate WMS/WMTS",
+    "title": "Add Layers",
     "disclaimer": "Data formats varies, therfore connection is not guranteed.",
-    "directAddLayers": "Add Layer",
-    "layerSelector": "Search and Add Layer",
+    "directAddLayers": "Add WMS/WMTS Layer",
+    "layerSelector": "Search and add WMS/WMTS Layer",
+    "addImage": "Add Image",
     "addUrlOption": "Add WMS/WMTS Server URL to Options",
     "add": "Add",
     "urlType": "Access method",
+    "enterUrl": "Enter URL",
+    "enterCoords": "Enter Coordinates",
     "serverUrl": "Server URL",
     "selectUrl": "Select Server URL*",
     "serviceType": "Service Type*",
@@ -487,6 +492,7 @@
     "search": "Search Layer",
     "selectLayer": "Select Layer",
     "clearLayer": "Clear Layer",
+    "addLayer": "Add Layer",
     "opacity": "Opacity",
     "nlsc": "NLSC Taiwan Map Service",
     "csrsr1": "NCU CSRSR Taiwan true-color",
@@ -507,7 +513,10 @@
       "layerKeyword": "Please enter the layer keyword.\nA case-insensitive search will be conducted, and a wildcard character '*' can be used anywhere in the string for fuzzy search.\n If you leave the search field blank or use a wildcard character, all layers will be searched.\nFor example, searching for 'sea will find the layer named 'sea', searching for '*sea' will find layers that end with 'sea', searching for 'sea*' will find layers that start with 'sea', and searching for '*sea*' will find layers that contain 'sea'. ",
       "urlType": "The system will automatically determine but may not always be correct. KVP is more prone to errors, it is recommended to use the RESTful format.\nPlease note that WMTS may fail to load tiles when the Z value exceeds the limit.\n*Must support EPSG:3857 projection.\n\nRESTful: Please change TileCol/x, TileRow/y, TileMatrix/Zoom/z (or equivalent) to {x}, {y}, {z}.\nExample: https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/{z}/{y}/{x}.jpg\n\nKVP WMS: Please remove BBOX.\nExample: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256\n\nKVP WMTS: Please modify these 3 parameters TileMatrix={z}&TileCol={x}&TileRow={y})\nExample: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg",
       "directAddLayers": "Enter the layer URL and parameters directly to add the layer.\nPlease refer to the access method instructions to modify the parameters into the correct format.",
-      "layerSelector": "Add layers by searching through the dataset.\nNote that some layers require datetime parameters, please set them using the datetime selector above (local time)."
+      "layerSelector": "Add layers by searching through the dataset.\nNote that some layers require datetime parameters, please set them using the datetime selector above (local time).",
+      "addImage1": "Enter the image URL to add a single image (short URLs not supported), and set the latitude and longitude bounding box .\n\nExample:\nIn the example tab of ",
+      "addImage2": "(CWA Integrated Radar Reflectivity Map) find the URL: ",
+      "addImage3": " and the bounding box coordinates 118-124\u00baE, 20.5-26.5\u00baN. Enter them and click 'ADD LAYER' button."
     }
   },
   "draw": {
@@ -544,6 +553,76 @@
     }
   },
   "alert": {
-    "fetchFail": "Data fetching issue. Please wait or contact tech support."
+    "fetchFail": "Data fetching issue. Please wait or contact tech support.",
+    "noSelect": "Please select parameters",
+    "noDate": "Please select Date",
+    "noData": "No Data",
+    "notInTime": "Not in time range"
+  },
+  "about": {
+    "title": "About Hidy",
+    "site": {
+      "title": "About Hidy",
+      "p1": "This site is an integrated data display platform developed and maintained by the <0>National Science and Technology Commission's (NSTC) Ocean Data Bank (ODB)</0>. Its primary purpose is to showcase ODB's open data and other ocean data required by various sectors, including industry, government, and academia.",
+      "p2": "ODB, established and operated by the <0>Institute of Oceanography, National Taiwan University</0> on behalf of the NSTC, dedicated to the primary mission of aggregating data from various domestic research vessels, including New Ocean Researcher <1>1</1>, <2>2</2>, <3>3</3>, Ocean Researcher 1, 2, 3, Fishery Researcher 1, and Ocean Researcher 5. We analyzes, organizes, and presents the accumulated investigation findings from these vessels over the years, providing data inquiries and applications within the national marine research community.",
+      "p3": "Due to security requirements, this platform only displays processed data and does not provide data requests and downloads. If you have such needs, please refer to the <0>regulations</0> and <1>apply to ODB</1>.",
+      "p4": "Google Chrome is recommended browser with a screen resolution of 1280x720 or higher for the best browsing experience. This site also supports Firefox, Microsoft Edge, Safari, and other browsers, but there may be slightly different from the original design. We do not recommend browsing on mobile devices (phones and tablets) as this site has not been optimized for a mobile experience.",
+      "p5": "If you have any questions or suggestions, please feel free to contact us: "
+    },
+    "acc": {
+      "title": "About Account",
+      "p1": "ODB SSO is the single sign-on system for all ODB services.",
+      "p2": "Registration: Click on the person icon in the upper right corner of this site, then select 'Create new account' at the bottom of the displayed panel, and follow the steps to create an account and verify your email. The personal information you provide is solely for system identification purposes.<br/>**Administrative units, principal investigators (PIs), and others with special permissions granted by NSTC, please <0>contact us</0>.",
+      "p3": "Login: Click on the person icon in the upper right corner of this site, and enter the username and password to log in. If 'Auto login' is not selected, automatic login will occur upon closing the browser. If selected, automatic login will be performed within a certain timeframe.",
+      "p4": "Cookies on this site are used to record account activities. Kindly remember to log out when finished using public devices. If the username and password are correct but logging in is unsuccessful, consider clearing the cookies or reaching out to us."
+    },
+    "link": {
+      "title": "Links",
+      "aboutOdb": "ODB Related",
+      "aboutShip": "Research Vessels Related",
+      "odb": "Ocean Data Bank (ODB), National Science and Technology Council (NSTC)",
+      "odb2": "ODB Official Website",
+      "odbnews": "ODB Newsletter (Ch.)",
+      "odbnews2": "Aperiodic updates on ODB activities",
+      "old2": "Legacy Hidy Viewer",
+      "report": "Cruise Reports (Ch.)",
+      "report2": "Historic cruise report (OR1, 2, 3, and NOR1, 2, 3)",
+      "cplan2": "Cruise Planning Tools",
+      "chemview2": "Marine Chemistry Data Viewer",
+      "mhw2": "Global Marine Heatwave Data",
+      "bioquery2": "Query app for Bio-Ocean Database and integrated OpenAPI for advanced analysis",
+      "copkey2": "Calanoid Copepods Classification Key",
+      "seats2": "Southeast Asian Time-series station",
+      "pco2": "Partial Pressure of Carbon Dioxide (Ch.)",
+      "pco22": "ODB pCO2 data Website",
+      "rose": "Ocean Current Rose Diagram (Ch.)",
+      "rose2": "Aggregated ODB Current Rose Diagram",
+      "ctd": "CTD Data (Ch.)",
+      "ctd2": "Aggregated ODB CTD Data",
+      "adcp": "Ocean Current Data (Ch.)",
+      "adcp2": "Aggregated ODB ADCP Data",
+      "gwr": "Superconducting Gravimeter Data (Ch.)",
+      "gwr2": "Ministry of the Interior's Superconducting Gravimeter Data in ODB",
+      "nor1": "R/V New Ocean Researcher 1 (NOR1) (Ch.)",
+      "nor1inst": "Marine Exploration Instrument Center, NTU (Ch.)",
+      "nor2": "R/V New Ocean Researcher 2 (NOR2)",
+      "nor2inst": "Precious Instrument Center of New Ocean Researcher 2 (Ch.)",
+      "nor3": "R/V New Ocean Researcher 3 (NOR3)",
+      "nor3inst": "NOR3 Marine Instrument Center (Ch.)"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "content": "Whether you have questions, suggestions, or just want to share a photo of your doggo, please don't hesitate to get in touch with us:"
+  },
+  "news": {
+    "title": "News",
+    "content": "2023/11/16 Modify 'Current Sea Surface Condition' and 'Current Weather Condition' format. Add data cluster level slides."
+  },
+  "share": {
+    "title": "Share View",
+    "copy": "Copy",
+    "refresh": "Update",
+    "clear": "Clear browser URL"
   }
 }

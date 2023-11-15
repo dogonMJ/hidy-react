@@ -5,11 +5,12 @@ import InfoButton from "components/InfoButton"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { RenderIf } from "components/RenderIf/RenderIf"
+import { AddImage } from "./AddImage"
 
 interface ItemList {
   [key: string]: JSX.Element
 }
-const optionList = ['directAddLayers', 'layerSelector']
+const optionList = ['directAddLayers', 'layerSelector', 'addImage']
 
 export const WMSSelector = () => {
   const { t } = useTranslation()
@@ -17,7 +18,8 @@ export const WMSSelector = () => {
 
   const itemList: ItemList = {
     directAddLayers: <DirectAddLayers />,
-    layerSelector: <LayerSelector />
+    layerSelector: <LayerSelector />,
+    addImage: <AddImage />
   }
 
   const handleToggle = (value: string) => () => {

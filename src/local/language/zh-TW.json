@@ -35,33 +35,36 @@
   "longitude": "經度",
   "remove": "移除",
   "dataPanel": "資料圖層",
+  "clusterLevel": "資料疊合等級",
   "CWAsites": {
-    "title": "台灣周遭海氣象",
+    "title": "臺灣周遭海氣象",
     "subheader": "最新資料",
-    "cwb": "中央氣象局",
-    "cwbopendata": "中央氣象局開放資料平台",
+    "cwa": "中央氣象署",
+    "cwaopendata": "中央氣象署開放資料平台",
     "sitelang": "C",
     "cwaSea": "即時海況",
     "cwaWeather": "目前天氣",
     "cwaRadar": "雷達回波",
-    "airtemp": "氣溫",
+    "airtemp": "平均氣溫",
     "seatemp": "海溫",
     "airpres": "測站氣壓",
     "wavehgt": "浪高",
     "wavedir": "浪向",
     "waveprd": "波浪週期",
-    "winddir": "風向",
-    "windspd": "風力",
-    "maxwspd": "最大風速",
+    "winddir": "平均風向",
+    "windspd": "平均風速",
+    "windlvl": "平均風級",
+    "maxwspd": "陣風風速",
+    "maxwlvl": "陣風風級",
     "currdir": "流向",
     "currspd": "流速",
     "tidehgt": "潮高",
     "tidelvl": "潮位",
     "Rhumd": "相對溼度",
-    "airtemp_H_day": "日最高溫",
-    "airtemp_L_day": "日最低溫",
-    "prec_day": "日累積雨量",
-    "maxwindspd_hour": "時陣風",
+    "airtemp_H_day": "本日最高溫",
+    "airtemp_L_day": "本日最低溫",
+    "prec_day": "本日累積雨量",
+    "maxwindspd_hour": "小時最大陣風風速",
     "BS": "級"
   },
   "APIlayers": {
@@ -275,7 +278,7 @@
       "macrobenthos": "大型底棲動物",
       "source": "ODB生物海洋資料庫",
       "source2": "詳細資料來源標示於各點",
-      "description1": "生物海洋資料庫彙整台灣周遭海域生物拖網資料。ODB資料集統整包含國科會計畫研究成果、公開發表之期刊或學術論文、研究者提供資料以及國際公開資料庫等資料來源；海保署資料集包含多年度計畫研究成果。",
+      "description1": "生物海洋資料庫彙整臺灣周遭海域生物拖網資料。ODB資料集統整包含國科會計畫研究成果、公開發表之期刊或學術論文、研究者提供資料以及國際公開資料庫等資料來源；海保署資料集包含多年度計畫研究成果。",
       "description2": "滑鼠指向點位可顯示採樣時間、位置及調查主題。\n點選點位會顯示該次採樣所得之物種、階層、資料來源及引用格式。<group>表示未鑑定至細部類群。",
       "description3": "若需申請詳細資料請洽ODB技術員。",
       "others": "進階查詢與分析工具",
@@ -313,7 +316,6 @@
       "description2": "NCEI海洋塑膠微粒平台彙整全球海洋塑膠微粒調查計畫之數據",
       "description3": "海保署委辦計畫數據",
       "OCAfull": "行政院海洋委員會海洋保育署",
-      "cluster": "資料疊合等級",
       "concentration": "濃度等級",
       "pieces": "件",
       "Very Low": "極低",
@@ -352,8 +354,8 @@
     "m": "公尺",
     "km": "公里",
     "mean": "平均",
-    "cwbRadar": "中央氣象局雷達回波",
-    "cwbOpenData": "中央氣象局資料開放平台",
+    "cwaRadar": "中央氣象署雷達回波",
+    "cwaOpenData": "中央氣象署資料開放平台",
     "madtDes": "使用",
     "3yr": "3年前1/1"
   },
@@ -472,13 +474,16 @@
     }
   },
   "WMSSelector": {
-    "title": "介接WMS/WMTS圖層",
+    "title": "加入圖層",
     "disclaimer": "各資料提供者格式略有差異，不保證能夠連接",
-    "directAddLayers": "加入圖層",
-    "layerSelector": "搜尋並加入圖層",
+    "directAddLayers": "加入WMS/WMTS圖層",
+    "layerSelector": "搜尋並加入WMS/WMTS圖層",
+    "addImage": "加入圖片",
     "addUrlOption": "加入WMS/WMTS網址至選項",
     "add": "新增",
     "urlType": "網址格式",
+    "enterUrl": "輸入網址",
+    "enterCoords": "輸入座標",
     "serverUrl": "服務網址",
     "selectUrl": "選擇服務網址*",
     "serviceType": "服務類型*",
@@ -487,6 +492,7 @@
     "search": "搜尋圖層",
     "selectLayer": "選擇圖層",
     "clearLayer": "清除圖層",
+    "addLayer": "加入圖層",
     "opacity": "不透明度",
     "nlsc": "內政部國土測繪中心",
     "csrsr1": "國立中央大學太空及遙測中心全島自然色",
@@ -507,7 +513,10 @@
       "layerKeyword": "輸入圖層關鍵字。\n忽略大小寫之精確搜尋，可於字串任何地方用萬用字元「*」做模糊搜尋。\n空白、萬用字元則搜尋所有圖層。\n範例：\n「sea」搜尋sea圖層；「*sea」搜尋sea結尾圖層；「sea*」搜尋sea開頭圖層；「*sea*」搜尋包含sea的圖層。",
       "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful WMTS。\n請注意WMTS在Z值超過上限時可能無法載入圖磚。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(col)、y(row)、z(matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg\n\nWMS: 請將BBOX移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256",
       "directAddLayers": "直接輸入圖層網址及參數直接加入圖層。\n請參考網址說明修改參數為正確格式。",
-      "layerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。"
+      "layerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。",
+      "addImage1": "輸入圖片網址加入單張圖片(不適用短網址)，須設定圖片範圍經緯度。\n\n範例:\n",
+      "addImage2": "的資料範例中找到圖片網址",
+      "addImage3": "及座標東經118-124度、北緯20.5-26.5度，分別輸入後按下加入圖層按鍵。"
     }
   },
   "draw": {
@@ -544,6 +553,76 @@
     }
   },
   "alert": {
-    "fetchFail": "資料擷取出現問題，請稍候或詢問技術員。"
+    "fetchFail": "資料擷取出現問題，請稍候或詢問技術員。",
+    "noSelect": "請選擇參數",
+    "noDate": "請選擇日期",
+    "noData": "無資料",
+    "notInTime": "不在資料時間範圍內"
+  },
+  "about": {
+    "title": "關於本站",
+    "site": {
+      "title": "關於本站",
+      "p1": "本站為<0>國家科學及技術委員會海洋學門資料庫(Ocean Data Bank, ODB)</0>開發維護之整合資料展示平台，主要展示ODB開放之資料以及其他產、官、學各界所需之海洋資料。",
+      "p2": "ODB由國科會委<0>國立臺灣大學海洋研究所</0>建立及運作，主要任務是彙整國內各研究船(新海研<1>1</1>、<2>2</2>、<3>3</3>號、海研一、二、三號、水試一號以及海研五號)之探測資料，並將歷年的海洋研究成果系統性地分析、整理與展示，提供全國海洋學界查詢及申請。",
+      "p3": "由於資安需求，本平台僅展示處理過之資料，且不提供資料申請及下載。若有需求請查閱<0>相關規定</0>向<1>ODB申請</1>。",
+      "p4": "建議以Google Chrome瀏覽器以1280x720以上螢幕解析度瀏覽。本站亦支援Firefox、Microsoft Edge、Safari等瀏覽器，但可能與原始設計稍有出入。不建議以行動裝置(手機及平板)瀏覽，本站尚未最佳化行動裝置體驗。",
+      "p5": "若有與本站相關之疑問與建議，歡迎來信"
+    },
+    "acc": {
+      "title": "關於帳號",
+      "p1": "ODB單一帳號登入(Single Sign-On)為ODB各項服務之帳號系統。",
+      "p2": "註冊：可點入本站右上方人頭圖像，於顯示之面板下方點選「創建帳號」，並依步驟完成帳號創建及信箱認證。填寫之個資僅作為系統內身分識別使用。<br />**管理單位、計畫主持人及其他有國科會同意之特殊權限者，請<0>來信</0>告知",
+      "p3": "登入：點入本站右上方人頭圖像，輸入帳號密碼登入。若無勾選「自動登入」，瀏覽器關閉即自動登出；若勾選則於一定時間內開啟頁面即自動登入。",
+      "p4": "本站使用Cookie紀錄帳號活動，於公共場合請務必記得登出。若帳號密碼正確卻無法登入，請嘗試清除cookie，或請聯絡我們。"
+    },
+    "link": {
+      "title": "相關連結",
+      "aboutOdb": "ODB相關",
+      "aboutShip": "研究船相關",
+      "odb": "國家科學及技術委員會海洋學門資料庫",
+      "odb2": "ODB官方網站",
+      "odbnews": "ODB電子報",
+      "odbnews2": "不定期發行，介紹ODB活動及近況",
+      "old2": "舊版Hidy Viewer",
+      "report": "探測報告查詢",
+      "report2": "海研一、二、三號、新海研1、2、3號歷年航次探測報告",
+      "cplan2": "航次規劃應用小工具",
+      "chemview2": "海洋化學資料展示",
+      "mhw2": "全球海洋熱浪資料展示",
+      "bioquery2": "生物海洋資料庫查詢圖台與進階分析應用程式介面",
+      "copkey2": "哲水蚤目物種分類檢索",
+      "seats2": "南海時間序列測站",
+      "pco2": "二氧化碳分壓",
+      "pco22": "ODB二氧化碳分壓網站",
+      "rose": "海流玫瑰圖",
+      "rose2": "ODB彙整之海流玫瑰圖",
+      "ctd": "CTD資料",
+      "ctd2": "ODB彙整之CTD資料",
+      "adcp": "海流資料",
+      "adcp2": "ODB彙整之ADCP資料",
+      "gwr": "超導式重力儀",
+      "gwr2": "ODB資料彙整內政部之超導式重力儀資料",
+      "nor1": "新海研1號",
+      "nor1inst": "國立臺灣大學理學院貴重儀器中心海洋探勘組",
+      "nor2": "新海研2號",
+      "nor2inst": "國立臺灣海洋大學新海研2號貴重儀器使用中心",
+      "nor3": "新海研3號",
+      "nor3inst": "國立中山大學新海研3號貴重儀器使用中心"
+    }
+  },
+  "contact": {
+    "title": "聯絡我們",
+    "content": "若您有任何問題與建議，或只是想把您的貓主子肖像放在上方空白處供人景仰，請不吝來信與我們聯絡:"
+  },
+  "news": {
+    "title": "最新消息",
+    "content": "2023/11/16 更新臺灣周遭海氣象中「目前天氣」及「即時海況」格式、新增資料疊合等級滑軌。"
+  },
+  "share": {
+    "title": "分享畫面",
+    "copy": "複製網址",
+    "refresh": "更新網址",
+    "clear": "清除瀏覽器網址"
   }
 }

@@ -1,4 +1,7 @@
 import { useTranslation } from "react-i18next";
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { ReactNode } from "react";
+
 
 interface Station {
   [key: string]: string
@@ -6,7 +9,7 @@ interface Station {
 
 const processUnknown = (data: string | undefined) => {
   try {
-    if (data === 'None' || data === undefined) {
+    if (data === 'None' || data === undefined || data === '-') {
       return <i>ND</i>
     } else {
       return <b>{data}</b>
@@ -17,6 +20,16 @@ const processUnknown = (data: string | undefined) => {
     return ' '
   }
 }
+
+const CustomTableRow = ({ label, value, unit }: { label: ReactNode | string, value: any, unit: string }) => {
+  return (
+    <TableRow>
+      <TableCell sx={{ p: 0.2 }}>{label}</TableCell>
+      <TableCell sx={{ p: 0.5 }}>{value}</TableCell>
+      <TableCell sx={{ p: 0.1 }}>{unit}</TableCell>
+    </TableRow>
+  )
+}
 const PopupTemplate = (props: { weatherData: any, station: Station }) => {
   const weatherData = props.weatherData
   const station = props.station
@@ -26,43 +39,42 @@ const PopupTemplate = (props: { weatherData: any, station: Station }) => {
   const link = "https://www.cwa.gov.tw/V8/C/M/OBS_Marine_plot.html?MID=" + station.StationID
   const { t } = useTranslation()
   return (
-    <table>
-      <caption>
-        <a href={link} target="_blank" rel="noreferrer noopenner" title={station.StationID}>{station.StationName} {station.StationNameEN}</a><br />
-        {datatime.substring(0, 19).replace('T', ' ')} <br />
-        {station.StationLatitude} N, {station.StationLongitude} E
-      </caption>
-      <tbody>
-        <tr>
-          <td>{t('CWBsites.airtemp')}: {processUnknown(weatherElements.Temperature)} &deg;C</td>
-          <td>{t('CWBsites.seatemp')}: {processUnknown(weatherElements.SeaTemperature)} &deg;C</td>
-          <td>{t('CWBsites.airpres')}: {processUnknown(weatherElements.StationPressure)} &#13169;</td>
-        </tr>
-        <tr>
-          <td>{t('CWBsites.wavehgt')}: {processUnknown(weatherElements.WaveHeight)} m</td>
-          <td>{t('CWBsites.wavedir')}: {processUnknown(weatherElements.WaveDirection)}</td>
-          <td>{t('CWBsites.waveprd')}: {processUnknown(weatherElements.WavePeriod)} s</td>
-        </tr>
-        <tr>
-          <td>{t('CWBsites.winddir')}: {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindDirection) : <i>NA</i>}</td>
-          <td>{t('CWBsites.windspd')}: {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindScale) : <i>NA</i>}{t('CWBsites.BS')}
-            {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindSpeed) : <i>NA</i>} m/s
-          </td>
-          <td>{t('CWBsites.maxwspd')}: {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.MaximumWindScale) : <i>NA</i>}{t('CWBsites.BS')}
-            {weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.MaximumWindSpeed) : <i>NA</i>} m/s</td>
-        </tr>
-        <tr>
-          <td>{t('CWBsites.currdir')}: {weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentDirection) : <i>NA</i>}</td>
-          <td>{t('CWBsites.currspd')}: {weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentSpeed) : <i>NA</i>} m/s</td>
-          <td>{t('CWBsites.currspd')}: {weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentSpeedInKnots) : <i>NA</i>} kt</td>
-        </tr>
-        <tr>
-          <td>{t('CWBsites.tidehgt')}: {processUnknown(weatherElements.TideHeight)} m</td>
-          <td>{t('CWBsites.tidelvl')}: {processUnknown(weatherElements.TideLevel)}</td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell colSpan={3} sx={{ textAlign: 'center', padding: 0.5, lineHeight: 1.4 }}>
+            <a href={link} target="_blank" rel="noreferrer noopenner" title={station.StationID}>
+              {station.StationID} {station.StationName} {station.StationNameEN}
+            </a>
+            <br />
+            {datatime.substring(0, 19).replace('T', ' ')} <br />
+            {station.StationLatitude} &deg;N, {station.StationLongitude} &deg;E<br />
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <CustomTableRow label={t('CWAsites.airtemp')} value={processUnknown(weatherElements.Temperature)} unit={'\u00b0C'} />
+        <CustomTableRow label={t('CWAsites.seatemp')} value={processUnknown(weatherElements.SeaTemperature)} unit={'\u00b0C'} />
+        <CustomTableRow label={t('CWAsites.airpres')} value={processUnknown(weatherElements.StationPressure)} unit={'hPa'} />
+        <CustomTableRow label={t('CWAsites.wavehgt')} value={processUnknown(weatherElements.WaveHeight)} unit={'m'} />
+        <CustomTableRow label={t('CWAsites.wavedir')} value={processUnknown(weatherElements.WaveDirection)} unit={'-'} />
+        <CustomTableRow label={t('CWAsites.waveprd')} value={processUnknown(weatherElements.WavePeriod)} unit={'s'} />
+
+        <CustomTableRow label={t('CWAsites.winddir')} value={weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindDirection) : <i>NA</i>} unit={'-'} />
+        <CustomTableRow label={t('CWAsites.windlvl')} value={weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindScale) : <i>NA</i>} unit={t('CWAsites.BS')} />
+        <CustomTableRow label={t('CWAsites.windspd')} value={weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.WindSpeed) : <i>NA</i>} unit={'m/s'} />
+        <CustomTableRow label={t('CWAsites.maxwlvl')} value={weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.MaximumWindScale) : <i>NA</i>} unit={t('CWAsites.BS')} />
+        <CustomTableRow label={t('CWAsites.maxwspd')} value={weatherElements.hasOwnProperty('PrimaryAnemometer') ? processUnknown(weatherElements.PrimaryAnemometer.MaximumWindSpeed) : <i>NA</i>} unit={'m/s'} />
+
+        <CustomTableRow label={t('CWAsites.currdir')} value={weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentDirection) : <i>NA</i>} unit={'-'} />
+        <CustomTableRow label={t('CWAsites.currspd')} value={weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentSpeed) : <i>NA</i>} unit={'m/s'} />
+        <CustomTableRow label={t('CWAsites.currspd')} value={weatherElements.hasOwnProperty('SeaCurrents') ? processUnknown(weatherElements.SeaCurrents.Layer[0].CurrentSpeedInKnots) : <i>NA</i>} unit={'kt'} />
+
+        <CustomTableRow label={t('CWAsites.tidehgt')} value={processUnknown(weatherElements.TideHeight)} unit={'m'} />
+        <CustomTableRow label={t('CWAsites.tidelvl')} value={processUnknown(weatherElements.TideLevel)} unit={'-'} />
+
+      </TableBody>
+    </Table>
   )
 }
 

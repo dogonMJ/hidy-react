@@ -51,4 +51,3 @@ export const ShowCwaForecast = (props: { data: any, bounds: number[][] }) => {
     <DataToolTip position={position} content={content} />
   )
 }
-
