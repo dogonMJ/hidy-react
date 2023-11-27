@@ -111,7 +111,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
           return coord.lng
         }
       })
-      await fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${lngs}&lat=${lats}`)
+      await fetch(`${process.env.REACT_APP_PROXY_BASE}/data/gebco?lon=${lngs}&lat=${lats}`)
         .then(res => res.json())
         .then(json => {
           lon = json.longitude.map((value: number) => Math.round(value * 10000) / 10000)
@@ -130,7 +130,7 @@ export const SeafloorElevation = (props: { coords: coor[], setOpen: React.Dispat
             depth = depth.map((x: number) => x * 3.28)
           }
         })
-      const endPoints = await fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${lngs}&lat=${lats}&mode=point`)
+      const endPoints = await fetch(`${process.env.REACT_APP_PROXY_BASE}/data/gebco?lon=${lngs}&lat=${lats}&mode=point`)
         .then(res => res.json())
         .then(json => {
           const d = [0]

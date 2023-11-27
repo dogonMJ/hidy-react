@@ -15,7 +15,6 @@ import { checkServiceType } from "Utils/UtilsURL";
 import { ServiceType } from "types"
 import { useMap, useMapEvents } from "react-leaflet";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
-import { setOptions } from "leaflet";
 
 export const LayerSelector = () => {
   const { t } = useTranslation()
@@ -78,7 +77,7 @@ export const LayerSelector = () => {
             TileMatrixSet: capability.TileMatrixSet,
             template: capability.template[0],
             format: capability.format[0],
-            style: capability.default ? capability.default : capability.example,
+            style: capability.style ? capability.style.default : '',
             time: datetime
           })
         } else {

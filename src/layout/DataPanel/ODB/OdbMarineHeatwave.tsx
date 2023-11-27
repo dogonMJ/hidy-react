@@ -13,7 +13,7 @@ export const OdbMarineHeatwave = () => {
   const [timespan, setTimespan] = useState([new Date('1985-01-01'), new Date()])
   const datetime = useSelector((state: RootState) => state.map.datetime);
   const month = datetime.slice(0, 7)
-  const url = `https://ecodata.odb.ntu.edu.tw/geoserver/gwc/service/wmts?service=WMTS&version=1.0.0&request=GetTile&layer=marineheatwave:mhw&style=polygon_level&tilerow={y}&tilecol={x}&tilematrix=EPSG:900913:{z}&tilematrixset=EPSG:900913&format=image/png&Time=${month}`
+  const url = `https://service.oc.ntu.edu.tw/data/odbgeowmts/rest/marineheatwave:mhw/polygon_level/WebMercatorQuad/{z}/{y}/{x}?format=image/png&Time=${month}`
   const legned: Legend = {
     'ice': {
       "color": "#c6e0fe",
@@ -42,7 +42,7 @@ export const OdbMarineHeatwave = () => {
   })
 
   useEffect(() => {
-    fetch('https://ecodata.odb.ntu.edu.tw/geoserver/gwc/service/wmts?request=GetCapabilities')
+    fetch('https://service.oc.ntu.edu.tw/data/odbgeowmts/?service=WMTS&version=1.1.1&request=GetCapabilities')
       .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(xml => {
@@ -69,7 +69,11 @@ export const OdbMarineHeatwave = () => {
   return (
     <>
       <AlertSlide open={notInRange} setOpen={setNotInRange} severity='error' timeout={3000} > {t('alert.notInTime')} </AlertSlide>
-      <TileLayer url={url} />
+      <TileLayer
+        id='mhw'
+        url={url}
+        crossOrigin="anonymous"
+      />
       <LegendControl position='bottomleft' legendContent={legnedContents.join('<br>')} legendClassNames={'sedLegend'} />
     </>
   )

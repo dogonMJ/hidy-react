@@ -1,14 +1,20 @@
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { LeafletEventHandlerFnMap } from 'leaflet'
 import { TileLayerCanvas } from "../../../components/TileLayerCanvas"
 import { WMSTileLayer } from "react-leaflet"
+import { useSelector } from "react-redux"
+import { RootState } from "store/store"
+
 export const AddWMS = (props: { params: any, opacity?: number, eventHandlers?: LeafletEventHandlerFnMap }) => {
   const { params, opacity = 100, eventHandlers } = { ...props }
   const ref = useRef<any>()
-  const time = params.time ? params.time : ''
+  const datetime = useSelector((state: RootState) => state.map.datetime).split('.')[0] + 'Z';
+  const time = params.time ? params.time : undefined
+  const defaultUrl = time ? `${params.url}?TIME=${time}` : params.url
+  const [url, setUrl] = useState(defaultUrl) //NASA GIBS不接受%3A在時間內
+
   const parameters = {
     layers: params.layer,
-    time: time,
     crossOrigin: 'anonymous',
     transparent: true,
     format: 'image/png',
@@ -16,17 +22,8 @@ export const AddWMS = (props: { params: any, opacity?: number, eventHandlers?: L
   }
 
   useEffect(() => {
-    params.elevation ?
-      ref.current.setParams({
-        ...parameters,
-        time: time,
-        elevation: params.elevation,
-      }) :
-      ref.current.setParams({
-        ...parameters,
-        time: time,
-      })
-  }, [params, time])
+    time && setUrl(`${params.url}?TIME=${datetime}`)
+  }, [datetime, time])
 
   useEffect(() => {
     ref.current.setOpacity(opacity / 100)
@@ -37,7 +34,7 @@ export const AddWMS = (props: { params: any, opacity?: number, eventHandlers?: L
       ref={ref}
       key={params.layer + time}
       type={params.service}
-      url={params.url}
+      url={url}
       eventHandlers={eventHandlers}
       params={parameters}
     />

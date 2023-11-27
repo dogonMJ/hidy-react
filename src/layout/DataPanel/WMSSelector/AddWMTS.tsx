@@ -7,7 +7,7 @@ export const AddWMTS = (props: { params: any, opacity?: number, eventHandlers?: 
   const { params, opacity = 100, eventHandlers } = { ...props }
   const ref = useRef<any>()
   let template = params.template ? params.template : ''
-  template = template.replace(/{tilematrixSet}/i, params.TileMatrixSet)
+  template = template.replace(/{tilematrixSet}/i, params.TileMatrixSet[0])
   template = template.replace(/{tilematrix}/i, '{z}')
   template = template.replace(/{tilecol}/i, '{x}')
   template = template.replace(/{tilerow}/i, '{y}')

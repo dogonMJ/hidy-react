@@ -1,5 +1,5 @@
 import 'leaflet'
-import { useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { MapContainer, ZoomControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
@@ -43,25 +43,11 @@ const LeafletMap = () => {
     dispatch(mapSlice.actions.userInfo(userInfo))
   }
 
-  checkLogin()
-
+  useEffect(() => {
+    checkLogin()
+  }, [])
   return (
     <>
-      <Flatpickr
-        id={'dateTimePicker'}
-        className='dateTimePicker'
-        data-enable-time
-        // value={datetime}
-        onChange={([datetime]) => dispatch(mapSlice.actions.setDatetime(datetime.toISOString()))}
-        options={{
-          defaultDate: defaultDate,
-          maxDate: timeNow.setDate(timeNow.getDate() + 9),
-          time_24hr: true,
-          allowInput: false,
-          minuteIncrement: 10,
-          weekNumbers: true,
-        }}
-      />
       <MapContainer
         ref={mapRef}
         id='mapContainer'
@@ -78,6 +64,21 @@ const LeafletMap = () => {
         maxBounds={[[90, -239], [-90, 481]]} //121+-360為中心設定邊界減少載入
       // worldCopyJump={true}
       >
+        <Flatpickr
+          id={'dateTimePicker'}
+          className='dateTimePicker'
+          data-enable-time
+          // value={datetime}
+          onChange={([datetime]) => dispatch(mapSlice.actions.setDatetime(datetime.toISOString()))}
+          options={{
+            defaultDate: defaultDate,
+            maxDate: timeNow.setDate(timeNow.getDate() + 9),
+            time_24hr: true,
+            allowInput: false,
+            minuteIncrement: 10,
+            weekNumbers: true,
+          }}
+        />
         <div id={'LengendContainer'} style={{ display: 'flex', flexDirection: 'column-reverse', position: 'absolute', bottom: 25, zIndex: 1000 }}></div>
         <Stack direction="column">
           <SignInControl />

@@ -43,7 +43,6 @@ export const SignInControl = () => {
       setShowBanner(true)
     }
   }
-
   return (
     <>
       <PortalControlButton position="topright" className='leaflet-control' order="unshift">

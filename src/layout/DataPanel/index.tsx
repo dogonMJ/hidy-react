@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect, useRef } from 'react';
+import { useState, Fragment, useEffect, useRef, memo, useCallback } from 'react';
 import 'leaflet'
 import { useSelector } from 'react-redux';
 import { RootState } from "store/store"
@@ -53,7 +53,7 @@ const secLevelAll: ComponentList = {
 }
 const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
 
-const DataPanel = () => {
+const DataPanel = memo(() => {
   const { setDrag } = useMapDragScroll()
   const ref = useRef<any>()
   const { t } = useTranslation()
@@ -76,12 +76,10 @@ const DataPanel = () => {
   const handleContact = () => setOpenAbout({ about: false, contact: !openAbout.contact, news: false })
   const handleNews = () => setOpenAbout({ about: false, contact: false, news: !openAbout.news })
 
-
-
   useEffect(() => {
     // L.DomEvent.disableClickPropagation(ref.current);
     L.DomEvent.disableScrollPropagation(ref.current);
-  })
+  }, [])
   // useEffect(() => {
   //   const queryString = window.location.search
   //   const urlParams = new URLSearchParams(queryString);
@@ -211,6 +209,6 @@ const DataPanel = () => {
       <About open={openAbout} setOpen={setOpenAbout} />
     </div >
   )
-}
+})
 
 export default DataPanel

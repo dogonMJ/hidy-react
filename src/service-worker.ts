@@ -76,7 +76,7 @@ registerRoute(
   ({ url }) => {
     const format = url.searchParams.get('format')
     const isPNG = format ? format.toLowerCase() === 'image/png' : false
-    return url.origin === "https://ecodata.odb.ntu.edu.tw" && isPNG ? true : false
+    return url.href.includes('marineheatwave:mhw') && isPNG ? true : false
   },
   // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({

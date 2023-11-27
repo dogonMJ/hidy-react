@@ -1,6 +1,6 @@
 import { Avatar, Box, Card, CardContent, CardHeader, Divider, Link, Modal, Tab, Tabs, Typography } from "@mui/material"
 import { CustomTabPanel } from "components/CustomTabPanel"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react"
 import ODBlogo from 'assets/images/logo192.png'
 import { Trans, useTranslation } from "react-i18next"
 
@@ -40,8 +40,26 @@ export const About = (props: AboutType) => {
   const { open, setOpen } = props
   const { t } = useTranslation()
   const [tabValue, setTabValue] = useState(0)
+  const [news, setNews] = useState('')
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => setTabValue(newValue)
+
+  useEffect(() => {
+    open.news &&
+      fetch('https://service.oc.ntu.edu.tw/data/getnews/')
+        .then(res => res.json())
+        .then(json => {
+          const text = json
+          const formattedString = text.split('\r\n').map((str: string, index: number) => (
+            <Typography key={index} sx={{ width: 368, whiteSpace: 'pre-wrap' }} variant="body1">
+              {str}
+              {index !== text.length - 1 && <br />}
+            </Typography>
+          ));
+          setNews(formattedString)
+        })
+  }, [open.news])
+
   return (
     <>
       <Modal
@@ -193,9 +211,7 @@ export const About = (props: AboutType) => {
           <Card>
             <CardHeader title={t('news.title')} sx={{ pb: 0 }} />
             <CardContent>
-              <Typography variant='body1' sx={{ textIndent: -30, paddingLeft: 4 }}>
-                {t('news.content')}<br />
-              </Typography>
+              {news}
             </CardContent>
           </Card>
         </Box>
