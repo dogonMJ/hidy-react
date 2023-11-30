@@ -36,6 +36,7 @@
   "remove": "移除",
   "dataPanel": "資料圖層",
   "clusterLevel": "資料疊合等級",
+  "hidyOld": "Hidy舊站",
   "CWAsites": {
     "title": "臺灣周遭海氣象",
     "subheader": "最新資料",
@@ -125,7 +126,7 @@
   "OdbData": {
     "title": "ODB資料",
     "odbTopo": "水深",
-    "odbCurrent": "海流",
+    "odbCur": "海流",
     "odbGravity": "重力",
     "odbSedCore": "沉積物及岩心採樣點位",
     "odbCtd": "鹽溫深儀及附掛探針",

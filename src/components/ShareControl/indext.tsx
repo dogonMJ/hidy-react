@@ -29,8 +29,8 @@ export const ShareControl = memo(() => {
   const getShareUrl = useCallback(() => {
     const states: any = store.getState();
     const switches = states.switches.checked //已開選項
-
     const modified = findModified(defaultStates, states, switches) //和預設不同選項
+
     //單選選項
     const modKeys = Object.keys(modified)
     const singleOptions = switches.filter((x: string) => !modKeys.includes(x))

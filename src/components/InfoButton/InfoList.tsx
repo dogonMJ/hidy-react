@@ -442,7 +442,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/gravity/" rel="noreferrer">{t('OdbData.gravity.source')}</a>
         </Typography >
       )
-    case 'odbCurrent':
+    case 'odbCur':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`OdbData.${props.dataId}`)}</b><br />
@@ -619,8 +619,8 @@ const InfoList = (props: { dataId: string }) => {
     case 'draw':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', width: '35vw' }}>
-          {t('draw.title')}<br />
-          {t('draw.source')}: <a target="_blank" href="https://doi.org/10.5285/e0f0bb80-ab44-2739-e053-6c86abc0289c" rel="noreferrer">GEBCO Compilation Group (2022) GEBCO_2022 Grid</a><br />
+          <b>{t('draw.title')}</b><br />
+          {t('draw.source')}: <a target="_blank" href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b" rel="noreferrer">GEBCO Compilation Group (2023) GEBCO_2023 Grid</a><br />
           {t('draw.resolution')}<br />
           {t('draw.info')}<br />
           {t('draw.polyline')}<br />

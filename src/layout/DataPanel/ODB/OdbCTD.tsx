@@ -17,6 +17,7 @@ import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
 import { CtdParameters, Palette } from 'types';
 import { OpacitySlider } from 'components/OpacitySlider';
+import { PanelSlider } from 'components/PanelSlider';
 
 const ctdDepths = ctdDepthMeterProps().ctdDepths
 const marks = ctdDepthMeterProps().marks
@@ -64,7 +65,6 @@ export const OdbCTD = () => {
   const fixRange = useSelector((state: RootState) => state.odbCtd.fix)
   const minmax = useSelector((state: RootState) => state.odbCtd.range)
   const opacity = useSelector((state: RootState) => state.odbCtd.opacity)
-  const [sliderInterval, setSliderInterval] = useState(interval)
   const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
   const [openVertical, setOpenVertical] = useState(false)
   const [warning, setWarning] = useState(false)
@@ -115,7 +115,6 @@ export const OdbCTD = () => {
 
   const handlePaletteChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPalette(event.target.value as Palette))
   const handleOpacityChange = (event: Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setOpacity(newValue as number))
-  const handleIntervalChange = (event: Event, newValue: number | number[]) => setSliderInterval(newValue as number)
   const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setInterval(newValue as number))
   const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (fixRange) {
@@ -223,17 +222,7 @@ export const OdbCTD = () => {
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.CTD.segment')}
         </Typography>
-        <Slider
-          value={sliderInterval}
-          onChange={handleIntervalChange}
-          onChangeCommitted={handleIntervalChangeCommitted}
-          min={0}
-          max={30}
-          valueLabelDisplay="auto"
-          marks
-          track={false}
-          sx={{ width: '85%', marginLeft: 2.1 }}
-        />
+        <PanelSlider initValue={interval} min={0} max={30} onChangeCommitted={handleIntervalChangeCommitted} track={false} />
         <Stack direction='row' alignItems='center' marginLeft={0}>
           <Select
             name='ODB-CTD-palette'
@@ -315,19 +304,6 @@ export const OdbCTD = () => {
             />
           </Stack>
         </Stack>
-        {/* <Typography variant="subtitle2" gutterBottom>
-          {t('OdbData.CTD.opacity')}
-        </Typography> */}
-        {/* <Slider
-          value={opacity}
-          onChange={handleOpacityChange}
-          min={0}
-          max={100}
-          step={1}
-          defaultValue={100}
-          valueLabelDisplay="auto"
-          sx={{ width: '85%', marginLeft: 2.1 }}
-        /> */}
         <OpacitySlider opacity={opacity} onChange={handleOpacityChange} />
       </Box >
       <GeoJSON

@@ -1,5 +1,5 @@
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Select, OutlinedInput, Box, Chip, MenuItem, Slider, Typography, Stack, Divider, Link } from "@mui/material"
-import { useState, useEffect, useRef, SyntheticEvent } from "react";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Select, OutlinedInput, Box, Chip, MenuItem, Typography, Stack, Divider, Link } from "@mui/material"
+import { useState, useEffect, useRef, SyntheticEvent, useCallback } from "react";
 import { renderToString } from 'react-dom/server';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
@@ -10,12 +10,12 @@ import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import FormatCoordinate from "components/FormatCoordinate";
 import * as geojson from 'geojson';
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-import Flatpickr from "react-flatpickr";
-import 'flatpickr/dist/plugins/monthSelect/style.css'
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
 import { useTranslation } from "react-i18next";
 import { useAlert } from "hooks/useAlert";
+import { PanelSlider } from "components/PanelSlider";
+import { PanelTimePickr } from "components/PanelTimePickr";
 
 declare const L: any;
 
@@ -50,10 +50,7 @@ export const OdbMicroplastics = () => {
   const [date, setDate] = useState<string[]>([])
   const [lat, setLat] = useState<number[]>([10, 40]);
   const [lon, setLon] = useState<number[]>([109, 135]);
-  const [sliderLat, setSliderLat] = useState<number[]>(lat);
-  const [sliderLon, setSliderLon] = useState<number[]>(lon);
   const [clusterLevel, setClusterLevel] = useState<number>(8)
-  const [dateClose, setDateClose] = useState(true)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layers: L.LayerGroup) => {
     const property = feature.properties
@@ -115,7 +112,7 @@ export const OdbMicroplastics = () => {
     setDataset((event.target as HTMLInputElement).value);
   };
 
-  const handleDateChange = (newDate: Date[]) => {
+  const handleDateChange = useCallback((newDate: Date[]) => {
     if (newDate.length === 0) {
       showAlert(t('alert.noDate'))
     } else if (newDate.length === 1) {
@@ -126,32 +123,30 @@ export const OdbMicroplastics = () => {
       const to = dateToApiString(newDate[1])
       setDate([from, to])
     }
-  }
-  const handleLatChange = (event: Event, newValue: number | number[]) => {
-    setSliderLat(newValue as number[]);
-  };
-  const handleLonChange = (event: Event, newValue: number | number[]) => {
-    setSliderLon(newValue as number[]);
-  };
+  }, [])
+
   const handleLatChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     setLat(newValue as number[]);
   };
   const handleLonChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     setLon(newValue as number[]);
   };
-  const handleClusterLevelChange = (event: Event, newValue: number | number[]) => {
+  const handleClusterLevelChange = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     setClusterLevel(newValue as number)
     refCluster.current.options.disableClusteringAtZoom = newValue
     refCluster.current.clearLayers()
     refCluster.current.addLayers(ref.current.getLayers())
   }
-  const handleDateClose = () => setDateClose(true)
-  const handleDateOpen = () => setDateClose(false)
+
+  const handleDateClose = useCallback(() => {
+    if (levels.length === 0) {
+      showAlert(t('alert.noSelect'))
+    }
+  }, [])
+
   useEffect(() => {
     if (date.length < 2) {
       showAlert(t('alert.noDate'))
-    } else if (levels.length === 0) {
-      if (dateClose) { showAlert(t('alert.noSelect')) } //避免alert關閉時re-render讓輸入框跳掉
     } else {
       if (levels.toString()) {
         const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/litter/${dataset}?level=${levels.toString()}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${date[0]}&endDate=${date[1]}`
@@ -200,63 +195,19 @@ export const OdbMicroplastics = () => {
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.chemistryList.dateRange')} 1972-Apr-20~
           </Typography>
-          <div style={{ marginBottom: 10, marginLeft: 15 }}>
-            <Flatpickr
-              className='chemDatePickr'
-              onChange={handleDateChange}
-              onClose={handleDateClose}
-              onOpen={handleDateOpen}
-              options={{
-                allowInput: true,
-                weekNumbers: false,
-                minDate: '1972-04-20',
-                maxDate: new Date(),
-                dateFormat: 'Y-m-d',
-                altFormat: 'Y-m-d',
-                ariaDateFormat: 'Y-m-d',
-                mode: "range",
-              }}
-            />
-          </div>
+          <PanelTimePickr onChange={handleDateChange} onClose={handleDateClose} minDate={'1972-04-20'} />
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.chemistryList.latRange')}&plusmn;90&deg;
           </Typography>
-          <Slider
-            value={sliderLat}
-            onChange={handleLatChange}
-            onChangeCommitted={handleLatChangeCommitted}
-            min={-90}
-            max={90}
-            valueLabelDisplay="auto"
-            marks
-            sx={{ width: '85%', marginLeft: 2.1 }}
-          />
+          <PanelSlider min={-90} max={90} initValue={lat} onChangeCommitted={handleLatChangeCommitted} />
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.chemistryList.lonRange')}&plusmn;180&deg;
           </Typography>
-          <Slider
-            value={sliderLon}
-            onChange={handleLonChange}
-            onChangeCommitted={handleLonChangeCommitted}
-            min={-180}
-            max={180}
-            valueLabelDisplay="auto"
-            marks
-            sx={{ width: '85%', marginLeft: 2.1 }}
-          />
+          <PanelSlider min={-180} max={180} initValue={lon} onChangeCommitted={handleLonChangeCommitted} />
           <Typography variant="subtitle2" gutterBottom>
             {t('clusterLevel')}
           </Typography>
-          <Slider
-            value={clusterLevel}
-            onChange={handleClusterLevelChange}
-            min={0}
-            max={10}
-            valueLabelDisplay="auto"
-            marks
-            track={false}
-            sx={{ width: '85%', marginLeft: 2.1 }}
-          />
+          <PanelSlider min={0} max={10} initValue={clusterLevel} onChangeCommitted={handleClusterLevelChange} track={false} />
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.select')}{t('OdbData.plastic.concentration')} ({t('OdbData.plastic.pieces')}/m<sup>3</sup>){t(`muti`)}
           </Typography>

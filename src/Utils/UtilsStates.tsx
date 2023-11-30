@@ -15,11 +15,13 @@ export const readUrlQuery = (key: string) => {
 export const findModified = (originalObject: any, modifiedObject: any, ons: string[]) => {
   const modifiedElements: any = {};
   for (const key in modifiedObject) {
-    if ((originalObject[key] !== modifiedObject[key] || ons.includes(key)) && key !== 'switches') {
-      modifiedElements[key] = {};
-      for (const k in modifiedObject[key]) {
-        if (originalObject[key][k] !== modifiedObject[key][k] && k !== 'userInfo') {
-          modifiedElements[key][k] = modifiedObject[key][k]
+    if (ons.includes(key)) {
+      if ((originalObject[key] !== modifiedObject[key] || ons.includes(key)) && key !== 'switches') {
+        modifiedElements[key] = {};
+        for (const k in modifiedObject[key]) {
+          if (originalObject[key][k] !== modifiedObject[key][k] && k !== 'userInfo') {
+            modifiedElements[key][k] = modifiedObject[key][k]
+          }
         }
       }
     }

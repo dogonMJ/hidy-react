@@ -5,8 +5,6 @@ const keys = Array.from(urlParams.keys())
 
 interface OnoffStates {
   checked: string[]
-  cwaForecast1: string[]
-
 }
 
 export const onoffsSlice = createSlice({

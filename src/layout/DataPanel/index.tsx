@@ -3,7 +3,7 @@ import 'leaflet'
 import { useSelector } from 'react-redux';
 import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
-import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typography } from '@mui/material';
+import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typography, Link } from '@mui/material';
 import { ChevronLeft, ChevronRight, MenuRounded } from '@mui/icons-material'
 import { DataPanelItem } from 'components/DataPanelItem';
 import { About } from 'components/About';
@@ -201,6 +201,7 @@ const DataPanel = memo(() => {
         </List>
         <Divider />
         <Box sx={{ paddingInlineEnd: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Button variant='text' size='small' href="https://odbgo.oc.ntu.edu.tw/odbargo/" target='_blank' rel="noreferrer noopenner" style={{ color: '#1976D2' }} >{t('hidyOld')}</Button>
           <Button variant='text' size='small' onClick={handleNews} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('news.title')}</Button>
           <Button variant='text' size='small' onClick={handleAbout} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('about.title')}</Button>
           <Button variant='text' size='small' onClick={handleContact} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('contact.title')}</Button>

@@ -36,6 +36,7 @@
   "remove": "Remove",
   "dataPanel": "Data Layers",
   "clusterLevel": "Data Cluster Level",
+  "hidyOld": "Old Hidy Site",
   "CWAsites": {
     "title": "Marine/Meteorological Data Near Taiwan",
     "subheader": "Latest Data",
@@ -125,7 +126,7 @@
   "OdbData": {
     "title": "ODB Data",
     "odbTopo": "Topography",
-    "odbCurrent": "Current",
+    "odbCur": "Current",
     "odbGravity": "Gravity",
     "odbSedCore": "Sediment and Core Sampling Sites",
     "odbCtd": "CTD and other sensors",

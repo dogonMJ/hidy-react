@@ -22,7 +22,7 @@ export const ODB = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const checked = useSelector((state: RootState) => state.switches.checked)
-
+  console.log(checked)
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -38,7 +38,7 @@ export const ODB = () => {
     odbTopo: <OdbTopo opacity={1} />,
     odbCtd: <OdbCTD />,
     odbGravity: <OdbGravity opacity={1} />,
-    odbCurrent: <OdbCurrent />,
+    odbCur: <OdbCurrent />,
     odbSedCore: <OdbSedCore />,
     odbMHW: <OdbMarineHeatwave />,
     odbChem: <OdbChemistry />,

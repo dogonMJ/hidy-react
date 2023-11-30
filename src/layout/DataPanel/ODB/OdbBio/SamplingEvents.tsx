@@ -1,5 +1,5 @@
 import { Select, Box, Chip, MenuItem, Slider, Typography, Autocomplete, TextField, Modal, Link, FormControl, InputLabel } from "@mui/material"
-import { useState, useEffect, useRef, SyntheticEvent } from "react";
+import { useState, useEffect, useRef, SyntheticEvent, useCallback } from "react";
 import { renderToString } from 'react-dom/server';
 import { GeoJSON, useMap } from "react-leaflet"
 import { LatLng } from "leaflet"
@@ -8,8 +8,8 @@ import { RootState } from "store/store"
 import { SelectChangeEvent, Popper, styled, autocompleteClasses } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import * as geojson from 'geojson';
-import Flatpickr from "react-flatpickr";
-import 'flatpickr/dist/plugins/monthSelect/style.css'
+// import Flatpickr from "react-flatpickr";
+// import 'flatpickr/dist/plugins/monthSelect/style.css'
 import { BioDataset, BioFilter, StringObject } from "types";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 //@ts-ignore
@@ -22,6 +22,8 @@ import { dateToBioApiString, category23 } from "Utils/UtilsODB";
 import { LargeFixedSizeListComponent } from "./LargeFixedSizeListComponent";
 import { odbBioSlice } from "store/slice/odbBioSlice";
 import { useAlert } from "hooks/useAlert";
+import { PanelSlider } from "components/PanelSlider";
+import { PanelTimePickr } from "components/PanelTimePickr";
 declare const L: any;
 
 const topicList = {
@@ -60,13 +62,10 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const clusterLevel = useSelector((state: RootState) => state.odbBio.cluster)
   const [taxaList, setTaxaList] = useState<string[]>([''])
   const [data, setData] = useState<any>()
-  const [sliderLat, setSliderLat] = useState<number[]>(lat);
-  const [sliderLon, setSliderLon] = useState<number[]>(lon);
   const [eventID, setEventID] = useState<string>('')
   const [cite, setCite] = useState<StringObject>({ cite: '', source: '' })
   const [openModal, setOpenModal] = useState(false)
   const [inputValue, setInputValue] = useState(taxon)
-  const [dateClose, setDateClose] = useState(true)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: L.Layer) => {
     const property = feature.properties
@@ -131,7 +130,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     value ? dispatch(odbBioSlice.actions.setTaxon(value)) : dispatch(odbBioSlice.actions.setTaxon(''))
   };
 
-  const handleDateChange = (newDate: Date[]) => {
+  const handleDateChange = useCallback((newDate: Date[]) => {
     if (newDate.length === 0) {
       showAlert(t('alert.noDate'))
     } else if (newDate.length === 1) {
@@ -142,20 +141,15 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
       const to = dateToBioApiString(newDate[1])
       dispatch(odbBioSlice.actions.setDateRange([from, to]))
     }
-  }
-  const handleLatChange = (event: Event, newValue: number | number[]) => {
-    setSliderLat(newValue as number[]);
-  };
-  const handleLonChange = (event: Event, newValue: number | number[]) => {
-    setSliderLon(newValue as number[]);
-  };
+  }, [])
+
   const handleLatChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     dispatch(odbBioSlice.actions.setLat(newValue as number[]))
   };
   const handleLonChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     dispatch(odbBioSlice.actions.setLon(newValue as number[]))
   };
-  const handleClusterLevelChange = (event: Event, newValue: number | number[]) => {
+  const handleClusterLevelChange = (event: SyntheticEvent | Event, newValue: number | number[]) => {
     dispatch(odbBioSlice.actions.setCluster(newValue as number))
     refCluster.current.options.disableClusteringAtZoom = newValue
     refCluster.current.clearLayers()
@@ -166,14 +160,15 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     setEventID('')
     setOpenModal(false)
   };
-  const handleDateClose = () => setDateClose(true)
-  const handleDateOpen = () => setDateClose(false)
+  const handleDateClose = useCallback(() => {
+    if (topics.length === 0) {
+      showAlert(t('alert.noSelect'))
+    }
+  }, [])
 
   useEffect(() => {
     if (bioDateRange.length < 2) {
       showAlert(t('alert.noDate'))
-    } else if (topics.length === 0) {
-      if (dateClose) { showAlert(t('alert.noSelect')) }
     } else {
       if (filter === 'topic') {
         const topic = topics.toString() ? topics.toString() : ' '
@@ -181,25 +176,30 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
       } else if (filter === 'taxon') {
         url.current = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/taxa/${dataset}/${taxon}?minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${bioDateRange[0]}&endDate=${bioDateRange[1]}`
       }
-      fetch(url.current)
-        .then(res => res.json())
-        .then(json => {
-          if (json.length === 0) {
-            refCluster.current.clearLayers()
-            ref.current.clearLayers()
-            setData(null)
-            showAlert(t('alert.noData'))
-          } else {
-            setData(json)
-            refCluster.current.clearLayers()
-            ref.current.clearLayers()
-            ref.current.addData(json)
-            refCluster.current.addLayers(ref.current.getLayers())
-          }
-        })
-        .catch(() => {
-          showAlert(t('alert.fetchFail'))
-        })
+      if (topics.length > 0) {
+        fetch(url.current)
+          .then(res => res.json())
+          .then(json => {
+            if (json.length === 0) {
+              refCluster.current.clearLayers()
+              ref.current.clearLayers()
+              setData(null)
+              showAlert(t('alert.noData'))
+            } else {
+              setData(json)
+              refCluster.current.clearLayers()
+              ref.current.clearLayers()
+              ref.current.addData(json)
+              refCluster.current.addLayers(ref.current.getLayers())
+            }
+          })
+          .catch(() => {
+            showAlert(t('alert.fetchFail'))
+          })
+      } else {
+        refCluster.current.clearLayers()
+        ref.current.clearLayers()
+      }
     }
   }, [filter, dataset, topics, taxon, lat, lon, bioDateRange, t])
 
@@ -215,64 +215,19 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.dateRange')} 1965-Jun-29~
         </Typography>
-        <div style={{ marginBottom: 10, marginLeft: 15 }}>
-          <Flatpickr
-            className='chemDatePickr'
-            onChange={handleDateChange}
-            onClose={handleDateClose}
-            onOpen={handleDateOpen}
-            options={{
-              defaultDate: bioDateRange,
-              allowInput: true,
-              weekNumbers: false,
-              minDate: '1965-06-29',
-              maxDate: new Date(),
-              dateFormat: 'Y-m-d',
-              altFormat: 'Y-m-d',
-              ariaDateFormat: 'Y-m-d',
-              mode: "range",
-            }}
-          />
-        </div>
+        <PanelTimePickr onChange={handleDateChange} onClose={handleDateClose} minDate={'1965-06-29'} />
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.latRange')} 10 ~ 40&deg;N
         </Typography>
-        <Slider
-          value={sliderLat}
-          onChange={handleLatChange}
-          onChangeCommitted={handleLatChangeCommitted}
-          min={10}
-          max={40}
-          valueLabelDisplay="auto"
-          marks
-          sx={{ width: '85%', marginLeft: 2.1 }}
-        />
+        <PanelSlider initValue={lat} min={10} max={40} onChangeCommitted={handleLatChangeCommitted} />
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.lonRange')} 109 ~ 135&deg;E
         </Typography>
-        <Slider
-          value={sliderLon}
-          onChange={handleLonChange}
-          onChangeCommitted={handleLonChangeCommitted}
-          min={109}
-          max={135}
-          valueLabelDisplay="auto"
-          marks
-          sx={{ width: '85%', marginLeft: 2.1 }}
-        />
+        <PanelSlider initValue={lon} min={109} max={135} onChangeCommitted={handleLonChangeCommitted} />
         <Typography variant="subtitle2" gutterBottom>
           {t('clusterLevel')}
         </Typography>
-        <Slider
-          value={clusterLevel}
-          onChange={handleClusterLevelChange}
-          min={0}
-          max={15}
-          valueLabelDisplay="auto"
-          marks
-          track={false}
-          sx={{ width: '85%', marginLeft: 2.1 }}
-        />
+        <PanelSlider initValue={clusterLevel} min={0} max={15} onChangeCommitted={handleClusterLevelChange} track={false} />
         <RenderIf isTrue={filter === 'topic'}>
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.select')}{t('OdbData.Bio.topic')}{t(`muti`)}
