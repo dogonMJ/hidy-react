@@ -2,9 +2,8 @@ import { GeoJSON } from 'react-leaflet'
 import { useEffect, useState, useRef, } from 'react'
 import { renderToString } from 'react-dom/server';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
-import { Box, Divider, MenuItem, Select, SelectChangeEvent, Slider, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
+import { Box, Divider, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import * as geojson from 'geojson'
 import 'leaflet'
 import 'leaflet-canvas-markers'
@@ -29,13 +28,13 @@ const marks = adcpDepthMeterProps().marks
 
 export const OdbCurrent = () => {
   const ref = useRef<any>()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const [warning, setWarning] = useState(false)
   const [openVertical, setOpenVertical] = useState(false)
   const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
-  const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['odbCurrent'])
-  const period = useSelector((state: RootState) => state.odbCur.period)
+  const depthMeterValue = useAppSelector(state => state.map.depthMeterValue['odbCurrent'])
+  const period = useAppSelector(state => state.odbCur.period)
 
   const depth = adcpDepths[depthMeterValue]
   const mode = periodTransform[period]

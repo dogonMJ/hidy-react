@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState, SyntheticEvent, ChangeEvent, memo, useMemo, useCallback } from 'react'
+import { useEffect, useState, SyntheticEvent, ChangeEvent, memo, useMemo } from 'react'
 import { renderToString } from 'react-dom/server';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
+import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
 import { odbCtdSlice } from 'store/slice/odbCtdSlice';
 import { GeoJSON } from 'react-leaflet'
-import { Box, Checkbox, Divider, MenuItem, Select, Slider, Stack, TextField, Typography, SelectChangeEvent, Button, FormControlLabel } from '@mui/material';
+import { Box, Checkbox, Divider, MenuItem, Select, Stack, TextField, Typography, SelectChangeEvent, Button, FormControlLabel } from '@mui/material';
 import { FeatureCollection, Point } from 'geojson'
 import * as geojson from 'geojson';
 import { createIntervalList, findInterval, getColorWithInterval, point2polygon, periodTransform, ctdDepthMeterProps, palettes, defaultCtdRange, ctdPar, periods } from 'Utils/UtilsODB';
@@ -15,7 +14,7 @@ import { ColorPalette } from 'components/ColorPalette/ColorPalette';
 import { CtdProfile } from 'components/VerticalPlot/CtdProfile';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-import { CtdParameters, Palette } from 'types';
+import { CtdParameters, Palette, validatePalette } from 'types';
 import { OpacitySlider } from 'components/OpacitySlider';
 import { PanelSlider } from 'components/PanelSlider';
 
@@ -52,22 +51,22 @@ const LegendCTD = memo((props: { palette: string[], interval: number, min: numbe
 const reversePalette = (palette: string[], reverse: boolean) => reverse ? [...palette].reverse() : palette
 
 export const OdbCTD = () => {
-  const ref = useRef<any>()
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const type = useSelector((state: RootState) => state.odbCtd.par)
-  const period = useSelector((state: RootState) => state.odbCtd.period)
-  const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['odbCtd'])
-  const palette = useSelector((state: RootState) => state.odbCtd.palette)
-  const mask = useSelector((state: RootState) => state.odbCtd.mask)
-  const reverse = useSelector((state: RootState) => state.odbCtd.reverse)
-  const interval = useSelector((state: RootState) => state.odbCtd.interval)
-  const fixRange = useSelector((state: RootState) => state.odbCtd.fix)
-  const minmax = useSelector((state: RootState) => state.odbCtd.range)
-  const opacity = useSelector((state: RootState) => state.odbCtd.opacity)
+  const dispatch = useAppDispatch()
+  const type = useAppSelector(state => state.odbCtd.par)
+  const period = useAppSelector(state => state.odbCtd.period)
+  const depthMeterValue = useAppSelector(state => state.map.depthMeterValue['odbCtd'])
+  const palette = useAppSelector(state => state.odbCtd.palette)
+  const mask = useAppSelector(state => state.odbCtd.mask)
+  const reverse = useAppSelector(state => state.odbCtd.reverse)
+  const interval = useAppSelector(state => state.odbCtd.interval)
+  const fixRange = useAppSelector(state => state.odbCtd.fixRange)
+  const minmax = useAppSelector(state => state.odbCtd.range)
+  const opacity = useAppSelector(state => state.odbCtd.opacity)
   const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
   const [openVertical, setOpenVertical] = useState(false)
   const [warning, setWarning] = useState(false)
+  const [data, setData] = useState<any>({ features: {} })
 
   const depth = ctdDepths[depthMeterValue]
   const mode = periodTransform[period]
@@ -165,7 +164,7 @@ export const OdbCTD = () => {
 
   const handleTypeChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setSelection(event.target.value as CtdParameters))
   const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPeriod(event.target.value as string))
-
+  const handleMask = () => dispatch(odbCtdSlice.actions.setMask(!mask))
   useEffect(() => {
     fetch(`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&mode=${mode}&format=geojson&append=temperature,salinity,density,fluorescence,transmission,oxygen,count`)
       .then((response) => response.json())
@@ -178,8 +177,7 @@ export const OdbCTD = () => {
           const polygon = point2polygon(point)
           feature.geometry = polygon
         })
-        ref.current.clearLayers()
-        ref.current.addData(json)
+        setData(json)
       })
       .catch((e) => setWarning(true))
   }, [t, depth, mode])
@@ -231,14 +229,11 @@ export const OdbCTD = () => {
             onChange={handlePaletteChange}
             sx={{ marginLeft: 2.1, marginBottom: 2 }}
           >
-            <MenuItem value='plasma'><ColorPalette palette={reversePalette(palettes['plasma'], reverse)} interval={interval} /></MenuItem>
-            <MenuItem value='viridis'><ColorPalette palette={reversePalette(palettes['viridis'], reverse)} interval={interval} /></MenuItem>
-            <MenuItem value='magma'><ColorPalette palette={reversePalette(palettes['magma'], reverse)} interval={interval} /></MenuItem>
-            <MenuItem value='coolwarm'><ColorPalette palette={reversePalette(palettes['coolwarm'], reverse)} interval={interval} /></MenuItem>
-            <MenuItem value='bwr'><ColorPalette palette={reversePalette(palettes['bwr'], reverse)} interval={interval} /></MenuItem>
-            <MenuItem value='jet'><ColorPalette palette={reversePalette(palettes['jet'], reverse)} interval={interval} /></MenuItem>
-            <MenuItem value='YlGnBu'><ColorPalette palette={reversePalette(palettes['YlGnBu'], reverse)} interval={interval} /></MenuItem>
-            <MenuItem value='YlOrRd'><ColorPalette palette={reversePalette(palettes['YlOrRd'], reverse)} interval={interval} /></MenuItem>
+            {
+              validatePalette.map(color => {
+                return <MenuItem key={color} value={color}><ColorPalette palette={reversePalette(palettes[color], reverse)} interval={interval} /></MenuItem>
+              })
+            }
           </Select>
           <Checkbox id='ODB-CTD-reverse' size="small" sx={{ pr: '2px', pt: '4px' }} checked={reverse} onChange={() => dispatch(odbCtdSlice.actions.setReverse(!reverse))} />
           <Typography variant="caption">
@@ -300,19 +295,18 @@ export const OdbCTD = () => {
             </Stack>
             <FormControlLabel
               label={<Typography variant="caption" >{t('OdbData.CTD.mask')}</Typography>}
-              control={<Checkbox id='ODB-CTD-mask' size="small" sx={{ p: '2px' }} checked={mask} onChange={() => dispatch(odbCtdSlice.actions.setMask(!mask))} />}
+              control={<Checkbox id='ODB-CTD-mask' size="small" sx={{ p: '2px' }} checked={mask} onChange={handleMask} />}
             />
           </Stack>
         </Stack>
         <OpacitySlider opacity={opacity} onChange={handleOpacityChange} />
       </Box >
       <GeoJSON
-        ref={ref}
-        data={{ type: 'Feature' }}
+        key={`${depth}_${data.features.length}`}
+        data={data}
         onEachFeature={onEachFeature}
         style={(feature: any) => {
-          const properties = feature.properties
-          const value = properties[type]
+          const value = feature.properties[type]
           if (value) {
             const i = findInterval(value, createIntervalList(minmax[type].min, minmax[type].max, interval))
             const colorList = reversePalette(palettes[palette], reverse)

@@ -1,9 +1,9 @@
 import { Alert, Slide } from "@mui/material";
 import { createPortal } from "react-dom";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { AlertSlideType } from "types";
 
-export const AlertSlide = (props: AlertSlideType) => {
+export const AlertSlide = memo((props: AlertSlideType) => {
   const { open, setOpen, severity, timeout = 3000, children, icon } = { ...props }
   useEffect(() => {
     if (open && timeout) {
@@ -38,4 +38,4 @@ export const AlertSlide = (props: AlertSlideType) => {
 
     </>
   )
-}
+})

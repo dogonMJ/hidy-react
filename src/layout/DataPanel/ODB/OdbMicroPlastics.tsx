@@ -1,10 +1,10 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Select, OutlinedInput, Box, Chip, MenuItem, Typography, Stack, Divider, Link } from "@mui/material"
-import { useState, useEffect, useRef, SyntheticEvent, useCallback } from "react";
+import { useEffect, useRef, SyntheticEvent, useCallback } from "react";
 import { renderToString } from 'react-dom/server';
-import { useSelector } from "react-redux";
-import { RootState } from "store/store"
+import { odbPlasticSlice } from "store/slice/odbPlasticSlice";
+import { useAppSelector, useAppDispatch } from "hooks/reduxHooks";
 import { GeoJSON } from "react-leaflet"
-import { LatLng } from "leaflet"
+import L, { LatLng } from "leaflet"
 import { SelectChangeEvent } from "@mui/material";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import FormatCoordinate from "components/FormatCoordinate";
@@ -15,12 +15,12 @@ import MarkerCluster from '@changey/react-leaflet-markercluster'
 import { useTranslation } from "react-i18next";
 import { useAlert } from "hooks/useAlert";
 import { PanelSlider } from "components/PanelSlider";
-import { PanelTimePickr } from "components/PanelTimePickr";
+import { PanelTimeRangePickr } from "components/PanelTimePickr";
+import { MPLevels } from "types";
 
-declare const L: any;
 
 interface PlasticConcentration {
-  [key: string]: {
+  [key: MPLevels]: {
     color: string,
     concentration: string
   }
@@ -41,16 +41,17 @@ const levelList: PlasticConcentration = {
 
 export const OdbMicroplastics = () => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()//useDispatch()
   const ref = useRef<any>()
   const refCluster = useRef<any>()
   const { openAlert, alertMessage, setOpenAlert, showAlert } = useAlert()
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
-  const [levels, setLevels] = useState<string[]>([])
-  const [dataset, setDataset] = useState('all')
-  const [date, setDate] = useState<string[]>([])
-  const [lat, setLat] = useState<number[]>([10, 40]);
-  const [lon, setLon] = useState<number[]>([109, 135]);
-  const [clusterLevel, setClusterLevel] = useState<number>(8)
+  const latlonFormat = useAppSelector(state => state.coordInput.latlonformat)
+  const dataset = useAppSelector(state => state.odbMP.dataset)
+  const date = useAppSelector(state => state.odbMP.date)
+  const levels = useAppSelector(state => state.odbMP.levels)
+  const lat = useAppSelector(state => state.odbMP.lat)
+  const lon = useAppSelector(state => state.odbMP.lon)
+  const clusterLevel = useAppSelector(state => state.odbMP.clusterLevel)
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layers: L.LayerGroup) => {
     const property = feature.properties
@@ -105,11 +106,11 @@ export const OdbMicroplastics = () => {
 
   const handleLevelChange = (event: SelectChangeEvent<typeof levels>) => {
     const { target: { value } } = event
-    setLevels(typeof value === 'string' ? value.split(',') : value);
+    dispatch(odbPlasticSlice.actions.setLevels(typeof value === 'string' ? value.split(',') : value))
   }
 
   const handleDatasetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDataset((event.target as HTMLInputElement).value);
+    dispatch(odbPlasticSlice.actions.setDataset((event.target as HTMLInputElement).value))
   };
 
   const handleDateChange = useCallback((newDate: Date[]) => {
@@ -117,22 +118,22 @@ export const OdbMicroplastics = () => {
       showAlert(t('alert.noDate'))
     } else if (newDate.length === 1) {
       const dt = dateToApiString(newDate[0])
-      setDate([dt, dt])
+      dispatch(odbPlasticSlice.actions.setDate([dt, dt]))
     } else {
       const from = dateToApiString(newDate[0])
       const to = dateToApiString(newDate[1])
-      setDate([from, to])
+      dispatch(odbPlasticSlice.actions.setDate([from, to]))
     }
   }, [])
 
   const handleLatChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
-    setLat(newValue as number[]);
+    dispatch(odbPlasticSlice.actions.setLat(newValue as number[]))
   };
   const handleLonChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => {
-    setLon(newValue as number[]);
+    dispatch(odbPlasticSlice.actions.setLon(newValue as number[]))
   };
   const handleClusterLevelChange = (event: SyntheticEvent | Event, newValue: number | number[]) => {
-    setClusterLevel(newValue as number)
+    dispatch(odbPlasticSlice.actions.setClusterLevel(newValue as number))
     refCluster.current.options.disableClusteringAtZoom = newValue
     refCluster.current.clearLayers()
     refCluster.current.addLayers(ref.current.getLayers())
@@ -195,7 +196,7 @@ export const OdbMicroplastics = () => {
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.chemistryList.dateRange')} 1972-Apr-20~
           </Typography>
-          <PanelTimePickr onChange={handleDateChange} onClose={handleDateClose} minDate={'1972-04-20'} />
+          <PanelTimeRangePickr onChange={handleDateChange} onClose={handleDateClose} defaultValues={date} options={{ minDate: '1972-04-20' }} />
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.chemistryList.latRange')}&plusmn;90&deg;
           </Typography>
@@ -218,16 +219,19 @@ export const OdbMicroplastics = () => {
             value={levels}
             onChange={handleLevelChange}
             input={<OutlinedInput label="Levels" />}
-            renderValue={(selected) => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={t(`OdbData.plastic.${value}`)} />
-                ))}
-              </Box>
-            )}
             sx={{
               maxWidth: 344
             }}
+            renderValue={(selected) => {
+              return (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={t(`OdbData.plastic.${value}`)} />
+                  ))}
+                </Box>
+              )
+            }
+            }
           >
             {Object.keys(levelList).map((level) => (
               <MenuItem

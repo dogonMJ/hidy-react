@@ -7,7 +7,7 @@ const query = readUrlQuery('map')
 const d = new Date()
 type Lang = 'zh-TW' | 'en'
 
-export interface inputstate {
+export interface MapStates {
   datetime: string
   userInfo: { [key: string]: any }
   scaleUnit: ScaleUnitType
@@ -24,7 +24,7 @@ export const mapSlice = createSlice({
       'odbCurrent': 49,
       'cmems': 49,
     },
-  } as inputstate,
+  } as MapStates,
   reducers: {
     setDatetime: (state, action: PayloadAction<string>) => {
       state.datetime = action.payload

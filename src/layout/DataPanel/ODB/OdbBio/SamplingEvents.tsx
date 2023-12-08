@@ -1,16 +1,13 @@
-import { Select, Box, Chip, MenuItem, Slider, Typography, Autocomplete, TextField, Modal, Link, FormControl, InputLabel } from "@mui/material"
+import { Select, Box, Chip, MenuItem, Typography, Autocomplete, TextField, Modal, Link, FormControl, InputLabel, SelectChangeEvent, Popper, styled, autocompleteClasses } from "@mui/material"
 import { useState, useEffect, useRef, SyntheticEvent, useCallback } from "react";
 import { renderToString } from 'react-dom/server';
 import { GeoJSON, useMap } from "react-leaflet"
 import { LatLng } from "leaflet"
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/store"
-import { SelectChangeEvent, Popper, styled, autocompleteClasses } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import * as geojson from 'geojson';
-// import Flatpickr from "react-flatpickr";
-// import 'flatpickr/dist/plugins/monthSelect/style.css'
-import { BioDataset, BioFilter, StringObject } from "types";
+import { BioDataset, BioFilter, BioTopics, StringObject } from "types";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
@@ -23,7 +20,7 @@ import { LargeFixedSizeListComponent } from "./LargeFixedSizeListComponent";
 import { odbBioSlice } from "store/slice/odbBioSlice";
 import { useAlert } from "hooks/useAlert";
 import { PanelSlider } from "components/PanelSlider";
-import { PanelTimePickr } from "components/PanelTimePickr";
+import { PanelTimeRangePickr } from "components/PanelTimePickr";
 declare const L: any;
 
 const topicList = {
@@ -32,7 +29,7 @@ const topicList = {
   "larval fish": { color: category23[2] },
   "macrobenthos": { color: category23[3] },
   "zooplankton": { color: category23[4] },
-} as { [key: string]: StringObject }
+} as { [key: BioTopics]: StringObject }
 
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
@@ -215,7 +212,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.dateRange')} 1965-Jun-29~
         </Typography>
-        <PanelTimePickr onChange={handleDateChange} onClose={handleDateClose} minDate={'1965-06-29'} />
+        <PanelTimeRangePickr onChange={handleDateChange} onClose={handleDateClose} defaultValues={bioDateRange} options={{ minDate: '1965-06-29' }} />
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.latRange')} 10 ~ 40&deg;N
         </Typography>

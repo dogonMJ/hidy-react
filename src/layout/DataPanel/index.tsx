@@ -1,9 +1,8 @@
-import { useState, Fragment, useEffect, useRef, memo, useCallback } from 'react';
+import { useState, Fragment, useEffect, useRef, memo } from 'react';
 import 'leaflet'
-import { useSelector } from 'react-redux';
-import { RootState } from "store/store"
+import { useAppSelector } from 'hooks/reduxHooks';
 import { useTranslation } from "react-i18next";
-import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typography, Link } from '@mui/material';
+import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typography } from '@mui/material';
 import { ChevronLeft, ChevronRight, MenuRounded } from '@mui/icons-material'
 import { DataPanelItem } from 'components/DataPanelItem';
 import { About } from 'components/About';
@@ -57,7 +56,7 @@ const DataPanel = memo(() => {
   const { setDrag } = useMapDragScroll()
   const ref = useRef<any>()
   const { t } = useTranslation()
-  const userInfo = useSelector((state: RootState) => state.map.userInfo);
+  const userInfo = useAppSelector(state => state.map.userInfo);
   const [openSwitch, setOpenSwitch] = useState(onOff)
   const [open, setOpen] = useState(true);
   const [openAbout, setOpenAbout] = useState({ about: false, contact: false, news: false })

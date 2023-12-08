@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next";
 import { QRCodeCanvas } from 'qrcode.react';
 
 const defaultStates: any = store.getState()
-
 export const ShareControl = memo(() => {
   const map = useMap()
   const { setDragNScroll } = useMapDragScroll()
@@ -30,7 +29,6 @@ export const ShareControl = memo(() => {
     const states: any = store.getState();
     const switches = states.switches.checked //已開選項
     const modified = findModified(defaultStates, states, switches) //和預設不同選項
-
     //單選選項
     const modKeys = Object.keys(modified)
     const singleOptions = switches.filter((x: string) => !modKeys.includes(x))
@@ -47,14 +45,16 @@ export const ShareControl = memo(() => {
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString);
     urlParams.forEach((value, key) => {
-      if (modified[key]) { //網址原有選項被改變
+      if (modified[key]) {
+        //網址原有選項被改變
         const original = readUrlQuery(key)
         Object.entries(original).forEach(([k, v]) => {
           if (modified[key][k] === undefined) {
             modified[key][k] = v
           }
         })
-      } else { //網址原有選項未改變，直接拉到新網址
+      } else {
+        //網址原有選項未改變，直接拉到新網址
         if (switches.includes(key)) {
           modified[key] = readUrlQuery(key)
         }

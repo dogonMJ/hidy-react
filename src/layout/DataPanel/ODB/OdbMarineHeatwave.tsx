@@ -1,6 +1,5 @@
 import { TileLayer } from "react-leaflet"
-import { useSelector } from "react-redux"
-import { RootState } from "store/store"
+import { useAppSelector } from "hooks/reduxHooks";
 import { LegendControl } from "components/LeafletLegend"
 import { Legend } from 'types';
 import { useTranslation } from "react-i18next";
@@ -11,7 +10,7 @@ export const OdbMarineHeatwave = () => {
   const { t } = useTranslation()
   const [notInRange, setNotInRange] = useState<boolean>(false)
   const [timespan, setTimespan] = useState([new Date('1985-01-01'), new Date()])
-  const datetime = useSelector((state: RootState) => state.map.datetime);
+  const datetime = useAppSelector(state => state.map.datetime);
   const month = datetime.slice(0, 7)
   const url = `https://service.oc.ntu.edu.tw/data/odbgeowmts/rest/marineheatwave:mhw/polygon_level/WebMercatorQuad/{z}/{y}/{x}?format=image/png&Time=${month}`
   const legned: Legend = {

@@ -1,5 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "store/store"
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem, } from '@mui/material';
 import { Divider, Switch } from "@mui/material";
@@ -20,9 +19,8 @@ import { onoffsSlice } from 'store/slice/onoffsSlice';
 
 export const ODB = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const checked = useSelector((state: RootState) => state.switches.checked)
-  console.log(checked)
+  const dispatch = useAppDispatch()
+  const checked = useAppSelector(state => state.switches.checked)
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];

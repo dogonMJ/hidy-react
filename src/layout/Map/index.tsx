@@ -1,6 +1,6 @@
 import 'leaflet'
-import { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
 import { MapContainer, ZoomControl } from 'react-leaflet'
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
@@ -25,18 +25,17 @@ import { ScreenshotControl } from 'components/ScreenshotControl';
 import { Graticule } from 'components/Graticule/index';
 import { ShareControl } from 'components/ShareControl/indext';
 import { mapSlice } from 'store/slice/mapSlice';
-import { RootState } from 'store/store';
 
 declare const L: any;
 
 const LeafletMap = () => {
   const mapRef = useRef<any>()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const defaultOptions = readUrlQuery('map')
   const defaultZoom = defaultOptions && defaultOptions.z ? Number(defaultOptions.z) : 7
   const defaultCenter = defaultOptions && defaultOptions.c ? JSON.parse(defaultOptions.c) : [23.5, 121]
   // const defaultDate = defaultOptions && defaultOptions.d ? new Date(defaultOptions.d) : new Date()
-  const defaultDate = useSelector((state: RootState) => state.map.datetime)
+  const defaultDate = useAppSelector(state => state.map.datetime)
   const timeNow = new Date()
   const checkLogin = async () => {
     const userInfo = await account.getUserInfo()

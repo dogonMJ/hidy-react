@@ -1,4 +1,4 @@
-import { CtdParameters, SliderMarks, StringObject } from 'types'
+import { CtdParameters, CtdPeriods, SliderMarks, StringObject } from 'types'
 import { Point, Polygon } from 'geojson'
 
 export const createIntervalList = (min: number, max: number, length: number) => {
@@ -131,7 +131,7 @@ export const calDir = (u: number, v: number) => {
 
 export const ctdPar = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",]
 export const periods = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
-export const periodTransform: StringObject = {
+export const periodTransform: { [key: CtdPeriods]: string } = {
   'avg': '0',
   'NE': '17',
   'SW': '18',
@@ -158,3 +158,5 @@ export const category23 = [
   0x8c564b, 0xc49c94, 0xe377c2, 0xf7b6d2, 0x7f7f7f, 0xc7c7c7, 0xbcbd22, 0xdbdb8d, 0x17becf, 0x9edae5,
   0xffff33, 0xa65628, 0xf781bf
 ].map(value => '#' + value.toString(16));
+
+export const chemDepthList = [0, 20, 50, 100, 150, 200, 250, 300, 400, 500, 1000, 1500, 2000, 3000, '4000+']
