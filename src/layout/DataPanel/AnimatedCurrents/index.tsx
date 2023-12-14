@@ -1,23 +1,22 @@
 
-import { useState } from 'react';
 import { Pane } from 'react-leaflet'
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
 import AnimatedLayers from "layout/DataPanel/AnimatedCurrents/AnimatedLayers";
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { Divider } from "@mui/material";
+import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
+import { onoffsSlice } from 'store/slice/onoffsSlice';
+import { OptionsAnimation, optionListAnimation as optionList } from 'types';
 // import { mapSlice } from 'store/slice/mapSlice';
 
-const optionList = ["close", "madt", "msla"]
+
+
 const AnimatedCurrents = () => {
-  // const dispatch = useDispatch()
-  const [identifier, setIdentifier] = useState('close')
-  // const identifier = useSelector((state: RootState) => state.map.animateIdent);
-  const datetime = useSelector((state: RootState) => state.map.datetime);
+  const dispatch = useAppDispatch()
+  const identifier = useAppSelector(state => state.switches.aniCur);
+  const datetime = useAppSelector(state => state.map.datetime);
   const handleToggle = (value: string) => () => {
-    // dispatch(mapSlice.actions.animateIdentifier(value))
-    setIdentifier(value)
+    dispatch(onoffsSlice.actions.setAniCur(value as OptionsAnimation))
   };
 
   return (
@@ -27,7 +26,7 @@ const AnimatedCurrents = () => {
         identifier={identifier}
         handleClick={handleToggle}
         group='Animated'
-        optionList={optionList}
+        optionList={optionList as unknown as string[]}
       />
       <Divider variant="middle" />
       <RenderIf isTrue={identifier !== 'close'}>

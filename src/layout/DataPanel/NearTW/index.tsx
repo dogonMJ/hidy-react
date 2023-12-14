@@ -6,19 +6,18 @@ import { CwaSeaForecast } from "./CwaSeaForecast";
 import { CwaWeatherSites } from "./CwaWeatherSites";
 import { CwaRadar } from "./CwaRadar";
 import InfoButton from "components/InfoButton";
-import { RootState } from 'store/store';
-import { useDispatch, useSelector } from 'react-redux';
 import { onoffsSlice } from 'store/slice/onoffsSlice';
 import { RenderIf } from "components/RenderIf/RenderIf";
-import { ComponentList } from "types";
+import { ComponentList, optionListCWA } from "types";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 // import { MoiSubstrate } from "./MoiSubstrate";
 
-const optionList = ['cwaSea', 'cwaWeather', 'cwaRadar']
+const optionList = optionListCWA
 
 export const ToggleCWA = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const checked = useSelector((state: RootState) => state.switches.checked)
+  const dispatch = useAppDispatch()
+  const checked = useAppSelector(state => state.switches.checked)
 
   const componentList: ComponentList = {
     cwaSea: <CwaSeaSites />,

@@ -74,9 +74,9 @@
     "subheader2": "模式預報",
     "close": "關閉",
     "allOthers": "若圖層未出現可能是伺服器速度或來源尚未更新，請查看其他日期或是稍等幾分鐘。",
-    "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
-    "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度距平",
-    "MODIS_Aqua_CorrectedReflectance_TrueColor": "真實色彩",
+    "sst": "海面溫度",
+    "ssta": "海面溫度距平",
+    "TrueColor": "真實色彩",
     "Himawari_AHI_Band3_Red_Visible_1km": "可見紅光",
     "sla": "相對平均海平面海表面高",
     "slaOthers": "相對平均海平面海表面高又稱海平面距平(SLA, i.e. Sea Level Anomalies)，使用20年(1993~2012)平均計算。\nSLA網格資料由多種高度測量整合資料進行最適內插估計。",
@@ -91,7 +91,7 @@
     "bottomT": "海床位溫分析及預報",
     "mlotst": "混合層厚度分析及預報",
     "zos": "相對大地水準面海表面高分析及預報",
-    "3dsea_water_velocity": "海水速度分析及預報"
+    "3dwater_velocity": "海水速度分析及預報"
   },
   "Animated": {
     "title": "流速動畫",
@@ -558,7 +558,8 @@
     "noSelect": "請選擇參數",
     "noDate": "請選擇日期",
     "noData": "無資料",
-    "notInTime": "不在資料時間範圍內"
+    "notInTime": "不在資料時間範圍內",
+    "checkQueryParameter": "參數錯誤，請檢查網址列參數"
   },
   "about": {
     "title": "關於本站",

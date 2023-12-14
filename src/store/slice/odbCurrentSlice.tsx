@@ -14,7 +14,7 @@ export const odbCurrentSlice = createSlice({
     period: initString(query, 'period', 'avg', isCtdPeriod),
   } as OdbCurStates,
   reducers: {
-    setPeriod: (state, action: PayloadAction<string>) => {
+    setPeriod: (state, action: PayloadAction<CtdPeriods>) => {
       state.period = action.payload
     },
   }

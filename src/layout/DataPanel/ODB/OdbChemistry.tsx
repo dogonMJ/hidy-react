@@ -28,7 +28,7 @@ export const OdbChemistry = () => {
   const refCluster = useRef<any>()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { openAlert, alertMessage, setOpenAlert, showAlert } = useAlert()
+  const { openAlert, alertMessage, setOpenAlert, setMessage } = useAlert()
   const latlonFormat = useAppSelector(state => state.coordInput.latlonformat)
   const date = useAppSelector(state => state.odbChem.date)
   const lat = useAppSelector(state => state.odbChem.lat)
@@ -177,15 +177,15 @@ export const OdbChemistry = () => {
 
   const handleDateClose = useCallback(() => {
     if (parameters.length === 0) {
-      showAlert(t('alert.noSelect'))
+      setMessage(t('alert.noSelect'))
     }
   }, [])
 
   useEffect(() => {
     if (date.length === 0) {
-      showAlert(t('alert.noDate'))
+      setMessage(t('alert.noDate'))
     } else if (parameters.length === 1) {
-      showAlert(t('alert.noSelect'))
+      setMessage(t('alert.noSelect'))
       refCluster.current.clearLayers()
       ref.current.clearLayers()
     } else {
@@ -197,7 +197,7 @@ export const OdbChemistry = () => {
           if (json === 'No result') {
             refCluster.current.clearLayers()
             ref.current.clearLayers()
-            showAlert(t('alert.noData'))
+            setMessage(t('alert.noData'))
           } else {
             refCluster.current.clearLayers()
             ref.current.clearLayers()
@@ -206,7 +206,7 @@ export const OdbChemistry = () => {
           }
         })
         .catch(() => {
-          showAlert(t('alert.fetchFail'))
+          setMessage(t('alert.fetchFail'))
         })
     }
   }, [lat, lon, depthIndex, date, parameters, t])

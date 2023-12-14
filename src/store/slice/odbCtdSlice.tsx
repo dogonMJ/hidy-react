@@ -53,7 +53,7 @@ export const odbCtdSlice = createSlice({
     setSelection: (state, action: PayloadAction<CtdParameters>) => {
       state.par = action.payload
     },
-    setPeriod: (state, action: PayloadAction<string>) => {
+    setPeriod: (state, action: PayloadAction<CtdPeriods>) => {
       state.period = action.payload
     },
     setProfileX2Par: (state, action: PayloadAction<CtdParameters | 'close'>) => {

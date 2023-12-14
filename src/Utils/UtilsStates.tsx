@@ -159,3 +159,12 @@ export const initNumber = (queryObject: any, par: string, defaultValue: number, 
 }
 export const initBoolean = (queryObject: any, par: string) =>
   queryObject && queryObject[par] === 'true' ? true : false
+
+
+export const initRadio = (urlParams: URLSearchParams, key: string, typeGuard?: any, defaultValue: string = 'close') => {
+  if (typeGuard) {
+    return typeGuard(urlParams.get(key)) ? urlParams.get(key) : defaultValue
+  } else {
+    return urlParams.get(key) ?? defaultValue
+  }
+}

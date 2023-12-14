@@ -74,9 +74,9 @@
     "subheader2": "Model Forecast",
     "close": "Close",
     "allOthers": "Due to the schedule or the server limitation, the images might update later by the provider. Please select another date or wait for a few minutes.",
-    "GHRSST_L4_MUR_Sea_Surface_Temperature": "Sea Surface Temperature",
-    "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "Sea Surface Temperature Anomalies",
-    "MODIS_Aqua_CorrectedReflectance_TrueColor": "True Color",
+    "sst": "Sea Surface Temperature",
+    "ssta": "Sea Surface Temperature Anomalies",
+    "TrueColor": "True Color",
     "Himawari_AHI_Band3_Red_Visible_1km": "Red Visible",
     "sla": "Sea surface height above sea level (Sea Level Anomalies)",
     "slaOthers": "Altimeter satellite gridded Sea Level Anomalies (SLA, i.e. sea surface height above sea level) computed with respect to a twenty-year (1993, 2012) mean.\nThe gridded SLA is estimated by Optimal Interpolation, merging the measurement from the different altimeter missions available.",
@@ -91,7 +91,7 @@
     "bottomT": "Sea Water Potential Temperature Analysis and Forecast at Sea Floor",
     "mlotst": "Ocean Mixed Layer Thickness Defined by Sigma Theta Analysis and Forecast",
     "zos": "Sea Surface Height Above Geoid Analysis and Forecast",
-    "3dsea_water_velocity": "Sea Water Velocity Analysis and Forecast"
+    "3dwater_velocity": "Sea Water Velocity Analysis and Forecast"
   },
   "Animated": {
     "title": "Animated",
@@ -558,7 +558,8 @@
     "noSelect": "Please select parameters",
     "noDate": "Please select Date",
     "noData": "No Data",
-    "notInTime": "Not in time range"
+    "notInTime": "Not in time range",
+    "checkQueryParameter": "Incorrect parameter, please check URL query string."
   },
   "about": {
     "title": "About Hidy",

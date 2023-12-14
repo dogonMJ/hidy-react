@@ -1,6 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "store/store"
+import { useMemo, useState } from "react";
 import {
   FormControl, Select, MenuItem, SelectChangeEvent, Stack, TextField, InputLabel, Button, FormLabel,
   FormControlLabel, Radio, RadioGroup, Alert, CircularProgress, Box
@@ -13,101 +11,102 @@ import { OpacitySlider } from "components/OpacitySlider";
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { checkServiceType } from "Utils/UtilsURL";
 import { ServiceType } from "types"
-import { useMap, useMapEvents } from "react-leaflet";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
+import { useAlert } from "hooks/useAlert";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { wmsSelectorSlice } from "store/slice/wmsSelectorSlice";
+
+interface Capabilities {
+  capability: any
+  layers: string[]
+  service: any
+}
 
 export const LayerSelector = () => {
   const { t } = useTranslation()
-  const map = useMap()
-  const defaultOptions = [
-    { value: 'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi', label: 'NASA GIBS WMS' },
-    { value: 'https://wmts.nlsc.gov.tw/wmts', label: t('WMSSelector.nlsc') },
-    { value: 'https://data.csrsr.ncu.edu.tw/SP/wmts', label: t('WMSSelector.csrsr1') },
-    { value: 'https://data.csrsr.ncu.edu.tw/SP_TW_FC/wmts', label: t('WMSSelector.csrsr2') },
-    { value: 'https://data.csrsr.ncu.edu.tw/SP_PH/wmts', label: t('WMSSelector.csrsr3') },
-    { value: 'https://data.csrsr.ncu.edu.tw/SP_PH_FC/wmts', label: t('WMSSelector.csrsr4') },
-  ]
-  const datetime = useSelector((state: RootState) => state.map.datetime).split('.')[0] + 'Z';
-  const [selectedURL, setSelectedURL] = useState(defaultOptions[0].value);
-  const [urlOptions, setUrlOptions] = useState(defaultOptions)
+  const dispatch = useAppDispatch()
+
+  const datetime = useAppSelector(state => state.map.datetime).split('.')[0] + 'Z';
+  const queryOptions = useAppSelector(state => state.wmsSelector.urlOptions)
+
+  const urlOptions = useMemo(() => {
+    const defaultOptions = [
+      { value: 'https://wmts.nlsc.gov.tw/wmts', label: t('WMSSelector.nlsc') },
+      { value: 'https://data.csrsr.ncu.edu.tw/SP/wmts', label: t('WMSSelector.csrsr1') },
+      { value: 'https://data.csrsr.ncu.edu.tw/SP_TW_FC/wmts', label: t('WMSSelector.csrsr2') },
+      { value: 'https://data.csrsr.ncu.edu.tw/SP_PH/wmts', label: t('WMSSelector.csrsr3') },
+      { value: 'https://data.csrsr.ncu.edu.tw/SP_PH_FC/wmts', label: t('WMSSelector.csrsr4') },
+      { value: 'https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi', label: 'NASA GIBS WMS' },
+    ]
+    const allOptions = [...queryOptions, ...defaultOptions]
+    return Array.from(new Set(allOptions.map(item => item.value)))
+      .map(value => {
+        const matchingItems = allOptions.filter(item => item.value === value);
+        return matchingItems.length > 1 ? matchingItems[1] : matchingItems[0]; // 用matchingItems[1]語言切換才會成功
+      });
+  }, [t, queryOptions])
+
+  const defaultURL = useAppSelector(state => state.wmsSelector.selectedUrl)
+  const selectedURL = defaultURL === '' ? urlOptions[0].value : defaultURL
+  const serviceType = useAppSelector(state => state.wmsSelector.serviceType)
+
+
   const [urlInput, setUrlInput] = useState('');
   const [layerKeyword, setLayerKeyword] = useState('*');
   const [selectedLayer, setSelectedLayer] = useState('');
   const [layers, setLayers] = useState([''])
-  const [serviceType, setServiceType] = useState<ServiceType>('WMS')
-  const [showAlert, setShowAlert] = useState({ show: false, message: '' })
+  // const [serviceType, setServiceType] = useState<ServiceType>('WMS')
   const [dupOption, setDupOption] = useState(false)
   const [layerProps, setLayerProps] = useState({})
   const [showLayer, setShowLayer] = useState(false)
   const [opacity, setOpacity] = useState(100)
   const [loadingLayers, setLoadingLayers] = useState(false)
-  const [matrixSetLevel, setMatrixSetLevel] = useState(25)
-  const [openZoomAlert, setOpenZoomAlert] = useState(false)
-
-
-
-  useMapEvents({
-    'zoomend': () => {
-      setOpenZoomAlert((map.getZoom() > matrixSetLevel) ? true : false)
-    },
-  })
+  const [capabilities, setCapabilities] = useState<Capabilities>()
+  const [globalController, setGlobalController] = useState<any>()
+  const { openAlert, setOpenAlert, alertMessage, setMessage } = useAlert()
 
   const handleSelectLayer = async (event: SelectChangeEvent) => {
-    setLoadingLayers(true)
-    await setSelectedLayer(event.target.value as string);
-    const query = new URLSearchParams({
-      url: selectedURL,
-      type: serviceType,
-      layer: event.target.value
-    })
-    await fetch('https://api.odb.ntu.edu.tw/ogcquery/capability?' + query)
-      .then(res => res.json())
-      .then(json => {
-        const capability = json.capability[0]
-        if (capability.TileMatrixSet) {
-          const matrixSet = Number(capability.TileMatrixSet.slice(-1))
-          const level = isNaN(matrixSet) ? 25 : matrixSet
-          setMatrixSetLevel(level)
-          setOpenZoomAlert((map.getZoom() > level) ? true : false)
-        }
-        if (serviceType === 'WMTS') {
-          setLayerProps({
-            url: selectedURL,
-            layer: event.target.value,
-            TileMatrixSet: capability.TileMatrixSet,
-            template: capability.template[0],
-            format: capability.format[0],
-            style: capability.style ? capability.style.default : '',
-            time: datetime
-          })
-        } else {
-          setLayerProps({
-            url: selectedURL,
-            layer: event.target.value,
-            service: serviceType,
-            time: datetime
-          })
-        }
-        setShowLayer(true)
-      })
-      .then(() => setLoadingLayers(false))
+    setSelectedLayer(event.target.value as string);
+    if (capabilities) {
+      const capability = capabilities.capability.find((obj: any) => obj.name === event.target.value)
+      if (serviceType === 'WMTS') {
+        setLayerProps({
+          url: selectedURL,
+          layer: event.target.value,
+          TileMatrixSet: capability.TileMatrixSet,
+          template: capability.template[0],
+          format: capability.format[0],
+          style: capability.style ? capability.style.default : '',
+          time: datetime
+        })
+      } else {
+        setLayerProps({
+          url: selectedURL,
+          layer: event.target.value,
+          service: serviceType,
+          time: datetime
+        })
+      }
+      setShowLayer(true)
+    }
+
   };
   const handleOpacity = (event: Event, newValue: number | number[]) => {
     setOpacity(newValue as number);
   };
 
-  // const checkServiceType = (selected: any) => {
-  //   const patternWMTS = new RegExp(/wmts/i)
-  //   patternWMTS.test(selected) ? setServiceType('WMTS') : setServiceType('WMS')
-  // }
-
   const handleSelectUrlOption = (event: any) => {
     const selected = event.target.value
-    setServiceType(checkServiceType(selected))
+    if (globalController) {
+      globalController.abort();
+    }
+    // setServiceType(checkServiceType(selected))
+    dispatch(wmsSelectorSlice.actions.setServiceType(checkServiceType(selected)))
     setLayers([])
     setSelectedLayer('')
     setShowLayer(false)
-    setSelectedURL(selected);
+    // setSelectedURL(selected);
+    dispatch(wmsSelectorSlice.actions.setSelectedUrl(selected))
   };
 
   const handleAddOption = () => {
@@ -115,48 +114,59 @@ export const LayerSelector = () => {
     const duplicate = urlOptions.filter(option => option.value === url).length > 0 ? true : false
     setDupOption(duplicate)
     if (url.length > 0 && !duplicate) {
-      setUrlOptions([{ value: url, label: url }, ...urlOptions])
-      setSelectedURL(url)
-      setServiceType(checkServiceType(url))
+      // setUrlOptions([{ value: url, label: url }, ...urlOptions])
+      dispatch(wmsSelectorSlice.actions.setUrlOptions([{ value: url, label: url }, ...urlOptions]))
+      // setSelectedURL(url)
+      dispatch(wmsSelectorSlice.actions.setSelectedUrl(url))
+      // setServiceType(checkServiceType(url))
+      dispatch(wmsSelectorSlice.actions.setServiceType(checkServiceType(url)))
       setUrlInput('')
-      setLayers([''])
+      setLayers([])
+      handleClearLayer()
     }
   }
   const handleServiceType = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleClearLayer()
     setLayers([])
-    setServiceType(event.target.value as ServiceType)
+    // setServiceType(event.target.value as ServiceType)
+    dispatch(wmsSelectorSlice.actions.setServiceType(event.target.value as ServiceType))
   }
 
   const handleSearch = () => {
+    if (globalController) {
+      globalController.abort()
+      setGlobalController(undefined)
+    }
+    const controller = new AbortController()
+    setGlobalController(controller)
+    const signal = controller.signal;
     const query = new URLSearchParams({
       url: selectedURL,
       type: serviceType,
       layer: layerKeyword
     })
-    setShowAlert({ show: false, message: '' })
     setSelectedLayer('')
     setLayers([])
     setLoadingLayers(true)
 
-    fetch('https://api.odb.ntu.edu.tw/ogcquery/capability?' + query)
+    fetch('https://api.odb.ntu.edu.tw/ogcquery/capability?' + query, { signal })
       .then(res => res.json())
       .then(json => {
         if (json.statusCode) {
-          setShowAlert({ show: true, message: t('WMSSelector.alert.inputError') })
+          setMessage(t('WMSSelector.alert.inputError'))
         } else {
           if (json.layers && json.layers <= 0) {
-            setShowAlert({ show: true, message: t('WMSSelector.alert.noLayer') })
+            setMessage(t('WMSSelector.alert.noLayer'))
           } else {
+            setCapabilities(json)
             setLayers(json.layers)
-            setShowAlert({ show: false, message: t('WMSSelector.alert.error') })
           }
         }
       })
       .then(() => setLoadingLayers(false))
       .catch(e => {
         setLoadingLayers(false)
-        setShowAlert({ show: true, message: 'Please check options or contact ODB' })
+        setMessage(t('WMSSelector.alert.error'))
       })
   }
 
@@ -164,22 +174,19 @@ export const LayerSelector = () => {
     setShowLayer(false)
     setSelectedLayer('')
     setLoadingLayers(false)
-    setMatrixSetLevel(25)
-    setOpenZoomAlert(false)
   }
 
   const eventHandlers = {
-    // tileerror: (e: any) => console.log('ppppp', e),
-    // error: () => console.log('error'),
     load: () => setLoadingLayers(false),
-    loading: () => setLoadingLayers(true)
+    loading: () => setLoadingLayers(true),
   }
 
-  useEffect(() => {
-    const defaultUrls = defaultOptions.map(option => option.value)
-    const newAdded = urlOptions.filter(option => !defaultUrls.includes(option.value))
-    setUrlOptions([...newAdded, ...defaultOptions])
-  }, [t])
+  // useEffect(() => {
+  //   const defaultUrls = defaultOptions.map(option => option.value)
+  //   const newAdded = urlOptions.filter(option => !defaultUrls.includes(option.value))
+  //   setUrlOptions([...newAdded, ...defaultOptions])
+  // }, [t])
+
   return (
     <>
       <Stack>
@@ -254,10 +261,8 @@ export const LayerSelector = () => {
         />
 
         <br />
-        <RenderIf isTrue={showAlert.show}>
-          <Alert severity="error">{showAlert.message}</Alert>
-        </RenderIf>
-        <Button variant="contained" onClick={handleSearch}>{t('WMSSelector.search')}</Button>
+
+        <Button variant="contained" onClick={handleSearch} disabled={loadingLayers}>{t('WMSSelector.search')}</Button>
 
         <br />
         <RenderIf isTrue={loadingLayers}>
@@ -267,21 +272,22 @@ export const LayerSelector = () => {
         </RenderIf>
         {(layers && layers.length >= 1 && layers[0] !== '') &&
           <>
-            <InputLabel sx={{ marginBottom: 1 }}>{t('WMSSelector.selectLayer')}</InputLabel>
-            <Select
-              value={selectedLayer}
-              label="Layers"
-              onChange={handleSelectLayer}
-              size="small"
-              sx={{ maxWidth: 344 }}
-            >
-              {layers.map((layer) =>
-                <MenuItem key={layer} value={layer}>
-                  {layer}
-                </MenuItem>
-              )}
-            </Select>
-
+            <FormControl size="small" sx={{ marginTop: 1 }}>
+              <InputLabel id='layers-label'>{t('WMSSelector.selectLayer')}</InputLabel>
+              <Select
+                labelId="layers-label"
+                label={t('WMSSelector.selectLayer')}
+                value={selectedLayer}
+                onChange={handleSelectLayer}
+                sx={{ maxWidth: 344 }}
+              >
+                {layers.map((layer) =>
+                  <MenuItem key={layer} value={layer}>
+                    {layer}
+                  </MenuItem>
+                )}
+              </Select>
+            </FormControl>
             <br />
 
             <OpacitySlider opacity={opacity} onChange={handleOpacity} />
@@ -290,11 +296,10 @@ export const LayerSelector = () => {
             {showLayer && <Button variant="contained" color={'error'} onClick={handleClearLayer}>{t('WMSSelector.clearLayer')}</Button>}
           </>
         }
-
         {(showLayer && serviceType === 'WMS') && <AddWMS params={layerProps} opacity={opacity} eventHandlers={eventHandlers} />}
         {(showLayer && serviceType === 'WMTS') && <AddWMTS params={layerProps} opacity={opacity} eventHandlers={eventHandlers} />}
       </Stack>
-      <AlertSlide open={openZoomAlert} setOpen={setOpenZoomAlert} severity='warning' > {t('WMSSelector.alert.zoomLevel')} </AlertSlide>
+      <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {alertMessage} </AlertSlide>
     </>
   )
 }

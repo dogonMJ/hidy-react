@@ -17,7 +17,7 @@ import { AdcpProfile } from 'components/VerticalPlot/AdcpProfile';
 import { LineProfile } from 'components/VerticalPlot/LineProfile';
 import { Stack } from '@mui/system';
 import { odbCurrentSlice } from 'store/slice/odbCurrentSlice';
-import { periods } from 'Utils/UtilsODB';
+import { CtdPeriods, validatePeriods as periods } from 'types';
 
 declare const L: any;
 const adcpDepths = adcpDepthMeterProps().adcpDepths
@@ -83,7 +83,7 @@ export const OdbCurrent = () => {
     return marker
   }
 
-  const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCurrentSlice.actions.setPeriod(event.target.value as string))
+  const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCurrentSlice.actions.setPeriod(event.target.value as CtdPeriods))
 
   useEffect(() => {
     const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&format=geojson&mode=${mode}&append=u,v,count&mean_threshold=10`

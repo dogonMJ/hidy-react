@@ -1,6 +1,4 @@
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { RootState } from "store/store"
 import ProcWMS from './ProcWMS'
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { LegendControl } from 'components/LeafletLegend'
@@ -8,15 +6,15 @@ import { RenderIf } from "components/RenderIf/RenderIf";
 import { Divider, ListSubheader } from "@mui/material";
 import SeaTempAno from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature_Anomalies.png'
 import SeaTemp from 'assets/images/colorbar_GHRSST_Sea_Surface_Temperature.png'
-import { useState } from "react";
-const optionList = ["close", "GHRSST_L4_MUR_Sea_Surface_Temperature", "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies", "MODIS_Aqua_CorrectedReflectance_TrueColor",
-  "sla", "adt", "CHL",]
-const optionForecast = ["3dinst_thetao", "3dinst_so", "3dsea_water_velocity", "mlotst", "zos", "bottomT",]
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { onoffsSlice } from "store/slice/onoffsSlice";
+import { optionList, optionForecast, OptionsWmsLayer, OptionsWmsLayerForecast } from "types";
+
 const getLegendUrl = (layerIdentifier: string) => {
   switch (layerIdentifier) {
-    case "GHRSST_L4_MUR_Sea_Surface_Temperature":
+    case "sst":
       return SeaTemp
-    case "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies":
+    case "ssta":
       return SeaTempAno
     default:
       return
@@ -24,10 +22,13 @@ const getLegendUrl = (layerIdentifier: string) => {
 }
 const APILayers = () => {
   const { t } = useTranslation()
-  const [identifier, setIdentifier] = useState("close")
-  const datetime = useSelector((state: RootState) => state.map.datetime);
+  const dispatch = useAppDispatch()
+  // const [identifier, setIdentifier] = useState("close")
+  const identifier = useAppSelector(state => state.switches.wmsLayer)
+  const datetime = useAppSelector(state => state.map.datetime);
   const handleToggle = (value: string) => () => {
-    setIdentifier(value)
+    // setIdentifier(value)
+    dispatch(onoffsSlice.actions.setWmsLayer(value as OptionsWmsLayer | OptionsWmsLayerForecast))
   };
   const legendUrl = getLegendUrl(identifier)
   const legendContent = `<img src=${legendUrl} alt="legend" style="width:320px;margin:-5px"/>`
@@ -41,7 +42,7 @@ const APILayers = () => {
         identifier={identifier}
         handleClick={handleToggle}
         group='APIlayers'
-        optionList={optionList}
+        optionList={optionList as unknown as string[]}
       />
       <Divider variant="middle" />
       <ListSubheader component="div" id="nested-list-subheader" sx={{ lineHeight: '25px', marginTop: '10px' }}>
@@ -51,7 +52,7 @@ const APILayers = () => {
         identifier={identifier}
         handleClick={handleToggle}
         group='APIlayers'
-        optionList={optionForecast}
+        optionList={optionForecast as unknown as string[]}
       />
       <Divider variant="middle" />
       <RenderIf isTrue={identifier !== "close"}>

@@ -3,11 +3,10 @@ import { useState, useEffect, useRef, SyntheticEvent, useCallback } from "react"
 import { renderToString } from 'react-dom/server';
 import { GeoJSON, useMap } from "react-leaflet"
 import { LatLng } from "leaflet"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
+import { useAppSelector, useAppDispatch } from "hooks/reduxHooks";
 import * as geojson from 'geojson';
-import { BioDataset, BioFilter, BioTopics, StringObject } from "types";
+import { BioDataset, BioFilter, BioTopics, StringObject, isBioTopics } from "types";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
@@ -21,6 +20,7 @@ import { odbBioSlice } from "store/slice/odbBioSlice";
 import { useAlert } from "hooks/useAlert";
 import { PanelSlider } from "components/PanelSlider";
 import { PanelTimeRangePickr } from "components/PanelTimePickr";
+
 declare const L: any;
 
 const topicList = {
@@ -29,7 +29,7 @@ const topicList = {
   "larval fish": { color: category23[2] },
   "macrobenthos": { color: category23[3] },
   "zooplankton": { color: category23[4] },
-} as { [key: BioTopics]: StringObject }
+} as { [key in BioTopics]: StringObject }
 
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
@@ -44,19 +44,19 @@ const StyledPopper = styled(Popper)({
 export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }) => {
   const { dataset, filter } = props
   const { t, i18n } = useTranslation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const ref = useRef<any>()
   const refCluster = useRef<any>()
   const url = useRef('')
   const map = useMap()
-  const { openAlert, setOpenAlert, alertMessage, showAlert } = useAlert()
-  const bioDateRange = useSelector((state: RootState) => state.odbBio.dateRange)
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
-  const lat = useSelector((state: RootState) => state.odbBio.latRange)
-  const lon = useSelector((state: RootState) => state.odbBio.lonRange)
-  const topics = useSelector((state: RootState) => state.odbBio.topics)
-  const taxon = useSelector((state: RootState) => state.odbBio.taxon)
-  const clusterLevel = useSelector((state: RootState) => state.odbBio.cluster)
+  const { openAlert, setOpenAlert, alertMessage, setMessage } = useAlert()
+  const bioDateRange = useAppSelector(state => state.odbBio.dateRange)
+  const latlonFormat = useAppSelector(state => state.coordInput.latlonformat)
+  const lat = useAppSelector(state => state.odbBio.latRange)
+  const lon = useAppSelector(state => state.odbBio.lonRange)
+  const topics = useAppSelector(state => state.odbBio.topics)
+  const taxon = useAppSelector(state => state.odbBio.taxon)
+  const clusterLevel = useAppSelector(state => state.odbBio.cluster)
   const [taxaList, setTaxaList] = useState<string[]>([''])
   const [data, setData] = useState<any>()
   const [eventID, setEventID] = useState<string>('')
@@ -112,7 +112,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   }
 
   const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlng: LatLng) => {
-    const topic = feature.properties.dataTopic
+    const topic: BioTopics = feature.properties.dataTopic
     return new L.CircleMarker(latlng, { radius: 4, color: topicList[topic].color })
   }
 
@@ -129,7 +129,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
 
   const handleDateChange = useCallback((newDate: Date[]) => {
     if (newDate.length === 0) {
-      showAlert(t('alert.noDate'))
+      setMessage(t('alert.noDate'))
     } else if (newDate.length === 1) {
       const dt = dateToBioApiString(newDate[0])
       dispatch(odbBioSlice.actions.setDateRange([dt, dt]))
@@ -159,13 +159,13 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   };
   const handleDateClose = useCallback(() => {
     if (topics.length === 0) {
-      showAlert(t('alert.noSelect'))
+      setMessage(t('alert.noSelect'))
     }
   }, [])
 
   useEffect(() => {
     if (bioDateRange.length < 2) {
-      showAlert(t('alert.noDate'))
+      setMessage(t('alert.noDate'))
     } else {
       if (filter === 'topic') {
         const topic = topics.toString() ? topics.toString() : ' '
@@ -181,7 +181,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
               refCluster.current.clearLayers()
               ref.current.clearLayers()
               setData(null)
-              showAlert(t('alert.noData'))
+              setMessage(t('alert.noData'))
             } else {
               setData(json)
               refCluster.current.clearLayers()
@@ -191,7 +191,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
             }
           })
           .catch(() => {
-            showAlert(t('alert.fetchFail'))
+            setMessage(t('alert.fetchFail'))
           })
       } else {
         refCluster.current.clearLayers()
@@ -250,15 +250,21 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
                 maxWidth: 344
               }}
             >
-              {Object.keys(topicList).map((topic) => (
-                <MenuItem
-                  key={topic}
-                  value={topic}
-                >
-                  <Typography sx={{ backgroundColor: topicList[topic].color, color: topicList[topic].color }}>&nbsp;&nbsp;</Typography>&nbsp;&nbsp;
-                  {t(`OdbData.Bio.${topic}`)}
-                </MenuItem>
-              ))}
+              {Object.keys(topicList).map((topic) => {
+                if (isBioTopics(topic)) {
+                  return (
+                    <MenuItem
+                      key={topic}
+                      value={topic}
+                    >
+                      <Typography sx={{ backgroundColor: topicList[topic].color, color: topicList[topic].color }}>&nbsp;&nbsp;</Typography>&nbsp;&nbsp;
+                      {t(`OdbData.Bio.${topic}`)}
+                    </MenuItem>
+                  )
+                } else {
+                  return null
+                }
+              })}
             </Select>
           </FormControl>
         </RenderIf>

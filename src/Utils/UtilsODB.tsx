@@ -1,4 +1,4 @@
-import { CtdParameters, CtdPeriods, SliderMarks, StringObject } from 'types'
+import { CtdParameters, CtdPeriods, Palette, SliderMarks } from 'types'
 import { Point, Polygon } from 'geojson'
 
 export const createIntervalList = (min: number, max: number, length: number) => {
@@ -103,7 +103,7 @@ export const adcpDepthMeterProps = () => {
   return { adcpDepths, marks }
 }
 
-export const palettes: { [key: string]: string[] } = {
+export const palettes: { [key in Palette]: string[] } = {
   plasma: ["#0d0887", "#220690", "#330597", "#41049d", "#5002a2", "#5c01a6", "#6a00a8", "#7701a8", "#8405a7", "#8f0da4", "#9c179e", "#a62098", "#b12a90", "#ba3388", "#c33d80", "#cc4778", "#d35171", "#da5b69", "#e16462", "#e76f5a", "#ed7953", "#f2844b", "#f68f44", "#fa9b3d", "#fca636", "#fdb42f", "#fec029", "#fcce25", "#f9dc24", "#f5eb27", "#f0f921"],
   coolwarm: ["#3b4cc0", "#455bcd", "#4f69d9", "#5978e3", "#6485ec", "#7092f3", "#7b9ff9", "#87aafc", "#93b5fe", "#9fbeff", "#aac7fd", "#b5cefa", "#c0d4f5", "#cad8ee", "#d4dbe6", "#dddddd", "#e5d8d1", "#ecd2c4", "#f2cbb7", "#f5c2aa", "#f7b89c", "#f7ad8f", "#f5a081", "#f29374", "#ee8468", "#e7755b", "#e0654f", "#d75344", "#cc403a", "#c12a30", "#b40426"],
   bwr: ['#0000ff', '#1111ff', '#2222ff', '#3333ff', '#4444ff', '#5555ff', '#6666ff', '#7777ff', '#8888ff', '#9999ff', '#aaaaff', '#bbbbff', '#ccccff', '#ddddff', '#eeeeff', '#ffffff', '#ffeeee', '#ffdddd', '#ffcccc', '#ffbbbb', '#ffaaaa', '#ff9999', '#ff8888', '#ff7777', '#ff6666', '#ff5555', '#ff4444', '#ff3333', '#ff2222', '#ff1111', '#ff0000'],
@@ -114,7 +114,7 @@ export const palettes: { [key: string]: string[] } = {
   YlGnBu: ['#ffffd9', '#fafdce', '#f5fbc4', '#f1f9b9', '#eaf7b1', '#e0f3b2', '#d6efb3', '#ccebb4', '#bde5b5', '#aadeb7', '#97d6b9', '#84cfbb', '#73c8bd', '#62c2bf', '#52bcc2', '#41b6c4', '#37acc3', '#2ea2c2', '#2498c1', '#1d8ebe', '#1f80b8', '#2072b2', '#2165ab', '#2258a5', '#234da0', '#24429b', '#253795', '#1f2f88', '#172978', '#102368', '#081d58'],
 }
 
-export const defaultCtdRange: { [key: string]: { min: number, max: number } } = {
+export const defaultCtdRange: { [key in CtdParameters]: { min: number, max: number } } = {
   temperature: { min: 0, max: 30 },
   salinity: { min: 34, max: 35 },
   density: { min: 21, max: 28 },
@@ -129,9 +129,7 @@ export const calDir = (u: number, v: number) => {
   return dir < 0 ? dir + 360 : dir
 }
 
-export const ctdPar = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",]
-export const periods = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter']
-export const periodTransform: { [key: CtdPeriods]: string } = {
+export const periodTransform: { [key in CtdPeriods]: string } = {
   'avg': '0',
   'NE': '17',
   'SW': '18',

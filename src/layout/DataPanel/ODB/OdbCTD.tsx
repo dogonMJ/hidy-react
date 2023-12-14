@@ -7,14 +7,14 @@ import { GeoJSON } from 'react-leaflet'
 import { Box, Checkbox, Divider, MenuItem, Select, Stack, TextField, Typography, SelectChangeEvent, Button, FormControlLabel } from '@mui/material';
 import { FeatureCollection, Point } from 'geojson'
 import * as geojson from 'geojson';
-import { createIntervalList, findInterval, getColorWithInterval, point2polygon, periodTransform, ctdDepthMeterProps, palettes, defaultCtdRange, ctdPar, periods } from 'Utils/UtilsODB';
+import { createIntervalList, findInterval, getColorWithInterval, point2polygon, periodTransform, ctdDepthMeterProps, palettes, defaultCtdRange } from 'Utils/UtilsODB';
 import { DepthMeter } from 'components/DepthlMeter';
 import { LegendControl } from 'components/LeafletLegend';
 import { ColorPalette } from 'components/ColorPalette/ColorPalette';
 import { CtdProfile } from 'components/VerticalPlot/CtdProfile';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-import { CtdParameters, Palette, validatePalette } from 'types';
+import { CtdParameters, CtdPeriods, Palette, validatePalette, validateCtdParameters as ctdPar, validatePeriods as periods } from 'types';
 import { OpacitySlider } from 'components/OpacitySlider';
 import { PanelSlider } from 'components/PanelSlider';
 
@@ -163,7 +163,7 @@ export const OdbCTD = () => {
   }
 
   const handleTypeChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setSelection(event.target.value as CtdParameters))
-  const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPeriod(event.target.value as string))
+  const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPeriod(event.target.value as CtdPeriods))
   const handleMask = () => dispatch(odbCtdSlice.actions.setMask(!mask))
   useEffect(() => {
     fetch(`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&mode=${mode}&format=geojson&append=temperature,salinity,density,fluorescence,transmission,oxygen,count`)

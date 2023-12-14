@@ -85,7 +85,7 @@ const getWMSData = async (
   baseUrl: string,
   latlng: L.LatLng,
   datetime: string,
-  identifier: string,
+  layer: string,
   elevation: number, setBartip: React.Dispatch<React.SetStateAction<string | null | undefined>>,
 ) => {
   // const bbox = `${latlng.lat - 0.02},${latlng.lng - 0.02},${latlng.lat + 0.02},${latlng.lng + 0.02}`
@@ -97,7 +97,7 @@ const getWMSData = async (
     service: 'WMS',
     // version: '1.3.0',
     version: '1.1.1',
-    layers: identifier,
+    layers: layer,
     // crs: 'EPSG:4326',
     srs: 'EPSG:4326',
     styles: "boxfill/rainbow",
@@ -106,7 +106,7 @@ const getWMSData = async (
     // height: '101',
     width: size.x.toString(),
     height: size.y.toString(),
-    query_layers: identifier,
+    query_layers: layer,
     // i: '50',
     // j: '50',
     x: point.x.toString(),
@@ -115,6 +115,7 @@ const getWMSData = async (
     time: datetime,
     elevation: elevation.toString()
   }).toString()
+
   fetch(url.toString())
     .then((response) => response.text())
     .then((text) => (new window.DOMParser()).parseFromString(text, "text/xml").documentElement)

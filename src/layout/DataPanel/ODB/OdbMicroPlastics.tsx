@@ -16,15 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useAlert } from "hooks/useAlert";
 import { PanelSlider } from "components/PanelSlider";
 import { PanelTimeRangePickr } from "components/PanelTimePickr";
-import { MPLevels } from "types";
-
-
-interface PlasticConcentration {
-  [key: MPLevels]: {
-    color: string,
-    concentration: string
-  }
-}
+import { MPLevels, isMPLevels, PlasticConcentration } from "types";
 
 const dateToApiString = (dateObj: Date) => {
   dateObj.setTime(dateObj.getTime() + 8 * 3600000)
@@ -44,7 +36,7 @@ export const OdbMicroplastics = () => {
   const dispatch = useAppDispatch()//useDispatch()
   const ref = useRef<any>()
   const refCluster = useRef<any>()
-  const { openAlert, alertMessage, setOpenAlert, showAlert } = useAlert()
+  const { openAlert, alertMessage, setOpenAlert, setMessage } = useAlert()
   const latlonFormat = useAppSelector(state => state.coordInput.latlonformat)
   const dataset = useAppSelector(state => state.odbMP.dataset)
   const date = useAppSelector(state => state.odbMP.date)
@@ -55,6 +47,7 @@ export const OdbMicroplastics = () => {
 
   const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layers: L.LayerGroup) => {
     const property = feature.properties
+    const densityClass: MPLevels = property.densityClass
     const content = (
       <Box>
         {/* {t('OdbData.location')}: {feature.geometry.coordinates[1]}, {feature.geometry.coordinates[0]}<br /> */}
@@ -64,8 +57,8 @@ export const OdbMicroplastics = () => {
         {t('OdbData.plastic.concentration')}:
         {" "}{t(`OdbData.plastic.${property.densityClass}`)} {" "}
         <b style={{
-          background: levelList[property.densityClass].color,
-          color: levelList[property.densityClass].color
+          background: levelList[densityClass].color,
+          color: levelList[densityClass].color
         }}>●</b>
         <br />
       </Box>
@@ -97,7 +90,7 @@ export const OdbMicroplastics = () => {
   }
 
   const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlng: LatLng) => {
-    const density = feature.properties.densityClass as string
+    const density = feature.properties.densityClass as MPLevels
     const marker = new L.CircleMarker(latlng, { radius: 4, weight: 2, color: levelList[density].color })
     const shiftedMarker = new L.CircleMarker([latlng.lat, latlng.lng + 360], { radius: 4, weight: 2, color: levelList[density].color })
     const markerGroup = L.layerGroup([marker, shiftedMarker]);
@@ -115,7 +108,7 @@ export const OdbMicroplastics = () => {
 
   const handleDateChange = useCallback((newDate: Date[]) => {
     if (newDate.length === 0) {
-      showAlert(t('alert.noDate'))
+      setMessage(t('alert.noDate'))
     } else if (newDate.length === 1) {
       const dt = dateToApiString(newDate[0])
       dispatch(odbPlasticSlice.actions.setDate([dt, dt]))
@@ -141,13 +134,13 @@ export const OdbMicroplastics = () => {
 
   const handleDateClose = useCallback(() => {
     if (levels.length === 0) {
-      showAlert(t('alert.noSelect'))
+      setMessage(t('alert.noSelect'))
     }
   }, [])
 
   useEffect(() => {
     if (date.length < 2) {
-      showAlert(t('alert.noDate'))
+      setMessage(t('alert.noDate'))
     } else {
       if (levels.toString()) {
         const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbocc/litter/${dataset}?level=${levels.toString()}&minLat=${lat[0]}&maxLat=${lat[1]}&minLon=${lon[0]}&maxLon=${lon[1]}&startDate=${date[0]}&endDate=${date[1]}`
@@ -157,7 +150,7 @@ export const OdbMicroplastics = () => {
             if (json.length === 0) {
               refCluster.current.clearLayers()
               ref.current.clearLayers()
-              showAlert(t('alert.noData'))
+              setMessage(t('alert.noData'))
             } else {
               // setData(json)
               refCluster.current.clearLayers()
@@ -166,7 +159,7 @@ export const OdbMicroplastics = () => {
               refCluster.current.addLayers(ref.current.getLayers())
             }
           })
-          .catch(() => showAlert(t('alert.fetchFail')))
+          .catch(() => setMessage(t('alert.fetchFail')))
       } else {
         refCluster.current.clearLayers()
         ref.current.clearLayers()
@@ -233,15 +226,21 @@ export const OdbMicroplastics = () => {
             }
             }
           >
-            {Object.keys(levelList).map((level) => (
-              <MenuItem
-                key={level}
-                value={level}
-              >
-                <Typography sx={{ backgroundColor: levelList[level].color, color: levelList[level].color }}>&nbsp;&nbsp;</Typography>&nbsp;&nbsp;
-                {t(`OdbData.plastic.${level}`)}&nbsp;&nbsp;({levelList[level].concentration})
-              </MenuItem>
-            ))}
+            {Object.keys(levelList).map((level) => {
+              if (isMPLevels(level)) {
+                return (
+                  <MenuItem
+                    key={level}
+                    value={level}
+                  >
+                    <Typography sx={{ backgroundColor: levelList[level].color, color: levelList[level].color }}>&nbsp;&nbsp;</Typography>&nbsp;&nbsp;
+                    {t(`OdbData.plastic.${level}`)}&nbsp;&nbsp;({levelList[level].concentration})
+                  </MenuItem>
+                )
+              } else {
+                return null
+              }
+            })}
           </Select>
           <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {alertMessage} </AlertSlide>
         </Stack>

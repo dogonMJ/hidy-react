@@ -1,7 +1,6 @@
 import * as geojson from 'geojson'
 import { AlertColor } from '@mui/material';
 import { ReactNode } from 'react';
-import { periods } from 'Utils/UtilsODB';
 
 export type coor = {
     lat: number;
@@ -12,6 +11,22 @@ export interface SliderMarks {
     value: number
     label: string
 }
+
+export interface StringObject {
+    [key: string]: string
+}
+
+export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"
+export type ScaleUnitType = 'metric' | 'nautical' | 'imperial'
+
+//////  wms layers //////
+
+// info list, wms list, local
+export const optionList = ["close", "sst", "ssta", "TrueColor", "sla", "adt", "CHL",] as const
+export const optionForecast = ["3dinst_thetao", "3dinst_so", "3dwater_velocity", "mlotst", "zos", "bottomT",] as const
+export type OptionsWmsLayer = typeof optionList[number]
+export type OptionsWmsLayerForecast = typeof optionForecast[number]
+export const isOptionsWmsLayer = (x: any): x is OptionsWmsLayer | OptionsWmsLayerForecast => [...optionList, ...optionForecast].includes(x)
 
 export interface Api {
     type: string
@@ -29,17 +44,6 @@ export interface Api {
     elevation?: number
     colorBar?: string
 }
-
-export interface StringObject {
-    [key: string]: string
-}
-
-export interface Legend {
-    [key: string]: StringObject
-}
-
-export type ServiceType = 'WMTS' | 'WMS'
-export type ScaleUnitType = 'metric' | 'nautical' | 'imperial'
 
 export interface ApiParams {
     key: string
@@ -60,13 +64,39 @@ export interface TileProp {
     type: Api['type']
 }
 
+export interface Legend {
+    [key: string]: StringObject
+}
+
 export interface ElevationInfo {
     defaultValue: number | undefined
     unit: string | undefined
     values: number[] | undefined
 }
 
-export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"
+export type ServiceType = 'WMTS' | 'WMS'
+export const isServiceType = (value: string): value is ServiceType => {
+    return value.toUpperCase() === 'WMTS' || value.toUpperCase() === 'WMS';
+}
+
+////// animation //////
+export const optionListAnimation = ["close", "madt", "msla"] as const
+export type OptionsAnimation = typeof optionListAnimation[number];
+export const isOptionsAnimation = (x: any): x is OptionsAnimation => optionListAnimation.includes(x)
+
+////// general //////
+export const optionListCWA = ['cwaSea', 'cwaWeather', 'cwaRadar'] as const
+export type OptionsCWA = typeof optionListCWA[number];
+export const optionListCWAFore = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd'] as const
+export type OptionsCWAFore = typeof optionListCWAFore[number];
+export const isOptionsCWAFore = (x: any): x is OptionsCWAFore => optionListCWAFore.includes(x)
+export const optionListCWAForeCur = ['close', 'cwacur', 'cwadir'] as const
+export type OptionsCWAForeCur = typeof optionListCWAForeCur[number];
+export const isOptionsCWAForeCur = (x: any): x is OptionsCWAForeCur => optionListCWAForeCur.includes(x)
+
+export interface ComponentList {
+    [key: string | OptionsCWA]: JSX.Element
+}
 ////// date //////
 export const isIsoDate = (dateString: string): boolean => {
     const date = new Date(dateString);
@@ -85,39 +115,41 @@ export enum BioFilter {
 }
 export const isBioFilter = (x: any): x is BioFilter => Object.keys(BioFilter).includes(x)
 
-const validateBioDataset = ["all", "odb", "oca"]
+const validateBioDataset = ["all", "odb", "oca"] as const
 export type BioDataset = typeof validateBioDataset[number];
 export const isBioDataset = (x: any): x is BioDataset => validateBioDataset.includes(x)
 
-export interface ComponentList {
-    [key: string]: JSX.Element
-}
-
-const validateBioTopics = ["demersal fish", "eDNA fish", "larval fish", "macrobenthos", "zooplankton"]
+const validateBioTopics = ["demersal fish", "eDNA fish", "larval fish", "macrobenthos", "zooplankton"] as const
 export type BioTopics = typeof validateBioTopics[number];
 export const isBioTopics = (x: any): x is BioTopics => validateBioTopics.includes(x)
 
 ////// Plastics //////
-const validateMPDataset = ["all", "ncei", "oca"]
+const validateMPDataset = ["all", "ncei", "oca"] as const
 export type MPDataset = typeof validateMPDataset[number];
 export const isMPDataset = (x: any): x is MPDataset => validateMPDataset.includes(x)
 
-const validateMPLevels = ["Very Low", "Low", "Medium", "High", "Very High"]
+const validateMPLevels = ["Very Low", "Low", "Medium", "High", "Very High"] as const
 export type MPLevels = typeof validateMPLevels[number];
 export const isMPLevels = (x: any): x is MPLevels => validateMPLevels.includes(x)
 
+export type PlasticConcentration = {
+    [key in MPLevels]: {
+        color: string,
+        concentration: string
+    }
+}
 ////// CTD //////
-export const validatePalette = ['plasma', 'viridis', 'magma', 'coolwarm', 'bwr', 'jet', 'YlGnBu', 'YlOrRd']
+export const validatePalette = ['plasma', 'viridis', 'magma', 'coolwarm', 'bwr', 'jet', 'YlGnBu', 'YlOrRd'] as const
 export type Palette = typeof validatePalette[number];
 export const isPalette = (p: any): p is Palette => validatePalette.includes(p)
 
-const validateCtdParameters = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",]
+export const validateCtdParameters = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",] as const
 export type CtdParameters = typeof validateCtdParameters[number];
 export const isCtdParameter = (p: any): p is CtdParameters => validateCtdParameters.includes(p)
 
-export type CtdPeriods = typeof periods[number]
-export const isCtdPeriod = (p: any): p is CtdPeriods => periods.includes(p)
-
+export const validatePeriods = ['avg', 'NE', 'SW', 'spring', 'summer', 'fall', 'winter'] as const
+export type CtdPeriods = typeof validatePeriods[number]
+export const isCtdPeriod = (p: any): p is CtdPeriods => validatePeriods.includes(p)
 
 export interface VerticalPlotProps {
     lat: number

@@ -48,7 +48,7 @@ export const AddImage = () => {
   const ref = useRef<any>()
   const map = useMap()
   const { t } = useTranslation()
-  const { openAlert, setOpenAlert, alertMessage, showAlert } = useAlert()
+  const { openAlert, setOpenAlert, alertMessage, setMessage } = useAlert()
   const [url, setUrl] = useState('')
   const [bounds, setBounds] = useState<LatLngBounds>() //L.latLngBounds([20.5, 118], [26.5, 124]) https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png
   const [nsew, setNsew] = useState<NSEW>({ N: null, S: null, E: null, W: null })
@@ -59,7 +59,7 @@ export const AddImage = () => {
     if (valid) {
       setBounds(L.latLngBounds([nsew.S!, nsew.W!], [nsew.N!, nsew.E!]))
     } else {
-      showAlert('input coodinates')
+      setMessage('input coodinates')
     }
   }
 

@@ -11,7 +11,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.close')}
         </Typography>
       )
-    case 'GHRSST_L4_MUR_Sea_Surface_Temperature':
+    case 'sst':
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
@@ -28,7 +28,7 @@ const InfoList = (props: { dataId: string }) => {
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
         </Typography>
       )
-    case 'GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies':
+    case 'ssta':
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
@@ -45,7 +45,7 @@ const InfoList = (props: { dataId: string }) => {
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
         </Typography>
       )
-    case 'MODIS_Aqua_CorrectedReflectance_TrueColor':
+    case 'TrueColor':
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
@@ -240,7 +240,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('APIlayers.instOthers')}<br />
         </Typography >
       )
-    case '3dsea_water_velocity':
+    case '3dwater_velocity':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />

@@ -27,12 +27,20 @@ export const ShareControl = memo(() => {
 
   const getShareUrl = useCallback(() => {
     const states: any = store.getState();
-    const switches = states.switches.checked //已開選項
-    const modified = findModified(defaultStates, states, switches) //和預設不同選項
+    const { checked, ...radios } = states.switches//已開選項和radio選項
+    const modified = findModified(defaultStates, states, checked) //和預設不同選項
     //單選選項
     const modKeys = Object.keys(modified)
-    const singleOptions = switches.filter((x: string) => !modKeys.includes(x))
+    const singleOptions = checked.filter((x: string) => !modKeys.includes(x))
     singleOptions.forEach((key: string) => { modified[key] = {} })
+    //單選 radio
+
+    Object.keys(radios).forEach((key: string) => {
+      if (radios[key] !== 'close') {
+        modified[key] = radios[key]
+      }
+    });
+
     //地圖選項
     modified.map = {
       lang: i18n.language,
@@ -49,13 +57,14 @@ export const ShareControl = memo(() => {
         //網址原有選項被改變
         const original = readUrlQuery(key)
         Object.entries(original).forEach(([k, v]) => {
-          if (modified[key][k] === undefined) {
+          if (modified[key][k] === undefined && typeof modified[key] !== 'string') {
+            //typeof modified[key] !== 'string'避免radio選項被取代，radio選項為 modified[key]=string
             modified[key][k] = v
           }
         })
       } else {
         //網址原有選項未改變，直接拉到新網址
-        if (switches.includes(key)) {
+        if (checked.includes(key)) {
           modified[key] = readUrlQuery(key)
         }
       }
@@ -127,7 +136,6 @@ export const ShareControl = memo(() => {
                 size="small"
                 sx={{ width: 400 }}
                 rows={5}
-                // defaultValue={newUrl}
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
                 onBlur={handleQRBlur}
