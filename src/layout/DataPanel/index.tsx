@@ -14,7 +14,7 @@ import { ODB } from 'layout/DataPanel/ODB';
 import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
 import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
-import { WMSSelector } from './WMSSelector';
+import { CustomLayer } from './CustomLayer';
 import { ComponentList } from 'types';
 import { useMapDragScroll } from 'hooks/useMapDragScroll';
 import ODBlogo from 'assets/images/logo192.png'
@@ -44,7 +44,7 @@ const itemList: ComponentList = {
   OdbData: <ODB />,
   CPlanLayers: <CPlanLayers />,
   StatMean: <StatisticMean />,
-  WMSSelector: < WMSSelector />,
+  CustomLayer: < CustomLayer />,
   // WebMaps: <SatelliteWebMaps cache={cache} />
 }
 const secLevelAll: ComponentList = {

@@ -104,7 +104,7 @@ export const isIsoDate = (dateString: string): boolean => {
 }
 
 ////// Chem //////
-const validateChemPar = ['none', 'Sal', 'DO', 'NO3', 'NO2', 'PO4', 'SiOx', 'NH4', 'Chl', 'POC', 'PON', 'DOC', 'DIC', 'pH_NBS', 'pH_total', 'Alk',]
+const validateChemPar = ['Sal', 'DO', 'NO3', 'NO2', 'PO4', 'SiOx', 'NH4', 'Chl', 'POC', 'PON', 'DOC', 'DIC', 'pH_NBS', 'pH_total', 'Alk'] as const
 export type ChemPar = typeof validateChemPar[number];
 export const isChemPar = (x: any): x is ChemPar => validateChemPar.includes(x)
 

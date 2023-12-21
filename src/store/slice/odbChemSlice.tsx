@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { initStringArray, initNumberArray, readUrlQuery } from "Utils/UtilsStates";
 import { chemDepthList } from "Utils/UtilsODB";
-import { isChemPar, isIsoDate } from "types";
+import { ChemPar, isChemPar, isIsoDate } from "types";
 
 const query: any = readUrlQuery('odbChem')
 
@@ -10,7 +10,7 @@ interface OdbChemStates {
   lat: number[]
   lon: number[]
   iDepth: number[]
-  par: string[]
+  par: ChemPar[]
 }
 
 export const odbChemSlice = createSlice({
@@ -20,7 +20,7 @@ export const odbChemSlice = createSlice({
     lat: initNumberArray(query, 'lat', [3, 33], [3, 33]),
     lon: initNumberArray(query, 'lon', [106, 128], [106, 128]),
     iDepth: initNumberArray(query, 'iDepth', [0, chemDepthList.length - 1], [0, chemDepthList.length - 1]),
-    par: initStringArray(query, 'par', ['none'], isChemPar),
+    par: initStringArray(query, 'par', [], isChemPar),
   } as OdbChemStates,
   reducers: {
     setDate: (state, action: PayloadAction<string[]>) => {
@@ -35,7 +35,7 @@ export const odbChemSlice = createSlice({
     setIDpeth: (state, action: PayloadAction<number[]>) => {
       state.iDepth = action.payload
     },
-    setPar: (state, action: PayloadAction<string[]>) => {
+    setPar: (state, action: PayloadAction<ChemPar[]>) => {
       state.par = action.payload
     },
   }

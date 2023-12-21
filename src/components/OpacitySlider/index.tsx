@@ -11,7 +11,7 @@ export const OpacitySlider: React.FC<OpacitySliderProps> = ({ opacity, ...props 
   return (
     <Stack spacing={0} direction="row" sx={{ mb: 1, width: '90%' }} alignItems="center" justifyContent="space-around">
       <OpacityIcon />
-      {t('WMSSelector.opacity')}
+      {t('CustomLayer.opacity')}
       <Slider
         sx={{ maxWidth: '65%' }}
         value={opacity}

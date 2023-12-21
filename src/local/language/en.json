@@ -474,10 +474,10 @@
       "hist": "Past cruise tracks of OR1, OR2, OR3, NOR1, NOR2, and NOR3."
     }
   },
-  "WMSSelector": {
+  "CustomLayer": {
     "title": "Add Layers",
     "disclaimer": "Data formats varies, therfore connection is not guranteed.",
-    "directAddLayers": "Add WMS/WMTS Layer",
+    "addWmsLayer": "Add WMS/WMTS Layer",
     "layerSelector": "Search and add WMS/WMTS Layer",
     "addImage": "Add Image",
     "addUrlOption": "Add WMS/WMTS Server URL to Options",
@@ -513,7 +513,7 @@
       "serviceType": "Select service type. Usually 'wms' or 'wmts' appears in URL.",
       "layerKeyword": "Please enter the layer keyword.\nA case-insensitive search will be conducted, and a wildcard character '*' can be used anywhere in the string for fuzzy search.\n If you leave the search field blank or use a wildcard character, all layers will be searched.\nFor example, searching for 'sea will find the layer named 'sea', searching for '*sea' will find layers that end with 'sea', searching for 'sea*' will find layers that start with 'sea', and searching for '*sea*' will find layers that contain 'sea'. ",
       "urlType": "The system will automatically determine but may not always be correct. KVP is more prone to errors, it is recommended to use the RESTful format.\nPlease note that WMTS may fail to load tiles when the Z value exceeds the limit.\n*Must support EPSG:3857 projection.\n\nRESTful: Please change TileCol/x, TileRow/y, TileMatrix/Zoom/z (or equivalent) to {x}, {y}, {z}.\nExample: https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/250m/{z}/{y}/{x}.jpg\n\nKVP WMS: Please remove BBOX.\nExample: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256\n\nKVP WMTS: Please modify these 3 parameters TileMatrix={z}&TileCol={x}&TileRow={y})\nExample: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg",
-      "directAddLayers": "Enter the layer URL and parameters directly to add the layer.\nPlease refer to the access method instructions to modify the parameters into the correct format.",
+      "addWmsLayer": "Enter the layer URL and parameters directly to add the layer.\nPlease refer to the access method instructions to modify the parameters into the correct format.",
       "layerSelector": "Add layers by searching through the dataset.\nNote that some layers require datetime parameters, please set them using the datetime selector above (local time).",
       "addImage1": "Enter the image URL to add a single image (short URLs not supported), and set the latitude and longitude bounding box .\n\nExample:\nIn the example tab of ",
       "addImage2": "(CWA Integrated Radar Reflectivity Map) find the URL: ",
@@ -559,7 +559,9 @@
     "noDate": "Please select Date",
     "noData": "No Data",
     "notInTime": "Not in time range",
-    "checkQueryParameter": "Incorrect parameter, please check URL query string."
+    "checkQueryParameter": "Incorrect parameter, please check URL query string.",
+    "noCoords": "Please enter the complete coordinates",
+    "checkImage": "Image not found or unauthorized."
   },
   "about": {
     "title": "About Hidy",

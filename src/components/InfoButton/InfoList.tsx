@@ -567,53 +567,53 @@ const InfoList = (props: { dataId: string }) => {
     case 'addUrlOption':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.addUrlOption')}
+          {t('CustomLayer.description.addUrlOption')}
         </Typography >
       )
     case 'selectUrl':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.selectUrl')}
+          {t('CustomLayer.description.selectUrl')}
         </Typography >
       )
     case 'serviceType':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.serviceType')}
+          {t('CustomLayer.description.serviceType')}
         </Typography >
       )
     case 'layerKeyword':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.layerKeyword')}
+          {t('CustomLayer.description.layerKeyword')}
         </Typography >
       )
-    case 'directAddLayers':
+    case 'addWmsLayer':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.directAddLayers')}
+          {t('CustomLayer.description.addWmsLayer')}
         </Typography >
       )
     case 'layerSelector':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.layerSelector')}
+          {t('CustomLayer.description.layerSelector')}
         </Typography >
       )
     case 'addImage':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.addImage1')}
+          {t('CustomLayer.description.addImage1')}
           <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-A0058-003" rel="noreferrer">中央氣象署資料開放平台雷達整合回波圖-臺灣(鄰近區域)_無地形</a>
-          {t('WMSSelector.description.addImage2')}
+          {t('CustomLayer.description.addImage2')}
           <i>https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png</i>
-          {t('WMSSelector.description.addImage3')}
+          {t('CustomLayer.description.addImage3')}
         </Typography >
       )
     case 'urlType':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', wordWrap: "break-word" }}>
-          {t('WMSSelector.description.urlType')}
+          {t('CustomLayer.description.urlType')}
         </Typography >
       )
     case 'draw':

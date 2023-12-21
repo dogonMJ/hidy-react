@@ -8,6 +8,8 @@ import { OpacitySlider } from "../../../components/OpacitySlider"
 import { getUrlQuery, checkServiceType } from "Utils/UtilsURL"
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { ServiceType } from "types"
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks"
+import { addWmsLayerSlice } from "store/slice/addWmsLayerSlice"
 
 //https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg
 //https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?&service=WMS&request=GetMap&layers=GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature&styles=&format=image%2Fpng&transparent=true&version=1.1.1&time=2019-03-17&width=256&height=256&srs=EPSG%3A3857
@@ -19,13 +21,14 @@ interface Params {
 
 export const DirectAddLayers = () => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const map = useMap()
   const ref = useRef<any>(null)
-  const [serviceType, setServiceType] = useState<ServiceType>('WMTS')
-  const [url, setUrl] = useState<string>('')
+  const url = useAppSelector(state => state.addWmsLayer.url)
+  const serviceType = useAppSelector(state => state.addWmsLayer.serviceType)
+  const opacity = useAppSelector(state => state.addWmsLayer.opacity)
+  const showLayer = useAppSelector(state => state.addWmsLayer.showLayer)
   const [key, setKey] = useState<string>()
-  const [showLayer, setShowLayer] = useState<string | null>(null)
-  const [opacity, setOpacity] = useState(100)
   const [loading, setLoading] = useState(false)
   const [params, setParams] = useState<Params>({ base: '', params: {} })
   const [openZoomAlert, setOpenZoomAlert] = useState(false)
@@ -42,15 +45,15 @@ export const DirectAddLayers = () => {
   })
 
   const handleServiceType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShowLayer(null)
-    setServiceType(event.target.value as ServiceType)
+    // setShowLayer(false)
+    dispatch(addWmsLayerSlice.actions.setWmsShowLayer(false))
+    dispatch(addWmsLayerSlice.actions.setServiceType(event.target.value as ServiceType))
   }
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const url = event.target.value
-    setServiceType(checkServiceType(url))
-    // setShowLayer(null)
-    setUrl(url)
+    const newUrl = event.target.value
+    dispatch(addWmsLayerSlice.actions.setServiceType(checkServiceType(newUrl)))
+    dispatch(addWmsLayerSlice.actions.setWmsUrl(newUrl))
   }
 
   const handleAddLayer = () => {
@@ -65,22 +68,21 @@ export const DirectAddLayers = () => {
       setParams({ base: url, params: {} })
     }
     setKey(new Date().toTimeString())
-    setShowLayer(serviceType)
+    dispatch(addWmsLayerSlice.actions.setWmsShowLayer(true))
   }
 
   const handleOpacity = (event: Event, newValue: number | number[]) => {
-    setOpacity(newValue as number);
+    dispatch(addWmsLayerSlice.actions.setWmsOpacity(newValue as number))
   };
 
   const handleClearLayer = () => {
-    setShowLayer(null)
+    dispatch(addWmsLayerSlice.actions.setWmsShowLayer(false))
     setOpenZoomAlert(false)
     setZoomLevel('')
+    setLoading(false)
   }
 
   const eventHandlers = {
-    // tileerror: (e: any) => console.log('ppppp', e),
-    error: () => console.log('error'),
     load: () => setLoading(false),
     loading: () => setLoading(true)
   }
@@ -90,11 +92,32 @@ export const DirectAddLayers = () => {
       ref.current.setOpacity(opacity / 100)
     }
   })
+
+  useEffect(() => {
+    if (showLayer) {
+      handleAddLayer()
+    }
+  }, [])
   return (
     <>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <TextField
+          multiline={true}
+          label={t('CustomLayer.serverUrl')}
+          value={url}
+          onChange={handleUrlChange}
+          variant="outlined"
+          size="small"
+          sx={{
+            width: '75%',
+            "& label": { fontSize: 14, }
+          }}
+        />
+        <Button variant="contained" onClick={handleAddLayer}>{t('CustomLayer.add')}</Button>
+      </Stack>
       <FormControl>
         <Stack direction="row" alignItems="center">
-          <FormLabel>{t('WMSSelector.urlType')}</FormLabel>
+          <FormLabel>{t('CustomLayer.urlType')}</FormLabel>
           <InfoButton dataId="urlType" />
         </Stack>
         <RadioGroup
@@ -107,37 +130,22 @@ export const DirectAddLayers = () => {
           <FormControlLabel value="WMTS" control={<Radio />} label="WMTS" />
         </RadioGroup>
       </FormControl>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
-        <TextField
-          multiline={true}
-          label={t('WMSSelector.serverUrl')}
-          value={url}
-          onChange={handleUrlChange}
-          variant="outlined"
-          size="small"
-          sx={{
-            width: '75%',
-            "& label": { fontSize: 14, }
-          }}
-        />
-        <Button variant="contained" onClick={handleAddLayer}>{t('WMSSelector.add')}</Button>
-      </Stack>
       {loading &&
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1, mb: 1 }}>
           <CircularProgress />
         </Box>
       }
-      {!loading && showLayer &&
+      {showLayer &&
         <>
           <br />
           <OpacitySlider opacity={opacity} onChange={handleOpacity} />
           <br />
-          <Button variant="contained" color={'error'} onClick={handleClearLayer}>{t('WMSSelector.clearLayer')}</Button>
+          <Button variant="contained" color={'error'} onClick={handleClearLayer}>{t('CustomLayer.clearLayer')}</Button>
         </>
       }
       {showLayer &&
         <TileLayerCanvas
-          type={showLayer}
+          type={serviceType}
           ref={ref}
           key={key}
           url={params.base}

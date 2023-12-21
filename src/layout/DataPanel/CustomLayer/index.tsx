@@ -2,22 +2,24 @@ import { Divider, Stack, Switch, List, ListItem, ListItemButton, ListItemText, L
 import { DirectAddLayers } from "./DirectAddLayer"
 import { LayerSelector } from "./LayerSelector"
 import InfoButton from "components/InfoButton"
-import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { RenderIf } from "components/RenderIf/RenderIf"
 import { AddImage } from "./AddImage"
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks"
+import { onoffsSlice } from "store/slice/onoffsSlice"
 
 interface ItemList {
   [key: string]: JSX.Element
 }
-const optionList = ['directAddLayers', 'layerSelector', 'addImage']
+const optionList = ['addWmsLayer', 'layerSelector', 'addImage']
 
-export const WMSSelector = () => {
+export const CustomLayer = () => {
   const { t } = useTranslation()
-  const [checked, setChecked] = useState<string[]>([])
+  const dispatch = useAppDispatch()
+  const checked = useAppSelector(state => state.switches.checked)
 
   const itemList: ItemList = {
-    directAddLayers: <DirectAddLayers />,
+    addWmsLayer: <DirectAddLayers />,
     layerSelector: <LayerSelector />,
     addImage: <AddImage />
   }
@@ -30,11 +32,12 @@ export const WMSSelector = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    setChecked(newChecked);
+    // setChecked(newChecked);
+    dispatch(onoffsSlice.actions.setChecked(newChecked))
   };
   return (
     <>
-      <Typography variant="caption" sx={{ fontStyle: 'italic', ml: 2 }}>{t('WMSSelector.disclaimer')}</Typography>
+      <Typography variant="caption" sx={{ fontStyle: 'italic', ml: 2 }}>{t('CustomLayer.disclaimer')}</Typography>
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {optionList.map((value) => {
           const labelId = `checkbox-list-label-${value}`;
@@ -48,7 +51,7 @@ export const WMSSelector = () => {
                 <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
                   <ListItemIcon>
                     <Switch
-                      id={`switch-WMSSelector-${value}`}
+                      id={`switch-customLayer-${value}`}
                       edge="start"
                       checked={checked.indexOf(value) !== -1}
                       tabIndex={-1}
@@ -56,7 +59,7 @@ export const WMSSelector = () => {
                       inputProps={{ 'aria-labelledby': labelId }}
                     />
                   </ListItemIcon>
-                  <ListItemText id={labelId} primary={t(`WMSSelector.${value}`)} />
+                  <ListItemText id={labelId} primary={t(`CustomLayer.${value}`)} />
                 </ListItemButton>
                 <InfoButton dataId={value} />
               </ListItem>

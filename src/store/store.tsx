@@ -7,7 +7,9 @@ import { mapSlice } from './slice/mapSlice';
 import { onoffsSlice } from './slice/onoffsSlice';
 import { odbPlasticSlice } from './slice/odbPlasticSlice';
 import { odbChemSlice } from './slice/odbChemSlice';
-import { wmsSelectorSlice } from './slice/wmsSelectorSlice';
+import { layerSelectorSlice } from './slice/layerSelectorSlice';
+import { addWmsLayerSlice } from './slice/addWmsLayerSlice';
+import { addImageSlice } from './slice/addImageSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +21,9 @@ export const store = configureStore({
     [onoffsSlice.name]: onoffsSlice.reducer,
     [odbPlasticSlice.name]: odbPlasticSlice.reducer,
     [odbChemSlice.name]: odbChemSlice.reducer,
-    [wmsSelectorSlice.name]: wmsSelectorSlice.reducer
+    [layerSelectorSlice.name]: layerSelectorSlice.reducer,
+    [addWmsLayerSlice.name]: addWmsLayerSlice.reducer,
+    [addImageSlice.name]: addImageSlice.reducer,
   },
 });
 

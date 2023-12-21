@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { QRCodeCanvas } from 'qrcode.react';
 
 const defaultStates: any = store.getState()
+
 export const ShareControl = memo(() => {
   const map = useMap()
   const { setDragNScroll } = useMapDragScroll()

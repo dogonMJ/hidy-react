@@ -16,7 +16,7 @@ const createLayer = (props: any, context: any) => {
   // const instance = (type === 'WMTS') ? layer.canvas(props.url, { ...props.params }) : layer.wmscanvas(props.url, { ...props.params, });
 
   if (type === 'WMTS') {
-    const instance = layer.canvas(props.url, { key: props.params.key, })
+    const instance = layer.canvas(props.url, { key: props.params.key, detectRetina: true, crossOrigin: 'anonymous' })
     return { instance, context };
   } else {
     const instance = layer.wmscanvas(props.url, { ...props.params, })
@@ -33,7 +33,6 @@ const createLayer = (props: any, context: any) => {
     instance.setParams({ ...newParams })
     return { instance, context };
   }
-  // return { instance, context };
 };
 
 const updateLayer = (instance: any, props: any, prevProps: any) => {

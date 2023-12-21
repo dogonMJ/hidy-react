@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useEffect, useRef } from "react"
+import { SyntheticEvent, useCallback, useEffect, useMemo, useRef } from "react"
 import { GeoJSON } from "react-leaflet"
 import { LatLng } from "leaflet"
 import { renderToString } from 'react-dom/server';
@@ -36,86 +36,90 @@ export const OdbChemistry = () => {
   const depthIndex = useAppSelector(state => state.odbChem.iDepth)
   const parameters = useAppSelector(state => state.odbChem.par)
 
-  const varList: { [key: ChemPar]: StringObject } = {
-    'Sal': {
-      name: t('OdbData.chemistryList.Sal'),
-      code: 'Salinity',
-      unit: '(psu)'
-    },
-    'DO': {
-      name: t('OdbData.chemistryList.DO'),
-      code: 'D.O.',
-      unit: '(\u00B5M)'
-    },
-    'NO3': {
-      name: t('OdbData.chemistryList.NO3'),
-      code: 'NO3',
-      unit: '(\u00B5M)'
-    },
-    'NO2': {
-      name: t('OdbData.chemistryList.NO2'),
-      code: 'NO2',
-      unit: '(\u00B5M)'
-    },
-    'PO4': {
-      name: t('OdbData.chemistryList.PO4'),
-      code: 'PO4',
-      unit: '(\u00B5M)'
-    },
-    'SiOx': {
-      name: t('OdbData.chemistryList.SiOx'),
-      code: 'Silicate',
-      unit: '(\u00B5M)'
-    },
-    'NH4': {
-      name: t('OdbData.chemistryList.NH4'),
-      code: 'NH4',
-      unit: '(\u00B5M)'
-    },
-    'Chl': {
-      name: t('OdbData.chemistryList.Chl'),
-      code: 'Chlorophyll a',
-      unit: '(\u00B5g/l)'
-    },
-    'POC': {
-      name: t('OdbData.chemistryList.POC'),
-      code: 'POC',
-      unit: '(\u00B5g/l)'
-    },
-    'PON': {
-      name: t('OdbData.chemistryList.PON'),
-      code: 'PON',
-      unit: '(\u00B5g/l)'
-    },
-    'DOC': {
-      name: t('OdbData.chemistryList.DOC'),
-      code: 'DOC',
-      unit: '(\u00B5g/l)'
-    },
-    'DIC': {
-      name: t('OdbData.chemistryList.DIC'),
-      code: 'DIC',
-      unit: '(\u00B5mol/kg)'
-    },
-    'pH_NBS': {
-      name: t('OdbData.chemistryList.pH_NBS'),
-      code: 'pH(NBS)',
-      unit: ''
-    },
-    'pH_total': {
-      name: t('OdbData.chemistryList.pH_total'),
-      code: 'pH(total)',
-      unit: ''
-    },
-    'Alk': {
-      name: t('OdbData.chemistryList.Alk'),
-      code: 'Total alkalinity',
-      unit: '(\u00B5mol/kg)'
-    },
-  }
+  const varList: { [key in ChemPar]: StringObject } = useMemo(() => {
+    return {
+      'Sal': {
+        name: t('OdbData.chemistryList.Sal'),
+        code: 'Salinity',
+        unit: '(psu)'
+      },
+      'DO': {
+        name: t('OdbData.chemistryList.DO'),
+        code: 'D.O.',
+        unit: '(\u00B5M)'
+      },
+      'NO3': {
+        name: t('OdbData.chemistryList.NO3'),
+        code: 'NO3',
+        unit: '(\u00B5M)'
+      },
+      'NO2': {
+        name: t('OdbData.chemistryList.NO2'),
+        code: 'NO2',
+        unit: '(\u00B5M)'
+      },
+      'PO4': {
+        name: t('OdbData.chemistryList.PO4'),
+        code: 'PO4',
+        unit: '(\u00B5M)'
+      },
+      'SiOx': {
+        name: t('OdbData.chemistryList.SiOx'),
+        code: 'Silicate',
+        unit: '(\u00B5M)'
+      },
+      'NH4': {
+        name: t('OdbData.chemistryList.NH4'),
+        code: 'NH4',
+        unit: '(\u00B5M)'
+      },
+      'Chl': {
+        name: t('OdbData.chemistryList.Chl'),
+        code: 'Chlorophyll a',
+        unit: '(\u00B5g/l)'
+      },
+      'POC': {
+        name: t('OdbData.chemistryList.POC'),
+        code: 'POC',
+        unit: '(\u00B5g/l)'
+      },
+      'PON': {
+        name: t('OdbData.chemistryList.PON'),
+        code: 'PON',
+        unit: '(\u00B5g/l)'
+      },
+      'DOC': {
+        name: t('OdbData.chemistryList.DOC'),
+        code: 'DOC',
+        unit: '(\u00B5g/l)'
+      },
+      'DIC': {
+        name: t('OdbData.chemistryList.DIC'),
+        code: 'DIC',
+        unit: '(\u00B5mol/kg)'
+      },
+      'pH_NBS': {
+        name: t('OdbData.chemistryList.pH_NBS'),
+        code: 'pH(NBS)',
+        unit: ''
+      },
+      'pH_total': {
+        name: t('OdbData.chemistryList.pH_total'),
+        code: 'pH(total)',
+        unit: ''
+      },
+      'Alk': {
+        name: t('OdbData.chemistryList.Alk'),
+        code: 'Total alkalinity',
+        unit: '(\u00B5mol/kg)'
+      },
+    }
+  }, [t])
+
   const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlang: LatLng) => {
     return new L.CircleMarker(latlang, { radius: 6 })
   }
+
   const onEachFeature = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
     if (feature.geometry.type === 'Point') {
       const property = feature.properties
@@ -169,7 +173,7 @@ export const OdbChemistry = () => {
 
   const handleParameters = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      dispatch(odbChemSlice.actions.setPar([...parameters, event.target.name]))
+      dispatch(odbChemSlice.actions.setPar([...parameters, event.target.name as ChemPar]))
     } else {
       dispatch(odbChemSlice.actions.setPar(parameters.filter(ele => ele !== event.target.name)))
     }
@@ -184,12 +188,12 @@ export const OdbChemistry = () => {
   useEffect(() => {
     if (date.length === 0) {
       setMessage(t('alert.noDate'))
-    } else if (parameters.length === 1) {
+    } else if (parameters.length === 0) {
       setMessage(t('alert.noSelect'))
       refCluster.current.clearLayers()
       ref.current.clearLayers()
     } else {
-      const pars = parameters.map(p => p === 'none' ? 'none' : varList[p].code).join(',')
+      const pars = parameters.map(p => varList[p].code).join(',')
       const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbchem/bottlehidy?lat_from=${lat[0]}&lat_to=${lat[1]}&lon_from=${lon[0]}&lon_to=${lon[1]}&dep1=${depthList[depthIndex[0]]}&dep2=${depthList[depthIndex[1]]}&var=${pars}&date_from=${date[0].replace(/-/g, '')}&date_to=${date[1].replace(/-/g, '')}`
       fetch(url)
         .then((response) => response.json())
@@ -235,7 +239,8 @@ export const OdbChemistry = () => {
           {t('OdbData.chemistryList.para')}
         </Typography>
         <Grid container columns={12} sx={{ width: 340, marginLeft: 0.5 }}>
-          {Object.keys(varList).map((par: string, id: number) => {
+          {Object.keys(varList).map((parKey: string, id: number) => {
+            const par = parKey as ChemPar
             return (
               <Grid item sm={6} key={id}>
                 <FormControlLabel
