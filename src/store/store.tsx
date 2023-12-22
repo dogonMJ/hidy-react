@@ -10,6 +10,7 @@ import { odbChemSlice } from './slice/odbChemSlice';
 import { layerSelectorSlice } from './slice/layerSelectorSlice';
 import { addWmsLayerSlice } from './slice/addWmsLayerSlice';
 import { addImageSlice } from './slice/addImageSlice';
+import { cplanSlice } from './slice/cplanSlice';
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     [layerSelectorSlice.name]: layerSelectorSlice.reducer,
     [addWmsLayerSlice.name]: addWmsLayerSlice.reducer,
     [addImageSlice.name]: addImageSlice.reducer,
+    [cplanSlice.name]: cplanSlice.reducer,
   },
 });
 
