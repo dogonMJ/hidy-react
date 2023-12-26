@@ -11,6 +11,7 @@ import { layerSelectorSlice } from './slice/layerSelectorSlice';
 import { addWmsLayerSlice } from './slice/addWmsLayerSlice';
 import { addImageSlice } from './slice/addImageSlice';
 import { cplanSlice } from './slice/cplanSlice';
+import { longtermSlice } from './slice/longtermSlice';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     [addWmsLayerSlice.name]: addWmsLayerSlice.reducer,
     [addImageSlice.name]: addImageSlice.reducer,
     [cplanSlice.name]: cplanSlice.reducer,
+    [longtermSlice.name]: longtermSlice.reducer,
   },
 });
 

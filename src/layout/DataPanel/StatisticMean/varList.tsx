@@ -1,4 +1,6 @@
-export const varList: { [key: string]: { name: string, unit: string } } = {
+import { LongtermPar, LongtermPeriod } from "types"
+
+export const varList: { [key in LongtermPar]: { name: string, unit: string } } = {
   close: { name: 'StatMean.close', unit: '' },
   t: { name: 'StatMean.temp', unit: '\u00b0C' },
   s: { name: 'StatMean.sal', unit: 'psu' },
@@ -15,7 +17,7 @@ export const varList: { [key: string]: { name: string, unit: string } } = {
   v: { name: 'StatMean.v', unit: 'm/s' },
 }
 
-export const avgTimeList: { [key: string]: { [key: string]: string } } = {
+export const avgTimeList: { [key in LongtermPeriod]: { [key: string]: string } } = {
   mean: { code: '00', text: 'StatMean.all' },
   winter: { code: '13', text: 'StatMean.winter' },
   spring: { code: '14', text: 'StatMean.spring' },
@@ -34,3 +36,7 @@ export const avgTimeList: { [key: string]: { [key: string]: string } } = {
   nov: { code: '11', text: 'StatMean.nov' },
   dec: { code: '12', text: 'StatMean.dec' },
 }
+
+export const years = Array.from({ length: 26 }, (v, i) => (i + 1993).toString())
+
+export const longtermDepths = [0, 10, 20, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500]

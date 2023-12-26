@@ -1,6 +1,7 @@
 import * as geojson from 'geojson'
 import { AlertColor } from '@mui/material';
 import { ReactNode } from 'react';
+import { longtermDepths, years } from 'layout/DataPanel/StatisticMean/varList';
 
 export type coor = {
     lat: number;
@@ -18,6 +19,16 @@ export interface StringObject {
 
 export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"
 export type ScaleUnitType = 'metric' | 'nautical' | 'imperial'
+
+
+export interface AlertSlideType {
+    open: boolean,
+    setOpen: any,
+    severity?: AlertColor,
+    timeout?: number,
+    children?: ReactNode,
+    icon?: ReactNode
+}
 
 //////  wms layers //////
 
@@ -78,6 +89,7 @@ export type ServiceType = 'WMTS' | 'WMS'
 export const isServiceType = (value: string): value is ServiceType => {
     return value.toUpperCase() === 'WMTS' || value.toUpperCase() === 'WMS';
 }
+
 
 ////// animation //////
 export const optionListAnimation = ["close", "madt", "msla"] as const
@@ -187,11 +199,17 @@ export interface CtdFeature extends geojson.Feature {
     properties: CtdProperties
 }
 
-export interface AlertSlideType {
-    open: boolean,
-    setOpen: any,
-    severity?: AlertColor,
-    timeout?: number,
-    children?: ReactNode,
-    icon?: ReactNode
-}
+////// long-term //////
+
+export const validateLongtermPars = ['close', 't', 's', 'o', 'i', 'p', 'n', 'c', 'k', 'm', 'h', 'w', 'u', 'v'] as const
+export type LongtermPar = typeof validateLongtermPars[number]
+export const isLongtermParameter = (p: any): p is LongtermPar => validateLongtermPars.includes(p)
+
+export const validateLongtermPeriods = ['mean', 'winter', 'spring', 'summer', 'fall', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec',] as const
+export type LongtermPeriod = typeof validateLongtermPeriods[number]
+export const isLongtermPeriod = (p: any): p is LongtermPeriod => validateLongtermPeriods.includes(p)
+
+export const isMonth = (p: any): p is number => Number.isInteger(Number(p)) && p > 0 && p < 13
+
+export const isLongtermYear = (p: any): p is string => years.includes(p)
+export const isLongtermDepth = (p: any): p is number => longtermDepths.includes(p)

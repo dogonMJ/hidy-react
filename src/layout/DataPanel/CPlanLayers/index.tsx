@@ -11,6 +11,7 @@ import { RenderIf } from 'components/RenderIf/RenderIf';
 import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
 import { cplanSlice } from 'store/slice/cplanSlice';
 import { onoffsSlice } from 'store/slice/onoffsSlice';
+import { useSingleComponentCheck } from 'hooks/useSingleComponentCheck';
 
 const { colors } = iosColors
 interface CplanGeoJSON extends L.GeoJSON {
@@ -18,10 +19,10 @@ interface CplanGeoJSON extends L.GeoJSON {
 }
 
 export const CPlanLayers = () => {
+  const { addCheckedComponent, removeCheckedComponent } = useSingleComponentCheck()
   const dispatch = useAppDispatch()
   const map = useMap()
   const colorId = useRef(0);
-  const checked = useAppSelector(state => state.switches.checked)
   const ckeys = useAppSelector(state => state.cplan.ckeys)
   const [layerList, setLayerList] = useState<any>([])
   const [ckey, setCkey] = useState('')
@@ -69,17 +70,15 @@ export const CPlanLayers = () => {
         setLayerList((prevLayerList: any) => [...prevLayerList, jsonLayer]);
         setTableData(jsonLayer)
         setRenderTable(true)
-        if (!checked.includes('cplan')) {
-          const newChecked = [...checked];
-          newChecked.push('cplan');
-          dispatch(onoffsSlice.actions.setChecked(newChecked))
-        }
+        addCheckedComponent('cplan')
       })
       .catch((e) => alert('請輸入正確C-key。Please Enter Correct C-Key.'))
     setCkey('')
+    colorId.current = (colorId.current + 1) % 8
   }
   const handleClose = (index: number) => {
-    dispatch(onoffsSlice.actions.setChecked([...ckeys].filter(key => key !== ckey[index])))
+    dispatch(cplanSlice.actions.setCkeys([...ckeys].filter(key => key !== ckeys[index])))
+    layerList.length === 1 && removeCheckedComponent('cplan')
     map.removeLayer(layerList[index])
     setLayerList(layerList.filter((data: any, i: number) => i !== index))
     setRenderTable(false)
@@ -94,7 +93,6 @@ export const CPlanLayers = () => {
     if (ckeys.length > 0) {
       ckeys.forEach(async (key) => {
         await handleSearch(key)
-        colorId.current = (colorId.current + 1) % 8
       })
     }
   }, [])
