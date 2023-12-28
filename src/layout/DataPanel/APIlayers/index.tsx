@@ -23,11 +23,9 @@ const getLegendUrl = (layerIdentifier: string) => {
 const APILayers = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  // const [identifier, setIdentifier] = useState("close")
   const identifier = useAppSelector(state => state.switches.wmsLayer)
   const datetime = useAppSelector(state => state.map.datetime);
   const handleToggle = (value: string) => () => {
-    // setIdentifier(value)
     dispatch(onoffsSlice.actions.setWmsLayer(value as OptionsWmsLayer | OptionsWmsLayerForecast))
   };
   const legendUrl = getLegendUrl(identifier)

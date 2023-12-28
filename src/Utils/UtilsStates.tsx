@@ -39,7 +39,7 @@ export const findModified = (originalObject: any, modifiedObject: any, ons: stri
           if (originalObject[key][k] !== modifiedObject[key][k] && k !== 'userInfo') {
             if (isObject(modifiedObject[key][k])) {
               const difference = findDifferences(originalObject[key][k], modifiedObject[key][k])
-              //併入網址列預設值，避免修改參數時遺漏 (findDifferences以往址值為基準比較，若沒有網址，default值將和原始無網址query狀態不同)
+              //併入網址列預設值，避免修改參數時遺漏 (findDifferences以網址值為基準比較，若沒有網址，default值將和原始無網址query狀態不同)
               const isUrlQuery = readUrlQuery(key) && readUrlQuery(key)[k]
               const diff_and_Url = isUrlQuery ? { ...difference, ...JSON.parse(readUrlQuery(key)[k]) } : difference
               if (Object.keys(diff_and_Url).length > 0) {
@@ -81,7 +81,7 @@ export const flattenObject = (obj: any, parentKey = "", depth = 0) => {
           queryArr.push(`${key}:[${obj[key].join(",")}]`) :
           queryArr.push(`&${key}=[${obj[key].join(",")}]`)
       } else {
-        if (obj[key]) {
+        if (obj[key] || obj[key] === 0) {
           parentKey ?
             queryArr.push(`${key}:${obj[key]}`) :
             queryArr.push(`&${key}=${obj[key]}`)

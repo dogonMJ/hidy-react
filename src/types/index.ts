@@ -18,8 +18,6 @@ export interface StringObject {
 }
 
 export type Positions = "bottomleft" | "bottomright" | "topleft" | "topright"
-export type ScaleUnitType = 'metric' | 'nautical' | 'imperial'
-
 
 export interface AlertSlideType {
     open: boolean,
@@ -29,6 +27,10 @@ export interface AlertSlideType {
     children?: ReactNode,
     icon?: ReactNode
 }
+
+const scaleUnits = ['metric', 'nautical', 'imperial'] as const
+export type ScaleUnit = typeof scaleUnits[number]
+export const isScaleUnit = (p: any): p is ScaleUnit => scaleUnits.includes(p)
 
 //////  wms layers //////
 

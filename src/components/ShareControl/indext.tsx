@@ -1,18 +1,19 @@
 import { PortalControlButton } from "components/PortalControlButton";
-import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Box, Slide, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Box, Slide, TextField, Typography } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import { useMap } from "react-leaflet";
-import { useSelector } from "react-redux";
-import { RootState, store } from "store/store";
+import { store } from "store/store";
 import { memo, useCallback, useState } from "react";
-import { readUrlQuery, findModified, flattenObject } from "Utils/UtilsStates";
+import { readUrlQuery, findModified, flattenObject, toIETF } from "Utils/UtilsStates";
 import { Close } from "@mui/icons-material";
 import { useMapDragScroll } from "hooks/useMapDragScroll";
 import { useTranslation } from "react-i18next";
 import { QRCodeCanvas } from 'qrcode.react';
+import { is3D } from "Utils/UtilsApi";
+import { useAppSelector } from "hooks/reduxHooks";
 
 const defaultStates: any = store.getState()
 
@@ -23,7 +24,7 @@ export const ShareControl = memo(() => {
   const [showBanner, setShowBanner] = useState(false)
   const [newUrl, setNewUrl] = useState('')
   const [newQRUrl, setNewQRUrl] = useState(newUrl)
-  const datetime = useSelector((state: RootState) => state.map.datetime)
+  const datetime = useAppSelector(state => state.map.datetime)
   const { i18n } = useTranslation()
 
   const getShareUrl = useCallback(() => {
@@ -34,22 +35,14 @@ export const ShareControl = memo(() => {
     const modKeys = Object.keys(modified)
     const singleOptions = checked.filter((x: string) => !modKeys.includes(x))
     singleOptions.forEach((key: string) => { modified[key] = {} })
-    //單選 radio
 
+    //單選 radio
     Object.keys(radios).forEach((key: string) => {
       if (radios[key] !== 'close') {
         modified[key] = radios[key]
       }
     });
 
-    //地圖選項
-    modified.map = {
-      lang: i18n.language,
-      z: map.getZoom(),
-      c: [map.getCenter().lat.toFixed(4), map.getCenter().lng.toFixed(4)],
-      datetime: datetime,
-      ...modified.map,
-    }
     //網址原有選項
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString);
@@ -70,6 +63,16 @@ export const ShareControl = memo(() => {
         }
       }
     })
+    //地圖選項
+    modified.map = {
+      z: map.getZoom(),
+      c: [map.getCenter().lat.toFixed(4), map.getCenter().lng.toFixed(4)],
+      datetime: datetime,
+      lang: toIETF(i18n.language) === 'en' ? 'en' : undefined,
+      scaleUnit: (states.map.scaleUnit !== 'metric') ? states.map.scaleUnit : undefined,
+      baseLayer: (states.map.baseLayer !== 'bingmap') ? states.map.baseLayer : undefined,
+      wmsDepthIndex: modified.wmsLayer && is3D(modified.wmsLayer) ? states.map.wmsDepthIndex : undefined,
+    }
     return flattenObject(modified)
   }, [datetime, map])
 

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { initBoolean, initNumber, initString, readUrlQuery } from "Utils/UtilsStates";
-import { LatLngBounds } from "leaflet";
 import { ServiceType, isServiceType } from "types";
 
 const query: any = readUrlQuery('addWmsLayer')

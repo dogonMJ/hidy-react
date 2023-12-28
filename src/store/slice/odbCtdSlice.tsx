@@ -32,6 +32,7 @@ interface OdbCtdStates {
   interval: number
   opacity: number
   range: { [key: string]: { min: number, max: number } }
+  depthIndex: number
 }
 
 export const odbCtdSlice = createSlice({
@@ -48,6 +49,7 @@ export const odbCtdSlice = createSlice({
     interval: initNumber(query, 'interval', 20, [0, 30]),
     opacity: initNumber(query, 'opacity', 100),
     range: initCtdRange(query, defaultCtdRange),
+    depthIndex: 99, //only for share url and default, does not involve in actual function
   } as OdbCtdStates,
   reducers: {
     setSelection: (state, action: PayloadAction<CtdParameters>) => {
@@ -87,6 +89,10 @@ export const odbCtdSlice = createSlice({
       if (action.payload.max || action.payload.max === 0) {
         state.range[action.payload.par].max = action.payload.max
       }
-    }
+    },
+    setDepthIndex: (state, action: PayloadAction<number>) => {
+      //only for share function
+      state.depthIndex = action.payload
+    },
   }
 });

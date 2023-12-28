@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "store/store"
 import { ExtendedScaleControl } from './ExtendedScaleControl';
@@ -20,6 +20,12 @@ export const CustomScaleControl = () => {
   useMapEvents({
     zoomend: () => setWidth(ref.current.getContainer().offsetWidth)
   })
+  useEffect(() => {
+    if (scaleUnit) {
+      ref.current.setUnit(scaleUnit)
+      setWidth(ref.current.getContainer().offsetWidth)
+    }
+  }, [])
   return (
     <>
       <Button

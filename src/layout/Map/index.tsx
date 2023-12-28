@@ -25,6 +25,7 @@ import { ScreenshotControl } from 'components/ScreenshotControl';
 import { Graticule } from 'components/Graticule/index';
 import { ShareControl } from 'components/ShareControl/indext';
 import { mapSlice } from 'store/slice/mapSlice';
+import { isCenter } from 'Utils/UtilsMap';
 
 declare const L: any;
 
@@ -32,9 +33,8 @@ const LeafletMap = () => {
   const mapRef = useRef<any>()
   const dispatch = useAppDispatch()
   const defaultOptions = readUrlQuery('map')
-  const defaultZoom = defaultOptions && defaultOptions.z ? Number(defaultOptions.z) : 7
-  const defaultCenter = defaultOptions && defaultOptions.c ? JSON.parse(defaultOptions.c) : [23.5, 121]
-  // const defaultDate = defaultOptions && defaultOptions.d ? new Date(defaultOptions.d) : new Date()
+  const defaultZoom = defaultOptions && Number(defaultOptions.z) ? Number(defaultOptions.z) : 7
+  const defaultCenter = defaultOptions && isCenter(defaultOptions.c) ? JSON.parse(defaultOptions.c) : [23.5, 121]
   const defaultDate = useAppSelector(state => state.map.datetime)
   const timeNow = new Date()
   const checkLogin = async () => {

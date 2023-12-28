@@ -62,3 +62,5 @@ export const checkTile = async (url: string, layer: string, time: string) => {
   const exist = await checkTime(getCapabilities, time)
   return exist
 }
+
+export const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false

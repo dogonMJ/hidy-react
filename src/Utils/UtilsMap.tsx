@@ -1,7 +1,7 @@
-import { ScaleUnitType, StringObject } from 'types'
+import { ScaleUnit, StringObject } from 'types'
 
 interface UnitSwitch {
-  [index: string]: ScaleUnitType
+  [index: string]: ScaleUnit
 }
 export const unitSwitch: UnitSwitch = {
   'metric': 'nautical',
@@ -20,5 +20,14 @@ export const defaultURLParams = {
     ctd: {},
     adcp: {},
     bio: {},
+  }
+}
+
+export const isCenter = (c: string) => {
+  const strArray = c.replace('[', '').replace(']', '').split(',');
+  if (strArray.length >= 2) {
+    return strArray.slice(0, 2).every((ele: any) => !isNaN(ele))
+  } else {
+    return false
   }
 }
