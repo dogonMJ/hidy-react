@@ -1,11 +1,10 @@
 import L from "leaflet";
 import { Marker, Popup } from 'react-leaflet'
 import FormatCoordinate from 'components/FormatCoordinate'
-import { RootState } from "store/store"
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Button, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from "react";
+import { Button, Stack, } from '@mui/material';
+import { memo, useState } from "react";
+import { useAppSelector } from "hooks/reduxHooks";
 
 interface markerSet {
   markerCoord: (number | null)[],
@@ -30,9 +29,9 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-const MarkerSet = (props: markerSet) => {
+export const MarkerSet = memo((props: markerSet) => {
   const { t } = useTranslation();
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
+  const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const [markerLat, markerLon] = [...props.markerCoord]
   const [elevation, setElevation] = useState(null)
   const popupopen = () => {
@@ -84,5 +83,4 @@ const MarkerSet = (props: markerSet) => {
     return <></>
   }
 }
-
-export default MarkerSet
+)

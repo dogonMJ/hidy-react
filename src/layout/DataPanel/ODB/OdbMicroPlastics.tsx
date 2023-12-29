@@ -37,7 +37,7 @@ export const OdbMicroplastics = () => {
   const ref = useRef<any>()
   const refCluster = useRef<any>()
   const { openAlert, alertMessage, setOpenAlert, setMessage } = useAlert()
-  const latlonFormat = useAppSelector(state => state.coordInput.latlonformat)
+  const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const dataset = useAppSelector(state => state.odbMP.dataset)
   const date = useAppSelector(state => state.odbMP.date)
   const levels = useAppSelector(state => state.odbMP.levels)

@@ -77,9 +77,12 @@ export const flattenObject = (obj: any, parentKey = "", depth = 0) => {
             queryArr.push(`${key}:${obj[key]}`)
         }
       } else if (Array.isArray(obj[key])) {
+        // parentKey ?
+        //   queryArr.push(`${key}:[${obj[key].join(",")}]`) :
+        //   queryArr.push(`&${key}=[${obj[key].join(",")}]`)
         parentKey ?
-          queryArr.push(`${key}:[${obj[key].join(",")}]`) :
-          queryArr.push(`&${key}=[${obj[key].join(",")}]`)
+          queryArr.push(`${key}:${JSON.stringify(obj[key])}`) :
+          queryArr.push(`&${key}=${JSON.stringify(obj[key])}`)
       } else {
         if (obj[key] || obj[key] === 0) {
           parentKey ?
@@ -106,7 +109,8 @@ export const checkQuerytPar = (queryObject: any, par: string) => queryObject && 
 
 export const initStringArray = (queryObject: any, par: string, defaultValue: string[], typeGuard?: any) => {
   if (queryObject && queryObject[par]) {
-    const values = str2List(queryObject[par])
+    // const values = str2List(queryObject[par])
+    const values = JSON.parse(queryObject[par])
     if (typeGuard) {
       return values.every(typeGuard) ? values : defaultValue //所有參數必須正確，避免部分正確造成困擾
     } else {
@@ -120,7 +124,8 @@ export const initStringArray = (queryObject: any, par: string, defaultValue: str
 
 export const initNumberArray = (queryObject: any, par: string, defaultValue: number[], range?: [number, number]) => {
   if (queryObject && queryObject[par]) {
-    const values = str2List(queryObject[par], Number)
+    // const values = str2List(queryObject[par], Number)
+    const values = JSON.parse(queryObject[par])
     if (!values.some(isNaN)) {
       if (range && values.length === 2) {
         const max = Math.min(Math.max(...values), range[1]);

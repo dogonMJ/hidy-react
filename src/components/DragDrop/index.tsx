@@ -9,9 +9,8 @@ import FormatCoordinate from "components/FormatCoordinate";
 //@ts-ignore
 import omnivore from '@mapbox/leaflet-omnivore'
 //@ts-ignore
-import { useSelector } from "react-redux";
-import { RootState } from "store/store"
 import Spectral_10 from "assets/jsons/Spectral_10.json"
+import { useAppSelector } from "hooks/reduxHooks";
 
 interface DropGeoJSON extends L.GeoJSON {
   filename?: string
@@ -36,7 +35,7 @@ export const DragDrop = () => {
   const map = useMap()
   const [dataList, setDataList] = useState<any>([])
   const [dropCount, setDropCount] = useState(0)
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
+  const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const mapContainer = document.getElementById('mapContainer')
 
   const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlng: LatLng) => {

@@ -1,18 +1,15 @@
-import { ScaleUnit, StringObject } from 'types'
+import { LatLonFormat, ScaleUnit } from 'types'
 
-interface UnitSwitch {
-  [index: string]: ScaleUnit
-}
-export const unitSwitch: UnitSwitch = {
+export const unitSwitch: { [key in ScaleUnit]: ScaleUnit } = {
   'metric': 'nautical',
   'nautical': 'imperial',
   'imperial': 'metric',
 }
 
-export const formatOrder: StringObject = {
-  'latlon-dd': 'latlon-dm',
-  'latlon-dm': 'latlon-dms',
-  'latlon-dms': 'latlon-dd',
+export const formatSwitch: { [key in LatLonFormat]: LatLonFormat } = {
+  'dd': 'dm',
+  'dm': 'dms',
+  'dms': 'dd',
 };
 
 export const defaultURLParams = {

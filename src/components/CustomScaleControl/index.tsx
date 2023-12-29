@@ -13,7 +13,7 @@ export const CustomScaleControl = () => {
   const [width, setWidth] = useState(90)
   const scaleUnit = useSelector((state: RootState) => state.map.scaleUnit)
   const handleClick = () => {
-    dispatch(mapSlice.actions.scaleUnitSwitch(scaleUnit))
+    dispatch(mapSlice.actions.switchScaleUnit(scaleUnit))
     ref.current.setUnit(unitSwitch[scaleUnit])
     setWidth(ref.current.getContainer().offsetWidth)
   }

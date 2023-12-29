@@ -1,11 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
-import MarkerSet from "layout/MouseCoordinates/MarkerSet"
+import { MarkerSet } from "layout/MouseCoordinates/MarkerSet"
 import { coordInputSlice } from "store/slice/coordInputSlice";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { memo } from "react";
 
-const PinnedMarker = () => {
-  const dispatch = useDispatch()
-  const markers = useSelector((state: RootState) => state.coordInput.markers)
+export const PinnedMarker = memo(() => {
+  const dispatch = useAppDispatch()
+  const markers = useAppSelector(state => state.coordInput.markers)
+
   const removeMarker = (evt: React.MouseEvent<HTMLButtonElement>): void => {
     const target = evt.target as HTMLButtonElement
     const idx = Number(target.dataset.idx)
@@ -16,7 +17,7 @@ const PinnedMarker = () => {
     } else {
       markerList.splice(idx, 2)
     }
-    dispatch(coordInputSlice.actions.changeMarkers(markerList));
+    dispatch(coordInputSlice.actions.setMarkers(markerList));
   }
   return (
     <>
@@ -24,5 +25,4 @@ const PinnedMarker = () => {
     </>
   )
 }
-
-export default PinnedMarker
+)

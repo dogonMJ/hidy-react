@@ -29,7 +29,7 @@ export const OdbChemistry = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { openAlert, alertMessage, setOpenAlert, setMessage } = useAlert()
-  const latlonFormat = useAppSelector(state => state.coordInput.latlonformat)
+  const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const date = useAppSelector(state => state.odbChem.date)
   const lat = useAppSelector(state => state.odbChem.lat)
   const lon = useAppSelector(state => state.odbChem.lon)

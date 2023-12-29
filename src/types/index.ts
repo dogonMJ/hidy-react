@@ -32,6 +32,9 @@ const scaleUnits = ['metric', 'nautical', 'imperial'] as const
 export type ScaleUnit = typeof scaleUnits[number]
 export const isScaleUnit = (p: any): p is ScaleUnit => scaleUnits.includes(p)
 
+const latlonFormats = ['dd', 'dm', 'dms'] as const
+export type LatLonFormat = typeof latlonFormats[number]
+export const isLatLonFormat = (p: any): p is LatLonFormat => latlonFormats.includes(p)
 //////  wms layers //////
 
 // info list, wms list, local

@@ -31,6 +31,7 @@ export const ShareControl = memo(() => {
     const states: any = store.getState();
     const { checked, ...radios } = states.switches//已開選項和radio選項
     const modified = findModified(defaultStates, states, checked) //和預設不同選項
+
     //單選選項
     const modKeys = Object.keys(modified)
     const singleOptions = checked.filter((x: string) => !modKeys.includes(x))
@@ -66,13 +67,15 @@ export const ShareControl = memo(() => {
     //地圖選項
     modified.map = {
       z: map.getZoom(),
-      c: [map.getCenter().lat.toFixed(4), map.getCenter().lng.toFixed(4)],
+      c: [Number(map.getCenter().lat.toFixed(4)), Number(map.getCenter().lng.toFixed(4))],
       datetime: datetime,
       lang: toIETF(i18n.language) === 'en' ? 'en' : undefined,
       scaleUnit: (states.map.scaleUnit !== 'metric') ? states.map.scaleUnit : undefined,
       baseLayer: (states.map.baseLayer !== 'bingmap') ? states.map.baseLayer : undefined,
+      latlonformat: (states.map.latlonformat !== 'dd') ? states.map.latlonformat : undefined,
       wmsDepthIndex: modified.wmsLayer && is3D(modified.wmsLayer) ? states.map.wmsDepthIndex : undefined,
     }
+    console.log(modified)
     return flattenObject(modified)
   }, [datetime, map])
 

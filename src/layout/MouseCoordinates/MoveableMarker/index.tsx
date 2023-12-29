@@ -1,7 +1,8 @@
 import { coor } from 'types';
-import MarkerSet from "layout/MouseCoordinates/MarkerSet";
+import { MarkerSet } from "layout/MouseCoordinates/MarkerSet";
+import { memo } from 'react';
 
-const MoveableMarker = (props: { position: coor, centerLon: number }) => {
+export const MoveableMarker = memo((props: { position: coor, centerLon: number }) => {
   const markerLat = props.position.lat
   const markerLon = props.position.lng
   let markerLon2;
@@ -19,5 +20,4 @@ const MoveableMarker = (props: { position: coor, centerLon: number }) => {
     </>
   )
 }
-
-export default MoveableMarker
+)

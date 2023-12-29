@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Grid, InputLabel, Stack, SxProps } from "@mui/material"
-import { ChangeEventHandler, ReactNode, useRef, useState } from "react"
+import { ChangeEventHandler, Fragment, ReactNode, useRef, useState } from "react"
 import { ImageOverlay, useMap } from "react-leaflet"
 import { useAlert } from "hooks/useAlert"
 import { AlertSlide } from "components/AlertSlide/AlertSlide"
@@ -86,7 +86,7 @@ export const AddImage = () => {
           <Grid item xs={4}></Grid>
           {
             ['north', 'west', 'east', 'south'].map(dir =>
-              <>
+              <Fragment key={dir}>
                 <Grid item xs={4} >
                   <CustomTextField
                     label={t(`screenshot.${dir}`)}
@@ -94,13 +94,13 @@ export const AddImage = () => {
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                       setSwne(prevState => ({
                         ...prevState,
-                        N: Number(event.target.value),
+                        [dir]: Number(event.target.value),
                       }));
                     }}
                   />
                 </Grid >
                 <Grid item xs={4}></Grid>
-              </>
+              </Fragment>
             )
           }
         </Grid>

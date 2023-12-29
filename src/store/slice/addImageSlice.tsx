@@ -12,8 +12,7 @@ interface AddImageStates {
 
 const initBbox = (queryObject: any, par: string) => {
   if (queryObject && queryObject[par]) {
-    const bbox = JSON.parse(queryObject[par])
-    return [[bbox[0], bbox[1]], [bbox[2], bbox[3]]]
+    return JSON.parse(queryObject[par])
   } else {
     return undefined
   }

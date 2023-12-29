@@ -51,7 +51,7 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
   const map = useMap()
   const { openAlert, setOpenAlert, alertMessage, setMessage } = useAlert()
   const bioDateRange = useAppSelector(state => state.odbBio.dateRange)
-  const latlonFormat = useAppSelector(state => state.coordInput.latlonformat)
+  const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const lat = useAppSelector(state => state.odbBio.latRange)
   const lon = useAppSelector(state => state.odbBio.lonRange)
   const topics = useAppSelector(state => state.odbBio.topics)

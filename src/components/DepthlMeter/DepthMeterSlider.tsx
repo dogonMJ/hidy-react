@@ -49,7 +49,8 @@ export const DepthMeterSlider = (props: { values: number[], marks: SliderMarks[]
 
   const handleChangeCommitted = (event: any, value: number | number[]) => {
     dispatch(mapSlice.actions.DepthMeterValue([props.user, value as number])) //更新實際使用state
-    switch (props.user) { //只用於更新分享網址避免網址過長，不影響原本功能
+    switch (props.user) {
+      //只用於更新分享網址避免網址過長，不影響原本功能
       case 'odbCurrent':
         dispatch(odbCurrentSlice.actions.setDepthIndex(value as number))
         break
