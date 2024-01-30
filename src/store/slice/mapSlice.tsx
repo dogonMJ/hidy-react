@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isLatLonFormat, isScaleUnit, LatLonFormat, ScaleUnit } from 'types'
+import { isBaseLayer, isLatLonFormat, isScaleUnit, LatLonFormat, ScaleUnit } from 'types'
 import { initString, readUrlQuery, } from "Utils/UtilsStates";
 import { unitSwitch, formatSwitch } from "Utils/UtilsMap";
 //depthMeterValue不加入share網址列。新state要加入share網址需在share function內手動新增。
@@ -30,7 +30,7 @@ export const mapSlice = createSlice({
     userInfo: {},
     datetime: initString(query, 'datetime', d.toISOString(), isDate),
     scaleUnit: initString(query, 'scaleUnit', 'metric', isScaleUnit),
-    baseLayer: initString(query, 'baseLayer', 'bingmap'),
+    baseLayer: initString(query, 'baseLayer', 'bingmap', isBaseLayer),
     latlonformat: initString(query, 'latlonformat', 'dd', isLatLonFormat),
     wmsDepthIndex: 49, //only for share function
     depthMeterValue: {

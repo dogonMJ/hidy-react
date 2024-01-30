@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { LatLngBounds, LatLngBoundsLiteral, LatLng } from "leaflet";
-import { useMapEvents, Rectangle, useMap, LayerGroup } from "react-leaflet";
+import { useMapEvents, Rectangle, useMap, LayerGroup, Pane } from "react-leaflet";
 import 'leaflet'
 import { useTranslation } from "react-i18next";
 import { screenshot } from "Utils/UtilsScreenshot";
@@ -282,10 +282,9 @@ export const ClipScreenshot = () => {
         </Box>
       </Stack >
       {
-        selection.bounds?.isValid() &&
-        <LayerGroup pane="clip">
-          <Rectangle ref={rectRef} bounds={selection.bounds} />
-        </LayerGroup>
+        <Pane name='clip'>
+          {selection.bounds?.isValid() && <Rectangle ref={rectRef} bounds={selection.bounds} />}
+        </Pane>
       }
     </>
   );

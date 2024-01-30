@@ -13,6 +13,15 @@ export const readUrlQuery = (key: string) => {
 }
 
 const isObject = (obj: any) => typeof obj === 'object' && obj !== null && !Array.isArray(obj);
+export const isJSONString = (str: string) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 const findDifferences = (obj1: any, obj2: any): any => {
   const differences: any = {};
   for (const key in obj2) {

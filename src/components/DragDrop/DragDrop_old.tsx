@@ -85,7 +85,6 @@ export const DragDrop = () => {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0]
       const fileType = file.type
-      console.log(fileType)
       switch (fileType) {
         case 'application/json':
           readFile(file, (res) => {

@@ -11,7 +11,7 @@ export const OdbMarineHeatwave = () => {
   const [notInRange, setNotInRange] = useState<boolean>(false)
   const [timespan, setTimespan] = useState([new Date('1985-01-01'), new Date()])
   const datetime = useAppSelector(state => state.map.datetime);
-  const month = datetime.slice(0, 7)
+  const month = datetime.slice(0, 7) + '-01'
   const url = `https://service.oc.ntu.edu.tw/data/odbgeowmts/rest/marineheatwave:mhw/polygon_level/WebMercatorQuad/{z}/{y}/{x}?format=image/png&Time=${month}`
   const legned: Legend = {
     'ice': {

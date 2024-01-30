@@ -106,7 +106,6 @@ export const LineProfile = (props: { url: string, text: { [key: string]: string 
           const newProps = Object.assign({}, plotProps)
           setPlotProps(newProps)
           setOpen(true)
-          console.log(json, spd)
         })
     }
   }, [url, t])

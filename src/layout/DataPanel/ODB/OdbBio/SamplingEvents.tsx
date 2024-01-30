@@ -210,9 +210,9 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
     <>
       <Box sx={{ margin: 0 }}>
         <Typography variant="subtitle2" gutterBottom>
-          {t('OdbData.chemistryList.dateRange')} 1965-Jun-29~
+          {t('OdbData.chemistryList.dateRange')} 1965-Jun-29 ~ 2022-Dec-31
         </Typography>
-        <PanelTimeRangePickr onChange={handleDateChange} onClose={handleDateClose} defaultValues={bioDateRange} options={{ minDate: '1965-06-29' }} />
+        <PanelTimeRangePickr onChange={handleDateChange} onClose={handleDateClose} defaultValues={bioDateRange} options={{ minDate: '1965-06-29', maxDate: '2022-12-31' }} />
         <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.latRange')} 10 ~ 40&deg;N
         </Typography>

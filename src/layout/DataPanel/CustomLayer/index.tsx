@@ -5,36 +5,23 @@ import InfoButton from "components/InfoButton"
 import { useTranslation } from "react-i18next"
 import { RenderIf } from "components/RenderIf/RenderIf"
 import { AddImage } from "./AddImage"
-import { useAppDispatch, useAppSelector } from "hooks/reduxHooks"
-import { onoffsSlice } from "store/slice/onoffsSlice"
+import { useToggleListChecks } from "hooks/useToggleListChecks"
 
 interface ItemList {
   [key: string]: JSX.Element
 }
-const optionList = ['addWmsLayer', 'layerSelector', 'addImage']
+const optionList = ['addWmsLayer', 'addLayerSelector', 'addImage']
 
 export const CustomLayer = () => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
-  const checked = useAppSelector(state => state.switches.checked)
+  const { checked, handleToggleChecks } = useToggleListChecks()
 
   const itemList: ItemList = {
     addWmsLayer: <DirectAddLayers />,
-    layerSelector: <LayerSelector />,
+    addLayerSelector: <LayerSelector />,
     addImage: <AddImage />
   }
 
-  const handleToggle = (value: string) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    // setChecked(newChecked);
-    dispatch(onoffsSlice.actions.setChecked(newChecked))
-  };
   return (
     <>
       <Typography variant="caption" sx={{ fontStyle: 'italic', ml: 2 }}>{t('CustomLayer.disclaimer')}</Typography>
@@ -48,7 +35,7 @@ export const CustomLayer = () => {
                 key={value}
                 disablePadding
               >
-                <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                <ListItemButton role={undefined} onClick={handleToggleChecks(value)} dense>
                   <ListItemIcon>
                     <Switch
                       id={`switch-customLayer-${value}`}

@@ -7,7 +7,7 @@ import { mapSlice } from './slice/mapSlice';
 import { onoffsSlice } from './slice/onoffsSlice';
 import { odbPlasticSlice } from './slice/odbPlasticSlice';
 import { odbChemSlice } from './slice/odbChemSlice';
-import { layerSelectorSlice } from './slice/layerSelectorSlice';
+import { addLayerSelectorSlice } from './slice/addLayerSelectorSlice';
 import { addWmsLayerSlice } from './slice/addWmsLayerSlice';
 import { addImageSlice } from './slice/addImageSlice';
 import { cplanSlice } from './slice/cplanSlice';
@@ -23,13 +23,13 @@ export const store = configureStore({
     [onoffsSlice.name]: onoffsSlice.reducer,
     [odbPlasticSlice.name]: odbPlasticSlice.reducer,
     [odbChemSlice.name]: odbChemSlice.reducer,
-    [layerSelectorSlice.name]: layerSelectorSlice.reducer,
+    [addLayerSelectorSlice.name]: addLayerSelectorSlice.reducer,
     [addWmsLayerSlice.name]: addWmsLayerSlice.reducer,
     [addImageSlice.name]: addImageSlice.reducer,
     [cplanSlice.name]: cplanSlice.reducer,
     [longtermSlice.name]: longtermSlice.reducer,
   },
 });
-
+console.log(mapSlice.actions, mapSlice.caseReducers, mapSlice.getInitialState, mapSlice.name, mapSlice.reducer)
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

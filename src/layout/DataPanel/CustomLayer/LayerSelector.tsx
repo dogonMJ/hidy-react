@@ -14,7 +14,7 @@ import { ServiceType } from "types"
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { useAlert } from "hooks/useAlert";
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
-import { layerSelectorSlice } from "store/slice/layerSelectorSlice";
+import { addLayerSelectorSlice } from "store/slice/addLayerSelectorSlice";
 
 interface Capabilities {
   capability: any
@@ -36,12 +36,12 @@ export const LayerSelector = () => {
   const [addedOptions, setAddedOptions] = useState<{ value: string, label: string }[]>([])
 
   const datetime = useAppSelector(state => state.map.datetime).split('.')[0] + 'Z';
-  const queryURL = useAppSelector(state => state.layerSelector.selectedUrl)
-  const serviceType = useAppSelector(state => state.layerSelector.serviceType)
-  const keyword = useAppSelector(state => state.layerSelector.keyword)
-  const showLayer = useAppSelector(state => state.layerSelector.showLayer)
-  const selectedLayer = useAppSelector(state => state.layerSelector.selectedLayer)
-  const opacity = useAppSelector(state => state.layerSelector.opacity)
+  const queryURL = useAppSelector(state => state.addLayerSelector.selectedUrl)
+  const serviceType = useAppSelector(state => state.addLayerSelector.serviceType)
+  const keyword = useAppSelector(state => state.addLayerSelector.keyword)
+  const showLayer = useAppSelector(state => state.addLayerSelector.showLayer)
+  const selectedLayer = useAppSelector(state => state.addLayerSelector.selectedLayer)
+  const opacity = useAppSelector(state => state.addLayerSelector.opacity)
   const urlOptions = useMemo(() => {
     const defaultOptions = [
       { value: 'https://wmts.nlsc.gov.tw/wmts', label: t('CustomLayer.nlsc') },
@@ -69,13 +69,13 @@ export const LayerSelector = () => {
   }
 
   const handleClearLayer = () => {
-    dispatch(layerSelectorSlice.actions.setShowLayer(false))
-    dispatch(layerSelectorSlice.actions.setSelectedLayer(''))
+    dispatch(addLayerSelectorSlice.actions.setShowLayer(false))
+    dispatch(addLayerSelectorSlice.actions.setSelectedLayer(''))
     setLoadingLayers(false)
   }
 
   const handleOpacity = (event: Event, newValue: number | number[]) => {
-    dispatch(layerSelectorSlice.actions.setOpacity(newValue as number))
+    dispatch(addLayerSelectorSlice.actions.setOpacity(newValue as number))
   };
 
   const handleAddOption = () => {
@@ -83,10 +83,10 @@ export const LayerSelector = () => {
     const duplicate = urlOptions.filter(option => option.value === url).length > 0 ?? false
     setDupOption(duplicate)
     if (url.length > 0 && !duplicate) {
-      // dispatch(layerSelectorSlice.actions.setUrlOptions([{ value: url, label: url }, ...urlOptions]))
+      // dispatch(addLayerSelectorSlice.actions.setUrlOptions([{ value: url, label: url }, ...urlOptions]))
       setAddedOptions([{ value: url, label: url }, ...urlOptions])
-      dispatch(layerSelectorSlice.actions.setSelectedUrl(url))
-      dispatch(layerSelectorSlice.actions.setServiceType(checkServiceType(url)))
+      dispatch(addLayerSelectorSlice.actions.setSelectedUrl(url))
+      dispatch(addLayerSelectorSlice.actions.setServiceType(checkServiceType(url)))
       setUrlInput('')
       setLayers([])
       handleClearLayer()
@@ -98,17 +98,17 @@ export const LayerSelector = () => {
     if (globalController) {
       globalController.abort();
     }
-    dispatch(layerSelectorSlice.actions.setServiceType(checkServiceType(selected)))
+    dispatch(addLayerSelectorSlice.actions.setServiceType(checkServiceType(selected)))
     setLayers([])
-    dispatch(layerSelectorSlice.actions.setSelectedLayer(''))
-    dispatch(layerSelectorSlice.actions.setShowLayer(false))
-    dispatch(layerSelectorSlice.actions.setSelectedUrl(selected))
+    dispatch(addLayerSelectorSlice.actions.setSelectedLayer(''))
+    dispatch(addLayerSelectorSlice.actions.setShowLayer(false))
+    dispatch(addLayerSelectorSlice.actions.setSelectedUrl(selected))
   };
 
   const handleServiceType = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleClearLayer()
     setLayers([])
-    dispatch(layerSelectorSlice.actions.setServiceType(event.target.value as ServiceType))
+    dispatch(addLayerSelectorSlice.actions.setServiceType(event.target.value as ServiceType))
   }
 
   const handleSearch = async () => {
@@ -124,7 +124,7 @@ export const LayerSelector = () => {
       type: serviceType,
       layer: keyword
     })
-    dispatch(layerSelectorSlice.actions.setSelectedLayer(''))
+    dispatch(addLayerSelectorSlice.actions.setSelectedLayer(''))
     setLayers([])
     setLoadingLayers(true)
 
@@ -153,7 +153,7 @@ export const LayerSelector = () => {
 
   const handleSelectLayer = async (value: string, capabilities: Capabilities) => {
     if (capabilities && capabilities.layers.includes(value)) {
-      dispatch(layerSelectorSlice.actions.setSelectedLayer(value))
+      dispatch(addLayerSelectorSlice.actions.setSelectedLayer(value))
       const capability = capabilities.capability.find((obj: any) => obj.name === value)
       if (serviceType === 'WMTS') {
         setLayerProps({
@@ -173,7 +173,7 @@ export const LayerSelector = () => {
           time: datetime
         })
       }
-      dispatch(layerSelectorSlice.actions.setShowLayer(true))
+      dispatch(addLayerSelectorSlice.actions.setShowLayer(true))
     } else if (!capabilities) {
       setMessage('empty capabilities, wrong type or wrong URL')
     } else if (!capabilities.layers.includes(value)) {
@@ -259,7 +259,7 @@ export const LayerSelector = () => {
         <TextField
           label={t('CustomLayer.keyword')}
           value={keyword}
-          onChange={(event) => dispatch(layerSelectorSlice.actions.setKeyword(event.target.value))}
+          onChange={(event) => dispatch(addLayerSelectorSlice.actions.setKeyword(event.target.value))}
           variant="outlined"
           size="small"
         />

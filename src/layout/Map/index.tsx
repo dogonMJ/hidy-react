@@ -7,7 +7,7 @@ import "flatpickr/dist/themes/dark.css";
 import "leaflet/dist/leaflet.css";
 import 'css/Map.css'
 import { Stack } from '@mui/material';
-import MouseCoordinates from "layout/MouseCoordinates";
+import { MouseCoordinates } from "layout/MouseCoordinates";
 import DataPanel from "layout/DataPanel";
 import { MyBaseLayers } from "components/Baselayers";
 import { LanguageControl } from 'components/LanguageControl'

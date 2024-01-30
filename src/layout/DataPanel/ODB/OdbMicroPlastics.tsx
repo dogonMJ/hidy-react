@@ -187,9 +187,9 @@ export const OdbMicroplastics = () => {
           </FormControl>
           <FormLabel>{t('OdbData.filter')}</FormLabel>
           <Typography variant="subtitle2" gutterBottom>
-            {t('OdbData.chemistryList.dateRange')} 1972-Apr-20~
+            {t('OdbData.chemistryList.dateRange')} 1972-Apr-20 ~ 2022-Dec-31
           </Typography>
-          <PanelTimeRangePickr onChange={handleDateChange} onClose={handleDateClose} defaultValues={date} options={{ minDate: '1972-04-20' }} />
+          <PanelTimeRangePickr onChange={handleDateChange} onClose={handleDateClose} defaultValues={date} options={{ minDate: '1972-04-20', maxDate: '2022-12-31' }} />
           <Typography variant="subtitle2" gutterBottom>
             {t('OdbData.chemistryList.latRange')}&plusmn;90&deg;
           </Typography>

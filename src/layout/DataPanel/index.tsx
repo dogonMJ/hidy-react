@@ -76,19 +76,38 @@ const DataPanel = memo(() => {
   const handleNews = () => setOpenAbout({ about: false, contact: false, news: !openAbout.news })
 
   useEffect(() => {
-    // L.DomEvent.disableClickPropagation(ref.current);
     L.DomEvent.disableScrollPropagation(ref.current);
   }, [])
-  // useEffect(() => {
-  //   const queryString = window.location.search
-  //   const urlParams = new URLSearchParams(queryString);
-  //   const ons = urlParams.get('data')?.split(',')
-  //   ons?.forEach((on) => {
-  //     onOff[on] = true
-  //   })
-  //   ons && setOpen(true)
-  //   console.log(urlParams.get('data'), onOff)
-  // }, [])
+  useEffect(() => {
+    /// 展開列表 ///
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString);
+    for (const [key] of urlParams.entries()) {
+      switch (key.slice(0, 3)) {
+        case 'odb':
+          onOff.OdbData = true
+          break
+        case 'cwa':
+          onOff.CWAsites = true
+          break
+        case 'lon':
+          onOff.StatMean = true
+          break
+        case 'wms':
+          onOff.APIlayers = true
+          break
+        case 'ani':
+          onOff.Animated = true
+          break
+        case 'add':
+          onOff.CustomLayer = true
+          break
+        case 'cpl':
+          onOff.CPlanLayers = true
+          break
+      }
+    }
+  }, [])
   return (
     <div
       ref={ref}

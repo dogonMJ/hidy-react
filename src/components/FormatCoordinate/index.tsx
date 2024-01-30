@@ -34,8 +34,8 @@ function isPosition(coords: any): coords is Position {
 }
 
 const FormatCoordinate = (props: { coords: LatLngExpression | Position, format: string }) => {
-  const lat = isPosition(props.coords) ? props.coords[1] : props.coords.lat
-  let lon = isPosition(props.coords) ? props.coords[0] : props.coords.lng
+  const lat = isPosition(props.coords) ? props.coords[0] : props.coords.lat
+  let lon = isPosition(props.coords) ? props.coords[1] : props.coords.lng
 
   const mutiple = Math.floor(lon / 360)
   if (mutiple >= 0) {

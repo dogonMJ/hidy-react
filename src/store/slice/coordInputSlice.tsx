@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { readUrlQuery, str2List } from "Utils/UtilsStates";
+import { isJSONString, readUrlQuery, str2List } from "Utils/UtilsStates";
 import { LatLngTuple } from "leaflet";
 
 const query: any = readUrlQuery('coordInput')
@@ -13,7 +13,7 @@ export const coordInputSlice = createSlice({
   name: "coordInput",
   initialState: {
     current: query && query.current && str2List(query.current).every((str) => !isNaN(Number(str))) ? str2List(query.current).map(Number) : [23.5, 121],
-    markers: query && query.markers ? JSON.parse(query.markers) : [],
+    markers: query && query.markers && isJSONString(query.markers) ? JSON.parse(query.markers) : [],
   } as inputState,
   reducers: {
     setCurrent: (state, action: PayloadAction<LatLngTuple>) => {

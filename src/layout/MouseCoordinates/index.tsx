@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useMapEvent } from 'react-leaflet'
+import { memo, useCallback, useRef, useState } from "react";
+import { Marker, useMapEvent } from 'react-leaflet'
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { CoordinatesInput } from "layout/MouseCoordinates/CoordinatesInput"
 import FormatCoordinate from "components/FormatCoordinate";
@@ -13,7 +13,7 @@ import { LatLngExpression } from "leaflet";
 import { mapSlice } from "store/slice/mapSlice";
 
 
-const MouseCoordinates = () => {
+export const MouseCoordinates = memo(() => {
   const dispatch = useAppDispatch()
   const { setDrag } = useMapDragScroll()
   const checked = useAppSelector(state => state.switches.checked)
@@ -21,7 +21,6 @@ const MouseCoordinates = () => {
   const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const [active, setActive] = useState(checked.includes('coordInput'))
   const [coords, setCoords] = useState<LatLngExpression>({ lat: 0, lng: 0 });
-
   useMapEvent('mousemove', (evt) => setCoords(evt.latlng))
 
   const toggleInput = () => {
@@ -35,7 +34,7 @@ const MouseCoordinates = () => {
       setActive(false)
     }
     dispatch(onoffsSlice.actions.setChecked(newChecked))
-  };
+  }
   const switchFormat = () => dispatch(mapSlice.actions.switchFormat(latlonFormat));
   const handleMouseEnter = () => setDrag(false)
   const handleMouseLeave = () => setDrag(true)
@@ -71,6 +70,4 @@ const MouseCoordinates = () => {
       {active && <MoveableMarker position={{ lat: current[0], lng: current[1] }} centerLon={121} />}
     </Paper>
   )
-}
-
-export default MouseCoordinates
+})

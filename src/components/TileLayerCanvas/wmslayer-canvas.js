@@ -21,7 +21,6 @@
         context.drawImage(img, 0, 0);
       };
       // var img = document.createElement('img');
-      // img.onlond = () => console.log('ppp')
       L.DomEvent.on(img, 'load', L.Util.bind(this._tileOnLoad, this, done, img));
       L.DomEvent.on(img, 'error', L.Util.bind(this._tileOnError, this, done, img));
 

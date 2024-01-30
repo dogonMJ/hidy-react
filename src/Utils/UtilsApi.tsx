@@ -63,4 +63,10 @@ export const checkTile = async (url: string, layer: string, time: string) => {
   return exist
 }
 
-export const is3D = (identifier: string) => identifier.slice(0, 2) === '3d' ? true : false
+export const is3D = (identifier: string) => {
+  try {
+    return identifier.slice(0, 2) === '3d' ? true : false
+  } catch {
+    return false
+  }
+}

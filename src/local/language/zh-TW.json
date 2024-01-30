@@ -478,7 +478,7 @@
     "title": "加入圖層",
     "disclaimer": "各資料提供者格式略有差異，不保證能夠連接",
     "addWmsLayer": "加入WMS/WMTS圖層",
-    "layerSelector": "搜尋並加入WMS/WMTS圖層",
+    "addLayerSelector": "搜尋並加入WMS/WMTS圖層",
     "addImage": "加入圖片",
     "addUrlOption": "加入WMS/WMTS網址至選項",
     "add": "新增",
@@ -514,7 +514,7 @@
       "layerKeyword": "輸入圖層關鍵字。\n忽略大小寫之精確搜尋，可於字串任何地方用萬用字元「*」做模糊搜尋。\n空白、萬用字元則搜尋所有圖層。\n範例：\n「sea」搜尋sea圖層；「*sea」搜尋sea結尾圖層；「sea*」搜尋sea開頭圖層；「*sea*」搜尋包含sea的圖層。",
       "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful WMTS。\n請注意WMTS在Z值超過上限時可能無法載入圖磚。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(col)、y(row)、z(matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg\n\nWMS: 請將BBOX移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256",
       "addWmsLayer": "直接輸入圖層網址及參數直接加入圖層。\n請參考網址說明修改參數為正確格式。",
-      "layerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。",
+      "addLayerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。",
       "addImage1": "輸入圖片網址加入單張圖片(不適用短網址)，須設定圖片範圍經緯度。\n\n範例:\n",
       "addImage2": "的資料範例中找到圖片網址",
       "addImage3": "及座標東經118-124度、北緯20.5-26.5度，分別輸入後按下加入圖層按鍵。"

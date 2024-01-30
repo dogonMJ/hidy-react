@@ -594,10 +594,10 @@ const InfoList = (props: { dataId: string }) => {
           {t('CustomLayer.description.addWmsLayer')}
         </Typography >
       )
-    case 'layerSelector':
+    case 'addLayerSelector':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('CustomLayer.description.layerSelector')}
+          {t('CustomLayer.description.addLayerSelector')}
         </Typography >
       )
     case 'addImage':

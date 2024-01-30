@@ -17,8 +17,8 @@ export const odbPlasticSlice = createSlice({
   name: "odbMP",
   initialState: {
     dataset: initString(query, 'dataset', 'all', isMPDataset),
-    date: initStringArray(query, 'date', [], isIsoDate),
-    levels: initStringArray(query, 'levels', [], isMPLevels),
+    date: initStringArray(query, 'date', ['2013-01-01', '2022-12-31'], isIsoDate),
+    levels: initStringArray(query, 'levels', ['Very Low', 'Low', 'Medium', 'High', 'Very High'], isMPLevels),
     lat: initNumberArray(query, 'lat', [10, 40], [-90, 90]),
     lon: initNumberArray(query, 'lon', [109, 135], [-180, 180]),
     clusterLevel: initNumber(query, 'clusterLevel', 8, [0, 10])

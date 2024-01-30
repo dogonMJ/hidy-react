@@ -36,7 +36,6 @@ export const ShareControl = memo(() => {
     const modKeys = Object.keys(modified)
     const singleOptions = checked.filter((x: string) => !modKeys.includes(x))
     singleOptions.forEach((key: string) => { modified[key] = {} })
-
     //單選 radio
     Object.keys(radios).forEach((key: string) => {
       if (radios[key] !== 'close') {
@@ -75,7 +74,6 @@ export const ShareControl = memo(() => {
       latlonformat: (states.map.latlonformat !== 'dd') ? states.map.latlonformat : undefined,
       wmsDepthIndex: modified.wmsLayer && is3D(modified.wmsLayer) ? states.map.wmsDepthIndex : undefined,
     }
-    console.log(modified)
     return flattenObject(modified)
   }, [datetime, map])
 
@@ -92,7 +90,7 @@ export const ShareControl = memo(() => {
     setNewQRUrl(`${window.location.origin}${window.location.pathname}?${res.slice(1)}`)
   }
   const handleCopy = () => navigator.clipboard.writeText(newUrl)
-  const handleClear = () => window.history.replaceState({}, '', `${window.location.origin}${window.location.pathname}`)
+  // const handleClear = () => window.history.replaceState({}, '', `${window.location.origin}${window.location.pathname}`)
   const handleMouseEnter = () => setDragNScroll(false)
   const handleMouseOut = () => setDragNScroll(true)
   const handleQRBlur = () => setNewQRUrl(newUrl)
@@ -155,9 +153,9 @@ export const ShareControl = memo(() => {
               <Button size="small" onClick={handleRefresh} startIcon={<RefreshIcon fontSize="small" />}>
                 <Typography fontSize='small'>{t('share.refresh')}</Typography>
               </Button>
-              <Button size="small" onClick={handleClear} startIcon={<ClearAllIcon fontSize="small" />}>
+              {/* <Button size="small" onClick={handleClear} startIcon={<ClearAllIcon fontSize="small" />}>
                 <Typography fontSize='small'>{t('share.clear')}</Typography>
-              </Button>
+              </Button> */}
             </CardActions>
           </Card>
         </Slide>

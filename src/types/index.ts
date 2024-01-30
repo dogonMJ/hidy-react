@@ -32,6 +32,10 @@ const scaleUnits = ['metric', 'nautical', 'imperial'] as const
 export type ScaleUnit = typeof scaleUnits[number]
 export const isScaleUnit = (p: any): p is ScaleUnit => scaleUnits.includes(p)
 
+const baseLayers = ['osm', 'EMAP5', 'EMAP8', 'bingmap', 'shaded', 'subice', 'measured']
+type BaseLayers = typeof baseLayers[number]
+export const isBaseLayer = (p: any): p is BaseLayers => baseLayers.includes(p)
+
 const latlonFormats = ['dd', 'dm', 'dms'] as const
 export type LatLonFormat = typeof latlonFormats[number]
 export const isLatLonFormat = (p: any): p is LatLonFormat => latlonFormats.includes(p)

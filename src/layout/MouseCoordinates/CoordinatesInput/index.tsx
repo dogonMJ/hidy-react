@@ -30,15 +30,18 @@ export const CoordinatesInput = memo(() => {
       dispatch(coordInputSlice.actions.setCurrent([inputLat, Number(target.value)]))
     }
   }
+  // const addMarkerBtn = () => {
+  //   let inputLon2: number;
+  //   const maxBounds = map.options.maxBounds as LatLngBounds
+  //   if (inputLon <= maxBounds.getCenter().lng) { //中線
+  //     inputLon2 = inputLon + 360
+  //   } else {
+  //     inputLon2 = inputLon - 360
+  //   }
+  //   dispatch(coordInputSlice.actions.setMarkers([...markers, [inputLat, inputLon], [inputLat, inputLon2]]));
+  // }
   const addMarkerBtn = () => {
-    let inputLon2: number;
-    const maxBounds = map.options.maxBounds as LatLngBounds
-    if (inputLon <= maxBounds.getCenter().lng) { //中線
-      inputLon2 = inputLon + 360
-    } else {
-      inputLon2 = inputLon - 360
-    }
-    dispatch(coordInputSlice.actions.setMarkers([...markers, [inputLat, inputLon], [inputLat, inputLon2]]));
+    dispatch(coordInputSlice.actions.setMarkers([...markers, [inputLat, inputLon]]));
   }
   const flyTo = () => {
     map.flyTo([inputLat, inputLon])

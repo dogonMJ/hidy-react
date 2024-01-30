@@ -50,7 +50,7 @@ export const MyBaseLayers = memo(() => {
                             type="Aerial"
                         />
                     </BaseLayer>
-                    <BaseLayer name='GEBCO Grid shaded relief'>
+                    <BaseLayer name='GEBCO Grid shaded relief' checked={layerId === 'shaded'}>
                         <WMSTileLayer
                             id='shaded'
                             attribution='<a href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b" target="_blank">GEBCO Compilation Group (2023) GEBCO 2023 Grid</a>'
@@ -62,7 +62,7 @@ export const MyBaseLayers = memo(() => {
                             }}
                         />
                     </BaseLayer>
-                    <BaseLayer name='GEBCO Grid colour-shaded for elevation including under ice topography'>
+                    <BaseLayer name='GEBCO Grid colour-shaded for elevation including under ice topography' checked={layerId === 'subice'}>
                         <WMSTileLayer
                             id='subice'
                             attribution='<a href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b" target="_blank">GEBCO Compilation Group (2023) GEBCO 2023 Grid</a>'
@@ -74,7 +74,7 @@ export const MyBaseLayers = memo(() => {
                             }}
                         />
                     </BaseLayer>
-                    <BaseLayer name='GEBCO Grid based on measured data only'>
+                    <BaseLayer name='GEBCO Grid based on measured data only' checked={layerId === 'measured'}>
                         <WMSTileLayer
                             id='measured'
                             attribution='<a href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b" target="_blank">GEBCO Compilation Group (2023) GEBCO 2023 Grid</a>'
