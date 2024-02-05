@@ -9,21 +9,21 @@ import 'css/Map.css'
 import { Stack } from '@mui/material';
 import { MouseCoordinates } from "layout/MouseCoordinates";
 import DataPanel from "layout/DataPanel";
-import { MyBaseLayers } from "components/Baselayers";
-import { LanguageControl } from 'components/LanguageControl'
-import { CPlanControl } from 'components/CplanControl';
-import { DragDrop } from 'components/DragDrop';
-import { SeafloorControl } from 'components/SeafloorControl';
+import { BaselayerControl } from "layout/UpRightControls/BaselayerControl";
+import { LanguageControl } from 'layout/UpRightControls/LanguageControl'
+import { CPlanControl } from 'layout/UpRightControls/CplanControl';
+import { DragDrop } from 'layout/Map/DragDrop';
+import { DrawControl } from 'layout/UpRightControls/DrawControl';
 // @ts-ignore
 import 'leaflet-measure/'
 import 'leaflet-measure/dist/leaflet-measure.css';
 import { account } from 'Utils/UtilsAccount'
 import { readUrlQuery } from "Utils/UtilsStates";
-import { SignInControl } from 'components/SignInControl';
-import { CustomScaleControl } from 'components/CustomScaleControl';
-import { ScreenshotControl } from 'components/ScreenshotControl';
-import { Graticule } from 'components/Graticule/index';
-import { ShareControl } from 'components/ShareControl/indext';
+import { SignInControl } from 'layout/UpRightControls/SignInControl';
+import { CustomScaleControl } from 'layout/BottomLeftControls/CustomScaleControl';
+import { ScreenshotControl } from 'layout/UpRightControls/ScreenshotControl';
+import { Graticule } from 'layout/Map/Graticule/index';
+import { ShareControl } from 'layout/UpRightControls/ShareControl/indext';
 import { mapSlice } from 'store/slice/mapSlice';
 import { isCenter } from 'Utils/UtilsMap';
 
@@ -83,11 +83,11 @@ const LeafletMap = () => {
           <SignInControl />
           <ShareControl />
           <LanguageControl />
-          <MyBaseLayers />
+          <BaselayerControl />
           <ZoomControl position="topright" />
           <CPlanControl />
           <ScreenshotControl position="topright" />
-          <SeafloorControl />
+          <DrawControl />
         </Stack>
         <CustomScaleControl />
         <MouseCoordinates />

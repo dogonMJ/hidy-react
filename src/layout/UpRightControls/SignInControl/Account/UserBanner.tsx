@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from 'react-i18next';
 import { Stack, Typography, IconButton } from "@mui/material"
 import LogoutIcon from '@mui/icons-material/Logout';
-import { account } from '../../Utils/UtilsAccount'
+import { account } from '../../../../Utils/UtilsAccount'
 import { mapSlice } from 'store/slice/mapSlice';
 
 export const UserBanner = React.forwardRef((props: { userInfo: any, setOpen: any }, ref) => {

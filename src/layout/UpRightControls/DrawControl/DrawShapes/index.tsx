@@ -8,7 +8,7 @@ import { EditControl } from "react-leaflet-draw"
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { RenderIf } from "components/RenderIf/RenderIf";
-import { SeafloorElevation } from "components/SeafloorElevation";
+import { SeafloorElevation } from "layout/UpRightControls/DrawControl/SeafloorElevation";
 import geodesic from "geographiclib-geodesic"
 
 declare const L: any

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { IconButton, Slide, Paper, Stack, ButtonGroup } from "@mui/material";
+import { IconButton, Paper, Stack, ButtonGroup } from "@mui/material";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import { ClipScreenshot } from "components/ClipScreenshot";
+import { ClipScreenshot } from "layout/UpRightControls/ScreenshotControl/ClipScreenshot";
 import { PortalControlButton } from "components/PortalControlButton";
 import { useMap } from "react-leaflet";
 import { Positions } from "types";

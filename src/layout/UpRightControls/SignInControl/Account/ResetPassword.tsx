@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Avatar, Button, CssBaseline, TextField, Box, Typography, Container, } from '@mui/material';
 import ODBIcon from 'assets/images/ODB.png';
 import { useTranslation } from 'react-i18next';
-import { account } from '../../Utils/UtilsAccount'
+import { account } from '../../../../Utils/UtilsAccount'
 import { Msgbox } from './Msgbox';
 
 export const ResetPassword = () => {

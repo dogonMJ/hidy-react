@@ -30,6 +30,5 @@ export const store = configureStore({
     [longtermSlice.name]: longtermSlice.reducer,
   },
 });
-console.log(mapSlice.actions, mapSlice.caseReducers, mapSlice.getInitialState, mapSlice.name, mapSlice.reducer)
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

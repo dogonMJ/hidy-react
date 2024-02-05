@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { createControlComponent } from "@react-leaflet/core";
 import { Control, DomUtil } from "leaflet";
-import { SwitchLang } from "components/LanguageControl/SwitchLang";
+import { SwitchLang } from "layout/UpRightControls/LanguageControl/SwitchLang";
 // import ReactDOM from 'react-dom';
 
 const Language = Control.extend({

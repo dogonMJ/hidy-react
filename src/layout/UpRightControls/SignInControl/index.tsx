@@ -2,12 +2,12 @@ import { useState, useRef } from "react";
 import 'leaflet'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { Dialog, DialogContent, IconButton, Slide, Paper, Stack, Avatar } from "@mui/material";
-import { SignIn } from "layout/Account/SignIn"
+import { SignIn } from "layout/UpRightControls/SignInControl/Account/SignIn"
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
-import { UserBanner } from "layout/Account/UserBanner";
-import { SignUp } from "layout/Account/SignUp"
-import { ResetPassword } from "layout/Account/ResetPassword"
+import { UserBanner } from "layout/UpRightControls/SignInControl/Account/UserBanner";
+import { SignUp } from "layout/UpRightControls/SignInControl/Account/SignUp"
+import { ResetPassword } from "layout/UpRightControls/SignInControl/Account/ResetPassword"
 import { PortalControlButton } from "components/PortalControlButton";
 
 export const SignInControl = () => {

@@ -3,13 +3,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { ButtonGroup, IconButton, Paper } from "@mui/material";
-import { DrawShapes } from "components/DrawShapes";
+import { DrawShapes } from "layout/UpRightControls/DrawControl/DrawShapes";
 import ShapeLineIcon from '@mui/icons-material/ShapeLine';
 import { RenderIf } from "components/RenderIf/RenderIf";
 import InfoButton from "components/InfoButton";
 import { PortalControlButton } from "components/PortalControlButton";
 
-export const SeafloorControl = () => {
+export const DrawControl = () => {
   const { t } = useTranslation()
   const [showDrawLine, setShowDrawLine] = useState(false)
   return (

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typography } from '@mui/material';
 import { ChevronLeft, ChevronRight, MenuRounded } from '@mui/icons-material'
 import { DataPanelItem } from 'components/DataPanelItem';
-import { About } from 'components/About';
+import { About } from 'layout/DataPanel/About';
 import { ToggleCWA } from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';

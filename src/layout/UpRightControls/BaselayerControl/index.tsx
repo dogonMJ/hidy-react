@@ -6,7 +6,8 @@ import { TileLayer, LayersControl, Pane, WMSTileLayer, LayerGroup, useMapEvents 
 import { BingLayer } from 'react-leaflet-bing-v2'
 import { mapSlice } from 'store/slice/mapSlice';
 const { BaseLayer } = LayersControl;
-export const MyBaseLayers = memo(() => {
+
+export const BaselayerControl = memo(() => {
     const dispatch = useAppDispatch()
     const layerId = useAppSelector(state => state.map.baseLayer)
     useMapEvents({
