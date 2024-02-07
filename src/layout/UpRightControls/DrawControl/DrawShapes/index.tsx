@@ -1,15 +1,16 @@
-import leaflet, { Map, Control, Polygon, Polyline, Circle } from 'leaflet';
+import { Polygon as PolygonType, Polyline as PolylineType, Circle as CircleType, layerGroup } from 'leaflet';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { LatLng } from "leaflet";
 import { useRef, useState } from "react";
-import { useMap, FeatureGroup } from "react-leaflet";
+import { useMap, FeatureGroup, } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw"
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { SeafloorElevation } from "layout/UpRightControls/DrawControl/SeafloorElevation";
 import geodesic from "geographiclib-geodesic"
+import { downloadPopup } from 'Utils/UtilsDraw';
 
 declare const L: any
 
@@ -33,6 +34,7 @@ export const DrawShapes = () => {
   const [coordsProfile, setCoordsProfile] = useState<LatLng[]>([])
   const [renderProfile, setRenderProfile] = useState(false)
   const scaleUnit = useSelector((state: RootState) => state.map.scaleUnit);
+  const circlemarkerGroup = layerGroup()
   const readableDistance = (distanceInMeters: number) => L.GeometryUtil.readableDistance(
     distanceInMeters,
     scaleUnit === 'metric' ? true : false,
@@ -84,24 +86,31 @@ export const DrawShapes = () => {
           onCreated={(e) => {
             switch (e.layerType) {
               case 'circlemarker':
-                const circlemarkerLayer = e.layer as Circle
-                circlemarkerLayer.on('mouseover', (ev: any) => {
+                const circlemarkerLayer = e.layer as CircleType
+                circlemarkerLayer.addTo(circlemarkerGroup)
+                circlemarkerLayer.on('click', async (ev: any) => {
                   fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${ev.latlng.lng}&lat=${ev.latlng.lat}`)
                     .then(res => res.json())
-                    .then(json => {
+                    .then(async (json) => {
                       const z = scaleUnit === 'imperial' ? `${Math.round(json.z[0] / 0.3048)} ft` : `${json.z[0]} m`
                       const cmContent = `${ev.latlng.lat.toFixed(4)}, ${ev.latlng.lng.toFixed(4)}<br>ele: ${z}`
-                      e.layer.bindPopup(cmContent)
+                      const popupContent = await downloadPopup(circlemarkerGroup)
+                      circlemarkerLayer.bindPopup(popupContent)
+                      circlemarkerLayer.openPopup()
                     })
                 })
                 break
               case 'polyline':
-                const polylineLayer = e.layer as Polyline
+                const polylineLayer = e.layer as PolylineType
+                polylineLayer.addTo(circlemarkerGroup)
                 const tooltips = new L.layerGroup();
                 const latlngs = polylineLayer.getLatLngs() as LatLng[]
-                polylineLayer.on('click', () => {
+                polylineLayer.on('click', async () => {
                   setCoordsProfile(latlngs)
                   setRenderProfile(true)
+                  const popupContent = await downloadPopup(circlemarkerGroup)
+                  polylineLayer.bindPopup(popupContent)
+                  polylineLayer.openPopup()
                 })
                 polylineLayer.on('mouseover', () => {
                   const accDist: number[] = []
@@ -128,7 +137,8 @@ export const DrawShapes = () => {
                 setRenderProfile(true)
                 break
               case 'polygon':
-                const polygonLayer = e.layer as Polygon
+                const polygonLayer = e.layer as PolygonType
+                polygonLayer.addTo(circlemarkerGroup)
                 let pgLatlngs = polygonLayer.getLatLngs()[0] as LatLng[]
                 polygonLayer.on('mouseover', () => {
                   const accDist: number[] = []
@@ -152,7 +162,7 @@ export const DrawShapes = () => {
                 })
                 break
               case 'circle':
-                const circleLayer = e.layer as Circle
+                const circleLayer = e.layer as CircleType
                 let latlng = circleLayer.getLatLng()
                 let center = L.circleMarker(latlng, { radius: 1 })
                 circleLayer.bringToFront()
