@@ -1,16 +1,18 @@
-import { Polygon as PolygonType, Polyline as PolylineType, Circle as CircleType, layerGroup } from 'leaflet';
+import { Polygon as PolygonType, Polyline as PolylineType, Circle as CircleType, layerGroup, LatLngExpression } from 'leaflet';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { LatLng } from "leaflet";
 import { useRef, useState } from "react";
-import { useMap, FeatureGroup, } from "react-leaflet";
+import { useMap, FeatureGroup, Popup } from "react-leaflet";
+
 import { EditControl } from "react-leaflet-draw"
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css'
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { SeafloorElevation } from "layout/UpRightControls/DrawControl/SeafloorElevation";
-import geodesic from "geographiclib-geodesic"
-import { downloadPopup } from 'Utils/UtilsDraw';
+import { readableArea, readableDistance, calGeodesic, calPolygon, handleButton, } from 'Utils/UtilsDraw';
+import { Button, ButtonGroup, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 declare const L: any
 
@@ -23,29 +25,17 @@ const dotIcon = ({ fill = "#3388ff", opacity = 0.7, size = [10, 10], anchor = [1
   iconAnchor: anchor,
 });
 
-const calGeodesic = (latlng1: LatLng, latlng2: LatLng) => {
-  const geod = geodesic.Geodesic.WGS84
-  return geod.Inverse(latlng1.lat, latlng1.lng, latlng2.lat, latlng2.lng).s12!
-}
-
 export const DrawShapes = () => {
+  const { t } = useTranslation()
   const map = useMap()
   const featureRef = useRef<any>()
   const [coordsProfile, setCoordsProfile] = useState<LatLng[]>([])
   const [renderProfile, setRenderProfile] = useState(false)
+  const [popupPos, setPopupPos] = useState<LatLngExpression | undefined>()
+  const [contentLayer, setContentLayer] = useState<any>()
   const scaleUnit = useSelector((state: RootState) => state.map.scaleUnit);
-  const circlemarkerGroup = layerGroup()
-  const readableDistance = (distanceInMeters: number) => L.GeometryUtil.readableDistance(
-    distanceInMeters,
-    scaleUnit === 'metric' ? true : false,
-    false,
-    scaleUnit === 'nautical' ? true : false,
-  )
-  const readableArea = (areaInSqMeters: number) => L.GeometryUtil.readableArea(
-    areaInSqMeters,
-    scaleUnit === 'imperial' ? false : ['km', 'ha', 'm'], //metric and nautical
-    scaleUnit === 'imperial' ? true : false,
-  )
+  const allLayerGroup = layerGroup()
+
   return (
     <>
       <FeatureGroup ref={featureRef}>
@@ -83,34 +73,47 @@ export const DrawShapes = () => {
               nautic: scaleUnit === 'nautical' ? true : false,
             }
           }}
-          onCreated={(e) => {
+          onDeleted={(e) => {
+            e.layers.eachLayer((layer) => {
+              allLayerGroup.removeLayer(layer)
+            })
+          }}
+          onCreated={async (e) => {
             switch (e.layerType) {
               case 'circlemarker':
                 const circlemarkerLayer = e.layer as CircleType
-                circlemarkerLayer.addTo(circlemarkerGroup)
-                circlemarkerLayer.on('click', async (ev: any) => {
-                  fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${ev.latlng.lng}&lat=${ev.latlng.lat}`)
+                circlemarkerLayer.addTo(allLayerGroup)
+                circlemarkerLayer.on('mouseover', async () => {
+                  //edit後需要更新，需要放在mouseover內重算
+                  const markerLatlng = circlemarkerLayer.getLatLng()
+                  const json = await fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${markerLatlng.lng}&lat=${markerLatlng.lat}`)
                     .then(res => res.json())
-                    .then(async (json) => {
-                      const z = scaleUnit === 'imperial' ? `${Math.round(json.z[0] / 0.3048)} ft` : `${json.z[0]} m`
-                      const cmContent = `${ev.latlng.lat.toFixed(4)}, ${ev.latlng.lng.toFixed(4)}<br>ele: ${z}`
-                      const popupContent = await downloadPopup(circlemarkerGroup)
-                      circlemarkerLayer.bindPopup(popupContent)
-                      circlemarkerLayer.openPopup()
-                    })
+                  const z = scaleUnit === 'imperial' ? `${Math.round(json.z[0] / 0.3048)} ft` : `${json.z[0]} m`
+                  const cmContent = `${markerLatlng.lat.toFixed(4)}, ${markerLatlng.lng.toFixed(4)}<br>ele: ${z}`
+                  circlemarkerLayer.bindTooltip(cmContent)
+                  circlemarkerLayer.openTooltip() //不加會閃掉
+                })
+                circlemarkerLayer.on('click', async (e: any) => {
+                  setPopupPos(e.latlng)
+                  setContentLayer(allLayerGroup)
+                  // const popupContent = await downloadPopup(allLayerGroup)
+                  // circlemarkerLayer.bindPopup(popupContent)
+                  // circlemarkerLayer.openPopup()
                 })
                 break
               case 'polyline':
                 const polylineLayer = e.layer as PolylineType
-                polylineLayer.addTo(circlemarkerGroup)
+                polylineLayer.addTo(allLayerGroup)
                 const tooltips = new L.layerGroup();
                 const latlngs = polylineLayer.getLatLngs() as LatLng[]
-                polylineLayer.on('click', async () => {
+                polylineLayer.on('click', async (e) => {
                   setCoordsProfile(latlngs)
                   setRenderProfile(true)
-                  const popupContent = await downloadPopup(circlemarkerGroup)
-                  polylineLayer.bindPopup(popupContent)
-                  polylineLayer.openPopup()
+                  setPopupPos(e.latlng)
+                  setContentLayer(allLayerGroup)
+                  // const popupContent = await downloadPopup(allLayerGroup)
+                  // polylineLayer.bindPopup(popupContent)
+                  // polylineLayer.openPopup()
                 })
                 polylineLayer.on('mouseover', () => {
                   const accDist: number[] = []
@@ -119,8 +122,8 @@ export const DrawShapes = () => {
                       const distance = calGeodesic(latlngs[i - 1], latlng)
                       accDist.push(distance)
                       const acc = accDist.reduce((a, b) => a + b, 0)
-                      const distanceString = readableDistance(distance)
-                      const accString = readableDistance(acc)
+                      const distanceString = readableDistance(distance, scaleUnit)
+                      const accString = readableDistance(acc, scaleUnit)
                       const content = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}<br>d: ${distanceString}<br>D: ${accString}`
                       L.tooltip().setLatLng(latlng).setContent(content).addTo(tooltips)
                     } else {
@@ -138,27 +141,23 @@ export const DrawShapes = () => {
                 break
               case 'polygon':
                 const polygonLayer = e.layer as PolygonType
-                polygonLayer.addTo(circlemarkerGroup)
-                let pgLatlngs = polygonLayer.getLatLngs()[0] as LatLng[]
+                polygonLayer.addTo(allLayerGroup)
                 polygonLayer.on('mouseover', () => {
-                  const accDist: number[] = []
-                  pgLatlngs.forEach((latlng: LatLng, i: number) => {
-                    if (i > 0) {
-                      const distance = calGeodesic(pgLatlngs[i - 1], latlng)
-                      accDist.push(distance)
-                    }
-                  })
-                  accDist.push(calGeodesic(pgLatlngs[0], pgLatlngs.slice(-1)[0]))
-                  const acc = accDist.reduce((a, b) => a + b, 0)
-                  const accString = readableDistance(acc)
-                  const pgArea = L.GeometryUtil.geodesicArea(pgLatlngs);
-                  const areaString = readableArea(pgArea)
-                  const pgContent = `A = ${areaString}<br>p = ${accString}`
+                  //edit後需要更新，需要放在mouseover內重算
+                  const pgLatlngs = polygonLayer.getLatLngs()[0] as LatLng[]
+                  const { area, perimeter } = calPolygon(pgLatlngs, scaleUnit)
+                  const pgContent = `A = ${area}<br>p = ${perimeter}`
                   polygonLayer.bindTooltip(pgContent)
                 })
                 polygonLayer.on('edit', () => {
-                  pgLatlngs = polygonLayer.getLatLngs() as LatLng[]
                   polygonLayer.bringToFront()
+                })
+                polygonLayer.on('click', async (e) => {
+                  setPopupPos(e.latlng)
+                  setContentLayer(allLayerGroup)
+                  // const popupContent = await downloadPopup(allLayerGroup)
+                  // polygonLayer.bindPopup(popupContent)
+                  // polygonLayer.openPopup()
                 })
                 break
               case 'circle':
@@ -170,9 +169,9 @@ export const DrawShapes = () => {
                   const radius = circleLayer.getRadius()
                   const ccArea = radius ** 2 * Math.PI
                   const circumference = 2 * radius * Math.PI
-                  const radiusString = readableDistance(radius)
-                  const circumferenceString = readableDistance(circumference)
-                  const areaString = readableArea(ccArea)
+                  const radiusString = readableDistance(radius, scaleUnit)
+                  const circumferenceString = readableDistance(circumference, scaleUnit)
+                  const areaString = readableArea(ccArea, scaleUnit)
                   const ccContent = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}<br>
                   r: ${radiusString}<br>
                   c: ${circumferenceString}<br>
@@ -194,6 +193,24 @@ export const DrawShapes = () => {
           }}
         />
       </FeatureGroup>
+      {popupPos &&
+        <Popup position={popupPos}>
+          <Typography variant='subtitle1'>
+            <b>{t('draw.downloadTitle')}</b>
+          </Typography>
+          <Typography variant='subtitle2' sx={{ whiteSpace: 'pre-wrap' }} gutterBottom>
+            {t('draw.downloadDescription')}
+          </Typography>
+          <Typography variant='caption' sx={{ whiteSpace: 'pre-wrap' }} gutterBottom>
+            {t('draw.downloadCaption')}
+          </Typography>
+          <ButtonGroup variant="outlined" size="small">
+            <Button onClick={(e) => handleButton(contentLayer, 'GPX')}>GPX</Button>
+            <Button onClick={async (e) => await handleButton(contentLayer, 'GeoJSON')}>GeoJSON</Button>
+            <Button onClick={async (e) => await handleButton(contentLayer, 'KML')}>KML</Button>
+          </ButtonGroup>
+        </Popup>
+      }
       <RenderIf isTrue={renderProfile}>
         <SeafloorElevation coords={coordsProfile} setOpen={setRenderProfile} />
       </RenderIf>

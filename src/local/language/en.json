@@ -532,7 +532,10 @@
     "edit": "Edit：",
     "del": "Delete：",
     "ele": "Elevation",
-    "dist": "Distance"
+    "dist": "Distance",
+    "downloadTitle": "Download Shape Paths",
+    "downloadDescription": "Click button below to download all paths in corresponding format.",
+    "downloadCaption": "*Not support for Circles.\n*GPX does not support polygons.\n*GeoJSON does not include elevation."
   },
   "translation": {
     "title": "切換語言"

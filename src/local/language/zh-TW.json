@@ -532,7 +532,10 @@
     "edit": "編輯：",
     "del": "刪除：",
     "ele": "高程",
-    "dist": "距離"
+    "dist": "距離",
+    "downloadTitle": "下載圖形路徑",
+    "downloadDescription": "點選下按鍵下載所有圖形路徑對應格式。",
+    "downloadCaption": "*不支援圓形。\n*GPX不支援多邊形。\n*GeoJSON不含高程。"
   },
   "translation": {
     "title": "Switch Language"

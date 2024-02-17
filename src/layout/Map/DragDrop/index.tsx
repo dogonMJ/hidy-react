@@ -173,7 +173,7 @@ export const DragDrop = () => {
                         },
                         "properties": {
                           "elevation": coordinate[2],
-                          "time": feature.properties.coordTimes[i]
+                          "time": feature.properties.coordTimes ? feature.properties.coordTimes[i] : ''
                         }
                       })
                     });
@@ -188,7 +188,7 @@ export const DragDrop = () => {
                           },
                           "properties": {
                             "elevation": coordinate[2],
-                            "time": feature.properties.coordTimes[i][j]
+                            "time": feature.properties.coordTimes ? feature.properties.coordTimes[i][j] : ''
                           }
                         })
                       })

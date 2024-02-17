@@ -1,16 +1,43 @@
-import { Circle, LayerGroup, Polygon, Polyline } from "leaflet";
+import { Circle, LatLng, LayerGroup, Polygon, Polyline } from "leaflet";
+import { ScaleUnit } from "types";
+import geodesic from "geographiclib-geodesic"
 
-export const downloadPopup = async (content: Polygon | Polyline | Circle | LayerGroup) => {
-  const container = document.createElement("div");
-  container.innerHTML = `Download Path<br>`
-  container.appendChild(await downloadButton(content, 'GeoJSON'))
-  container.appendChild(await downloadButton(content, 'KML'))
-  container.appendChild(await downloadButton(content, 'GPX'))
-  // container.appendChild(downloadButton('hidy_path.json', content, 'text/plain;chartset=utf-8', 'CSV'))
-  return container
+declare const L: any
+
+export const calGeodesic = (latlng1: LatLng, latlng2: LatLng) => {
+  const geod = geodesic.Geodesic.WGS84
+  return geod.Inverse(latlng1.lat, latlng1.lng, latlng2.lat, latlng2.lng).s12!
 }
 
-const downloadData = (filename: string, content: string, contentType: string) => {
+export const readableDistance = (distanceInMeters: number, scaleUnit: ScaleUnit) => L.GeometryUtil.readableDistance(
+  distanceInMeters,
+  scaleUnit === 'metric' ? true : false,
+  false,
+  scaleUnit === 'nautical' ? true : false,
+)
+export const readableArea = (areaInSqMeters: number, scaleUnit: ScaleUnit) => L.GeometryUtil.readableArea(
+  areaInSqMeters,
+  scaleUnit === 'imperial' ? false : ['km', 'ha', 'm'], //metric and nautical
+  scaleUnit === 'imperial' ? true : false,
+)
+
+export const calPolygon = (pgLatlngs: LatLng[], scaleUnit: ScaleUnit = 'metric') => {
+  const accDist: number[] = []
+  pgLatlngs.forEach((latlng: LatLng, i: number) => {
+    if (i > 0) {
+      const distance = calGeodesic(pgLatlngs[i - 1], latlng)
+      accDist.push(distance)
+    }
+  })
+  accDist.push(calGeodesic(pgLatlngs[0], pgLatlngs.slice(-1)[0]))
+  const acc = accDist.reduce((a, b) => a + b, 0)
+  const accString = readableDistance(acc, scaleUnit)
+  const pgArea = L.GeometryUtil.geodesicArea(pgLatlngs);
+  const areaString = readableArea(pgArea, scaleUnit)
+  return { area: areaString, perimeter: accString }
+}
+
+export const downloadData = (filename: string, content: string, contentType: string) => {
   const file = new Blob([content], { type: contentType })
   const link = document.createElement('a');
   link.href = URL.createObjectURL(file);
@@ -19,77 +46,67 @@ const downloadData = (filename: string, content: string, contentType: string) =>
   link.remove()
 }
 
-const downloadButton = async (content: Polygon | Polyline | Circle | LayerGroup, text: string) => {
-  const button = document.createElement("button");
-  button.innerHTML = text;
+export const handleButton = async (content: Polygon | Polyline | Circle | LayerGroup, text: string) => {
   switch (text) {
     case 'GeoJSON':
-      button.onclick = function () {
-        const geojsonContent = JSON.stringify(content.toGeoJSON(), null, 2)
-        downloadData('hidy_path.json', geojsonContent, 'application/geo+json')
-      }
+      const geojsonContent = JSON.stringify(content.toGeoJSON(), null, 2)
+      downloadData('hidy_path.json', geojsonContent, 'application/geo+json')
       break
     case 'KML':
-      button.onclick = async function () {
-        const kmlContent = await buildKMLData(content.toGeoJSON())
-        downloadData('hidy_path.kml', kmlContent, 'application/vnd.google-earth.kml+xml')
-      }
+      const kmlContent = await buildKMLData(content.toGeoJSON())
+      downloadData('hidy_path.kml', kmlContent, 'application/vnd.google-earth.kml+xml')
       break
     case 'GPX':
-      button.onclick = async function () {
-        const gpxContent = await buildGPXData(content.toGeoJSON())
-        downloadData('hidy_path.gpx', gpxContent, 'application/gpx+xml')
-      }
+      const gpxContent = await buildGPXData(content.toGeoJSON())
+      downloadData('hidy_path.gpx', gpxContent, 'application/gpx+xml')
       break
-    case 'CSV':
   }
-  return button
 }
 
-const getGebcoDepth = async (coordinates: number[][]) => {
-  const lngs = coordinates.map((coors) => coors[0])
-  const lats = coordinates.map((coors) => coors[1])
+const getGebcoDepth = async (coordinates: number[][] | number[]) => {
+  let lngs, lats;
+  if (Array.isArray(coordinates[0])) {
+    lngs = (coordinates as number[][]).map((coors: number[]) => coors[0]);
+    lats = (coordinates as number[][]).map((coors: number[]) => coors[1]);
+  } else {
+    lngs = coordinates[0];
+    lats = coordinates[1];
+  }
   const res = await fetch(`${process.env.REACT_APP_PROXY_BASE}/data/gebco?lon=${lngs}&lat=${lats}&mode=point`)
   const json = await res.json()
   return json.z
 }
-const buildKMLData = async (dataAll: any) => {
+export const buildKMLData = async (dataAll: any) => {
   let result = KMLTemplate.head
-  console.log(dataAll)
   if (dataAll.type === 'FeatureCollection') {
     const features = dataAll.features
+    let ipt = 0;
+    let ipath = 0;
+    let ipoly = 0;
     await Promise.all(features.map(async (feature: any, ifeature: number) => {
       const geoType = feature.geometry.type
       switch (geoType) {
         case 'Point':
+          const zpt = await getGebcoDepth(feature.geometry.coordinates)
           const ptCoor = feature.geometry.coordinates
-          const pts = KMLTemplate.point(`Marker ${ifeature}`, ptCoor[0], ptCoor[1], 0)
-          result += `
-    ${pts}`
+          result += KMLTemplate.point(`Marker ${ipt}`, ptCoor[0], ptCoor[1], zpt)
+          ipt += 1
           break
         case 'LineString':
-          const z = await getGebcoDepth(feature.geometry.coordinates)
-          const lineCoors = feature.geometry.coordinates.map((coordinate: number[]) => coordinate.join(',')).join(' ')
-          const linePts = feature.geometry.coordinates.map((coor: number[], ipt: number) => KMLTemplate.point(`Path ${ifeature} Point ${ipt}`, coor[0], coor[1], z[ipt], '#track-none')).join('\n\t\t')
-          result += `
-    <Folder>
-      <name>Feature ${ifeature}</name>
-      <Folder>
-        <name>Points</name>
-        ${linePts}
-      </Folder>
-      <Placemark>
-        <name>Feature ${ifeature}</name>
-        <styleUrl>#lineStyle</styleUrl>
-        <LineString>
-          <tessellate>1</tessellate>
-          <coordinates>${lineCoors}</coordinates>
-        </LineString>
-      </Placemark>
-    </Folder>
-    `
+          const zpath = await getGebcoDepth(feature.geometry.coordinates)
+          const lineCoors = feature.geometry.coordinates.map((coordinate: number[], i: number) => `${coordinate.join(',')},${zpath[i]}`).join(' ')
+          const linePts = feature.geometry.coordinates.map((coor: number[], ipt: number) => KMLTemplate.point(`Path ${ifeature} Point ${ipt}`, coor[0], coor[1], zpath[ipt], '#track-none'))
+          result += KMLTemplate.lineString(`Line ${ipath}`, linePts, lineCoors)
+          ipath += 1
           break
-        // case 'Polygon':
+        case 'Polygon':
+          const zPoly = await getGebcoDepth(feature.geometry.coordinates[0])
+          const polyCoors = feature.geometry.coordinates[0].map((coordinate: number[], i: number) => `${coordinate.join(',')},${zPoly[i]}`).join(' ')
+          const pgLatlngs = feature.geometry.coordinates[0].map((coords: number[]) => L.latLng(coords[1], coords[0]))
+          const { area, perimeter } = calPolygon(pgLatlngs)
+          result += KMLTemplate.polygon(`Polygon ${ipoly}`, polyCoors, '#polygon_style', area, perimeter)
+          ipoly += 1
+          break
       }
     }))
   }
@@ -98,21 +115,44 @@ const buildKMLData = async (dataAll: any) => {
 }
 
 const buildGPXData = async (dataAll: any) => {
-  const z = await getGebcoDepth(dataAll.geometry.coordinates)
   let result = GPXTemplate.head
-  if (dataAll.type === 'Feature' && dataAll.geometry.type === 'LineString') {
-    const trkpts = dataAll.geometry.coordinates.map((coor: number[], i: number) =>
-      `<trkpt lat="${coor[1]}" lon="${coor[0]}">
-          <ele>${z[i]}</ele>
+  if (dataAll.type === 'FeatureCollection') {
+    const features = dataAll.features
+    let iwpt = 0;
+    let ipath = 0;
+    await Promise.all(features.map(async (feature: any) => {
+      const geoType = feature.geometry.type
+      switch (geoType) {
+        case 'Point':
+          const zpt = await getGebcoDepth(feature.geometry.coordinates)
+          const wptCoor = feature.geometry.coordinates
+          const wpt = `<wpt lat="${wptCoor[1]}" lon="${wptCoor[0]}">
+    <name>WPT ${iwpt}</name>
+    <desc>${zpt} m</desc>
+    <ele>${zpt}</ele>
+  </wpt>`
+          result += `
+  ${wpt}`
+          iwpt += 1
+          break
+        case 'LineString':
+          const zpath = await getGebcoDepth(feature.geometry.coordinates)
+          const trkpts = feature.geometry.coordinates.map((coor: number[], i: number) =>
+            `<trkpt lat="${coor[1]}" lon="${coor[0]}">
+          <ele>${zpath[i]}</ele>
         </trkpt>`
-    ).join('\n\t\t')
-    result += `
-    <trk>
-      <name>Hidy Path</name>
-      <trkseg>
-        ${trkpts}
-      </trkseg>
-    </trk>`
+          ).join('\n\t\t')
+          result += `
+  <trk>
+    <name>Hidy Path ${ipath}</name>
+    <trkseg>
+      ${trkpts}
+    </trkseg>
+  </trk>`
+          ipath += 1
+          break
+      }
+    }))
   }
   result += GPXTemplate.end
   return result
@@ -125,18 +165,52 @@ const GPXTemplate = {
 </gpx>`
 }
 const KMLTemplate = {
-  point: (name: string, lng: number, lat: number, depth: number, style: string = '') =>
-    `<Placemark>
+  point: (name: string, lng: number, lat: number, depth: number, style: string = '') => `
+    <Placemark>
       <name>${name}</name>
       <styleUrl>${style}</styleUrl>
       <Point>
-        <coordinates>${lng},${lat}</coordinates>
+        <coordinates>${lng},${lat},${depth}</coordinates>
       </Point>
       <description><![CDATA[<table>
           <tr><td>Longitude: ${lng} </td></tr>
           <tr><td>Latitude: ${lat} </td></tr>
           <tr><td>GEBCO Depth: ${depth} m</td></tr>
           </table>]]>
+      </description>
+    </Placemark>`,
+  lineString: (name: string, points: any, lineCoor: any) => `
+    <Folder>
+      <name>${name}</name>
+      <Folder>
+        <name>Points</name>${points}
+      </Folder>
+      <Placemark>
+        <name>${name}</name>
+        <styleUrl>#lineStyle</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>${lineCoor}</coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>`,
+  polygon: (name: string, polyCoors: any, style: string = '', area: string, perimeter: string) => `
+    <Placemark>
+      <name>${name}</name>
+      <styleUrl>${style}</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              ${polyCoors}
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+      <description><![CDATA[<table>
+        <tr><td>Area: ${area} </td></tr>
+        <tr><td>Perimeter: ${perimeter} </td></tr>
+        </table>]]>
       </description>
     </Placemark>`,
   head: `<?xml version="1.0" encoding="UTF-8"?>
@@ -148,6 +222,15 @@ const KMLTemplate = {
         <color>99ffac59</color>
         <width>6</width>
       </LineStyle>
+    </Style>
+    <Style id="polygon_style">
+      <LineStyle>
+        <color>ccffac59</color>
+        <width>6</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>99ffac59</color>
+      </PolyStyle>
     </Style>
     <StyleMap id="track-none">
       <Pair>
@@ -180,6 +263,45 @@ const KMLTemplate = {
         <scale>0</scale>
       </LabelStyle>
     </Style>`,
-  end: `</Document>
+  end: `
+  </Document>
 </kml>`,
 }
+
+
+
+// const downloadButton = async (content: Polygon | Polyline | Circle | LayerGroup, text: string) => {
+//   const button = document.createElement("button");
+//   button.innerHTML = text;
+//   button.style.marginRight = '2px'
+//   switch (text) {
+//     case 'GeoJSON':
+//       button.onclick = function () {
+//         const geojsonContent = JSON.stringify(content.toGeoJSON(), null, 2)
+//         downloadData('hidy_path.json', geojsonContent, 'application/geo+json')
+//       }
+//       break
+//     case 'KML':
+//       button.onclick = async function () {
+//         const kmlContent = await buildKMLData(content.toGeoJSON())
+//         downloadData('hidy_path.kml', kmlContent, 'application/vnd.google-earth.kml+xml')
+//       }
+//       break
+//     case 'GPX':
+//       button.onclick = async function () {
+//         const gpxContent = await buildGPXData(content.toGeoJSON())
+//         downloadData('hidy_path.gpx', gpxContent, 'application/gpx+xml')
+//       }
+//       break
+//   }
+//   return button
+// }
+
+// export const downloadPopup = async (content: Polygon | Polyline | Circle | LayerGroup) => {
+//   const container = document.createElement("div");
+//   container.innerHTML = `下載路徑 Download Path<br>*無圓形 Circle not supported. <br> *GPX無多邊形 GPX does not support polygons.<br>`
+//   container.appendChild(await downloadButton(content, 'GeoJSON'))
+//   container.appendChild(await downloadButton(content, 'KML'))
+//   container.appendChild(await downloadButton(content, 'GPX'))
+//   return container
+// }
