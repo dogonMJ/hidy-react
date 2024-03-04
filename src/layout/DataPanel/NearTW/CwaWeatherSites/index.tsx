@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from 'react'
 import { renderToString } from 'react-dom/server';
 import PopupTemplate from './PopupWeather'
 import CloudIcon from '@mui/icons-material/Cloud';
-import proj4 from "proj4";
 //@ts-ignore
 import MarkerCluster from '@changey/react-leaflet-markercluster'
 import { Box, Divider, Slider, Typography } from '@mui/material';
@@ -17,21 +16,6 @@ interface DataArray {
   [key: string]: Object
 }
 
-proj4.defs([
-  [
-    'EPSG:3821',
-    '+title=TWD67 +proj=longlat +towgs84=-752,-358,-179,-.0000011698,.0000018398,.0000009822,.00002329 +ellps=aust_SA +units=度 +no_defs'
-    //DON'T use GRS67, use aust_SA
-  ],
-  [
-    'EPSG:4326',
-    '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
-  ],
-]);
-
-const trans3821to4326 = (lat: number, lon: number) => {
-  return proj4('EPSG:3821', 'EPSG:4326', [lon, lat]).reverse()
-}
 const icon = new L.divIcon({
   className: "CWB_Sea_icon",
   html: renderToString(<CloudIcon style={{ color: '#38AEDD' }} />)

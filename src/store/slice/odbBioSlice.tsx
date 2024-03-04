@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BioDataset, BioFilter } from "types";
-import { str2List, readUrlQuery } from "Utils/UtilsStates";
+import { BioDataset, BioFilter, isBioDataset, isBioFilter, isBioTopics, isIsoDate } from "types";
+import { readUrlQuery, initNumberArray, initStringArray, initString, initNumber } from "Utils/UtilsStates";
 const query = readUrlQuery('odbBio')
 
 interface OdbBioStates {
@@ -16,22 +16,19 @@ interface OdbBioStates {
   cluster: number
 }
 
-const isBioFilter = (x: any): x is BioFilter => Object.keys(BioFilter).includes(x)
-const isBioDataset = (x: any): x is BioDataset => Object.keys(BioDataset).includes(x)
-
 export const odbBioSlice = createSlice({
   name: "odbBio",
   initialState: {
-    dataset: query && isBioDataset(query.dataset) ? query.dataset : 'all',
-    filter: query && isBioFilter(query.filter) ? query.filter : 'topic',
-    dateRange: query && query.dateRange ? str2List(query.dateRange) : [],
+    dataset: initString(query, 'dataset', 'all', isBioDataset),
+    filter: initString(query, 'filter', 'topic', isBioFilter),
+    dateRange: initStringArray(query, 'dateRange', ['2013-01-01', '2022-12-31'], isIsoDate),
     tabNum: query && Number(query.tabNum) === 1 ? 1 : 0,
     compGrid: query && Number(query.compGrid) === 2 ? 2 : 1,
-    latRange: query && query.latRange && !str2List(query.latRange, Number).some(isNaN) ? str2List(query.latRange, Number) : [10, 40],
-    lonRange: query && query.lonRange && !str2List(query.lonRange, Number).some(isNaN) ? str2List(query.lonRange, Number) : [109, 135],
-    topics: query && query.topics ? str2List(query.topics) : [],
-    taxon: query && query.taxon ? query.taxon : '',
-    cluster: query && Number(query.cluster) <= 15 ? Number(query.cluster) : 8,
+    latRange: initNumberArray(query, 'latRange', [10, 40], [10, 40]),
+    lonRange: initNumberArray(query, 'lonRange', [109, 135], [109, 135]),
+    topics: initStringArray(query, 'topics', ["demersal fish", "eDNA fish", "larval fish", "macrobenthos", "zooplankton"], isBioTopics),
+    taxon: initString(query, 'taxon', ''),
+    cluster: initNumber(query, 'cluster', 8, [0, 15]),
   } as OdbBioStates,
   reducers: {
     setDataset: (state, action: PayloadAction<BioDataset>) => {

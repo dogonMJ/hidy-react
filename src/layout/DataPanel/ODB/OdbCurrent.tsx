@@ -2,9 +2,8 @@ import { GeoJSON } from 'react-leaflet'
 import { useEffect, useState, useRef, } from 'react'
 import { renderToString } from 'react-dom/server';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
-import { Box, Divider, MenuItem, Select, SelectChangeEvent, Slider, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
+import { Box, Divider, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import * as geojson from 'geojson'
 import 'leaflet'
 import 'leaflet-canvas-markers'
@@ -18,7 +17,7 @@ import { AdcpProfile } from 'components/VerticalPlot/AdcpProfile';
 import { LineProfile } from 'components/VerticalPlot/LineProfile';
 import { Stack } from '@mui/system';
 import { odbCurrentSlice } from 'store/slice/odbCurrentSlice';
-import { periods } from 'Utils/UtilsODB';
+import { CtdPeriods, validatePeriods as periods } from 'types';
 
 declare const L: any;
 const adcpDepths = adcpDepthMeterProps().adcpDepths
@@ -29,13 +28,13 @@ const marks = adcpDepthMeterProps().marks
 
 export const OdbCurrent = () => {
   const ref = useRef<any>()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const [warning, setWarning] = useState(false)
   const [openVertical, setOpenVertical] = useState(false)
   const [ptData, setPtData] = useState({ lat: 121, lng: 20 })
-  const depthMeterValue = useSelector((state: RootState) => state.map.depthMeterValue['odbCurrent'])
-  const period = useSelector((state: RootState) => state.odbCur.period)
+  const depthMeterValue = useAppSelector(state => state.map.depthMeterValue['odbCurrent'])
+  const period = useAppSelector(state => state.odbCur.period)
 
   const depth = adcpDepths[depthMeterValue]
   const mode = periodTransform[period]
@@ -84,7 +83,7 @@ export const OdbCurrent = () => {
     return marker
   }
 
-  const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCurrentSlice.actions.setPeriod(event.target.value as string))
+  const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCurrentSlice.actions.setPeriod(event.target.value as CtdPeriods))
 
   useEffect(() => {
     const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&format=geojson&mode=${mode}&append=u,v,count&mean_threshold=10`

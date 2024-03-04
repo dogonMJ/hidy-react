@@ -81,7 +81,7 @@ export const BioComposition = (props: { dataset: BioDataset, filter: BioFilter }
 
   useEffect(() => {
 
-    fetch(`https://seaimage.oc.ntu.edu.tw/occapi/grid/${dataset}/${grid}/${filter}`)
+    fetch(`${process.env.REACT_APP_PROXY_BASE}/data/odbocc/grid/${dataset}/${grid}/${filter}`)
       .then(response => response.json())
       .then(json => {
         ref.current.clearLayers().addData(json)

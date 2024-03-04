@@ -1,45 +1,47 @@
-import { useMap, useMapEvents } from "react-leaflet"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../store/store"
+import { useMap } from "react-leaflet"
 import { coordInputSlice } from "../../../store/slice/coordInputSlice";
 import { useTranslation } from "react-i18next";
 import { TextField, IconButton, Paper } from '@mui/material';
-import { GpsFixed, AddLocationAlt, AdsClick } from '@mui/icons-material';
-import { useState } from "react";
+import { GpsFixed, AddLocationAlt } from '@mui/icons-material';
 import { LatLngBounds } from "leaflet";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { useMapDragScroll } from "hooks/useMapDragScroll";
+import { memo } from "react";
 
-const CoordinatesInput = () => {
+export const CoordinatesInput = memo(() => {
   const map = useMap();
+  const { setDrag } = useMapDragScroll()
   const { t } = useTranslation();
-  const dispatch = useDispatch()
-  const boundCenter: any = map.options.center
-  const inputLat = useSelector((state: RootState) => state.coordInput.inputLat)
-  const inputLon = useSelector((state: RootState) => state.coordInput.inputLon)
-  const markers = useSelector((state: RootState) => state.coordInput.markers)
+  const dispatch = useAppDispatch()
+  // const boundCenter: any = map.options.center
+  const current = useAppSelector(state => state.coordInput.current)
+  const inputLat = current[0]
+  const inputLon = current[1]
+  const markers = useAppSelector(state => state.coordInput.markers)
 
-  const mouseEnter = () => {
-    map.dragging.disable()
-  }
-  const mouseLeave = () => {
-    map.dragging.enable()
-  }
+  const mouseEnter = () => setDrag(false)
+  const mouseLeave = () => setDrag(true)
+
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const target = evt.target as HTMLInputElement
     if (target.id === 'lat') {
-      dispatch(coordInputSlice.actions.changeLat(Number(target.value)));
+      dispatch(coordInputSlice.actions.setCurrent([Number(target.value), inputLon]))
     } else {
-      dispatch(coordInputSlice.actions.changeLon(Number(target.value)));
+      dispatch(coordInputSlice.actions.setCurrent([inputLat, Number(target.value)]))
     }
   }
+  // const addMarkerBtn = () => {
+  //   let inputLon2: number;
+  //   const maxBounds = map.options.maxBounds as LatLngBounds
+  //   if (inputLon <= maxBounds.getCenter().lng) { //中線
+  //     inputLon2 = inputLon + 360
+  //   } else {
+  //     inputLon2 = inputLon - 360
+  //   }
+  //   dispatch(coordInputSlice.actions.setMarkers([...markers, [inputLat, inputLon], [inputLat, inputLon2]]));
+  // }
   const addMarkerBtn = () => {
-    let inputLon2: number;
-    const maxBounds = map.options.maxBounds as LatLngBounds
-    if (inputLon <= maxBounds.getCenter().lng) { //中線
-      inputLon2 = inputLon + 360
-    } else {
-      inputLon2 = inputLon - 360
-    }
-    dispatch(coordInputSlice.actions.changeMarkers([...markers, [inputLat, inputLon], [inputLat, inputLon2]]));
+    dispatch(coordInputSlice.actions.setMarkers([...markers, [inputLat, inputLon]]));
   }
   const flyTo = () => {
     map.flyTo([inputLat, inputLon])
@@ -124,5 +126,4 @@ const CoordinatesInput = () => {
     </Paper>
   )
 }
-
-export default CoordinatesInput
+)

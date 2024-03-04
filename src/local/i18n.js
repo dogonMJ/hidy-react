@@ -16,7 +16,7 @@ const resources = {
   },
 };
 
-i18n
+export default i18n
   // .use(LanguageDetector) //偵測瀏覽器語言
   .use(initReactI18next)
   .init({
@@ -29,5 +29,3 @@ i18n
       escapeValue: false,
     },
   });
-
-export default i18n;

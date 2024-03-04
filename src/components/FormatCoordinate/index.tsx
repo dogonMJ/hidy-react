@@ -1,12 +1,7 @@
-import { coor } from 'types'
 import { Position } from 'geojson';
-const sign = (degree: number, direction: string) => {
-  if (degree < 0) {
-    return direction[0]
-  } else {
-    return direction[1]
-  }
-}
+import { LatLngExpression } from 'leaflet';
+const sign = (degree: number, direction: string) => degree < 0 ? direction[0] : direction[1]
+
 const formatLonLat = (degree: number) => {
   const deg = Number(degree)
   const d = Math.trunc(deg);
@@ -34,12 +29,13 @@ const toDD = (degree: number) => {
   return `${D}\u00B0`
 }
 
-function isPosition(coords: coor | Position): coords is Position {
+function isPosition(coords: any): coords is Position {
   return Array.isArray(coords) && coords.length === 2;
 }
-const FormatCoordinate = (props: { coords: coor | Position, format: string }) => {
-  const lat = isPosition(props.coords) ? props.coords[1] : props.coords.lat
-  let lon = isPosition(props.coords) ? props.coords[0] : props.coords.lng
+
+const FormatCoordinate = (props: { coords: LatLngExpression | Position, format: string }) => {
+  const lat = isPosition(props.coords) ? props.coords[0] : props.coords.lat
+  let lon = isPosition(props.coords) ? props.coords[1] : props.coords.lng
 
   const mutiple = Math.floor(lon / 360)
   if (mutiple >= 0) {
@@ -49,11 +45,11 @@ const FormatCoordinate = (props: { coords: coor | Position, format: string }) =>
   }
   if (lon > 180) { lon -= 360 }
   switch (props.format) {
-    case 'latlon-dd':
+    case 'dd':
       return <span>{toDD(lat)}, {toDD(lon)}</span>
-    case 'latlon-dms':
+    case 'dms':
       return <span>{toDMS(lat, 'SN')}, {toDMS(lon, 'WE')}</span>
-    case 'latlon-dm':
+    case 'dm':
       return <span>{toDM(lat, 'SN')}, {toDM(lon, 'WE')}</span>
     default:
       return <span>{toDD(lat)}, {toDD(lon)}</span>

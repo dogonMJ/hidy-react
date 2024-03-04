@@ -1,37 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { formatOrder } from "Utils/UtilsMap";
+import { isJSONString, readUrlQuery, str2List } from "Utils/UtilsStates";
+import { LatLngTuple } from "leaflet";
 
-export interface inputstate {
-  active: boolean
-  inputLat: number
-  inputLon: number
-  markers: Array<Array<number | null>>//[(number | null)[]]
-  latlonformat: string
+const query: any = readUrlQuery('coordInput')
+
+export interface inputState {
+  current: LatLngTuple
+  markers: number[][]//Array<Array<number | null>>
 }
+
 export const coordInputSlice = createSlice({
   name: "coordInput",
   initialState: {
-    active: false,
-    inputLat: 23.5,
-    inputLon: 121,
-    markers: [[null, null]],
-    latlonformat: 'latlon-dd',
-  } as inputstate,
+    current: query && query.current && str2List(query.current).every((str) => !isNaN(Number(str))) ? str2List(query.current).map(Number) : [23.5, 121],
+    markers: query && query.markers && isJSONString(query.markers) ? JSON.parse(query.markers) : [],
+  } as inputState,
   reducers: {
-    switchActive: (state, action: PayloadAction<boolean>) => {
-      state.active = action.payload
+    setCurrent: (state, action: PayloadAction<LatLngTuple>) => {
+      state.current = action.payload
     },
-    changeLat: (state, action: PayloadAction<number>) => {
-      state.inputLat = action.payload
-    },
-    changeLon: (state, action: PayloadAction<number>) => {
-      state.inputLon = action.payload
-    },
-    changeMarkers: (state, action: PayloadAction<Array<Array<number | null>>>) => {
+    setMarkers: (state, action: PayloadAction<number[][]>) => {
       state.markers = action.payload
-    },
-    switchFormat: (state, action: PayloadAction<string>) => {
-      state.latlonformat = formatOrder[action.payload]
     },
   }
 });

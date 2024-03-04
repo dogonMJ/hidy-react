@@ -4,7 +4,7 @@ export const useAlert = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<ReactNode>('');
 
-  const showAlert = useCallback((message: ReactNode) => {
+  const setMessage = useCallback((message: ReactNode) => {
     setAlertMessage(message);
     setOpenAlert(true);
   }, [])
@@ -18,7 +18,7 @@ export const useAlert = () => {
     openAlert,
     setOpenAlert,
     alertMessage,
-    showAlert,
+    setMessage,
     hideAlert,
   };
 }

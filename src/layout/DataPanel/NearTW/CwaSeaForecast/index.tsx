@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
 import { ImageOverlay } from "react-leaflet";
 import { DataPanelRadioList } from 'components/DataPanelRadioList';
 import { RenderIf } from "components/RenderIf/RenderIf";
@@ -9,33 +7,39 @@ import { Divider } from "@mui/material";
 import { useAlert } from "hooks/useAlert";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { isOptionsCWAFore, isOptionsCWAForeCur, optionListCWAFore, optionListCWAForeCur } from "types";
+import { onoffsSlice } from "store/slice/onoffsSlice";
 
-const optionList = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd']
-const optionList2 = ['close', 'cwacur', 'cwadir']
+const optionsForecast = [...optionListCWAFore]
+const optionsCur = [...optionListCWAForeCur]
 const getUrl = (identifier: string, date: string) => `${process.env.REACT_APP_PROXY_BASE}/data/figs/cwaforecast/epsg3857_${identifier}_${date}.png`
 
 export const CwaSeaForecast = () => {
   const ref = useRef<any>(null)
   const ref2 = useRef<any>(null)
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const identifiers = useSelector((state: RootState) => state.switches.checked)
-  const [identifier, setIdentifier] = useState('close')
-  const [identifier2, setIdentifier2] = useState('close')
+  const dispatch = useAppDispatch()
+  const idForecast = useAppSelector(state => state.switches.cwaSeaForecast)
+  const idCur = useAppSelector(state => state.switches.cwaSeaForeCur)
   const [jsonData, setJsonData] = useState(null)
-  const { openAlert, alertMessage, setOpenAlert, showAlert } = useAlert()
-  const datetime = useSelector((state: RootState) => state.map.datetime);
+  const { openAlert, alertMessage, setOpenAlert, setMessage } = useAlert()
+  const datetime = useAppSelector(state => state.map.datetime);
   const date = datetime.replace(/T|-|:/g, '').substring(0, 10)
 
-  const handleToggle = (value: string) => () => {
-    setIdentifier(value)
+  const handleToggleForecast = (value: string) => () => {
+    isOptionsCWAFore(value) ?
+      dispatch(onoffsSlice.actions.setCwaSeaForecast(value)) :
+      setMessage(t('alert.checkQueryParameter'))
   };
-  const handleToggle2 = (value: string) => () => {
-    setIdentifier2(value)
+  const handleToggleCur = (value: string) => () => {
+    isOptionsCWAForeCur(value) ?
+      dispatch(onoffsSlice.actions.setCwaSeaForeCur(value)) :
+      setMessage(t('alert.checkQueryParameter'))
   };
   useEffect(() => {
     if (ref.current) {
-      const url = getUrl(identifier, date)
+      const url = getUrl(idForecast, date)
       fetch(url, { method: "HEAD" })
         .then((response) => {
           if (response.ok) {
@@ -49,7 +53,7 @@ export const CwaSeaForecast = () => {
         })
     };
     if (ref2.current) {
-      const url = getUrl(identifier2, date)
+      const url = getUrl(idCur, date)
       fetch(url, { method: "HEAD" })
         .then((response) => {
           if (response.ok) {
@@ -62,9 +66,9 @@ export const CwaSeaForecast = () => {
           ref2.current.setOpacity(0)
         })
     }
-  }, [datetime, identifier, identifier2])
+  }, [datetime, idForecast, idCur])
   useEffect(() => {
-    if (identifier !== 'close' || identifier2 !== 'close') {
+    if (idForecast !== 'close' || idCur !== 'close') {
       fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/cwaforecast/data_${date}.json`)
         .then((response) => response.json())
         .then((json) => {
@@ -80,32 +84,32 @@ export const CwaSeaForecast = () => {
             ref2.current.setUrl()
             ref2.current.setOpacity(0)
           }
-          showAlert(t('alert.notInTime'))
+          setMessage(t('alert.notInTime'))
         })
     }
-  }, [date, identifier, identifier2])
+  }, [date, idForecast, idCur])
   return (
     <>
       <DataPanelRadioList
-        identifier={identifier2}
-        handleClick={handleToggle2}
+        identifier={idCur}
+        handleClick={handleToggleCur}
         group='CwaSeaForecast'
-        optionList={optionList2}
+        optionList={optionsCur}
       />
       <Divider variant="middle" sx={{ width: '80%', marginLeft: '16%', }} flexItem light />
       <DataPanelRadioList
-        identifier={identifier}
-        handleClick={handleToggle}
+        identifier={idForecast}
+        handleClick={handleToggleForecast}
         group='CwaSeaForecast'
-        optionList={optionList}
+        optionList={optionsForecast}
       />
-      <RenderIf isTrue={(identifier !== 'close' || identifier2 !== 'close') && jsonData}>
+      <RenderIf isTrue={(idForecast !== 'close' || idCur !== 'close') && jsonData}>
         <ShowCwaForecast data={jsonData} bounds={[[6.95, 109.95], [36.05, 126.05]]} />
       </RenderIf>
-      <RenderIf isTrue={identifier2 !== 'close'}>
+      <RenderIf isTrue={idCur !== 'close'}>
         <ImageOverlay ref={ref2} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={3} opacity={0} />
       </RenderIf>
-      <RenderIf isTrue={identifier !== 'close'}>
+      <RenderIf isTrue={idForecast !== 'close'}>
         <ImageOverlay ref={ref} url={''} crossOrigin='anonymous' bounds={[[6.95, 109.95], [36.05, 126.05]]} zIndex={2} opacity={0} />
       </RenderIf>
       <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {alertMessage} </AlertSlide>

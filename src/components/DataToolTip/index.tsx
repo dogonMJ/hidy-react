@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Tooltip, CircleMarker } from 'react-leaflet'
-import { useSelector } from "react-redux";
-import { RootState } from "store/store"
 import { coor } from 'types';
 import FormatCoordinate from "components/FormatCoordinate";
+import { useAppSelector } from "hooks/reduxHooks";
 
 interface CircleStyles {
   fill: boolean
@@ -24,7 +23,7 @@ const pointStyle = {
 }
 
 const DataToolTip = (props: { position: coor, content: any }) => {
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
+  const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const [circleStyle, setCircleStyle] = useState<CircleStyles>({ fill: false, opacity: 0, stroke: false, zIndex: 1500 })
 
   const handleCircleMarker = {

@@ -1,5 +1,3 @@
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "store/store"
 import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem, } from '@mui/material';
 import { Divider, Switch } from "@mui/material";
@@ -15,30 +13,18 @@ import { OdbBio } from './OdbBio';
 import { OdbMicroplastics } from './OdbMicroPlastics';
 import { OdbMarineHeatwave } from './OdbMarineHeatwave';
 import { ComponentList } from 'types';
-import { onoffsSlice } from 'store/slice/onoffsSlice';
+import { useToggleListChecks } from "hooks/useToggleListChecks";
 
 
 export const ODB = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const checked = useSelector((state: RootState) => state.switches.checked)
-
-  const handleToggle = (value: string) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    dispatch(onoffsSlice.actions.setChecked(newChecked))
-  };
+  const { checked, handleToggleChecks } = useToggleListChecks()
 
   const componentList: ComponentList = {
     odbTopo: <OdbTopo opacity={1} />,
     odbCtd: <OdbCTD />,
     odbGravity: <OdbGravity opacity={1} />,
-    odbCurrent: <OdbCurrent />,
+    odbCur: <OdbCurrent />,
     odbSedCore: <OdbSedCore />,
     odbMHW: <OdbMarineHeatwave />,
     odbChem: <OdbChemistry />,
@@ -60,7 +46,7 @@ export const ODB = () => {
                 key={value}
                 disablePadding
               >
-                <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                <ListItemButton role={undefined} onClick={handleToggleChecks(value)} dense>
                   <ListItemIcon>
                     <Switch
                       id={`switch-ODB-${value}`}

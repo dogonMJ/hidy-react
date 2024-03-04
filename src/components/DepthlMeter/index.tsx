@@ -1,22 +1,16 @@
-import { useMap } from 'react-leaflet';
 import { Box, Paper } from '@mui/material';
 import { createPortal } from 'react-dom'
 import { SliderMarks } from 'types'
 import { DepthMeterSlider } from 'components/DepthlMeter/DepthMeterSlider'
-import { memo, useState } from 'react';
+import { memo } from 'react';
+import { useMapDragScroll } from 'hooks/useMapDragScroll';
 
 export const DepthMeter = memo((props: { values: number[], marks: SliderMarks[], user?: any }) => {
+  const { setDrag } = useMapDragScroll()
   const mapContainer = document.getElementById('mapContainer')
-  const map = useMap()
-  const [isEnter, setIsEnter] = useState(false)
-  const mouseEnter = () => {
-    map.dragging.disable()
-    setIsEnter(true)
-  }
-  const mouseLeave = () => {
-    map.dragging.enable()
-    setIsEnter(false)
-  }
+  const mouseEnter = () => setDrag(false)
+  const mouseLeave = () => setDrag(true)
+
   if (mapContainer) {
     return (
       createPortal(

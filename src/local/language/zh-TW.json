@@ -36,6 +36,7 @@
   "remove": "移除",
   "dataPanel": "資料圖層",
   "clusterLevel": "資料疊合等級",
+  "hidyOld": "Hidy舊站",
   "CWAsites": {
     "title": "臺灣周遭海氣象",
     "subheader": "最新資料",
@@ -73,9 +74,9 @@
     "subheader2": "模式預報",
     "close": "關閉",
     "allOthers": "若圖層未出現可能是伺服器速度或來源尚未更新，請查看其他日期或是稍等幾分鐘。",
-    "GHRSST_L4_MUR_Sea_Surface_Temperature": "海面溫度",
-    "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": "海面溫度距平",
-    "MODIS_Aqua_CorrectedReflectance_TrueColor": "真實色彩",
+    "sst": "海面溫度",
+    "ssta": "海面溫度距平",
+    "TrueColor": "真實色彩",
     "Himawari_AHI_Band3_Red_Visible_1km": "可見紅光",
     "sla": "相對平均海平面海表面高",
     "slaOthers": "相對平均海平面海表面高又稱海平面距平(SLA, i.e. Sea Level Anomalies)，使用20年(1993~2012)平均計算。\nSLA網格資料由多種高度測量整合資料進行最適內插估計。",
@@ -90,7 +91,7 @@
     "bottomT": "海床位溫分析及預報",
     "mlotst": "混合層厚度分析及預報",
     "zos": "相對大地水準面海表面高分析及預報",
-    "3dsea_water_velocity": "海水速度分析及預報"
+    "3dwater_velocity": "海水速度分析及預報"
   },
   "Animated": {
     "title": "流速動畫",
@@ -125,7 +126,7 @@
   "OdbData": {
     "title": "ODB資料",
     "odbTopo": "水深",
-    "odbCurrent": "海流",
+    "odbCur": "海流",
     "odbGravity": "重力",
     "odbSedCore": "沉積物及岩心採樣點位",
     "odbCtd": "鹽溫深儀及附掛探針",
@@ -383,7 +384,7 @@
     "monthly": "逐月",
     "mean": "平均",
     "timePeriod": "時段",
-    "contour": "海面",
+    "contour": "平面",
     "profile": "剖面",
     "depth": "深度",
     "year": "年",
@@ -473,11 +474,11 @@
       "hist": "海研一號、海研二號、海研三號、新海研1號、新海研2號、新海研3號歷年航次路線。"
     }
   },
-  "WMSSelector": {
+  "CustomLayer": {
     "title": "加入圖層",
     "disclaimer": "各資料提供者格式略有差異，不保證能夠連接",
-    "directAddLayers": "加入WMS/WMTS圖層",
-    "layerSelector": "搜尋並加入WMS/WMTS圖層",
+    "addWmsLayer": "加入WMS/WMTS圖層",
+    "addLayerSelector": "搜尋並加入WMS/WMTS圖層",
     "addImage": "加入圖片",
     "addUrlOption": "加入WMS/WMTS網址至選項",
     "add": "新增",
@@ -512,8 +513,8 @@
       "serviceType": "選擇服務格式，通常網址就會有wms或wmts字樣。",
       "layerKeyword": "輸入圖層關鍵字。\n忽略大小寫之精確搜尋，可於字串任何地方用萬用字元「*」做模糊搜尋。\n空白、萬用字元則搜尋所有圖層。\n範例：\n「sea」搜尋sea圖層；「*sea」搜尋sea結尾圖層；「sea*」搜尋sea開頭圖層；「*sea*」搜尋包含sea的圖層。",
       "urlType": "系統會自動判斷，但不一定正確。KVP較容易出錯，建議使用RESTful WMTS。\n請注意WMTS在Z值超過上限時可能無法載入圖磚。\n*須支援EPSG:3857投影\n\nRESTful: 請將x(col)、y(row)、z(matrix)座標改為{x}、{y}、{z}。\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2012-07-09/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg\n\nKVP WMTS: 請修改此3個參數如為TileMatrix={z}&TileCol={x}&TileRow={y})\n範例: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/wmts.cgi?Service=WMTS&Request=GetTile&layer=MODIS_Terra_CorrectedReflectance_TrueColor&tilematrixset=GoogleMapsCompatible_Level9&style=default&TIME=2012-07-09&Version=1.0.0&TileMatrix={z}&TileCol={x}&TileRow={y}&Format=image%2Fjpeg\n\nWMS: 請將BBOX移除。\n範例: https://nrt.cmems-du.eu/thredds/wms/global-analysis-forecast-bio-001-028-daily?SERVICE=WMS&REQUEST=GetMap&LAYERS=chl&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&VERSION=1.1.1&TIME=2023-03-09T12%3A00%3A00Z&SRS=EPSG%3A3857&WIDTH=256&HEIGHT=256",
-      "directAddLayers": "直接輸入圖層網址及參數直接加入圖層。\n請參考網址說明修改參數為正確格式。",
-      "layerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。",
+      "addWmsLayer": "直接輸入圖層網址及參數直接加入圖層。\n請參考網址說明修改參數為正確格式。",
+      "addLayerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。",
       "addImage1": "輸入圖片網址加入單張圖片(不適用短網址)，須設定圖片範圍經緯度。\n\n範例:\n",
       "addImage2": "的資料範例中找到圖片網址",
       "addImage3": "及座標東經118-124度、北緯20.5-26.5度，分別輸入後按下加入圖層按鍵。"
@@ -531,7 +532,10 @@
     "edit": "編輯：",
     "del": "刪除：",
     "ele": "高程",
-    "dist": "距離"
+    "dist": "距離",
+    "downloadTitle": "下載圖形路徑",
+    "downloadDescription": "點選下按鍵下載所有圖形路徑對應格式。",
+    "downloadCaption": "*不支援圓形。\n*GPX不支援多邊形。\n*GeoJSON不含高程。"
   },
   "translation": {
     "title": "Switch Language"
@@ -557,7 +561,10 @@
     "noSelect": "請選擇參數",
     "noDate": "請選擇日期",
     "noData": "無資料",
-    "notInTime": "不在資料時間範圍內"
+    "notInTime": "不在資料時間範圍內",
+    "checkQueryParameter": "參數錯誤，請檢查網址列參數",
+    "noCoords": "請輸入完整座標",
+    "checkImage": "圖片不存在、無瀏覽權限或網址錯誤"
   },
   "about": {
     "title": "關於本站",
@@ -585,7 +592,7 @@
       "odbnews": "ODB電子報",
       "odbnews2": "不定期發行，介紹ODB活動及近況",
       "old2": "舊版Hidy Viewer",
-      "report": "探測報告查詢",
+      "report": "新版探測報告查詢",
       "report2": "海研一、二、三號、新海研1、2、3號歷年航次探測報告",
       "cplan2": "航次規劃應用小工具",
       "chemview2": "海洋化學資料展示",

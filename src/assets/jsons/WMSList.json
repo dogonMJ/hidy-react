@@ -1,5 +1,5 @@
 {
-  "GHRSST_L4_MUR_Sea_Surface_Temperature": {
+  "sst": {
     "type": "wms",
     "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi",
     "layer": "GHRSST_L4_MUR_Sea_Surface_Temperature",
@@ -13,7 +13,7 @@
     "colorBar": "seaSurfTempColor",
     "featureinfo": false
   },
-  "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": {
+  "ssta": {
     "type": "wms",
     "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi",
     "layer": "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
@@ -27,7 +27,7 @@
     "colorBar": "seaSurfTempAnoColor",
     "featureinfo": false
   },
-  "MODIS_Aqua_CorrectedReflectance_TrueColor": {
+  "TrueColor": {
     "type": "wms",
     "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi",
     "layer": "MODIS_Aqua_CorrectedReflectance_TrueColor",
@@ -112,7 +112,7 @@
     "unit": "\u00B0C",
     "featureinfo": true
   },
-  "3dsea_water_velocity": {
+  "3dwater_velocity": {
     "type": "wms",
     "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i",
     "layer": "sea_water_velocity",

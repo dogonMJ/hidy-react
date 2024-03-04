@@ -6,19 +6,16 @@ import { CwaSeaForecast } from "./CwaSeaForecast";
 import { CwaWeatherSites } from "./CwaWeatherSites";
 import { CwaRadar } from "./CwaRadar";
 import InfoButton from "components/InfoButton";
-import { RootState } from 'store/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { onoffsSlice } from 'store/slice/onoffsSlice';
 import { RenderIf } from "components/RenderIf/RenderIf";
-import { ComponentList } from "types";
+import { ComponentList, optionListCWA } from "types";
+import { useToggleListChecks } from "hooks/useToggleListChecks";
 // import { MoiSubstrate } from "./MoiSubstrate";
 
-const optionList = ['cwaSea', 'cwaWeather', 'cwaRadar']
+const optionList = optionListCWA
 
 export const ToggleCWA = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const checked = useSelector((state: RootState) => state.switches.checked)
+  const { checked, handleToggleChecks } = useToggleListChecks()
 
   const componentList: ComponentList = {
     cwaSea: <CwaSeaSites />,
@@ -27,16 +24,6 @@ export const ToggleCWA = () => {
     // substrate:<MoiSubstrate />
   }
 
-  const handleToggle = (value: string) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    dispatch(onoffsSlice.actions.setChecked(newChecked))
-  };
   return (
     <>
       <Divider variant="middle" />
@@ -52,7 +39,7 @@ export const ToggleCWA = () => {
                 key={value}
                 disablePadding
               >
-                <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                <ListItemButton role={undefined} onClick={handleToggleChecks(value)} dense>
                   <ListItemIcon>
                     <Switch
                       id={`switch-${value}`}

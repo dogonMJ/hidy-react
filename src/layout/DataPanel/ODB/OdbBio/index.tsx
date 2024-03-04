@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Divider, Box, Tab, Tabs, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio,
   Stack, Typography
@@ -8,19 +7,18 @@ import { SamplingEvents } from "./SamplingEvents";
 import { BioComposition } from "./BioComposition";
 import { BioDataset, BioFilter } from "types";
 import { SwitchSameColor } from "components/SwitchSameColor";
-import { useDispatch, useSelector } from "react-redux";
 import { odbBioSlice } from "store/slice/odbBioSlice";
-import { RootState } from "store/store";
 import { CustomTabPanel } from "components/CustomTabPanel";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 
 const ModeSwitch = SwitchSameColor()
 
 export const OdbBio = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const tabNum = useSelector((state: RootState) => state.odbBio.tabNum)
-  const dataset = useSelector((state: RootState) => state.odbBio.dataset)
-  const filter = useSelector((state: RootState) => state.odbBio.filter)
+  const dispatch = useAppDispatch()
+  const tabNum = useAppSelector(state => state.odbBio.tabNum)
+  const dataset = useAppSelector(state => state.odbBio.dataset)
+  const filter = useAppSelector(state => state.odbBio.filter)
   const handleTabChange = () => {
     dispatch(odbBioSlice.actions.switchTab())
   }

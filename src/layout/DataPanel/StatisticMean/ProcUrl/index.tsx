@@ -4,30 +4,33 @@ import { Box, Typography, MenuItem, InputLabel, Select, SelectChangeEvent, FormC
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { PlotContour } from "../PlotContour";
 import { PlotProfile } from "../PlotProfile";
-import { varList, avgTimeList } from "../varList";
+import { varList, avgTimeList, years } from "../varList";
 import { useMapDragScroll } from "hooks/useMapDragScroll";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { longtermSlice } from "store/slice/longtermSlice";
+import { LongtermPar, LongtermPeriod, isMonth } from "types";
 
-const years = Array.from({ length: 26 }, (v, i) => (i + 1993).toString())
 
-export const ProcUrl = (props: { parameter: string, depth: number, monthly: boolean, profile: boolean, coord: string }) => {
+export const ProcUrl = (props: { parameter: LongtermPar, depth: number, monthly: boolean, profile: boolean, coord: string }) => {
   const { parameter, depth, monthly, profile, coord } = props
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { setDrag } = useMapDragScroll()
-  const [timePeriod, setTimePeriod] = useState<string>('mean')
-  const [year, setYear] = useState(years[0])
-  const [month, setMonth] = useState('01')
+  const year = useAppSelector(state => state.longterm.year)
+  const month = useAppSelector(state => state.longterm.month)
+  const timePeriod = useAppSelector(state => state.longterm.period)
   const [url, setUrl] = useState('')
   const [text, setText] = useState({})
 
   const handleMouseLeave = () => setDrag(true)
   const handleTimePeriod = (event: SelectChangeEvent) => {
-    setTimePeriod(event.target.value)
+    dispatch(longtermSlice.actions.setPeriod(event.target.value as LongtermPeriod))
   }
   const handleMonth = (event: SelectChangeEvent) => {
-    setMonth(event.target.value)
+    dispatch(longtermSlice.actions.setMonth(event.target.value))
   }
   const handleYear = (event: SelectChangeEvent) => {
-    setYear(event.target.value)
+    dispatch(longtermSlice.actions.setYear(event.target.value))
   }
   const handelDirection = (coord: string) => {
     // coord.length === 5為選擇經線，x軸為緯線，反之亦然
@@ -76,7 +79,8 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
               onChange={handleTimePeriod}
             >
               {Object.keys(avgTimeList).map((par: string, id: number) => {
-                return <MenuItem key={id} value={par} onMouseLeave={handleMouseLeave}>{t(avgTimeList[par].text)}</MenuItem>
+                const typedPar = par as LongtermPeriod
+                return <MenuItem key={id} value={par} onMouseLeave={handleMouseLeave}>{t(avgTimeList[typedPar].text)}</MenuItem>
               })}
             </Select>
           </FormControl>
@@ -109,11 +113,10 @@ export const ProcUrl = (props: { parameter: string, depth: number, monthly: bool
               onChange={handleMonth}
             >
               {Object.keys(avgTimeList).map((par: string, id: number) => {
-                if (Number(avgTimeList[par].code) < 13 && Number(avgTimeList[par].code) !== 0) {
-                  return <MenuItem key={id} value={avgTimeList[par].code} onMouseLeave={handleMouseLeave}>{t(avgTimeList[par].text)}</MenuItem>
-                } else {
-                  return null
-                }
+                const typedPar = par as LongtermPeriod
+                return isMonth(avgTimeList[typedPar].code)
+                  ? <MenuItem key={id} value={avgTimeList[typedPar].code} onMouseLeave={handleMouseLeave}>{t(avgTimeList[typedPar].text)}</MenuItem>
+                  : null
               })}
             </Select>
           </FormControl>

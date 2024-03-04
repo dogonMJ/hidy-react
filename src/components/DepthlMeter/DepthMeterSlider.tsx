@@ -4,9 +4,11 @@ import { SliderMarks } from 'types'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import React, { forwardRef, useState } from 'react';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/store"
 import { mapSlice } from 'store/slice/mapSlice';
+import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
+import { odbCurrentSlice } from 'store/slice/odbCurrentSlice';
+import { odbCtdSlice } from 'store/slice/odbCtdSlice';
+
 const preventHorizontalKeyboardNavigation = (event: React.KeyboardEvent) => {
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     event.preventDefault();
@@ -37,16 +39,28 @@ const ValueLabelComponent = (props: ValueLabelComponentProps) => {
 }
 
 export const DepthMeterSlider = (props: { values: number[], marks: SliderMarks[], user?: any }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { values, marks } = props
   const maxValue = values.length - 1
-  const defaultValue = useSelector((state: RootState) => state.map.depthMeterValue[props.user])
+  const defaultValue = useAppSelector(state => state.map.depthMeterValue[props.user])
   const [value, setValue] = useState(defaultValue)
-  const handleChange = (event: Event, value: any) => {
-    setValue(value)
-  }
+
+  const handleChange = (event: Event, value: any) => setValue(value)
+
   const handleChangeCommitted = (event: any, value: number | number[]) => {
-    dispatch(mapSlice.actions.DepthMeterValue([props.user, value as number]))
+    dispatch(mapSlice.actions.DepthMeterValue([props.user, value as number])) //更新實際使用state
+    switch (props.user) {
+      //只用於更新分享網址避免網址過長，不影響原本功能
+      case 'odbCurrent':
+        dispatch(odbCurrentSlice.actions.setDepthIndex(value as number))
+        break
+      case 'odbCtd':
+        dispatch(odbCtdSlice.actions.setDepthIndex(value as number))
+        break
+      case 'cmems':
+        dispatch(mapSlice.actions.setWmsDepthIndex(value as number))
+        break
+    }
   }
   return (
     <Slider

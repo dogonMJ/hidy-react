@@ -1,12 +1,11 @@
-import { useState, Fragment, useEffect, useRef } from 'react';
+import { useState, Fragment, useEffect, useRef, memo } from 'react';
 import 'leaflet'
-import { useSelector } from 'react-redux';
-import { RootState } from "store/store"
+import { useAppSelector } from 'hooks/reduxHooks';
 import { useTranslation } from "react-i18next";
 import { List, Collapse, Drawer, Button, Divider, IconButton, styled, Stack, Typography } from '@mui/material';
 import { ChevronLeft, ChevronRight, MenuRounded } from '@mui/icons-material'
 import { DataPanelItem } from 'components/DataPanelItem';
-import { About } from 'components/About';
+import { About } from 'layout/DataPanel/About';
 import { ToggleCWA } from 'layout/DataPanel/NearTW';
 import APILayers from 'layout/DataPanel/APIlayers'
 import AnimatedCurrents from 'layout/DataPanel/AnimatedCurrents';
@@ -15,7 +14,7 @@ import { ODB } from 'layout/DataPanel/ODB';
 import { CPlanLayers } from 'layout/DataPanel/CPlanLayers';
 import { StatisticMean } from 'layout/DataPanel/StatisticMean';
 import { ShipTrack } from './ShipTrack';
-import { WMSSelector } from './WMSSelector';
+import { CustomLayer } from './CustomLayer';
 import { ComponentList } from 'types';
 import { useMapDragScroll } from 'hooks/useMapDragScroll';
 import ODBlogo from 'assets/images/logo192.png'
@@ -45,7 +44,7 @@ const itemList: ComponentList = {
   OdbData: <ODB />,
   CPlanLayers: <CPlanLayers />,
   StatMean: <StatisticMean />,
-  WMSSelector: < WMSSelector />,
+  CustomLayer: < CustomLayer />,
   // WebMaps: <SatelliteWebMaps cache={cache} />
 }
 const secLevelAll: ComponentList = {
@@ -53,11 +52,11 @@ const secLevelAll: ComponentList = {
 }
 const onOff: OnOff = Object.keys(itemList).reduce((acc, key) => Object.assign(acc, { [key]: false }), {})
 
-const DataPanel = () => {
+const DataPanel = memo(() => {
   const { setDrag } = useMapDragScroll()
   const ref = useRef<any>()
   const { t } = useTranslation()
-  const userInfo = useSelector((state: RootState) => state.map.userInfo);
+  const userInfo = useAppSelector(state => state.map.userInfo);
   const [openSwitch, setOpenSwitch] = useState(onOff)
   const [open, setOpen] = useState(true);
   const [openAbout, setOpenAbout] = useState({ about: false, contact: false, news: false })
@@ -76,22 +75,39 @@ const DataPanel = () => {
   const handleContact = () => setOpenAbout({ about: false, contact: !openAbout.contact, news: false })
   const handleNews = () => setOpenAbout({ about: false, contact: false, news: !openAbout.news })
 
-
-
   useEffect(() => {
-    // L.DomEvent.disableClickPropagation(ref.current);
     L.DomEvent.disableScrollPropagation(ref.current);
-  })
-  // useEffect(() => {
-  //   const queryString = window.location.search
-  //   const urlParams = new URLSearchParams(queryString);
-  //   const ons = urlParams.get('data')?.split(',')
-  //   ons?.forEach((on) => {
-  //     onOff[on] = true
-  //   })
-  //   ons && setOpen(true)
-  //   console.log(urlParams.get('data'), onOff)
-  // }, [])
+  }, [])
+  useEffect(() => {
+    /// 展開列表 ///
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString);
+    for (const [key] of urlParams.entries()) {
+      switch (key.slice(0, 3)) {
+        case 'odb':
+          onOff.OdbData = true
+          break
+        case 'cwa':
+          onOff.CWAsites = true
+          break
+        case 'lon':
+          onOff.StatMean = true
+          break
+        case 'wms':
+          onOff.APIlayers = true
+          break
+        case 'ani':
+          onOff.Animated = true
+          break
+        case 'add':
+          onOff.CustomLayer = true
+          break
+        case 'cpl':
+          onOff.CPlanLayers = true
+          break
+      }
+    }
+  }, [])
   return (
     <div
       ref={ref}
@@ -203,6 +219,7 @@ const DataPanel = () => {
         </List>
         <Divider />
         <Box sx={{ paddingInlineEnd: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Button variant='text' size='small' href="https://odbgo.oc.ntu.edu.tw/odbargo/" target='_blank' rel="noreferrer noopenner" style={{ color: '#1976D2' }} >{t('hidyOld')}</Button>
           <Button variant='text' size='small' onClick={handleNews} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('news.title')}</Button>
           <Button variant='text' size='small' onClick={handleAbout} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('about.title')}</Button>
           <Button variant='text' size='small' onClick={handleContact} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('contact.title')}</Button>
@@ -211,6 +228,6 @@ const DataPanel = () => {
       <About open={openAbout} setOpen={setOpenAbout} />
     </div >
   )
-}
+})
 
 export default DataPanel

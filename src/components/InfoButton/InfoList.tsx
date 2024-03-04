@@ -11,7 +11,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.close')}
         </Typography>
       )
-    case 'GHRSST_L4_MUR_Sea_Surface_Temperature':
+    case 'sst':
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
@@ -28,7 +28,7 @@ const InfoList = (props: { dataId: string }) => {
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
         </Typography>
       )
-    case 'GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies':
+    case 'ssta':
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
@@ -45,7 +45,7 @@ const InfoList = (props: { dataId: string }) => {
           <i>part of NASA's Earth Observing System Data and Information System (EOSDIS).</i>
         </Typography>
       )
-    case 'MODIS_Aqua_CorrectedReflectance_TrueColor':
+    case 'TrueColor':
       return (
         <Typography sx={{ p: 2 }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
@@ -240,7 +240,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('APIlayers.instOthers')}<br />
         </Typography >
       )
-    case '3dsea_water_velocity':
+    case '3dwater_velocity':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`APIlayers.${props.dataId}`)}</b><br />
@@ -442,7 +442,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.source')}: <a target="_blank" href="https://www.odb.ntu.edu.tw/gravity/" rel="noreferrer">{t('OdbData.gravity.source')}</a>
         </Typography >
       )
-    case 'odbCurrent':
+    case 'odbCur':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`OdbData.${props.dataId}`)}</b><br />
@@ -567,60 +567,60 @@ const InfoList = (props: { dataId: string }) => {
     case 'addUrlOption':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.addUrlOption')}
+          {t('CustomLayer.description.addUrlOption')}
         </Typography >
       )
     case 'selectUrl':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.selectUrl')}
+          {t('CustomLayer.description.selectUrl')}
         </Typography >
       )
     case 'serviceType':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.serviceType')}
+          {t('CustomLayer.description.serviceType')}
         </Typography >
       )
     case 'layerKeyword':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.layerKeyword')}
+          {t('CustomLayer.description.layerKeyword')}
         </Typography >
       )
-    case 'directAddLayers':
+    case 'addWmsLayer':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.directAddLayers')}
+          {t('CustomLayer.description.addWmsLayer')}
         </Typography >
       )
-    case 'layerSelector':
+    case 'addLayerSelector':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.layerSelector')}
+          {t('CustomLayer.description.addLayerSelector')}
         </Typography >
       )
     case 'addImage':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
-          {t('WMSSelector.description.addImage1')}
+          {t('CustomLayer.description.addImage1')}
           <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-A0058-003" rel="noreferrer">中央氣象署資料開放平台雷達整合回波圖-臺灣(鄰近區域)_無地形</a>
-          {t('WMSSelector.description.addImage2')}
+          {t('CustomLayer.description.addImage2')}
           <i>https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png</i>
-          {t('WMSSelector.description.addImage3')}
+          {t('CustomLayer.description.addImage3')}
         </Typography >
       )
     case 'urlType':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', wordWrap: "break-word" }}>
-          {t('WMSSelector.description.urlType')}
+          {t('CustomLayer.description.urlType')}
         </Typography >
       )
     case 'draw':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', width: '35vw' }}>
-          {t('draw.title')}<br />
-          {t('draw.source')}: <a target="_blank" href="https://doi.org/10.5285/e0f0bb80-ab44-2739-e053-6c86abc0289c" rel="noreferrer">GEBCO Compilation Group (2022) GEBCO_2022 Grid</a><br />
+          <b>{t('draw.title')}</b><br />
+          {t('draw.source')}: <a target="_blank" href="https://doi.org/10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b" rel="noreferrer">GEBCO Compilation Group (2023) GEBCO_2023 Grid</a><br />
           {t('draw.resolution')}<br />
           {t('draw.info')}<br />
           {t('draw.polyline')}<br />

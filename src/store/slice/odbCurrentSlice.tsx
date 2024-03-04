@@ -1,20 +1,27 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { readUrlQuery } from "Utils/UtilsStates";
+import { initString, readUrlQuery } from "Utils/UtilsStates";
+import { CtdPeriods, isCtdPeriod } from "types";
 
 const query: any = readUrlQuery('odbCur')
 
 interface OdbCurStates {
-  period: string
+  period: CtdPeriods
+  depthIndex: number
 }
 
 export const odbCurrentSlice = createSlice({
   name: "odbCur",
   initialState: {
-    period: query && query.period ? query.period : 'avg',
+    period: initString(query, 'period', 'avg', isCtdPeriod),
+    depthIndex: 49, //only for share url and default, does not involve in actual function
   } as OdbCurStates,
   reducers: {
-    setPeriod: (state, action: PayloadAction<string>) => {
+    setPeriod: (state, action: PayloadAction<CtdPeriods>) => {
       state.period = action.payload
+    },
+    setDepthIndex: (state, action: PayloadAction<number>) => {
+      //only for share function
+      state.depthIndex = action.payload
     },
   }
 });

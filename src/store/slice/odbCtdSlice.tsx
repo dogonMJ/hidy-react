@@ -1,44 +1,61 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CtdParameters, Palette, isCtdParameter, isPalette } from 'types'
+import { CtdParameters, CtdPeriods, Palette, isCtdParameter, isCtdPeriod, isPalette } from 'types'
 import { defaultCtdRange } from "Utils/UtilsODB";
-import { readUrlQuery } from "Utils/UtilsStates";
+import { initBoolean, initNumber, initString, readUrlQuery } from "Utils/UtilsStates";
 
 const query: any = readUrlQuery('odbCtd')
+
+const initCtdRange = (query: any, defaultCtdRange: any) => {
+  if (query && query.range) {
+    const modifiedRange = JSON.parse(query.range)
+    const mergedObject = { ...defaultCtdRange };
+    for (const key in modifiedRange) {
+      if (modifiedRange.hasOwnProperty(key) && mergedObject.hasOwnProperty(key)) {
+        mergedObject[key] = { ...mergedObject[key], ...modifiedRange[key] };
+      }
+    }
+    return mergedObject
+  } else {
+    return defaultCtdRange
+  }
+}
 
 interface OdbCtdStates {
   par: CtdParameters
   pX2: CtdParameters | 'close'
   pY: CtdParameters | 'depth'
-  period: string
+  period: CtdPeriods
   palette: Palette
   mask: boolean
   reverse: boolean
-  fix: boolean
+  fixRange: boolean
   interval: number
   opacity: number
   range: { [key: string]: { min: number, max: number } }
+  depthIndex: number
 }
 
 export const odbCtdSlice = createSlice({
   name: "odbCtd",
   initialState: {
-    par: query && query.par && isCtdParameter(query.par) ? query.par : 'temperature',
-    pX2: query && query.pX2 && isCtdParameter(query.pX2) ? query.pX2 : 'salinity',
-    pY: query && query.pY && isCtdParameter(query.pY) ? query.pY : 'depth',
-    period: query && query.period ? query.period : 'avg',
-    palette: query && query.palette && isPalette(query.palette) ? query.palette : 'plasma',
-    mask: query && query.mask === 'true' ? true : false,
-    reverse: query && query.reverse === 'true' ? true : false,
-    fix: query && query.fixRange === 'true' ? true : false,
-    interval: query && Number(query.interval) >= 0 && Number(query.interval) <= 30 ? Number(query.interval) : 20,
-    opacity: query && query.opacity ? Number(query.opacity) : 100,
-    range: defaultCtdRange,
+    par: initString(query, 'par', 'temperature', isCtdParameter),
+    pX2: initString(query, 'pX2', 'salinity', isCtdParameter),
+    pY: initString(query, 'pY', 'depth', isCtdParameter),
+    period: initString(query, 'period', 'avg', isCtdPeriod),
+    palette: initString(query, 'palette', 'plasma', isPalette),
+    mask: initBoolean(query, 'mask'),
+    reverse: initBoolean(query, 'reverse'),
+    fixRange: initBoolean(query, 'fixRange'),
+    interval: initNumber(query, 'interval', 20, [0, 30]),
+    opacity: initNumber(query, 'opacity', 100),
+    range: initCtdRange(query, defaultCtdRange),
+    depthIndex: 99, //only for share url and default, does not involve in actual function
   } as OdbCtdStates,
   reducers: {
     setSelection: (state, action: PayloadAction<CtdParameters>) => {
       state.par = action.payload
     },
-    setPeriod: (state, action: PayloadAction<string>) => {
+    setPeriod: (state, action: PayloadAction<CtdPeriods>) => {
       state.period = action.payload
     },
     setProfileX2Par: (state, action: PayloadAction<CtdParameters | 'close'>) => {
@@ -57,7 +74,7 @@ export const odbCtdSlice = createSlice({
       state.reverse = action.payload
     },
     setFixRange: (state, action: PayloadAction<boolean>) => {
-      state.fix = action.payload
+      state.fixRange = action.payload
     },
     setInterval: (state, action: PayloadAction<number>) => {
       state.interval = action.payload
@@ -72,6 +89,10 @@ export const odbCtdSlice = createSlice({
       if (action.payload.max || action.payload.max === 0) {
         state.range[action.payload.par].max = action.payload.max
       }
-    }
+    },
+    setDepthIndex: (state, action: PayloadAction<number>) => {
+      //only for share function
+      state.depthIndex = action.payload
+    },
   }
 });

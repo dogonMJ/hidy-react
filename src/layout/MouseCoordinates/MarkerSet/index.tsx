@@ -1,11 +1,14 @@
 import L from "leaflet";
 import { Marker, Popup } from 'react-leaflet'
 import FormatCoordinate from 'components/FormatCoordinate'
-import { RootState } from "store/store"
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Button, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from "react";
+import { Button, Stack, } from '@mui/material';
+import { memo, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { coordInputSlice } from "store/slice/coordInputSlice";
+import blueIconPng from 'assets/images/marker-icon-blue.png';
+import greenIconPng from 'assets/images/marker-icon-green.png';
+import shadowPng from 'assets/images/marker-shadow.png'
 
 interface markerSet {
   markerCoord: (number | null)[],
@@ -13,26 +16,31 @@ interface markerSet {
   onclick?: (evt: React.MouseEvent<HTMLButtonElement>) => void,
 }
 const greenIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  iconUrl: greenIconPng,
+  shadowUrl: shadowPng,
+  iconSize: [20, 31],
+  iconAnchor: [10.5, 31],
+  popupAnchor: [1, -30],
+  shadowSize: [31, 31]
 });
 
 const blueIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconUrl: blueIconPng,
+  shadowUrl: shadowPng,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
 
-const MarkerSet = (props: markerSet) => {
+const round5 = (n: number) => Math.round(n * 100000) / 100000
+
+export const MarkerSet = memo((props: markerSet) => {
+  const ref = useRef<any>()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation();
-  const latlonFormat = useSelector((state: RootState) => state.coordInput.latlonformat)
+  const latlonFormat = useAppSelector(state => state.map.latlonformat)
+  const position = useAppSelector(state => state.coordInput.current)
   const [markerLat, markerLon] = [...props.markerCoord]
   const [elevation, setElevation] = useState(null)
   const popupopen = () => {
@@ -49,6 +57,14 @@ const MarkerSet = (props: markerSet) => {
         .then(res => res.json())
         .then(json => setElevation(json.z[0]))
     }
+  }
+  const onDrag = () => {
+    const latlng = ref.current.getLatLng()
+    dispatch(coordInputSlice.actions.setCurrent([round5(latlng.lat), round5(latlng.lng)]))
+  }
+  const onDragEnd = () => {
+    const latlng = ref.current.getLatLng()
+    dispatch(coordInputSlice.actions.setCurrent([round5(latlng.lat), round5(latlng.lng)]))
   }
 
   if (markerLat !== null && markerLon !== null) {
@@ -72,9 +88,9 @@ const MarkerSet = (props: markerSet) => {
       )
     } else {
       return (
-        <Marker position={[markerLat, markerLon]} icon={blueIcon} eventHandlers={{ popupopen: popupopen }} >
+        <Marker ref={ref} position={position} icon={blueIcon} eventHandlers={{ popupopen: popupopen, dragend: onDragEnd, drag: onDrag }} draggable={true}>
           <Popup>
-            <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
+            <FormatCoordinate coords={position} format={latlonFormat} />
             {elevation && <div>Elevation: {elevation} m</div>}
           </Popup>
         </Marker>
@@ -84,5 +100,4 @@ const MarkerSet = (props: markerSet) => {
     return <></>
   }
 }
-
-export default MarkerSet
+)

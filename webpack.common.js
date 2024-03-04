@@ -4,6 +4,8 @@ const webpack = require('webpack');
 require('dotenv').config({ path: './.env' });
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
+const { GenerateSW } = require('workbox-webpack-plugin');
+
 
 module.exports = {
   entry: {
@@ -67,7 +69,10 @@ module.exports = {
     new InjectManifest({
       swSrc: './src/service-worker.ts',
       swDest: 'sw.js',
-    })
+      exclude: [
+        /index\.html$/,
+      ],
+    }),
   ],
   resolve: {
     plugins: [

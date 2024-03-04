@@ -5,13 +5,14 @@ import { useTranslation } from "react-i18next";
 import { ProcUrl } from 'layout/DataPanel/StatisticMean/ProcUrl';
 import { RenderIf } from "components/RenderIf/RenderIf";
 import { TopoJSON } from "components/TopoJSON/TopoJSON";
-import { varList } from "./varList"
+import { varList, longtermDepths as depths } from "./varList"
 import InfoButton from "components/InfoButton";
 import { SwitchSameColor } from "components/SwitchSameColor";
-import { useDispatch } from "react-redux";
-import { mapSlice } from "store/slice/mapSlice";
 import { useMapDragScroll } from "hooks/useMapDragScroll";
-const depths = [0, 10, 20, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500]
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { longtermSlice } from "store/slice/longtermSlice";
+import { useSingleComponentCheck } from "hooks/useSingleComponentCheck";
+import { LongtermPar } from "types";
 
 const PeriodSwitch = SwitchSameColor()
 const gridStyle = {
@@ -20,27 +21,30 @@ const gridStyle = {
 }
 
 export const StatisticMean = () => {
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { setDrag } = useMapDragScroll()
-  const [parameter, setParameter] = useState('close')
-  const [monthly, setMonthly] = useState(false)
-  const [profile, setProfile] = useState(false)
-  const [depth, setDepth] = useState(0)
+  const { addCheckedComponent, removeCheckedComponent } = useSingleComponentCheck()
+  const parameter = useAppSelector(state => state.longterm.par)
+  const monthly = useAppSelector(state => state.longterm.monthly)
+  const profile = useAppSelector(state => state.longterm.profile)
+  const depth = useAppSelector(state => state.longterm.depth)
+  const gridCoord = useAppSelector(state => state.longterm.coord)
   const [girdLines, setGridLines] = useState<any>()
-  const [gridCoord, setGridCoord] = useState<string>('')
 
   const handleMouseLeave = () => setDrag(true)
   const handleParameter = (event: SelectChangeEvent) => {
-    setParameter(event.target.value)
+    dispatch(longtermSlice.actions.setPar(event.target.value as LongtermPar))
+    event.target.value === 'close' ? removeCheckedComponent('longterm') : addCheckedComponent('longterm')
   }
   const handlePeriodSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMonthly(event.target.checked)
+    dispatch(longtermSlice.actions.setMonthly(event.target.checked))
   }
   const handleType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProfile(event.target.checked)
+    dispatch(longtermSlice.actions.setProfile(event.target.checked))
   }
   const handleDepth = (event: SelectChangeEvent) => {
-    setDepth(Number(event.target.value))
+    dispatch(longtermSlice.actions.setDepth(Number(event.target.value)))
   }
 
   const styleFunc = () => gridStyle
@@ -54,7 +58,7 @@ export const StatisticMean = () => {
       layer.setStyle(gridStyle)
     })
     layer.on('click', () => {
-      setGridCoord(feature.properties.title.replace('.', ''))
+      dispatch(longtermSlice.actions.setCoord(feature.properties.title.replace('.', '')))
     })
   }
 
@@ -77,15 +81,16 @@ export const StatisticMean = () => {
             onChange={handleParameter}
           >
             {Object.keys(varList).map((par: string, id: number) => {
-              const unit = varList[par].unit === '' ? '' : `(${varList[par].unit})`
-              return <MenuItem key={id} value={par} onMouseLeave={handleMouseLeave}>{`${t(varList[par].name)} ${unit}`}</MenuItem>
+              const typedPar = par as LongtermPar
+              const unit = varList[typedPar].unit === '' ? '' : `(${varList[typedPar].unit})`
+              return <MenuItem key={id} value={par} onMouseLeave={handleMouseLeave}>{`${t(varList[typedPar].name)} ${unit}`}</MenuItem>
             })}
           </Select>
         </FormControl>
         <Stack direction="row" spacing={1} alignItems="center">
           <InfoButton dataId="StatMeanLongterm" />
           <Typography style={{ marginLeft: -5 }}>{t('StatMean.longterm')}</Typography>
-          <PeriodSwitch id={`switch-statmena-period`} onChange={handlePeriodSwitch} />
+          <PeriodSwitch id={`switch-statmena-period`} onChange={handlePeriodSwitch} checked={monthly} />
           <Typography>{t('StatMean.monthly')}</Typography>
           <InfoButton dataId="StatMeanMonthly" />
         </Stack>
@@ -97,7 +102,7 @@ export const StatisticMean = () => {
         <Stack direction="row" spacing={1} alignItems="center">
           <InfoButton dataId="StatMeanContour" />
           <Typography style={{ marginLeft: -5 }}>{t('StatMean.contour')}</Typography>
-          <PeriodSwitch id={`switch-statmena-type`} onChange={handleType} />
+          <PeriodSwitch id={`switch-statmena-type`} onChange={handleType} checked={profile} />
           <Typography>{t('StatMean.profile')}</Typography>
           <InfoButton dataId="StatMeanProfile" />
         </Stack>
