@@ -96,9 +96,6 @@ export const DrawShapes = () => {
                 circlemarkerLayer.on('click', async (e: any) => {
                   setPopupPos(e.latlng)
                   setContentLayer(allLayerGroup)
-                  // const popupContent = await downloadPopup(allLayerGroup)
-                  // circlemarkerLayer.bindPopup(popupContent)
-                  // circlemarkerLayer.openPopup()
                 })
                 break
               case 'polyline':

@@ -6,6 +6,9 @@ import { Button, Stack, } from '@mui/material';
 import { memo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { coordInputSlice } from "store/slice/coordInputSlice";
+import blueIconPng from 'assets/images/marker-icon-blue.png';
+import greenIconPng from 'assets/images/marker-icon-green.png';
+import shadowPng from 'assets/images/marker-shadow.png'
 
 interface markerSet {
   markerCoord: (number | null)[],
@@ -13,8 +16,8 @@ interface markerSet {
   onclick?: (evt: React.MouseEvent<HTMLButtonElement>) => void,
 }
 const greenIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconUrl: greenIconPng,
+  shadowUrl: shadowPng,
   iconSize: [20, 31],
   iconAnchor: [10.5, 31],
   popupAnchor: [1, -30],
@@ -22,8 +25,8 @@ const greenIcon = new L.Icon({
 });
 
 const blueIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconUrl: blueIconPng,
+  shadowUrl: shadowPng,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],

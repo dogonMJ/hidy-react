@@ -1,4 +1,4 @@
-import { Typography, Box, Switch } from "@mui/material"
+import { Typography, Box } from "@mui/material"
 import { GeoJsonTooltip } from "components/GeoJsonTooltip"
 import { Marker, useMap } from "react-leaflet"
 import { useEffect, useState } from "react"
@@ -35,9 +35,12 @@ export const ShipLocation = () => {
   const [shipInfo, setShipInfo] = useState<Ships | undefined>(undefined)
 
   const fetchShipInfo = async () => {
-    // const baseUrl = 'https://api.odb.ntu.edu.tw/cruise/ship/'
     const baseUrl = `${process.env.REACT_APP_PROXY_BASE}/data/shiploc/`
-    await Promise.all([fetch(`${baseUrl}NOR1`, { credentials: 'include' }), fetch(`${baseUrl}NOR2`, { credentials: 'include' }), fetch(`${baseUrl}NOR3`, { credentials: 'include' })])
+    await Promise.all([
+      fetch(`${baseUrl}NOR1`, { credentials: 'include' }),
+      fetch(`${baseUrl}NOR2`, { credentials: 'include' }),
+      fetch(`${baseUrl}NOR3`, { credentials: 'include' })
+    ])
       .then(async ([NOR1, NOR2, NOR3]) => {
         const nor1 = await NOR1.json()
         const nor2 = await NOR2.json()

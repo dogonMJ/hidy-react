@@ -25,6 +25,9 @@ const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>,
     },
     'mouseout': () => {
       layer.setStyle(lineStyle)
+    },
+    'click': () => {
+      window.open(`https://cruise.oc.ntu.edu.tw/csr/${cruiseId[0]}${cruiseId[1]}`, '_blank')
     }
   })
 }
@@ -38,7 +41,6 @@ export const HistTrack = () => {
   const [year, setYear] = useState('')
   const [json, setJson] = useState<any>(null)
 
-  // const getShips = () => fetch('https://odbpo.oc.ntu.edu.tw/ais/getorshiplist')
   const getShips = () => fetch(`${process.env.REACT_APP_PROXY_BASE}/data/shiplist/getorshiplist`)
     .then(response => response.json())
     .then(json => setShipList(json[0]))
@@ -63,7 +65,6 @@ export const HistTrack = () => {
 
   useEffect(() => {
     ref.current.clearLayers()
-    // fetch(`https://localhost:3000/test_files/${ship}_${year}.kml`)
     if (year) {
       fetch(`${process.env.REACT_APP_PROXY_BASE}/data/histship?ship=${ship}&year=${year}`, {
         credentials: 'include'

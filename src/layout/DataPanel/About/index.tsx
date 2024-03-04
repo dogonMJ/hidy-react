@@ -32,7 +32,7 @@ const links: { [key: string]: string } = {
   rose: 'https://app05.odb.ntu.edu.tw/physv/sadcp/rose/odbphy_current_rose.htm',
   ctd: 'https://www.odb.ntu.edu.tw/ctd/',
   adcp: 'https://www.odb.ntu.edu.tw/adcp/',
-  report: 'http://app01.odb.ntu.edu.tw/CSRQry/CSRQry/'
+  report: 'https://cruise.oc.ntu.edu.tw/'
 }
 const genLinks = (linkKey: string, children: string | JSX.Element) => <Link href={links[linkKey]} target="_blank" rel="noopener noreferrer">{children}</Link>
 

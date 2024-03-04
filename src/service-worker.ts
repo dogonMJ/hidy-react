@@ -10,9 +10,9 @@
 
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+import { StaleWhileRevalidate, NetworkFirst } from 'workbox-strategies';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -47,11 +47,15 @@ registerRoute(
       return false;
     }
 
+    if (url.pathname === '/index.html') {
+      return false; // Exclude index.html from service worker handling
+    }
     // Return true to signal that we want to use the handler.
     return true;
   },
+  new NetworkFirst()
   // createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html')
-  createHandlerBoundToURL('index.html')
+  // createHandlerBoundToURL('index.html')
 );
 
 // An example runtime caching route for requests that aren't handled by the
@@ -96,4 +100,11 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Any other custom service worker logic can go here.
+self.addEventListener('activate', (event) => {
+  self.addEventListener('fetch', (fetchEvent) => {
+    if (fetchEvent.request.url.endsWith('index.html')) {
+      fetchEvent.respondWith(fetch(fetchEvent.request, { cache: 'no-store' }));
+      return;
+    }
+  });
+});
