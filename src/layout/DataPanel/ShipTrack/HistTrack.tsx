@@ -5,6 +5,7 @@ import { MenuItem, Box, Select, SelectChangeEvent, FormControl, InputLabel } fro
 import { useTranslation } from "react-i18next"
 // @ts-ignore
 import toGeoJSON from '@mapbox/togeojson'
+import { useFetchData } from "hooks/useFetchData";
 
 
 const lineStyle = {
@@ -36,19 +37,16 @@ export const HistTrack = () => {
   const map = useMap()
   const ref = useRef<any>()
   const { t } = useTranslation()
-  const [shipList, setShipList] = useState<any>(undefined)
   const [ship, setShip] = useState('')
   const [year, setYear] = useState('')
   const [json, setJson] = useState<any>(null)
 
-  const getShips = () => fetch(`${process.env.REACT_APP_PROXY_BASE}/data/shiplist/getorshiplist`)
-    .then(response => response.json())
-    .then(json => setShipList(json[0]))
+  const { data: shipList } = useFetchData(`${process.env.REACT_APP_PROXY_BASE}/data/shiplist/getorshiplist`)
 
   const handleShip = (event: SelectChangeEvent) => {
     const oldYear = year
     const newShip = event.target.value
-    shipList[newShip].includes(oldYear) ? setYear(oldYear) : setYear('')
+    shipList[0][newShip].includes(oldYear) ? setYear(oldYear) : setYear('')
     setShip(newShip);
     map.scrollWheelZoom.enable()
     map.dragging.enable()
@@ -58,10 +56,6 @@ export const HistTrack = () => {
     map.scrollWheelZoom.enable()
     map.dragging.enable()
   }
-
-  useEffect(() => {
-    getShips()
-  }, [])
 
   useEffect(() => {
     ref.current.clearLayers()
@@ -90,7 +84,7 @@ export const HistTrack = () => {
             size="small"
           >
             {shipList &&
-              Object.keys(shipList).map(ship => <MenuItem key={ship} value={ship}>{ship}</MenuItem>)
+              Object.keys(shipList[0]).map(ship => <MenuItem key={ship} value={ship}>{ship}</MenuItem>)
             }
           </Select>
         </FormControl>
@@ -103,7 +97,7 @@ export const HistTrack = () => {
             size="small"
           >
             {ship && ship !== '' &&
-              shipList[ship].map((yr: string) => <MenuItem key={yr} value={yr}>{yr}</MenuItem>)
+              shipList[0][ship].map((yr: string) => <MenuItem key={yr} value={yr}>{yr}</MenuItem>)
             }
           </Select>
         </FormControl>

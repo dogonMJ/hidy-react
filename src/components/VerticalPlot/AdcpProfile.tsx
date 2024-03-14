@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, memo } from 'react'
 import { LineChart } from 'components/LineChart';
 import { PlotParams } from "react-plotly.js";
-import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
 import { VerticalPlotProps, AdcpFeature } from 'types';
@@ -105,11 +104,6 @@ export const AdcpProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, 
 
   return (
     <>
-      <Box sx={{ marginLeft: 2 }}>
-        <Typography variant="subtitle2" gutterBottom>
-          {t('OdbData.CTD.secondPar')}
-        </Typography>
-      </Box>
       <LineChart ref={ref} paneName={'ADCPProfile'} plotProps={plotProps} setOpen={setOpen} positionOffset={{ x: -200, y: -125 }} />
       <AlertSlide open={warning} setOpen={setWarning} severity='error'>
         {t('alert.fetchFail')}

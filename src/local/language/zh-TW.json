@@ -30,9 +30,18 @@
   "sqmiles": "平方英里",
   "decPoint": ".",
   "thousandsSep": ",",
+  "flyto": "移動至座標",
+  "addMarker": "新增圖釘",
+  "switchFormat": "切換格式",
   "coordHeader": "輸入座標",
+  "pasteCoor": "貼上座標",
+  "passCoor": "傳送位置至圖釘",
+  "transformHeader": "轉換座標",
+  "transform": "轉換",
   "latitude": "緯度",
   "longitude": "經度",
+  "lat": "緯度",
+  "lng": "經度",
   "remove": "移除",
   "dataPanel": "資料圖層",
   "clusterLevel": "資料疊合等級",
@@ -169,7 +178,7 @@
     "CTD": {
       "selection": "參數及季節",
       "close": "關閉",
-      "yPar": "縱(y)軸(參數",
+      "yPar": "縱(y)軸參數",
       "x2Par": "第二橫(x)軸參數",
       "depth": "深度 (m)",
       "density": "密度 (kg/m\u00B3)",
@@ -564,7 +573,8 @@
     "notInTime": "不在資料時間範圍內",
     "checkQueryParameter": "參數錯誤，請檢查網址列參數",
     "noCoords": "請輸入完整座標",
-    "checkImage": "圖片不存在、無瀏覽權限或網址錯誤"
+    "checkImage": "圖片不存在、無瀏覽權限或網址錯誤",
+    "notValidNumber": "請輸入正確數字"
   },
   "about": {
     "title": "關於本站",
