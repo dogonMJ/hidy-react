@@ -135,7 +135,7 @@ export const ConverCoordinates = memo((props: { activeMarker: boolean }) => {
       <Paper
         className="mousePos"
         sx={{
-          bottom: activeMarker ? '124px' : '50px',
+          bottom: activeMarker ? '123px' : '50px',
           paddingBlock: '6px'
         }}
       >

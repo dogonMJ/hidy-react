@@ -1,7 +1,7 @@
 import { useMap } from "react-leaflet"
 import { coordInputSlice } from "../../../store/slice/coordInputSlice";
 import { useTranslation } from "react-i18next";
-import { TextField, IconButton, Paper, Stack, Typography, Button } from '@mui/material';
+import { TextField, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { GpsFixed, AddLocationAlt } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { useMapDragScroll } from "hooks/useMapDragScroll";

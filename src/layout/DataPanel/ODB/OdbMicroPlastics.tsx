@@ -24,11 +24,16 @@ const dateToApiString = (dateObj: Date) => {
 }
 
 const levelList: PlasticConcentration = {
-  "Very Low": { color: '#8ff1b1', concentration: '<0.0005' },
-  "Low": { color: '#acd36c', concentration: '0.0005-0.005' },
-  "Medium": { color: '#fce72b', concentration: '0.005-1' },
-  "High": { color: '#e68128', concentration: '1-10' },
-  "Very High": { color: '#f34545', concentration: '>=10' },
+  // "Very Low": { color: '#8ff1b1', concentration: '<0.0005' },
+  // "Low": { color: '#acd36c', concentration: '0.0005-0.005' },
+  // "Medium": { color: '#fce72b', concentration: '0.005-1' },
+  // "High": { color: '#e68128', concentration: '1-10' },
+  // "Very High": { color: '#f34545', concentration: '>=10' },
+  "Very Low": { color: '#ffffcc', concentration: '<0.0005' },
+  "Low": { color: '#fedc7c', concentration: '0.0005-0.005' },
+  "Medium": { color: '#fd8d3c', concentration: '0.005-1' },
+  "High": { color: '#e6211e', concentration: '1-10' },
+  "Very High": { color: '#800026', concentration: '>=10' },
 }
 
 export const OdbMicroplastics = () => {

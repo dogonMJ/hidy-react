@@ -1,12 +1,12 @@
-import { memo, useCallback, useState } from "react";
-import { useMap, useMapEvent } from 'react-leaflet'
+import { memo, useState } from "react";
+import { useMapEvent } from 'react-leaflet'
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { CoordinatesInput } from "layout/MouseCoordinates/CoordinatesInput"
 import FormatCoordinate from "components/FormatCoordinate";
 import { PinnedMarker } from "layout/MouseCoordinates/PinnedMarker";
 import { MoveableMarker } from "layout/MouseCoordinates/MoveableMarker";
 import { IconButton, Paper, Stack, Typography } from '@mui/material';
-import { LocationOff, LocationOn, Map, Sync, SyncAlt, SyncDisabled } from '@mui/icons-material';
+import { LocationOff, LocationOn, Sync, SyncAlt, SyncDisabled } from '@mui/icons-material';
 import { useMapDragScroll } from "hooks/useMapDragScroll";
 import { onoffsSlice } from "store/slice/onoffsSlice";
 import { LatLngExpression } from "leaflet";
