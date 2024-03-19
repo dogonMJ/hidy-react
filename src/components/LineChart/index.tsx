@@ -44,6 +44,7 @@ export const LineChart = forwardRef((
         // defaultClassName={'DefaultDraggable'}
         defaultPosition={{ x: layerCenterPoint.x + offset.x, y: layerCenterPoint.y + offset.y }}
         disabled={disableDrag}
+        onStop={(e) => e.stopPropagation()}
       >
         <div ref={nodeRef} id={props.paneName}>
           <div

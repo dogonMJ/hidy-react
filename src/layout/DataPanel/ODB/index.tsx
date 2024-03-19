@@ -14,6 +14,8 @@ import { OdbMicroplastics } from './OdbMicroPlastics';
 import { OdbMarineHeatwave } from './OdbMarineHeatwave';
 import { ComponentList } from 'types';
 import { useToggleListChecks } from "hooks/useToggleListChecks";
+import { OdbTide } from "./OdbTide";
+import { OdbProfile } from "./OdbProfile";
 
 
 export const ODB = () => {
@@ -30,6 +32,8 @@ export const ODB = () => {
     odbChem: <OdbChemistry />,
     odbBio: <OdbBio />,
     odbMP: < OdbMicroplastics />,
+    odbTide: <OdbTide />,
+    odbProfile: <OdbProfile />,
     // WebMaps: <SatelliteWebMaps cache={cache} />
   }
 

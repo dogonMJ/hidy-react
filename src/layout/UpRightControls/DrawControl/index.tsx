@@ -19,7 +19,9 @@ export const DrawControl = () => {
           <IconButton
             aria-label={`${t('draw.title')}`}
             title={`${t('draw.title')}`}
-            onClick={() => { setShowDrawLine(!showDrawLine) }}
+            onClick={() => {
+              setShowDrawLine(!showDrawLine)
+            }}
             sx={{
               width: 30,
               height: 30,

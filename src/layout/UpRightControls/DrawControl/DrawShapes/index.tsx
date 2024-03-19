@@ -1,6 +1,4 @@
-import { Polygon as PolygonType, Polyline as PolylineType, Circle as CircleType, layerGroup, LatLngExpression } from 'leaflet';
-import { useSelector } from "react-redux";
-import { RootState } from "store/store"
+import { Polygon as PolygonType, Polyline as PolylineType, Circle as CircleType, layerGroup, LatLngExpression, latLng } from 'leaflet';
 import { LatLng } from "leaflet";
 import { useRef, useState } from "react";
 import { useMap, FeatureGroup, Popup } from "react-leaflet";
@@ -13,6 +11,8 @@ import { SeafloorElevation } from "layout/UpRightControls/DrawControl/SeafloorEl
 import { readableArea, readableDistance, calGeodesic, calPolygon, handleButton, } from 'Utils/UtilsDraw';
 import { Button, ButtonGroup, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from 'hooks/reduxHooks';
+import { OdbTide } from 'layout/DataPanel/ODB/OdbTide';
 
 declare const L: any
 
@@ -33,9 +33,8 @@ export const DrawShapes = () => {
   const [renderProfile, setRenderProfile] = useState(false)
   const [popupPos, setPopupPos] = useState<LatLngExpression | undefined>()
   const [contentLayer, setContentLayer] = useState<any>()
-  const scaleUnit = useSelector((state: RootState) => state.map.scaleUnit);
+  const scaleUnit = useAppSelector(state => state.map.scaleUnit);
   const allLayerGroup = layerGroup()
-
   return (
     <>
       <FeatureGroup ref={featureRef}>
@@ -94,7 +93,11 @@ export const DrawShapes = () => {
                   circlemarkerLayer.openTooltip() //不加會閃掉
                 })
                 circlemarkerLayer.on('click', async (e: any) => {
-                  setPopupPos(e.latlng)
+                  setPopupPos(prev => { //prev === e.latlng時無法更新
+                    return prev === e.latlng ?
+                      { lng: e.latlng.lng * (1 + Math.random() * 0.0000000001), lat: e.latlng.lat }
+                      : e.latlng
+                  })
                   setContentLayer(allLayerGroup)
                 })
                 break
@@ -108,9 +111,6 @@ export const DrawShapes = () => {
                   setRenderProfile(true)
                   setPopupPos(e.latlng)
                   setContentLayer(allLayerGroup)
-                  // const popupContent = await downloadPopup(allLayerGroup)
-                  // polylineLayer.bindPopup(popupContent)
-                  // polylineLayer.openPopup()
                 })
                 polylineLayer.on('mouseover', () => {
                   const accDist: number[] = []
@@ -133,8 +133,8 @@ export const DrawShapes = () => {
                 polylineLayer.on('mouseout', () => {
                   tooltips.clearLayers()
                 })
-                setCoordsProfile(latlngs)
-                setRenderProfile(true)
+                // setCoordsProfile(latlngs)
+                // setRenderProfile(true)
                 break
               case 'polygon':
                 const polygonLayer = e.layer as PolygonType
@@ -152,9 +152,6 @@ export const DrawShapes = () => {
                 polygonLayer.on('click', async (e) => {
                   setPopupPos(e.latlng)
                   setContentLayer(allLayerGroup)
-                  // const popupContent = await downloadPopup(allLayerGroup)
-                  // polygonLayer.bindPopup(popupContent)
-                  // polygonLayer.openPopup()
                 })
                 break
               case 'circle':
