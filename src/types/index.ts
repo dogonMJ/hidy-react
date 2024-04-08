@@ -43,7 +43,7 @@ export const isLatLonFormat = (p: any): p is LatLonFormat => latlonFormats.inclu
 
 // info list, wms list, local
 export const optionList = ["close", "sst", "ssta", "TrueColor", "sla", "adt", "CHL",] as const
-export const optionForecast = ["3dinst_thetao", "3dinst_so", "3dwater_velocity", "mlotst", "zos", "bottomT",] as const
+export const optionForecast = ["3dinst_thetao", "3dinst_so", "mlotst", "zos", "bottomT",] as const //"3dwater_velocity",  removed
 export type OptionsWmsLayer = typeof optionList[number]
 export type OptionsWmsLayerForecast = typeof optionForecast[number]
 export const isOptionsWmsLayer = (x: any): x is OptionsWmsLayer | OptionsWmsLayerForecast => [...optionList, ...optionForecast].includes(x)
