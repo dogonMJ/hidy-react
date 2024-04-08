@@ -19,6 +19,7 @@ import { ComponentList } from 'types';
 import { useMapDragScroll } from 'hooks/useMapDragScroll';
 import ODBlogo from 'assets/images/logo192.png'
 import { Box } from '@mui/system';
+import { WebMapLayers } from './WebMapLayers';
 
 
 declare const L: any
@@ -45,7 +46,7 @@ const itemList: ComponentList = {
   CPlanLayers: <CPlanLayers />,
   StatMean: <StatisticMean />,
   CustomLayer: < CustomLayer />,
-  // WebMaps: <SatelliteWebMaps cache={cache} />
+  WebMapLayers: <WebMapLayers />,
 }
 const secLevelAll: ComponentList = {
   ShipTrack: <ShipTrack />

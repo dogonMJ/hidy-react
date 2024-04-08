@@ -40,7 +40,7 @@
     "unit": " ",
     "featureinfo": false
   },
-  "sla": {
+  "sla_old": {
     "type": "wms",
     "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4",
     "layer": "sla",
@@ -51,6 +51,17 @@
     "crossOrigin": "anonymous",
     "unit": "m",
     "featureinfo": true
+  },
+  "sla": {
+    "type": "wmts",
+    "url": "https://wmts.marine.copernicus.eu/teroWmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=EPSG:3857&tilematrix={z}&tilerow={y}&tilecol={x}&",
+    "layer": "SEALEVEL_GLO_PHY_L4_NRT_008_046/cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.25deg_P1D_202311/sla",
+    "duration": "P1D",
+    "style": "boxfill/rainbow",
+    "format": "image/png",
+    "transparent": true,
+    "unit": "",
+    "featureinfo": false
   },
   "adt": {
     "type": "wms",

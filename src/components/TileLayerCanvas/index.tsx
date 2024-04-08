@@ -13,10 +13,16 @@ import "./WMSCanvas-TileLayer.js"
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer
   const type = props.type ? props.type.toUpperCase() : ''
+  const key = props.params?.key ?? (props.key ?? 'wmLayer')
   // const instance = (type === 'WMTS') ? layer.canvas(props.url, { ...props.params }) : layer.wmscanvas(props.url, { ...props.params, });
-
   if (type === 'WMTS') {
-    const instance = layer.canvas(props.url, { key: props.params.key, detectRetina: true, crossOrigin: 'anonymous' })
+    // if (props.params?.key) { delete props.params.key }
+    const urlParams = props.params ? Object.entries(props.params)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&')
+      : ''
+    const instance = layer.canvas(props.url + urlParams, { key: key, detectRetina: true, crossOrigin: 'anonymous' })
+    if (props.opacity) { instance.setOpacity(props.opacity) }
     return { instance, context };
   } else {
     const instance = layer.wmscanvas(props.url, { ...props.params, })

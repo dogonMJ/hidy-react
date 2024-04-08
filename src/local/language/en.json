@@ -46,6 +46,7 @@
   "dataPanel": "Data Layers",
   "clusterLevel": "Data Cluster Level",
   "hidyOld": "Old Hidy Site",
+  "depth": "Depth (m)",
   "CWAsites": {
     "title": "Marine/Meteorological Data Near Taiwan",
     "subheader": "Latest Data",
@@ -132,6 +133,9 @@
     "sal": "Surface Salinity (psu)",
     "others": "Data range from D+0 00:00(UTC) to D+3 00:00(UTC) after daily update on 14:00(UTC+8). \nFor example, data range from 11/15 00:00(UTC) to 11/18 00:00(UTC) on 11/15 14:00(UTC+8) update."
   },
+  "wm": {
+    "palette": "Palette"
+  },
   "OdbData": {
     "title": "ODB Data",
     "odbTopo": "Topography",
@@ -189,7 +193,7 @@
       "oxygen": "Dissolved Oxygen (μM)",
       "opacity": "Opacity",
       "mask": "Mask out-of-range values",
-      "rev": "Reverse",
+      "rev": "Inverse",
       "segment": "Segmentation",
       "thresholds": "Thresholds",
       "defaultRange": "Default",
@@ -532,7 +536,7 @@
   "draw": {
     "title": "Add Shapes",
     "source": " Terrain model data source",
-    "resolution": "Spatial resolution: 15 arcseconds (approximately 460 meters, varying with location).",
+    "resolution": "Spatial resolution: 15 arcseconds (varying with location, approximately 460 m at equator).",
     "info": "Capable of drawing continuous line segments, polygons, circles, and individual points, with the ability to edit and delete the graphics.\n\tLength and area values are derived from geodesic calculations using the WGS84 ellipsoid.\n\tThe resulting values are for reference only",
     "polyline": "Line Segments: Left-click to add consecutive line segments; connect points or click 'Finish' to complete.\n\tUse 'Delete last point' to undo the last point; 'cancel' to cancel the segment.\n\tHover for info: 'd' for distance from the previous point, 'D' for total distance.\n\tTerrain profile displays when completing a segment or clicking a completed one.\n\tThe profile features dotted lines for sections and coordinates, toggled by 'Toggle Annotation' in the top toolbar.\n\tTop toolbar enables actions such as saving, zooming, and panning.",
     "polygon": "Polygon: Left-click to add segments, click start or 'Finish' to complete.\n\tHover for info: 'A' for area, 'p' for perimeter.",
