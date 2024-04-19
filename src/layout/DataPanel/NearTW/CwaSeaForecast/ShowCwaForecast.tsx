@@ -10,10 +10,10 @@ const calIndex = (position: coor, bounds: number[][], resolution: number) => {
   const upLat = bounds[1][0]
   const upLon = bounds[1][1]
   if (position.lng >= lowLon && position.lng <= upLon && position.lat >= lowLat && position.lat <= upLat) {
-    const lenY = 1 + ((upLat - resolution / 2) - (lowLat + resolution / 2)) / resolution
+    const lenX = 1 + ((upLon - resolution / 2) - (lowLon + resolution / 2)) / resolution
     const x = Math.ceil((position.lng - lowLon) * (1 / resolution))
     const y = Math.ceil((position.lat - lowLat) * (1 / resolution))
-    return (x - 1) * lenY + y - 1
+    return x - 1 + (y - 1) * lenX
   } else {
     return null
   }

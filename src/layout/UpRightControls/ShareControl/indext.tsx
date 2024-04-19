@@ -3,6 +3,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButt
 import ShareIcon from '@mui/icons-material/Share';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import UndoIcon from '@mui/icons-material/Undo';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import { useMap } from "react-leaflet";
 import { store } from "store/store";
@@ -26,8 +27,8 @@ export const ShareControl = memo(() => {
   const [newQRUrl, setNewQRUrl] = useState(newUrl)
   const datetime = useAppSelector(state => state.map.datetime)
   const { i18n } = useTranslation()
-
-  const getShareUrl = useCallback(() => {
+  // const getShareUrl = useCallback(() => {
+  const getShareUrl = () => {
     const states: any = store.getState();
     const { checked, ...radios } = states.switches//已開選項和radio選項
     const modified = findModified(defaultStates, states, checked) //和預設不同選項
@@ -42,7 +43,6 @@ export const ShareControl = memo(() => {
         modified[key] = radios[key]
       }
     });
-
     //網址原有選項
     const queryString = window.location.search
     const urlParams = new URLSearchParams(queryString);
@@ -51,6 +51,17 @@ export const ShareControl = memo(() => {
         //網址原有選項被改變
         const original = readUrlQuery(key)
         Object.entries(original).forEach(([k, v]) => {
+          if (original[k] && modified[key][k] && original[k].includes('{')) {
+            const urlObj = JSON.parse(original[k])
+            const modObj = modified[key][k]
+            for (const key in urlObj) {
+              if (modObj.hasOwnProperty(key) && urlObj.hasOwnProperty(key)) {
+                if (modObj[key] === undefined) {
+                  modObj[key] = urlObj[key];
+                }
+              }
+            }
+          }
           if (modified[key][k] === undefined && typeof modified[key] !== 'string') {
             //typeof modified[key] !== 'string'避免radio選項被取代，radio選項為 modified[key]=string
             modified[key][k] = v
@@ -75,7 +86,8 @@ export const ShareControl = memo(() => {
       wmsDepthIndex: modified.wmsLayer && is3D(modified.wmsLayer) ? states.map.wmsDepthIndex : undefined,
     }
     return flattenObject(modified)
-  }, [datetime, map])
+  }
+  // }, [datetime, map])
 
   const handleClick = () => {
     const res = getShareUrl()
@@ -88,6 +100,10 @@ export const ShareControl = memo(() => {
     const res = getShareUrl()
     setNewUrl(`${window.location.origin}${window.location.pathname}?${res.slice(1)}`)
     setNewQRUrl(`${window.location.origin}${window.location.pathname}?${res.slice(1)}`)
+  }
+  const handleDefault = () => {
+    setNewUrl(`${window.location.origin}${window.location.pathname}`)
+    setNewQRUrl(`${window.location.origin}${window.location.pathname}`)
   }
   const handleCopy = () => navigator.clipboard.writeText(newUrl)
   // const handleClear = () => window.history.replaceState({}, '', `${window.location.origin}${window.location.pathname}`)
@@ -152,6 +168,9 @@ export const ShareControl = memo(() => {
               </Button>
               <Button size="small" onClick={handleRefresh} startIcon={<RefreshIcon fontSize="small" />}>
                 <Typography fontSize='small'>{t('share.refresh')}</Typography>
+              </Button>
+              <Button size="small" onClick={handleDefault} startIcon={<UndoIcon fontSize="small" />}>
+                <Typography fontSize='small'>{t('share.toDefault')}</Typography>
               </Button>
               {/* <Button size="small" onClick={handleClear} startIcon={<ClearAllIcon fontSize="small" />}>
                 <Typography fontSize='small'>{t('share.clear')}</Typography>

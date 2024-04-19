@@ -21,7 +21,7 @@ import { ColorPaletteLegend } from 'components/ColorPaletteLegend';
 const ctdDepths = ctdDepthMeterProps().ctdDepths
 const marks = ctdDepthMeterProps().marks
 
-const reversePalette = (palette: string[], reverse: boolean) => reverse ? [...palette].reverse() : palette
+export const reversePalette = (palette: string[], reverse: boolean) => reverse ? [...palette].reverse() : palette
 
 export const OdbCTD = () => {
   const { t } = useTranslation()

@@ -131,10 +131,23 @@
     "dir": "Current Direction",
     "ssh": "Surface Height (m)",
     "sal": "Surface Salinity (psu)",
-    "others": "Data range from D+0 00:00(UTC) to D+3 00:00(UTC) after daily update on 14:00(UTC+8). \nFor example, data range from 11/15 00:00(UTC) to 11/18 00:00(UTC) on 11/15 14:00(UTC+8) update."
+    "others": "Data range from D+0 00:00(UTC) to D+5 00:00(UTC) after daily update on 14:00(UTC+8). \nFor example, data range from 11/15 00:00(UTC) to 11/20 00:00(UTC) on 11/15 14:00(UTC+8) update."
   },
-  "wm": {
-    "palette": "Palette"
+  "WebMapLayers": {
+    "title": "Satellite Image",
+    "close": "close",
+    "palette": "palette",
+    "adt": "Sea surface height above geoid (Absolute Dynamic Topography)",
+    "sla": "Sea surface height above sea level (Sea Level Anomalies)",
+    "CHL": "Ocean chlorophyll-a mass concentration",
+    "3dinst_thetao": "Sea Water Potential Temperature Analysis and Forecast (+48h)",
+    "3dinst_so": "Sea Water Salinity Analysis and Forecast (+48h)",
+    "bottomT": "Sea Water Potential Temperature Analysis and Forecast at Sea Floor",
+    "mlotst": "Ocean Mixed Layer Thickness Defined by Sigma Theta Analysis and Forecast",
+    "zos": "Sea Surface Height Above Geoid Analysis and Forecast",
+    "sst": "Sea Surface Temperature",
+    "ssta": "Sea Surface Temperature Anomalies",
+    "TrueColor": "True Color"
   },
   "OdbData": {
     "title": "ODB Data",
@@ -644,6 +657,7 @@
     "title": "Share View",
     "copy": "Copy",
     "refresh": "Update",
-    "clear": "Clear browser URL"
+    "clear": "Clear browser URL",
+    "toDefault": "Defaults"
   }
 }

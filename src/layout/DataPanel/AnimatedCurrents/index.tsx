@@ -15,10 +15,9 @@ const AnimatedCurrents = () => {
   const dispatch = useAppDispatch()
   const identifier = useAppSelector(state => state.switches.aniCur);
   const datetime = useAppSelector(state => state.map.datetime);
-  const handleToggle = (value: string) => () => {
+  const handleToggle = (value: string) => {
     dispatch(onoffsSlice.actions.setAniCur(value as OptionsAnimation))
   };
-
   return (
     <>
       <Divider variant="middle" />

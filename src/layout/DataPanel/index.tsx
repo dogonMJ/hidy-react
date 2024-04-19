@@ -38,15 +38,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const itemList: ComponentList = {
-  APIlayers: <APILayers />,
+  // APIlayers: <APILayers />,
+  WebMapLayers: <WebMapLayers />,
   CWAsites: <ToggleCWA />,
   Animated: <AnimatedCurrents />,
   // SatData: <SatelliteData />,
   OdbData: <ODB />,
   CPlanLayers: <CPlanLayers />,
   StatMean: <StatisticMean />,
-  CustomLayer: < CustomLayer />,
-  WebMapLayers: <WebMapLayers />,
+  CustomLayer: <CustomLayer />,
 }
 const secLevelAll: ComponentList = {
   ShipTrack: <ShipTrack />
@@ -95,7 +95,7 @@ const DataPanel = memo(() => {
           onOff.StatMean = true
           break
         case 'wms':
-          onOff.APIlayers = true
+          onOff.WebMapLayers = true
           break
         case 'ani':
           onOff.Animated = true

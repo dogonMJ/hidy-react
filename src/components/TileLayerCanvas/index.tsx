@@ -13,15 +13,13 @@ import "./WMSCanvas-TileLayer.js"
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer
   const type = props.type ? props.type.toUpperCase() : ''
-  const key = props.params?.key ?? (props.key ?? 'wmLayer')
   // const instance = (type === 'WMTS') ? layer.canvas(props.url, { ...props.params }) : layer.wmscanvas(props.url, { ...props.params, });
   if (type === 'WMTS') {
-    // if (props.params?.key) { delete props.params.key }
     const urlParams = props.params ? Object.entries(props.params)
       .map(([key, value]) => `${key}=${value}`)
       .join('&')
       : ''
-    const instance = layer.canvas(props.url + urlParams, { key: key, detectRetina: true, crossOrigin: 'anonymous' })
+    const instance = layer.canvas(props.url + urlParams, { crossOrigin: 'anonymous' })
     if (props.opacity) { instance.setOpacity(props.opacity) }
     return { instance, context };
   } else {
@@ -29,7 +27,7 @@ const createLayer = (props: any, context: any) => {
     const newParams = Object.fromEntries(
       Object.entries(props.params).map(([k, v]) => [k.toUpperCase(), v])
     );
-    const wmsKeys = Object.keys(instance.wmsParams).filter(key => !Object.keys(newParams).includes(key.toUpperCase()))
+    const wmsKeys = Object.keys(instance.wmsParams).filter(key => !Object.keys(newParams).includes(key.toUpperCase())) //篩掉重複參數
     const defaultObj: { [key: string]: any } = {}
     wmsKeys.forEach(key => {
       defaultObj[key] = instance.wmsParams[key]
@@ -51,6 +49,9 @@ const updateLayer = (instance: any, props: any, prevProps: any) => {
   }
   if (prevProps.zIndex !== props.zIndex) {
     if (instance.setZIndex) instance.setZIndex(props.zIndex);
+  }
+  if (prevProps.customKey !== props.customKey) {
+    if (instance.setParams) instance.setParams(props.params);
   }
 };
 

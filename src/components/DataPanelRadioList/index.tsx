@@ -1,16 +1,17 @@
-import { List, RadioGroup, ListItemButton, FormControlLabel, ListItemText, ListItem, Radio, ListItemIcon, IconButton } from '@mui/material';
+import { List, RadioGroup, ListItemButton, FormControlLabel, ListItemText, ListItem, Radio, ListItemIcon, IconButton, SxProps } from '@mui/material';
 import InfoButton from "components/InfoButton";
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { memo } from 'react';
 import { useTranslation } from "react-i18next";
 
-interface Props {
+interface DataPanelRadioListProps {
   identifier: any
   handleClick: any
   group: string
   optionList: string[]
   customButtonProps?: any
   customPanel?: JSX.Element
+  sx?: SxProps
 }
 
 const CustomButton = memo((props: {
@@ -34,7 +35,7 @@ const CustomButton = memo((props: {
   )
 })
 
-export const DataPanelRadioList = (props: Props) => {
+export const DataPanelRadioList = (props: DataPanelRadioListProps) => {
   const { t } = useTranslation()
   const {
     identifier,
@@ -42,10 +43,11 @@ export const DataPanelRadioList = (props: Props) => {
     group,
     optionList,
     customButtonProps,
-    customPanel
+    customPanel,
+    sx
   } = props
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', ...sx }
     }>
       <RadioGroup
         aria-labelledby={group + "-group-label"}
@@ -70,7 +72,7 @@ export const DataPanelRadioList = (props: Props) => {
                     />
                     <ListItemText id={labelId} primary={t(`${group}.${value}`)} />
                   </ListItemButton>
-                  {customButtonProps && value !== 'close' && <CustomButton id={value} disableWhenNotSelect={value !== identifier} {...customButtonProps} />}
+                  {customButtonProps && value !== 'close' && value === identifier && <CustomButton id={value}  {...customButtonProps} />}
                   <InfoButton dataId={value} iconSx={{ paddingBlock: 0 }} />
                 </ListItem>
                 {customPanel && value !== 'close' &&
