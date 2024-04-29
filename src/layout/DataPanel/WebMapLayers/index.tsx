@@ -17,6 +17,7 @@ import { ProcGibs } from "./ProcGibs";
 import { GibsCustomPanel } from "./GibsCustomPanel";
 import { onoffsSlice } from "store/slice/onoffsSlice";
 import { reversePalette } from "../ODB/OdbCTD"
+import { Pane } from "react-leaflet";
 
 
 const optionGibs = ["sst", "ssta", "TrueColor"]
@@ -48,7 +49,6 @@ export const WebMapLayers = () => {
     dispatch(onoffsSlice.actions.setChecked(newChecked))
   }
   const hadleBrushClick = async (ev: any) => {
-    // (handleToggleChecks('webmap'))()
     const id = ev.currentTarget.id
     if (id === identifier) { setOpenCustomPanel(prev => !prev) }
   }
@@ -138,7 +138,7 @@ export const WebMapLayers = () => {
           interval={256}
           min={wmProps?.min}
           max={wmProps?.max}
-          title={t(`WebMapLayers.${identifier}`)}
+          title={t(`WebMapLayers.legend.${identifier}`)}
         />
         <RenderIf isTrue={is3D(identifier)}>
           <DepthMeter values={depths} marks={getMarks('', depths)} user={'cmems'} />

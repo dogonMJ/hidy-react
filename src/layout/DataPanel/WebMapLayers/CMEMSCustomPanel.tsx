@@ -9,6 +9,9 @@ import { ColorPalette } from "components/ColorPalette/ColorPalette"
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks"
 import { WmProps, webmapSlice } from "store/slice/webmapSlice"
 import { reversePalette } from "../ODB/OdbCTD"
+import { DefaultRangeButton } from "components/DefaultRangeButton"
+import { PanelMinMaxField } from "components/PanelMinMaxField/PanelMinMaxField"
+import { MinMax } from "types"
 
 const cmapKey = ["algae", "amp", "balance", "cividis", "cyclic", "delta", "dense", "gray", "haline", "ice", "inferno", "magma", "matter",
   "plasma", "rainbow", "solar", "speed", "tempo", "thermal", "viridis"] as const
@@ -29,7 +32,7 @@ export const WMTSCustomPanel = (props: WMTSCustomPanelProps) => {
   const inverse = wmProps?.inverse ?? false
   const min = wmProps?.min ?? 0
   const max = wmProps?.max ?? 0
-  const [inputRange, setInputRange] = useState(identifier === 'close' ? { min: 0, max: 0 } : { min: min, max: max })
+  const [panelRange, setPanelRange] = useState(identifier === 'close' ? { min: 0, max: 0 } : { min: min, max: max })
 
   const handleMask = () => {
     const newWmProps: WmProps = Object.assign({}, { ...wmProps, noClamp: !noClamp })
@@ -50,31 +53,15 @@ export const WMTSCustomPanel = (props: WMTSCustomPanelProps) => {
     dispatch(webmapSlice.actions.setWmProps({ identifier, newWmProps }))
   }
 
-  const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputRange({ min: Number(event.target.value), max: max })
-  }
-  const handleMaxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputRange({ min: min, max: Number(event.target.value) })
-  }
-  const handleMinMaxBlur = () => {
-    const min = inputRange.min
-    const max = inputRange.max
-    if (min > max) {
-      const newRange = { min: max, max: min }
-      setInputRange(newRange)
-      const newWmProps: WmProps = Object.assign({}, { ...wmProps, ...newRange })
-      dispatch(webmapSlice.actions.setWmProps({ identifier, newWmProps }))
-    } else {
-      const newRange = { min: min, max: max }
-      const newWmProps: WmProps = Object.assign({}, { ...wmProps, ...newRange })
-      dispatch(webmapSlice.actions.setWmProps({ identifier, newWmProps }))
-    }
+  const setRange = (newRange: MinMax) => {
+    const newWmProps: WmProps = Object.assign({}, { ...wmProps, ...newRange })
+    dispatch(webmapSlice.actions.setWmProps({ identifier, newWmProps }))
   }
   const handleDefaultRange = () => {
     const min = cmemsList[identifier].defaults?.min ?? 0
     const max = cmemsList[identifier].defaults?.max ?? 1
     const defaultRange = { min: min, max: max }
-    setInputRange(defaultRange)
+    setPanelRange(defaultRange)
     const newWmProps: WmProps = Object.assign({}, { ...wmProps, ...defaultRange })
     dispatch(webmapSlice.actions.setWmProps({ identifier, newWmProps }))
   }
@@ -115,55 +102,9 @@ export const WMTSCustomPanel = (props: WMTSCustomPanelProps) => {
           {t('OdbData.CTD.thresholds')}
         </Typography>
         <Stack direction='row' spacing={2} sx={{ ml: 2.1, mb: 2 }}>
-          <TextField
-            label={t('OdbData.min')}
-            size="small"
-            type="number"
-            variant="standard"
-            value={inputRange.min}
-            onChange={handleMinChange}
-            onBlur={handleMinMaxBlur}
-            onKeyDown={(ev) => {
-              if (ev.key.toLowerCase() === 'enter') {
-                handleMinMaxBlur()
-              }
-            }}
-            sx={{ width: 70 }}
-          />
-          <TextField
-            label={t('OdbData.max')}
-            size="small"
-            type="number"
-            variant="standard"
-            value={inputRange.max}
-            onChange={handleMaxChange}
-            onBlur={handleMinMaxBlur}
-            onKeyDown={(ev) => {
-              if (ev.key.toLowerCase() === 'enter') {
-                handleMinMaxBlur()
-              }
-            }}
-            sx={{ width: 70 }}
-          />
+          <PanelMinMaxField inputRange={panelRange} setInputRange={setPanelRange} setRange={setRange} />
           <Stack>
-            <Button
-              id='ODB-CMEMS-defaultRange'
-              size="small"
-              variant='outlined'
-              sx={{
-                height: 20,
-                p: 0,
-                color: 'black',
-                borderColor: 'lightgray',
-                '&:hover': {
-                  borderColor: 'lightgrey',
-                  bgcolor: 'whitesmoke'
-                },
-              }}
-              onClick={handleDefaultRange}
-            >
-              {t('OdbData.CTD.defaultRange')}
-            </Button>
+            <DefaultRangeButton setRange={handleDefaultRange} />
             <FormControlLabel
               label={<Typography variant="caption" >{t('OdbData.CTD.mask')}</Typography>}
               control={<Checkbox id='ODB-CTD-mask' size="small" sx={{ p: '2px' }} checked={noClamp} onChange={handleMask} />}

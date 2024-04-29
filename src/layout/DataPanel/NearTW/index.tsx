@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { List, ListItemButton, ListItemIcon, ListItemText, ListItem } from '@mui/material';
 import { Divider, ListSubheader, Switch } from "@mui/material";
 import { CwaSeaSites } from "./CwaSeaSites";
-import { CwaSeaForecast } from "./CwaSeaForecast";
+import { CwaSeaForecast } from "./CwaSeaForecast/index";
 import { CwaWeatherSites } from "./CwaWeatherSites";
 import { CwaRadar } from "./CwaRadar";
 import InfoButton from "components/InfoButton";
