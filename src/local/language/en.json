@@ -147,7 +147,17 @@
     "zos": "Sea Surface Height Above Geoid Analysis and Forecast",
     "sst": "Sea Surface Temperature",
     "ssta": "Sea Surface Temperature Anomalies",
-    "TrueColor": "True Color"
+    "TrueColor": "True Color",
+    "legend": {
+      "adt": "Surface height (m)",
+      "sla": "Surface height (m)",
+      "CHL": "Chl.-a mass conc. (mg/m³)",
+      "3dinst_thetao": "Water Potential Temp. (\u00B0C)",
+      "3dinst_so": "Salinity (psu)",
+      "bottomT": "Floor Potential Temp. (\u00B0C)",
+      "mlotst": "Mixed Layer Thickness (m)",
+      "zos": "Surface Height (m)"
+    }
   },
   "OdbData": {
     "title": "ODB Data",

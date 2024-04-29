@@ -12,7 +12,9 @@ export const LegendControl = memo((props: LegendProps) => {
   const map = useMap()
   const legend = new Control(props)
   legend.onAdd = () => {
-    const div = DomUtil.create('div', `legendbg ${props.legendClassNames}`);
+    const div = props.legendClassNames ?
+      DomUtil.create('div', `legendbg ${props.legendClassNames}`) :
+      DomUtil.create('div', `legendbg`)
     if (typeof props.legendContent === 'string') {
       div.innerHTML = props.legendContent
     } else {

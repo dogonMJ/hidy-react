@@ -43,15 +43,16 @@ export const getColorWithInterval = (list: string[], num: number) => {
   return result;
 }
 
-export const point2polygon = (geometry: Point): Polygon => {
+export const point2polygon = (geometry: Point, cellSize: number): Polygon => {
   const center = geometry.coordinates
+  const extend = cellSize / 2
   const polygon: Polygon = {
     type: 'Polygon',
     coordinates: [[
-      [center[0] + 0.125, center[1] + 0.125],
-      [center[0] - 0.125, center[1] + 0.125],
-      [center[0] - 0.125, center[1] - 0.125],
-      [center[0] + 0.125, center[1] - 0.125]
+      [center[0] + extend, center[1] + extend],
+      [center[0] - extend, center[1] + extend],
+      [center[0] - extend, center[1] - extend],
+      [center[0] + extend, center[1] - extend]
     ]]
   }
   return polygon

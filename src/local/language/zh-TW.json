@@ -147,7 +147,17 @@
     "zos": "相對大地水準面海表面高分析及預報",
     "sst": "海面溫度",
     "ssta": "海面溫度距平",
-    "TrueColor": "真實色彩"
+    "TrueColor": "真實色彩",
+    "legend": {
+      "adt": "海表面高 (m)",
+      "sla": "海表面高 (m)",
+      "CHL": "葉綠素-a濃度 (mg/m³)",
+      "3dinst_thetao": "海水位溫 (\u00B0C)",
+      "3dinst_so": "鹽度 (psu)",
+      "bottomT": "海床位溫 (\u00B0C)",
+      "mlotst": "混合層厚度 (m)",
+      "zos": "海表面高 (m)"
+    }
   },
   "OdbData": {
     "title": "ODB資料",

@@ -64,6 +64,7 @@ const initGibs = (id: string) => {
     return { ...obj }
   }
 }
+
 export const webmapSlice = createSlice({
   name: "webmap",
   initialState: {

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CtdParameters, CtdPeriods, CTDPalette, isCtdParameter, isCtdPeriod, isPalette } from 'types'
+import { CtdParameters, CtdPeriods, CTDPalette, isCtdParameter, isCtdPeriod, isPalette, MinMax } from 'types'
 import { defaultCtdRange } from "Utils/UtilsODB";
 import { initBoolean, initNumber, initString, readUrlQuery } from "Utils/UtilsStates";
 
@@ -31,7 +31,7 @@ interface OdbCtdStates {
   fixRange: boolean
   interval: number
   opacity: number
-  range: { [key: string]: { min: number, max: number } }
+  range: { [key: string]: MinMax }
   depthIndex: number
 }
 

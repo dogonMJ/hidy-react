@@ -1,9 +1,9 @@
-import { useEffect, useState, SyntheticEvent, ChangeEvent, useMemo } from 'react'
+import { useEffect, useState, SyntheticEvent, ChangeEvent } from 'react'
 import { renderToString } from 'react-dom/server';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
 import { odbCtdSlice } from 'store/slice/odbCtdSlice';
-import { GeoJSON } from 'react-leaflet'
+import { GeoJSON, Pane } from 'react-leaflet'
 import { Box, Checkbox, Divider, MenuItem, Select, Stack, TextField, Typography, SelectChangeEvent, Button, FormControlLabel } from '@mui/material';
 import { FeatureCollection, Point } from 'geojson'
 import * as geojson from 'geojson';
@@ -13,10 +13,14 @@ import { ColorPalette } from 'components/ColorPalette/ColorPalette';
 import { CtdProfile } from 'components/VerticalPlot/CtdProfile';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-import { CtdParameters, CtdPeriods, CTDPalette, validatePalette, validateCtdParameters as ctdPar, validatePeriods as periods } from 'types';
+import { CtdParameters, CtdPeriods, CTDPalette, validatePalette, validateCtdParameters as ctdPar, validatePeriods as periods, MinMax } from 'types';
 import { OpacitySlider } from 'components/OpacitySlider';
 import { PanelSlider } from 'components/PanelSlider';
 import { ColorPaletteLegend } from 'components/ColorPaletteLegend';
+import { DefaultRangeButton } from 'components/DefaultRangeButton';
+import { PanelMinMaxField } from 'components/PanelMinMaxField/PanelMinMaxField';
+import { LatLng } from 'leaflet';
+declare const L: any;
 
 const ctdDepths = ctdDepthMeterProps().ctdDepths
 const marks = ctdDepthMeterProps().marks
@@ -40,13 +44,14 @@ export const OdbCTD = () => {
   const [openVertical, setOpenVertical] = useState(false)
   const [warning, setWarning] = useState(false)
   const [data, setData] = useState<any>({ features: {} })
+  const [panelRange, setPanelRange] = useState<MinMax>({ min: minmax[type].min, max: minmax[type].max })
 
   const depth = ctdDepths[depthMeterValue]
   const mode = periodTransform[period]
 
-  const onEachFeature = (feature: geojson.Feature<geojson.Polygon, any>, layer: any) => {
+  const onEachFeature = (feature: geojson.Feature<geojson.Point, any>, layer: any) => {
     const property = feature.properties
-    const center = property.center
+    const center = feature.geometry.coordinates
     const content = (
       <Box>
         {center[1]}, {center[0]}<br />
@@ -70,51 +75,35 @@ export const OdbCTD = () => {
     })
   }
 
+  const pointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlang: LatLng) => {
+    const cellsize = 0.25
+    const extend = cellsize / 2
+    const lat = latlang.lat
+    const lng = latlang.lng
+    const bounds = [[lat - extend, lng - extend], [lat + extend, lng + extend]]
+    return new L.rectangle(bounds)
+  }
+
   const handlePaletteChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPalette(event.target.value as CTDPalette))
   const handleOpacityChange = (event: Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setOpacity(newValue as number))
   const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setInterval(newValue as number))
-  const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (fixRange) {
-      ctdPar.forEach((parameter) => {
-        dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: Number(event.target.value) }))
-      })
-    } else {
-      dispatch(odbCtdSlice.actions.setRange({ par: type, min: Number(event.target.value) }))
-    }
-  }
-  const handleMaxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (fixRange) {
-      ctdPar.forEach((parameter) => {
-        dispatch(odbCtdSlice.actions.setRange({ par: parameter, max: Number(event.target.value) }))
-      })
-    } else {
-      dispatch(odbCtdSlice.actions.setRange({ par: type, max: Number(event.target.value) }))
-    }
-  }
-  const handleMinMaxBlur = () => {
-    const min = minmax[type].min
-    const max = minmax[type].max
-    if (min > max) {
-      if (fixRange) {
-        ctdPar.forEach((parameter) => {
-          dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: max, max: min }))
-        })
-      } else {
-        dispatch(odbCtdSlice.actions.setRange({ par: type, min: max, max: min }))
-      }
-    }
-  }
-  const handleFixRange = () => {
-    if (!fixRange) {
-      ctdPar.forEach((parameter) => {
-        dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: minmax[type].min, max: minmax[type].max }))
-      })
-    }
-    dispatch(odbCtdSlice.actions.setFixRange(!fixRange))
+  // const handleFixRange = () => {
+  //   if (!fixRange) {
+  //     ctdPar.forEach((parameter) => {
+  //       dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: minmax[type].min, max: minmax[type].max }))
+  //     })
+  //   }
+  //   dispatch(odbCtdSlice.actions.setFixRange(!fixRange))
+  // }
+
+  const setRange = (newRange: MinMax) => {
+    dispatch(odbCtdSlice.actions.setRange({ par: type, min: newRange.min, max: newRange.max }))
   }
 
   const handleDefaultRange = () => {
     dispatch(odbCtdSlice.actions.setFixRange(false))
+    const defaultRange = { min: defaultCtdRange[type].min, max: defaultCtdRange[type].max }
+    setPanelRange(defaultRange)
     ctdPar.forEach((parameter) => {
       dispatch(odbCtdSlice.actions.setRange({ par: parameter, min: defaultCtdRange[parameter].min, max: defaultCtdRange[parameter].max }))
     })
@@ -127,14 +116,6 @@ export const OdbCTD = () => {
     fetch(`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&mode=${mode}&format=geojson&append=temperature,salinity,density,fluorescence,transmission,oxygen,count`)
       .then((response) => response.json())
       .then((json: FeatureCollection) => {
-        json.features.forEach((feature) => {
-          const point = feature.geometry as Point
-          if (feature.properties) {
-            feature.properties['center'] = point.coordinates
-          }
-          const polygon = point2polygon(point)
-          feature.geometry = polygon
-        })
         setData(json)
       })
       .catch((e) => setWarning(true))
@@ -202,55 +183,15 @@ export const OdbCTD = () => {
           {t('OdbData.CTD.thresholds')}
         </Typography>
         <Stack direction='row' spacing={2} sx={{ ml: 2.1, mb: 2 }}>
-          <TextField
-            label={t('OdbData.min')}
-            size="small"
-            type="number"
-            variant="standard"
-            value={minmax[type].min}
-            onChange={handleMinChange}
-            onBlur={handleMinMaxBlur}
-            sx={{
-              width: 50
-            }}
-          />
-          <TextField
-            label={t('OdbData.max')}
-            size="small"
-            type="number"
-            variant="standard"
-            value={minmax[type].max}
-            onChange={handleMaxChange}
-            onBlur={handleMinMaxBlur}
-            sx={{
-              width: 50
-            }}
-          />
+          <PanelMinMaxField inputRange={panelRange} setInputRange={setPanelRange} setRange={setRange} />
           <Stack>
-            <Stack direction={'row'} alignItems="center" >
-              <FormControlLabel
+            {/* <Stack direction={'row'} alignItems="center" > */}
+            {/* <FormControlLabel
                 label={<Typography variant="caption" >{t('OdbData.CTD.fixRange')}</Typography>}
                 control={<Checkbox id='ODB-CTD-fixRange' size="small" sx={{ p: '2px' }} checked={fixRange} onChange={handleFixRange} />}
-              />
-              <Button
-                id='ODB-CTD-defaultRange'
-                size="small"
-                variant='outlined'
-                sx={{
-                  height: 20,
-                  p: 0,
-                  color: 'black',
-                  borderColor: 'lightgray',
-                  '&:hover': {
-                    borderColor: 'lightgrey',
-                    bgcolor: 'whitesmoke'
-                  },
-                }}
-                onClick={handleDefaultRange}
-              >
-                {t('OdbData.CTD.defaultRange')}
-              </Button>
-            </Stack>
+              /> */}
+            <DefaultRangeButton setRange={handleDefaultRange} />
+            {/* </Stack> */}
             <FormControlLabel
               label={<Typography variant="caption" >{t('OdbData.CTD.mask')}</Typography>}
               control={<Checkbox id='ODB-CTD-mask' size="small" sx={{ p: '2px' }} checked={mask} onChange={handleMask} />}
@@ -263,6 +204,7 @@ export const OdbCTD = () => {
         key={`${depth}_${data.features.length}`}
         data={data}
         onEachFeature={onEachFeature}
+        pointToLayer={pointToLayer}
         style={(feature: any) => {
           const value = feature.properties[type]
           if (value) {

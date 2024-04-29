@@ -3,6 +3,10 @@ import { AlertColor } from '@mui/material';
 import { ReactNode } from 'react';
 import { longtermDepths, years } from 'layout/DataPanel/StatisticMean/varList';
 
+export interface MinMax {
+    min: number
+    max: number
+}
 export type coor = {
     lat: number;
     lng: number;
@@ -108,7 +112,8 @@ export const isOptionsAnimation = (x: any): x is OptionsAnimation => optionListA
 ////// general //////
 export const optionListCWA = ['cwaSea', 'cwaWeather', 'cwaRadar'] as const
 export type OptionsCWA = typeof optionListCWA[number];
-export const optionListCWAFore = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd'] as const
+// export const optionListCWAFore = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd'] as const
+export const optionListCWAFore = ['close', 'SST', 'SAL', 'SSH', 'SPD'] as const
 export type OptionsCWAFore = typeof optionListCWAFore[number];
 export const isOptionsCWAFore = (x: any): x is OptionsCWAFore => optionListCWAFore.includes(x)
 export const optionListCWAForeCur = ['close', 'cwacur', 'cwadir'] as const

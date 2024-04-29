@@ -53,7 +53,7 @@ export const MarkerSet = memo((props: markerSet) => {
         const round = -Math.round(markerLon / 360)
         lon = markerLon + 360 * round
       }
-      fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${lon}&lat=${markerLat}`)
+      fetch(`${process.env.REACT_APP_PROXY_BASE}/data/gebco?lon=${lon}&lat=${markerLat}`)
         .then(res => res.json())
         .then(json => setElevation(json.z[0]))
     }
