@@ -56,6 +56,14 @@ export const CWADefaults: CWAStates = {
     mask: false,
     min: 0,
     max: 2
+  },
+  DIR: {
+    opacity: 100,
+    palette: 'red',
+    inverse: false,
+    mask: false,
+    min: 0,
+    max: 2
   }
 }
 

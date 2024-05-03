@@ -113,7 +113,7 @@ export const isOptionsAnimation = (x: any): x is OptionsAnimation => optionListA
 export const optionListCWA = ['cwaSea', 'cwaWeather', 'cwaRadar'] as const
 export type OptionsCWA = typeof optionListCWA[number];
 // export const optionListCWAFore = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd'] as const
-export const optionListCWAFore = ['close', 'SST', 'SAL', 'SSH', 'SPD'] as const
+export const optionListCWAFore = ['close', 'SST', 'SAL', 'SSH', 'SPD', 'DIR'] as const
 export type OptionsCWAFore = typeof optionListCWAFore[number];
 export const isOptionsCWAFore = (x: any): x is OptionsCWAFore => optionListCWAFore.includes(x)
 export const optionListCWAForeCur = ['close', 'cwacur', 'cwadir'] as const

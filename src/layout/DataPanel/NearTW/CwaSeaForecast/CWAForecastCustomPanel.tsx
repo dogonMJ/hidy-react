@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
 import { Box, Checkbox, Divider, MenuItem, Select, Stack, Typography, SelectChangeEvent, FormControlLabel } from '@mui/material';
@@ -16,7 +16,7 @@ interface CWACustomPanelProps {
   identifier: string
 }
 
-export const CWAForecastCustomPanel = (props: CWACustomPanelProps) => {
+export const CWAForecastCustomPanel = memo((props: CWACustomPanelProps) => {
   const { identifier } = props
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
@@ -45,6 +45,8 @@ export const CWAForecastCustomPanel = (props: CWACustomPanelProps) => {
   const setRange = ({ min, max }: MinMax) => {
     dispatch(cwaForecastSlice.actions.setRange({ identifier, min: min, max: max }))
   }
+
+
   return (
     <>
       <Divider variant="middle" />
@@ -98,4 +100,4 @@ export const CWAForecastCustomPanel = (props: CWACustomPanelProps) => {
       </Box >
     </>
   )
-}
+})

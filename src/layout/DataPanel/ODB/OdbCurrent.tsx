@@ -10,7 +10,7 @@ import 'leaflet-canvas-markers'
 import { DepthMeter } from 'components/DepthlMeter';
 import { LegendControl } from "components/LeafletLegend"
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-import Arrow from 'assets/images/ArrowUp.svg'
+import Arrow from 'assets/images/ArrowUp.png'
 import { periodTransform, calSpd, calDir, adcpDepthMeterProps } from 'Utils/UtilsODB';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AdcpProfile } from 'components/VerticalPlot/AdcpProfile';
