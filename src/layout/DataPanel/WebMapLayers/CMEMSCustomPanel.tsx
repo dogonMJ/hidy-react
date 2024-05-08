@@ -1,7 +1,7 @@
 // import wmList from 'assets/jsons/WebMapsList.json'
-import { Box, Button, Checkbox, Divider, FormControlLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material"
+import { Box, Checkbox, Divider, FormControlLabel, MenuItem, Select, SelectChangeEvent, Stack, Typography } from "@mui/material"
 import { OpacitySlider } from "components/OpacitySlider"
-import { ChangeEvent, useState } from "react"
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { cmemsList } from "./WMTSList"
 import CMEMSPalettes from "assets/jsons/CMEMS_cmap.json"
@@ -11,12 +11,7 @@ import { WmProps, webmapSlice } from "store/slice/webmapSlice"
 import { reversePalette } from "../ODB/OdbCTD"
 import { DefaultRangeButton } from "components/DefaultRangeButton"
 import { PanelMinMaxField } from "components/PanelMinMaxField/PanelMinMaxField"
-import { MinMax } from "types"
-
-const cmapKey = ["algae", "amp", "balance", "cividis", "cyclic", "delta", "dense", "gray", "haline", "ice", "inferno", "magma", "matter",
-  "plasma", "rainbow", "solar", "speed", "tempo", "thermal", "viridis"] as const
-export type CMEMSPalette = typeof cmapKey[number];
-export const isCMEMSPalette = (p: any): p is CMEMSPalette => cmapKey.includes(p)
+import { CMEMSPalette, CMEMSPaletteList, MinMax } from "types"
 
 interface WMTSCustomPanelProps {
   identifier: string
@@ -82,11 +77,11 @@ export const WMTSCustomPanel = (props: WMTSCustomPanelProps) => {
             sx={{ marginLeft: 2.1, marginBottom: 2 }}
           >
             {
-              cmapKey.map(color => {
+              CMEMSPaletteList.filter(color => color !== 'ocean' && color !== 'ternary').map(color => {
                 return (
                   <MenuItem key={color} value={color} title={color}>
                     <ColorPalette
-                      palette={reversePalette(CMEMSPalettes[color as keyof typeof CMEMSPalettes], inverse)}
+                      palette={reversePalette(CMEMSPalettes[color as CMEMSPalette], inverse)}
                       fullLength={180} />
                   </MenuItem>
                 )

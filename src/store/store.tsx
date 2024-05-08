@@ -14,6 +14,7 @@ import { cplanSlice } from './slice/cplanSlice';
 import { longtermSlice } from './slice/longtermSlice';
 import { webmapSlice } from './slice/webmapSlice';
 import { cwaForecastSlice } from './slice/cwaForecastSlice';
+import { cwaForecastDirSlice } from './slice/cwaForecastDirSlice';
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
     [longtermSlice.name]: longtermSlice.reducer,
     [webmapSlice.name]: webmapSlice.reducer,
     [cwaForecastSlice.name]: cwaForecastSlice.reducer,
+    [cwaForecastDirSlice.name]: cwaForecastDirSlice.reducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>

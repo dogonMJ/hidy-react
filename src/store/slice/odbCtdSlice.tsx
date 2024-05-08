@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CtdParameters, CtdPeriods, CTDPalette, isCtdParameter, isCtdPeriod, isPalette, MinMax } from 'types'
+import { CtdParameters, CtdPeriods, CTDPalette, isCtdParameter, isCtdPeriod, isCTDPalette, MinMax } from 'types'
 import { defaultCtdRange } from "Utils/UtilsODB";
 import { initBoolean, initNumber, initString, readUrlQuery } from "Utils/UtilsStates";
 
@@ -42,7 +42,7 @@ export const odbCtdSlice = createSlice({
     pX2: initString(query, 'pX2', 'salinity', isCtdParameter),
     pY: initString(query, 'pY', 'depth', isCtdParameter),
     period: initString(query, 'period', 'avg', isCtdPeriod),
-    palette: initString(query, 'palette', 'plasma', isPalette),
+    palette: initString(query, 'palette', 'plasma', isCTDPalette),
     mask: initBoolean(query, 'mask'),
     reverse: initBoolean(query, 'reverse'),
     fixRange: initBoolean(query, 'fixRange'),

@@ -18,6 +18,7 @@ import { GibsCustomPanel } from "./GibsCustomPanel";
 import { onoffsSlice } from "store/slice/onoffsSlice";
 import { reversePalette } from "../ODB/OdbCTD"
 import { Pane } from "react-leaflet";
+import { CMEMSPalette } from "types";
 
 
 const optionGibs = ["sst", "ssta", "TrueColor"]
@@ -134,7 +135,7 @@ export const WebMapLayers = () => {
       <RenderIf isTrue={identifier !== 'close' && !optionGibs.includes(identifier)}>
         <ProcCMEMS identifier={identifier} {...wmProps} />
         <ColorPaletteLegend
-          palette={reversePalette(CMEMSPalettes[wmProps?.cmap as keyof typeof CMEMSPalettes], wmProps?.inverse ?? false)}
+          palette={reversePalette(CMEMSPalettes[wmProps?.cmap as CMEMSPalette], wmProps?.inverse ?? false)}
           interval={256}
           min={wmProps?.min}
           max={wmProps?.max}

@@ -103,22 +103,33 @@ export const isServiceType = (value: string): value is ServiceType => {
     return value.toUpperCase() === 'WMTS' || value.toUpperCase() === 'WMS';
 }
 
+export const CMEMSPaletteList = ["algae", "amp", "balance", "cividis", "cyclic", "delta", "dense", "gray", "haline", "ice", "inferno", "magma", "matter",
+    "plasma", "rainbow", "solar", "speed", "tempo", "thermal", "viridis", "ocean", "ternary"] as const
+export type CMEMSPalette = typeof CMEMSPaletteList[number];
+export const isCMEMSPalette = (p: any): p is CMEMSPalette => CMEMSPaletteList.includes(p)
 
 ////// animation //////
 export const optionListAnimation = ["close", "madt", "msla"] as const
 export type OptionsAnimation = typeof optionListAnimation[number];
 export const isOptionsAnimation = (x: any): x is OptionsAnimation => optionListAnimation.includes(x)
 
-////// general //////
+////// CWA //////
 export const optionListCWA = ['cwaSea', 'cwaWeather', 'cwaRadar'] as const
 export type OptionsCWA = typeof optionListCWA[number];
 // export const optionListCWAFore = ['close', 'cwasst', 'cwapsu', 'cwasla', 'cwaspd'] as const
 export const optionListCWAFore = ['close', 'SST', 'SAL', 'SSH', 'SPD', 'DIR'] as const
 export type OptionsCWAFore = typeof optionListCWAFore[number];
 export const isOptionsCWAFore = (x: any): x is OptionsCWAFore => optionListCWAFore.includes(x)
+
+export const cwaArrowColors = ['grey', 'black', 'orange'] as const
+export type CWAArrowColor = typeof cwaArrowColors[number];
+export const iscwaArrowColors = (x: any): x is CWAArrowColor => cwaArrowColors.includes(x)
+
 export const optionListCWAForeCur = ['close', 'cwacur', 'cwadir'] as const
 export type OptionsCWAForeCur = typeof optionListCWAForeCur[number];
 export const isOptionsCWAForeCur = (x: any): x is OptionsCWAForeCur => optionListCWAForeCur.includes(x)
+
+
 
 export interface ComponentList {
     [key: string | OptionsCWA]: JSX.Element
@@ -167,7 +178,7 @@ export type PlasticConcentration = {
 ////// CTD //////
 export const validatePalette = ['plasma', 'viridis', 'magma', 'coolwarm', 'bwr', 'jet', 'YlGnBu', 'YlOrRd'] as const
 export type CTDPalette = typeof validatePalette[number];
-export const isPalette = (p: any): p is CTDPalette => validatePalette.includes(p)
+export const isCTDPalette = (p: any): p is CTDPalette => validatePalette.includes(p)
 
 export const validateCtdParameters = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",] as const
 export type CtdParameters = typeof validateCtdParameters[number];

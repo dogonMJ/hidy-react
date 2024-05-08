@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initBoolean, initString, readUrlQuery } from "Utils/UtilsStates";
-import { CTDPalette, isPalette } from "types";
-import { optionListCWAFore } from "types";
-const query: any = readUrlQuery('webmap')
+import { readUrlQuery } from "Utils/UtilsStates";
+import { CMEMSPalette } from "types";
+const query: any = readUrlQuery('cwaForecast')
 
 interface CWAProps {
   opacity: number
-  palette: string
+  palette: CMEMSPalette
   inverse: boolean
   mask: boolean
   min: number
   max: number
 }
+
 interface CWAStates {
   [key: string]: CWAProps
 }
@@ -57,56 +57,35 @@ export const CWADefaults: CWAStates = {
     min: 0,
     max: 2
   },
-  DIR: {
-    opacity: 100,
-    palette: 'red',
-    inverse: false,
-    mask: false,
-    min: 0,
-    max: 2
-  }
 }
 
-// const initCWA = (id: string) => {
-//   const defaults = CWADefaults
-//   if (query && Object.keys(query)[0] !== '') {
-//     const converted = Object.fromEntries(
-//       Object.entries(query).map(([key, value]) => [key, JSON.parse(value as string)])
-//     )
-//     const modifiedId = Object.keys(converted)
-//     const obj = {
-//       cmap: modifiedId.includes(id) ? converted[id].cmap ?? (defaults?.cmap ?? 'default') : (defaults?.cmap ?? 'default'),
-//       min: modifiedId.includes(id) ? converted[id].min ?? (defaults?.min ?? 0) : (defaults?.min ?? 0),
-//       max: modifiedId.includes(id) ? converted[id].max ?? (defaults?.max ?? 1) : (defaults?.max ?? 1),
-//       opacity: modifiedId.includes(id) ? converted[id].opacity ?? 100 : 100,
-//       noClamp: modifiedId.includes(id) ? converted[id].noClamp ?? (defaults?.noClamp ?? false) : (defaults?.noClamp ?? false),
-//       inverse: modifiedId.includes(id) ? converted[id].inverse ?? (defaults?.inverse ?? false) : (defaults?.inverse ?? false),
-//     }
-//     return { ...obj }
-//   } else {
-//     const obj = {
-//       cmap: defaults?.cmap ?? 'default',
-//       min: defaults?.min ?? 0,
-//       max: defaults?.max ?? 1,
-//       opacity: 100,
-//       noClamp: defaults?.noClamp ?? false,
-//       inverse: defaults?.inverse ?? false,
-//     }
-//     return { ...obj }
-//   }
-
-// }
+const initCWAStates = () => {
+  if (query) {
+    const res = { ...CWADefaults }
+    Object.keys(query).forEach((key: string) => {
+      if (key) {
+        const urlObj = JSON.parse(query[key])
+        const newObj = { ...CWADefaults[key], ...urlObj }
+        res[key] = newObj
+      }
+    })
+    return (res)
+  } else {
+    return CWADefaults
+  }
+}
+initCWAStates()
 export const cwaForecastSlice = createSlice({
   name: "cwaForecast",
   initialState: {
-    ...CWADefaults
+    ...initCWAStates(),
   } as CWAStates,
   reducers: {
     setOpacity: (state, action: PayloadAction<{ identifier: string, opacity: number }>) => {
       const { identifier, opacity } = action.payload
       state[identifier].opacity = opacity
     },
-    setPalette: (state, action: PayloadAction<{ identifier: string, palette: CTDPalette }>) => {
+    setPalette: (state, action: PayloadAction<{ identifier: string, palette: CMEMSPalette }>) => {
       const { identifier, palette } = action.payload
       state[identifier].palette = palette
     },

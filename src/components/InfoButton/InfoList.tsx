@@ -323,13 +323,13 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwadir':
+    case 'DIR':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
           {t('DataInfo.source')}: <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/mathematics/M-B0071-000" rel="noreferrer">中央氣象署開放資料CWA Open Data</a><br />
           {t('DataInfo.productID')}: <span>M-B0071</span><br />
-          {t('DataInfo.variable')}:橫向流速(UC)、直向流速(VC)<br />
+          {t('DataInfo.variable')}:橫向流速(UC)、直向流速(VC)、流速(SPD)<br />
           {t('DataInfo.spatialRange')}: 7 ~ 36°N, 110 ~ 126°E<br />
           {t('DataInfo.spatialRes')}: 0.1° × 0.1°<br />
           {t('DataInfo.temporalRange')}: 73 hours<br />
@@ -338,7 +338,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwasst':
+    case 'SST':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
@@ -353,7 +353,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwapsu':
+    case 'SAL':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
@@ -368,7 +368,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwaspd':
+    case 'SPD':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />
@@ -383,7 +383,7 @@ const InfoList = (props: { dataId: string }) => {
           {t('DataInfo.others')}: {t('CwaSeaForecast.others')}<br />
         </Typography >
       )
-    case 'cwasla':
+    case 'SSH':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
           <b>{t(`CwaSeaForecast.${props.dataId}`)}</b><br />

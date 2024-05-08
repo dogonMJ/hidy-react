@@ -75,7 +75,7 @@ export const OdbCurrent = () => {
       radius: 20,
       img: {
         url: Arrow,    //image link
-        size: [siz / 2, siz],     //image size ( default [40, 40] )
+        size: [siz / 4, siz],     //image size ( default [40, 40] )
         rotate: angle,         //image base rotate ( default 0 )
         offset: { x: 0, y: 0 }, //image offset ( default { x: 0, y: 0 } )
       },
@@ -126,7 +126,7 @@ export const OdbCurrent = () => {
         <AdcpProfile lat={ptData.lat} lng={ptData.lng} mode={mode} parameter={'spd'} setOpen={setOpenVertical} />
       </RenderIf>
       <DepthMeter values={adcpDepths} marks={marks} user={'odbCurrent'} />
-      <LegendControl position='bottomleft' legendContent={`<img src=${Arrow} height=20 width=10><span style="margin-left:8px;">0.5 m/s</span>`} />
+      <LegendControl position='bottomleft' legendContent={`<img src=${Arrow} height=20 width=5><span style="margin-left:8px;">0.5 m/s</span>`} />
       <AlertSlide open={warning} setOpen={setWarning} severity='error'>
         {t('alert.fetchFail')}
       </AlertSlide>

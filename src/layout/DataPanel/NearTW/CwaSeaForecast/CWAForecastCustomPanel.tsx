@@ -1,11 +1,10 @@
-import { SyntheticEvent, memo, useMemo, useState } from 'react'
+import { SyntheticEvent, memo, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
 import { Box, Checkbox, Divider, MenuItem, Select, Stack, Typography, SelectChangeEvent, FormControlLabel } from '@mui/material';
 import { ColorPalette } from 'components/ColorPalette/ColorPalette';
-import { CTDPalette, MinMax } from 'types';
+import { CMEMSPalette, MinMax } from 'types';
 import { OpacitySlider } from 'components/OpacitySlider';
-import { PanelSlider } from 'components/PanelSlider';
 import { cwaForecastSlice } from 'store/slice/cwaForecastSlice';
 import { reversePalette } from 'layout/DataPanel/ODB/OdbCTD';
 import CMEMSPalettes from "assets/jsons/CMEMS_cmap.json"
@@ -32,7 +31,7 @@ export const CWAForecastCustomPanel = memo((props: CWACustomPanelProps) => {
 
   const handleOpacityCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(cwaForecastSlice.actions.setOpacity({ identifier, opacity: opacitySlider }))
   const handleOpacityChange = (event: Event, newValue: number | number[]) => setOpacitySlider(newValue as number)
-  const handlePaletteChange = (event: SelectChangeEvent) => dispatch(cwaForecastSlice.actions.setPalette({ identifier, palette: event.target.value as CTDPalette }))
+  const handlePaletteChange = (event: SelectChangeEvent) => dispatch(cwaForecastSlice.actions.setPalette({ identifier, palette: event.target.value as CMEMSPalette }))
   const handleMask = () => {
     dispatch(cwaForecastSlice.actions.setMask({ identifier, mask: !mask }))
   }
@@ -67,7 +66,7 @@ export const CWAForecastCustomPanel = memo((props: CWACustomPanelProps) => {
               Object.keys(CMEMSPalettes).map(color => {
                 return (
                   <MenuItem key={color} value={color} title={color}>
-                    <ColorPalette palette={reversePalette(CMEMSPalettes[color as keyof typeof CMEMSPalettes], inverse)} />
+                    <ColorPalette palette={reversePalette(CMEMSPalettes[color as CMEMSPalette], inverse)} />
                   </MenuItem>
                 )
               })
