@@ -80,22 +80,24 @@ const AnimatedLayers = (props: { identifier: string, time: string }) => {
     },
     mousedown: (e) => {
       // kuo修改之json有東+0.125北-0.125度，方格和CMEMS對不上,須修正
-      const jsonData = JSON.parse(sessionStorage['jsonData']);
-      const nx = jsonData[0].header.nx
-      const ny = jsonData[0].header.ny
-      const dx = jsonData[0].header.dx
-      const dy = jsonData[0].header.dy
-      const ul = [jsonData[0].header.lo1, jsonData[0].header.la1]
-      const x = Math.ceil((e.latlng.lng - (ul[0] - dx / 2)) / dx) - 1
-      const y = Math.floor(((ul[1] + dy / 2) - e.latlng.lat) / dy)
-      if (x < nx && x >= 0 && y < ny) {
-        const i = x + y * nx
-        const east = jsonData[0].data[i] //ugos, ugosa
-        const north = jsonData[1].data[i] //vgos, vgosa
-        const composite = Math.sqrt(Math.pow(east, 2) + Math.pow(north, 2)).toFixed(2)
-        setToolTip({ lat: e.latlng.lat, lng: e.latlng.lng, north: north, east: east, composite: composite })
-      } else {
-        setToolTip({ lat: null, lng: null, north: null, east: null, composite: null })
+      if (sessionStorage['jsonData']) {
+        const jsonData = JSON.parse(sessionStorage['jsonData']);
+        const nx = jsonData[0].header.nx
+        const ny = jsonData[0].header.ny
+        const dx = jsonData[0].header.dx
+        const dy = jsonData[0].header.dy
+        const ul = [jsonData[0].header.lo1, jsonData[0].header.la1]
+        const x = Math.ceil((e.latlng.lng - (ul[0] - dx / 2)) / dx) - 1
+        const y = Math.floor(((ul[1] + dy / 2) - e.latlng.lat) / dy)
+        if (x < nx && x >= 0 && y < ny) {
+          const i = x + y * nx
+          const east = jsonData[0].data[i] //ugos, ugosa
+          const north = jsonData[1].data[i] //vgos, vgosa
+          const composite = Math.sqrt(Math.pow(east, 2) + Math.pow(north, 2)).toFixed(2)
+          setToolTip({ lat: e.latlng.lat, lng: e.latlng.lng, north: north, east: east, composite: composite })
+        } else {
+          setToolTip({ lat: null, lng: null, north: null, east: null, composite: null })
+        }
       }
     }
   });

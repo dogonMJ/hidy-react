@@ -68,6 +68,32 @@ registerRoute(
     ],
   })
 );
+registerRoute(
+  ({ url }) => {
+    const format = url.searchParams.get('format')
+    const isPNG = format ? format.toLowerCase() === 'image/png' : false
+    return url.hostname.includes("wmts.marine.copernicus.eu") && isPNG ? true : false
+  },
+  new StaleWhileRevalidate({
+    cacheName: 'cmems-cache',
+    plugins: [
+      expirationPlugin,
+    ],
+  })
+);
+registerRoute(
+  ({ url }) => {
+    const format = url.searchParams.get('format')
+    const isPNG = format ? format.toLowerCase() === 'image/png' : false
+    return url.hostname.includes("gibs.earthdata.nasa.gov") && isPNG ? true : false
+  },
+  new StaleWhileRevalidate({
+    cacheName: 'gibs-cache',
+    plugins: [
+      expirationPlugin,
+    ],
+  })
+);
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {

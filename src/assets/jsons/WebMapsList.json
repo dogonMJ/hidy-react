@@ -1,74 +1,26 @@
 {
   "GHRSST_L4_MUR_Sea_Surface_Temperature": {
-    "type": "wms",
+    "type": "wmts",
     "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?",
     "layer": "GHRSST_L4_MUR_Sea_Surface_Temperature",
     "featureinfo": false
   },
   "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies": {
-    "type": "wms",
+    "type": "wmts",
     "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?",
     "layer": "GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies",
     "featureinfo": false
   },
   "MODIS_Aqua_CorrectedReflectance_TrueColor": {
-    "type": "wms",
+    "type": "wmts",
     "url": "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?",
     "layer": "MODIS_Aqua_CorrectedReflectance_TrueColor",
     "featureinfo": false
   },
   "sla": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4",
+    "type": "wmts",
+    "url": "http://wmts.marine.copernicus.eu/teroWmts/?",
     "layer": "sla",
-    "featureinfo": true
-  },
-  "adt": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4",
-    "layer": "adt",
-    "featureinfo": true
-  },
-  "CHL": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_obs-oc_glo_bgc-plankton_nrt_l4-gapfree-multi-4km_P1D",
-    "layer": "CHL",
-    "featureinfo": true
-  },
-  "3dinst_thetao": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy-thetao_anfc_0.083deg_PT6H-i",
-    "layer": "thetao",
-    "featureinfo": true
-  },
-  "3dinst_so": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy-so_anfc_0.083deg_PT6H-i",
-    "layer": "so",
-    "featureinfo": true
-  },
-  "bottomT": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-    "layer": "tob",
-    "featureinfo": true
-  },
-  "3dsea_water_velocity": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i",
-    "layer": "sea_water_velocity",
-    "featureinfo": true
-  },
-  "mlotst": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-    "layer": "mlotst",
-    "featureinfo": true
-  },
-  "zos": {
-    "type": "wms",
-    "url": "https://nrt.cmems-du.eu/thredds/wms/cmems_mod_glo_phy_anfc_0.083deg_P1D-m",
-    "layer": "zos",
     "featureinfo": true
   }
 }

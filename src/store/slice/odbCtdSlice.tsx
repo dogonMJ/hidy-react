@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CtdParameters, CtdPeriods, Palette, isCtdParameter, isCtdPeriod, isPalette } from 'types'
+import { CtdParameters, CtdPeriods, CTDPalette, isCtdParameter, isCtdPeriod, isPalette } from 'types'
 import { defaultCtdRange } from "Utils/UtilsODB";
 import { initBoolean, initNumber, initString, readUrlQuery } from "Utils/UtilsStates";
 
@@ -25,7 +25,7 @@ interface OdbCtdStates {
   pX2: CtdParameters | 'close'
   pY: CtdParameters | 'depth'
   period: CtdPeriods
-  palette: Palette
+  palette: CTDPalette
   mask: boolean
   reverse: boolean
   fixRange: boolean
@@ -64,7 +64,7 @@ export const odbCtdSlice = createSlice({
     setProfileYPar: (state, action: PayloadAction<CtdParameters | 'depth'>) => {
       state.pY = action.payload
     },
-    setPalette: (state, action: PayloadAction<Palette>) => {
+    setPalette: (state, action: PayloadAction<CTDPalette>) => {
       state.palette = action.payload
     },
     setMask: (state, action: PayloadAction<boolean>) => {

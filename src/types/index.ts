@@ -161,8 +161,8 @@ export type PlasticConcentration = {
 }
 ////// CTD //////
 export const validatePalette = ['plasma', 'viridis', 'magma', 'coolwarm', 'bwr', 'jet', 'YlGnBu', 'YlOrRd'] as const
-export type Palette = typeof validatePalette[number];
-export const isPalette = (p: any): p is Palette => validatePalette.includes(p)
+export type CTDPalette = typeof validatePalette[number];
+export const isPalette = (p: any): p is CTDPalette => validatePalette.includes(p)
 
 export const validateCtdParameters = ["temperature", "salinity", "density", "fluorescence", "transmission", "oxygen",] as const
 export type CtdParameters = typeof validateCtdParameters[number];
@@ -222,3 +222,5 @@ export const isMonth = (p: any): p is number => Number.isInteger(Number(p)) && p
 
 export const isLongtermYear = (p: any): p is string => years.includes(p)
 export const isLongtermDepth = (p: any): p is number => longtermDepths.includes(p)
+
+////// webmaps //////

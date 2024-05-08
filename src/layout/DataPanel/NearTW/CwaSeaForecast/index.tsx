@@ -26,13 +26,12 @@ export const CwaSeaForecast = () => {
   const { openAlert, alertMessage, setOpenAlert, setMessage } = useAlert()
   const datetime = useAppSelector(state => state.map.datetime);
   const date = datetime.replace(/T|-|:/g, '').substring(0, 10)
-
-  const handleToggleForecast = (value: string) => () => {
+  const handleToggleForecast = (value: any) => {
     isOptionsCWAFore(value) ?
       dispatch(onoffsSlice.actions.setCwaSeaForecast(value)) :
       setMessage(t('alert.checkQueryParameter'))
   };
-  const handleToggleCur = (value: string) => () => {
+  const handleToggleCur = (value: any) => {
     isOptionsCWAForeCur(value) ?
       dispatch(onoffsSlice.actions.setCwaSeaForeCur(value)) :
       setMessage(t('alert.checkQueryParameter'))
@@ -91,17 +90,17 @@ export const CwaSeaForecast = () => {
   return (
     <>
       <DataPanelRadioList
-        identifier={idCur}
-        handleClick={handleToggleCur}
         group='CwaSeaForecast'
+        identifier={idCur}
         optionList={optionsCur}
+        handleClick={handleToggleCur}
       />
       <Divider variant="middle" sx={{ width: '80%', marginLeft: '16%', }} flexItem light />
       <DataPanelRadioList
-        identifier={idForecast}
-        handleClick={handleToggleForecast}
         group='CwaSeaForecast'
+        identifier={idForecast}
         optionList={optionsForecast}
+        handleClick={handleToggleForecast}
       />
       <RenderIf isTrue={(idForecast !== 'close' || idCur !== 'close') && jsonData}>
         <ShowCwaForecast data={jsonData} bounds={[[6.95, 109.95], [36.05, 126.05]]} />

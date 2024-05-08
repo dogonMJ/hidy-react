@@ -55,7 +55,11 @@ export const findModified = (originalObject: any, modifiedObject: any, ons: stri
                 //object內有任何element更動，修改更動，貼上其他原本項目，避免後續default value更改 (eg. CTD min max)
                 modifiedElements[key][k] = {}
                 Object.keys(diff_and_Url).forEach((differenceKey: string) => {
-                  modifiedElements[key][k][differenceKey] = { ...originalObject[key][k][differenceKey], ...difference[differenceKey] }
+                  if (isObject(difference[differenceKey])) {
+                    modifiedElements[key][k][differenceKey] = { ...originalObject[key][k][differenceKey], ...difference[differenceKey] }
+                  } else {
+                    modifiedElements[key][k][differenceKey] = difference[differenceKey]
+                  }
                 })
               }
             } else {

@@ -12,6 +12,7 @@ import { addWmsLayerSlice } from './slice/addWmsLayerSlice';
 import { addImageSlice } from './slice/addImageSlice';
 import { cplanSlice } from './slice/cplanSlice';
 import { longtermSlice } from './slice/longtermSlice';
+import { webmapSlice } from './slice/webmapSlice';
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     [addImageSlice.name]: addImageSlice.reducer,
     [cplanSlice.name]: cplanSlice.reducer,
     [longtermSlice.name]: longtermSlice.reducer,
+    [webmapSlice.name]: webmapSlice.reducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>

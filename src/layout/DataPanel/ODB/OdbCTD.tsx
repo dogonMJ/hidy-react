@@ -1,4 +1,4 @@
-import { useEffect, useState, SyntheticEvent, ChangeEvent, memo, useMemo } from 'react'
+import { useEffect, useState, SyntheticEvent, ChangeEvent, useMemo } from 'react'
 import { renderToString } from 'react-dom/server';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/reduxHooks';
@@ -9,46 +9,19 @@ import { FeatureCollection, Point } from 'geojson'
 import * as geojson from 'geojson';
 import { createIntervalList, findInterval, getColorWithInterval, point2polygon, periodTransform, ctdDepthMeterProps, palettes, defaultCtdRange } from 'Utils/UtilsODB';
 import { DepthMeter } from 'components/DepthlMeter';
-import { LegendControl } from 'components/LeafletLegend';
 import { ColorPalette } from 'components/ColorPalette/ColorPalette';
 import { CtdProfile } from 'components/VerticalPlot/CtdProfile';
 import { RenderIf } from 'components/RenderIf/RenderIf';
 import { AlertSlide } from 'components/AlertSlide/AlertSlide';
-import { CtdParameters, CtdPeriods, Palette, validatePalette, validateCtdParameters as ctdPar, validatePeriods as periods } from 'types';
+import { CtdParameters, CtdPeriods, CTDPalette, validatePalette, validateCtdParameters as ctdPar, validatePeriods as periods } from 'types';
 import { OpacitySlider } from 'components/OpacitySlider';
 import { PanelSlider } from 'components/PanelSlider';
+import { ColorPaletteLegend } from 'components/ColorPaletteLegend';
 
 const ctdDepths = ctdDepthMeterProps().ctdDepths
 const marks = ctdDepthMeterProps().marks
 
-const LegendCTD = memo((props: { palette: string[], interval: number, min: number, max: number, title: string }) => {
-  const { palette, interval, min, max, title } = props
-  const FULLWIDTH = 180
-  const offset = interval ? FULLWIDTH / (interval + 2) : FULLWIDTH / 2
-  return (
-    <Box>
-      <Typography variant="caption">{title}</Typography>
-      <ColorPalette palette={palette} interval={interval} fullLength={FULLWIDTH} />
-      <Stack
-        direction={'row'}
-        justifyContent="space-between"
-        alignItems="baseline"
-        spacing={2}
-      >
-        <Box m={0} paddingLeft={`${offset - 10}px`} width={'20px'} textAlign={'center'}>
-          {min}
-        </Box>
-        {interval !== 0 &&
-          <Box m={0} paddingRight={`${offset - 10}px`} width={'20px'} textAlign={'center'}>
-            {max}
-          </Box>
-        }
-      </Stack>
-    </Box>
-  )
-})
-
-const reversePalette = (palette: string[], reverse: boolean) => reverse ? [...palette].reverse() : palette
+export const reversePalette = (palette: string[], reverse: boolean) => reverse ? [...palette].reverse() : palette
 
 export const OdbCTD = () => {
   const { t } = useTranslation()
@@ -70,21 +43,6 @@ export const OdbCTD = () => {
 
   const depth = ctdDepths[depthMeterValue]
   const mode = periodTransform[period]
-
-  const legend = useMemo(() =>
-    <LegendControl
-      position='bottomleft'
-      legendContent={
-        <LegendCTD
-          palette={reversePalette(palettes[palette], reverse)}
-          interval={interval}
-          min={minmax[type].min}
-          max={minmax[type].max}
-          title={t(`OdbData.CTD.${type}`)}
-        />
-      }
-    />
-    , [palette, interval, minmax, type, reverse, t])
 
   const onEachFeature = (feature: geojson.Feature<geojson.Polygon, any>, layer: any) => {
     const property = feature.properties
@@ -112,7 +70,7 @@ export const OdbCTD = () => {
     })
   }
 
-  const handlePaletteChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPalette(event.target.value as Palette))
+  const handlePaletteChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPalette(event.target.value as CTDPalette))
   const handleOpacityChange = (event: Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setOpacity(newValue as number))
   const handleIntervalChangeCommitted = (event: SyntheticEvent | Event, newValue: number | number[]) => dispatch(odbCtdSlice.actions.setInterval(newValue as number))
   const handleMinChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -323,7 +281,13 @@ export const OdbCTD = () => {
           }
         }} />
       <DepthMeter values={ctdDepths} marks={marks} user={'odbCtd'} />
-      {legend}
+      <ColorPaletteLegend
+        palette={reversePalette(palettes[palette], reverse)}
+        interval={interval}
+        min={minmax[type].min}
+        max={minmax[type].max}
+        title={t(`OdbData.CTD.${type}`)}
+      />
       <RenderIf isTrue={openVertical}>
         <CtdProfile lat={ptData.lat} lng={ptData.lng} mode={mode} parameter={type} setOpen={setOpenVertical} />
       </RenderIf>

@@ -40,6 +40,18 @@
     "unit": " ",
     "featureinfo": false
   },
+  "sla_old": {
+    "type": "wms",
+    "url": "https://nrt.cmems-du.eu/thredds/wms/dataset-duacs-nrt-global-merged-allsat-phy-l4",
+    "layer": "sla",
+    "duration": "P1D",
+    "style": "boxfill/rainbow",
+    "format": "image/png",
+    "transparent": true,
+    "crossOrigin": "anonymous",
+    "unit": "m",
+    "featureinfo": true
+  },
   "sla": {
     "type": "wmts",
     "url": "https://wmts.marine.copernicus.eu/teroWmts?service=WMTS&request=GetTile&version=1.0.0&tilematrixset=EPSG:3857&tilematrix={z}&tilerow={y}&tilecol={x}&",
