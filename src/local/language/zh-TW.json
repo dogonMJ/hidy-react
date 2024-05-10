@@ -518,7 +518,8 @@
     "keyword": "關鍵字",
     "search": "搜尋圖層",
     "selectLayer": "選擇圖層",
-    "clearLayer": "清除圖層",
+    "layerName": "圖層名稱",
+    "clearData": "清除資料",
     "addLayer": "加入圖層",
     "opacity": "不透明度",
     "nlsc": "內政部國土測繪中心",
@@ -527,6 +528,7 @@
     "csrsr3": "國立中央大學太空及遙測中心澎湖自然色",
     "csrsr4": "國立中央大學太空及遙測中心澎湖假色",
     "alert": {
+      "dupName": "重複圖層名稱",
       "dupOption": "重複輸入",
       "inputError": "請檢查伺服器網址或服務類型是否正確",
       "noLayer": "找不到圖層",

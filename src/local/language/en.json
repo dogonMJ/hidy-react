@@ -518,7 +518,8 @@
     "keyword": "Keyword",
     "search": "Search Layer",
     "selectLayer": "Select Layer",
-    "clearLayer": "Clear Layer",
+    "layerName": "Layer Name",
+    "clearData": "Clear Data",
     "addLayer": "Add Layer",
     "opacity": "Opacity",
     "nlsc": "NLSC Taiwan Map Service",
@@ -527,6 +528,7 @@
     "csrsr3": "NCU CSRSR Penghu true-color",
     "csrsr4": "NCU CSRSR Penghu false-color",
     "alert": {
+      "dupName": "Duplicate layer name",
       "dupOption": "Duplicate input",
       "inputError": "check WMS/WMTS or URL",
       "noLayer": "No layer found",
