@@ -45,7 +45,7 @@
   "remove": "Remove",
   "dataPanel": "Data Layers",
   "clusterLevel": "Data Cluster Level",
-  "hidyOld": "Old Hidy Site",
+  "hidyOld": "Old Hidy",
   "depth": "Depth (m)",
   "CWAsites": {
     "title": "Marine/Meteorological Data Near Taiwan",
@@ -645,6 +645,14 @@
       "nor2inst": "Precious Instrument Center of New Ocean Researcher 2 (Ch.)",
       "nor3": "R/V New Ocean Researcher 3 (NOR3)",
       "nor3inst": "NOR3 Marine Instrument Center (Ch.)"
+    },
+    "cite": {
+      "title": "Citation",
+      "link": " this link (Mandarin).",
+      "intro": "ODB data policy, data applications, term of use, and citations please refer to",
+      "ref": "Citation format for services and content of this website",
+      "other": " If you are using the original data from this website, please follow the regulations set by the original data publisher",
+      "api": "*When citing the API, please modify the last URL to the API URL and version (please refer to the API documentation). eg., ecodata.odb.ntu.edu.tw/api/sadcp. v1.0."
     }
   },
   "contact": {

@@ -32,7 +32,8 @@ const links: { [key: string]: string } = {
   rose: 'https://app05.odb.ntu.edu.tw/physv/sadcp/rose/odbphy_current_rose.htm',
   ctd: 'https://www.odb.ntu.edu.tw/ctd/',
   adcp: 'https://www.odb.ntu.edu.tw/adcp/',
-  report: 'https://cruise.oc.ntu.edu.tw/'
+  report: 'https://cruise.oc.ntu.edu.tw/',
+  cite: 'https://www.odb.ntu.edu.tw/odb-services/'
 }
 const genLinks = (linkKey: string, children: string | JSX.Element) => <Link href={links[linkKey]} target="_blank" rel="noopener noreferrer">{children}</Link>
 
@@ -90,6 +91,7 @@ export const About = (props: AboutType) => {
                 <Tab label={t('about.site.title')} />
                 <Tab label={t('about.acc.title')} />
                 <Tab label={t('about.link.title')} />
+                <Tab label={t('about.cite.title')} />
               </Tabs>
               <CustomTabPanel value={tabValue} index={0}>
                 <Typography variant="body2" component={'div'} sx={{ padding: 2, textIndent: '2rem', height: 325, overflowY: 'auto' }}>
@@ -161,6 +163,21 @@ export const About = (props: AboutType) => {
                   {genLinks('nor2inst', t('about.link.nor2inst'))}<br />
                   {genLinks('nor3', t('about.link.nor3'))}<br />
                   {genLinks('nor3inst', t('about.link.nor3inst'))}<br />
+                </Typography>
+              </CustomTabPanel>
+              <CustomTabPanel value={tabValue} index={3}>
+                <Typography variant="body2" sx={{ padding: 2, textIndent: '2rem', overflowY: 'auto' }}>
+                  {t('about.cite.intro')}{genLinks('cite', t('about.cite.link'))}{t('about.cite.other')}
+                </Typography>
+                <Typography variant="body2" sx={{ paddingLeft: 2, textIndent: '2rem', overflowY: 'auto' }}>
+                  {t('about.cite.ref')}:
+                </Typography>
+                <Typography variant=
+                  "body2" sx={{ padding: 2, paddingLeft: '3.5rem', textIndent: '-1.5rem' }}>
+                  Ocean Data Bank, National Science and Technology Council, Taiwan. https://doi.org/10.5281/zenodo.7512112. Accessed DAY/MONTH/YEAR from https://odbview.oc.ntu.edu.tw/hidy/.
+                </Typography>
+                <Typography variant="body2" sx={{ padding: 2, textIndent: '2rem', overflowY: 'auto' }}>
+                  {t('about.cite.api')}
                 </Typography>
               </CustomTabPanel>
             </CardContent>
