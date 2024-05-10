@@ -35,6 +35,7 @@ export const OdbChemistry = () => {
   const lon = useAppSelector(state => state.odbChem.lon)
   const depthIndex = useAppSelector(state => state.odbChem.iDepth)
   const parameters = useAppSelector(state => state.odbChem.par)
+  const clusterLevel = useAppSelector(state => state.odbChem.clusterLevel)
 
   const varList: { [key in ChemPar]: StringObject } = useMemo(() => {
     return {
@@ -133,14 +134,6 @@ export const OdbChemistry = () => {
         </Box>
       )
       layer.bindTooltip(renderToString(content))
-      //   const property = feature.properties
-      //   const content = `${property.ship}-${property.cruise}<br>
-      // ${property.date} ${property.time}<br>
-      // Location: ${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}<br>
-      // Depths (m): ${handleJsonStringList(property.depths).join(', ')}<br>
-      // Parameters: ${handleJsonStringList(property.parameters).join(', ')}
-      // `
-      // layer.bindTooltip(content)
     }
   }
   const styleFunc = () => {
@@ -184,6 +177,13 @@ export const OdbChemistry = () => {
       setMessage(t('alert.noSelect'))
     }
   }, [])
+
+  const handleClusterLevelChange = (event: SyntheticEvent | Event, newValue: number | number[]) => {
+    dispatch(odbChemSlice.actions.setClusterLevel(newValue as number))
+    refCluster.current.options.disableClusteringAtZoom = newValue
+    refCluster.current.clearLayers()
+    refCluster.current.addLayers(ref.current.getLayers())
+  }
 
   useEffect(() => {
     if (date.length === 0) {
@@ -236,6 +236,10 @@ export const OdbChemistry = () => {
         </Typography>
         <PanelSlider min={0} max={depthList.length - 1} initValue={depthIndex} onChangeCommitted={handleDepthChangeCommitted} valueLabelFormat={depthLabelFormat} />
         <Typography variant="subtitle2" gutterBottom>
+          {t('clusterLevel')}
+        </Typography>
+        <PanelSlider min={3} max={12} initValue={clusterLevel} onChangeCommitted={handleClusterLevelChange} track={false} />
+        <Typography variant="subtitle2" gutterBottom>
           {t('OdbData.chemistryList.para')}
         </Typography>
         <Grid container columns={12} sx={{ width: 340, marginLeft: 0.5 }}>
@@ -258,7 +262,7 @@ export const OdbChemistry = () => {
       <Divider variant="middle" />
       <MarkerCluster
         ref={refCluster}
-        disableClusteringAtZoom={12}
+        disableClusteringAtZoom={clusterLevel}
       >
         <GeoJSON ref={ref} data={{ type: 'Feature' }} style={styleFunc} pointToLayer={pointToLayer} onEachFeature={onEachFeature} />
       </MarkerCluster>

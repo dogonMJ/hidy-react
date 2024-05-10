@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initStringArray, initNumberArray, readUrlQuery } from "Utils/UtilsStates";
+import { initStringArray, initNumberArray, readUrlQuery, initNumber } from "Utils/UtilsStates";
 import { chemDepthList } from "Utils/UtilsODB";
 import { ChemPar, isChemPar, isIsoDate } from "types";
 
@@ -11,6 +11,7 @@ interface OdbChemStates {
   lon: number[]
   iDepth: number[]
   par: ChemPar[]
+  clusterLevel: number
 }
 
 export const odbChemSlice = createSlice({
@@ -21,6 +22,7 @@ export const odbChemSlice = createSlice({
     lon: initNumberArray(query, 'lon', [106, 128], [106, 128]),
     iDepth: initNumberArray(query, 'iDepth', [0, chemDepthList.length - 1], [0, chemDepthList.length - 1]),
     par: initStringArray(query, 'par', [], isChemPar),
+    clusterLevel: initNumber(query, 'clusterLevel', 8, [0, 10])
   } as OdbChemStates,
   reducers: {
     setDate: (state, action: PayloadAction<string[]>) => {
@@ -37,6 +39,9 @@ export const odbChemSlice = createSlice({
     },
     setPar: (state, action: PayloadAction<ChemPar[]>) => {
       state.par = action.payload
+    },
+    setClusterLevel: (state, action: PayloadAction<number>) => {
+      state.clusterLevel = action.payload
     },
   }
 });
