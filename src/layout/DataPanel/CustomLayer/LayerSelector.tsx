@@ -203,7 +203,7 @@ export const LayerSelector = () => {
             multiline={true}
             variant="outlined"
             size="small"
-            label={t('CustomLayer.serverUrl')}
+            label={t('CustomLayer.serviceUrl')}
             value={urlInput}
             onChange={(event) => setUrlInput(event.target.value)}
             sx={{

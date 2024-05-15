@@ -13,8 +13,6 @@ import "./WMSCanvas-TileLayer.js"
 const createLayer = (props: any, context: any) => {
   const layer: any = L.tileLayer
   const type = props.type ? props.type.toUpperCase() : ''
-  const key = props.params?.key ?? (props.key ?? 'wmLayer')
-  // const instance = (type === 'WMTS') ? layer.canvas(props.url, { ...props.params }) : layer.wmscanvas(props.url, { ...props.params, });
   if (type === 'WMTS') {
     const urlParams = props.params ? Object.entries(props.params)
       .map(([key, value]) => `${key}=${value}`)
@@ -22,20 +20,22 @@ const createLayer = (props: any, context: any) => {
       : ''
     const instance = layer.canvas(props.url + urlParams, { crossOrigin: 'anonymous' })
     if (props.opacity) { instance.setOpacity(props.opacity) }
+    if (props.zIndex) { instance.setZIndex(props.zIndex); }
     return { instance, context };
   } else {
-    const instance = layer.wmscanvas(props.url, { ...props.params, })
-    const newParams = Object.fromEntries(
-      Object.entries(props.params).map(([k, v]) => [k.toUpperCase(), v])
-    );
-    const wmsKeys = Object.keys(instance.wmsParams).filter(key => !Object.keys(newParams).includes(key.toUpperCase())) //篩掉重複參數
-    const defaultObj: { [key: string]: any } = {}
-    wmsKeys.forEach(key => {
-      defaultObj[key] = instance.wmsParams[key]
-    })
-    Object.assign(newParams, defaultObj)
-    instance.wmsParams = {}
+    let url;
+    let newParams = Object.assign({}, props.params);
+    // NASA Gibs的time只接受:不接受%3A，time加入url內避免setParams自動改為%3A
+    if (props.params && props.params['time']) {
+      url = `${props.url.split('?')[0]}?&time=${props.params['time']}`
+      delete newParams['time'] //避免同key衝突
+    } else {
+      url = props.url.split('?')[0]
+    }
+    const instance = layer.wmscanvas(url)
     instance.setParams({ ...newParams })
+    if (props.opacity) { instance.setOpacity(props.opacity) }
+    if (props.zIndex) { instance.setZIndex(props.zIndex); }
     return { instance, context };
   }
 };

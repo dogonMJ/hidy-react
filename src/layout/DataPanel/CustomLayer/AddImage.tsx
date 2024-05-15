@@ -65,7 +65,11 @@ export const AddImage = () => {
       layeri += 1
       setInputLayerName(`layer${layeri}`)
     } else {
-      dispatch(addImageSlice.actions.setLayerList([{ name: inputLayerName, url, bounds }, ...layerList]))
+      if (layerList) {
+        dispatch(addImageSlice.actions.setLayerList([{ name: inputLayerName, url, bounds }, ...layerList]))
+      } else {
+        dispatch(addImageSlice.actions.setLayerList([{ name: inputLayerName, url, bounds }]))
+      }
     }
   }
 

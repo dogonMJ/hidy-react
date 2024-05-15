@@ -610,10 +610,10 @@ const InfoList = (props: { dataId: string }) => {
           {t('CustomLayer.description.addImage3')}
         </Typography >
       )
-    case 'urlType':
+    case 'serviceUrl':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', wordWrap: "break-word" }}>
-          {t('CustomLayer.description.urlType')}
+          {t('CustomLayer.description.serviceUrl')}
         </Typography >
       )
     case 'draw':
