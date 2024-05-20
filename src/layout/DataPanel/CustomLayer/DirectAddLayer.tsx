@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { TileLayerCanvas } from "../../../components/TileLayerCanvas"
-import { FormControl, FormControlLabel, FormLabel, Stack, Radio, RadioGroup, TextField, CircularProgress, Box, InputLabel, Typography, IconButton, Button, Popover } from "@mui/material"
+import { FormControl, FormControlLabel, FormLabel, Stack, Radio, RadioGroup, TextField, CircularProgress, Box, InputLabel, IconButton } from "@mui/material"
 import LayersClearIcon from '@mui/icons-material/LayersClear';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import InfoButton from "components/InfoButton"
@@ -12,6 +12,7 @@ import { ServiceType } from "types"
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks"
 import { addWmsLayerSlice } from "store/slice/addWmsLayerSlice"
 import { useAlert } from "hooks/useAlert";
+import { LayerControlPanel } from "./LayerControlPanel";
 
 //https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg
 //https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi?&service=WMS&request=GetMap&layers=GHRSST_L4_AVHRR-OI_Sea_Surface_Temperature&styles=&format=image%2Fpng&transparent=true&version=1.1.1&time=2019-03-17&width=256&height=256&srs=EPSG%3A3857
@@ -32,7 +33,7 @@ export const DirectAddLayers = () => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { openAlert, setOpenAlert, alertMessage, setMessage, severity, setSeverity, hideAlert } = useAlert()
-  const url = useAppSelector(state => state.addWmsLayer.url).replaceAll('%26', '&')
+  const url = useAppSelector(state => state.addWmsLayer.url).replaceAll('%26', '&') //需要以%26取代&避免讀網址時出錯
   const serviceType = useAppSelector(state => state.addWmsLayer.serviceType)
   const opacity = useAppSelector(state => state.addWmsLayer.opacity)
   const layerName = useAppSelector(state => state.addWmsLayer.layerName)
@@ -40,8 +41,6 @@ export const DirectAddLayers = () => {
   const [inputUrl, setInputURL] = useState(url)
   const [inputLayerName, setInputLayerName] = useState(layerName)
   const [key, setKey] = useState(0)
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const [selectedLayer, setSelectedLayer] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   let layeri = layerList ? layerList.length + 1 : 1
 
@@ -68,16 +67,12 @@ export const DirectAddLayers = () => {
     if (layerList && layerList.some(layer => layer.name === inputLayerName)) {
       setSeverity('error')
       setMessage(t('CustomLayer.alert.dupName'))
-      setInputLayerName(`layer${layeri}`)
-      dispatch(addWmsLayerSlice.actions.setLayerName(`layer${layeri}`))
+      setInputLayerName(`layer ${layeri}`)
+      dispatch(addWmsLayerSlice.actions.setLayerName(`layer ${layeri}`))
       layeri += 1
     } else {
       if (url) {
-        if (serviceType === 'WMS') {
-          dispatch(addWmsLayerSlice.actions.setLayerList([{ name: inputLayerName, base: url, serviceType, opacity }, ...layerList]))
-        } else {
-          dispatch(addWmsLayerSlice.actions.setLayerList([{ name: inputLayerName, base: url, serviceType, opacity }, ...layerList]))
-        }
+        dispatch(addWmsLayerSlice.actions.setLayerList([{ name: inputLayerName, url, serviceType, opacity }, ...layerList]))
         dispatch(addWmsLayerSlice.actions.setWmsUrl(''))
         setInputURL('')
       } else {
@@ -96,14 +91,6 @@ export const DirectAddLayers = () => {
     setInputURL('')
     dispatch(addWmsLayerSlice.actions.setWmsUrl(''))
   }
-  const handlePopover = (event: React.MouseEvent<HTMLButtonElement>, layerName: string) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedLayer(layerName);
-  };
-  const handleClosePopover = () => {
-    setAnchorEl(null);
-    setSelectedLayer(null);
-  };
   const eventHandlers = {
     load: () => setLoading(false),
     loading: () => setLoading(true)
@@ -164,48 +151,8 @@ export const DirectAddLayers = () => {
           <CircularProgress />
         </Box>
       }
-      {layerList && layerList.map((layer, index) => {
-        const layerIndex = layerList.findIndex(item => item.name === layer.name);
-        return (
-          <Box key={layer.name} sx={{ border: 1, padding: 1, borderRadius: 1, borderColor: '#C0C0C0' }}>
-            <Button
-              size="small"
-              sx={{ maxWidth: '100%', textTransform: 'none', justifyContent: 'flex-start' }}
-              onClick={(event) => handlePopover(event, layer.name)}
-            >
-              <Typography sx={{ maxWidth: '100%', wordWrap: 'break-word', textAlign: 'left' }}>{layer.name}</Typography>
-            </Button>
-            <Popover
-              open={selectedLayer === layer.name && Boolean(anchorEl)}
-              anchorEl={anchorEl}
-              onClose={handleClosePopover}
-              anchorOrigin={{ vertical: 'top', horizontal: 'left', }}
-              transformOrigin={{ vertical: 'bottom', horizontal: 'left', }}
-              sx={{ maxWidth: '60%' }}
-            >
-              <Typography sx={{ p: 2, wordWrap: 'break-word' }}>{layer.base}</Typography>
-            </Popover>
-            <Stack direction={'row'}>
-              <IconButton
-                color={'error'}
-                onClick={() => dispatch(addWmsLayerSlice.actions.setLayerList(layerList.filter((_, i) => i !== index)))}
-              >
-                <LayersClearIcon />
-              </IconButton>
-              <OpacitySlider
-                opacity={layer.opacity}
-                onChange={(e, value) => {
-                  const updatedLayerList = [...layerList];
-                  updatedLayerList[layerIndex] = { ...updatedLayerList[layerIndex], opacity: value as number };
-                  dispatch(addWmsLayerSlice.actions.setLayerList(updatedLayerList))
-                }}
-                componentSx={{ width: '80%' }}
-                sx={{ width: '56%' }}
-              />
-            </Stack>
-          </Box>
-        )
-      })
+      {layerList &&
+        <LayerControlPanel layerList={layerList} setLayerList={addWmsLayerSlice.actions.setLayerList} />
       }
       {url &&
         <TileLayerCanvas
@@ -219,7 +166,7 @@ export const DirectAddLayers = () => {
         />
       }
       {layerList && [...layerList].reverse().map((layer) => {
-        const decodedURL = layer.base.replaceAll('%26', '&')
+        const decodedURL = layer.url.replaceAll('%26', '&')
         return (
           <TileLayerCanvas
             key={layer.name}

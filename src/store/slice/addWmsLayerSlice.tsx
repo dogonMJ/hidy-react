@@ -23,7 +23,7 @@ export const addWmsLayerSlice = createSlice({
     serviceType: initString(query, 'serviceType', 'WMTS', isServiceType),
     url: initString(query, 'url', '').replaceAll('%26', '&'),
     opacity: initNumber(query, 'opacity', 100),
-    layerName: initString(query, 'layerName', 'layer1'),
+    layerName: initString(query, 'layerName', 'layer 1'),
     layerList: initList(query, 'layerList'),
   } as AddWmsLayerStates,
   reducers: {
@@ -42,7 +42,7 @@ export const addWmsLayerSlice = createSlice({
     setLayerList: (state, action: PayloadAction<any>) => {
       const result = action.payload.map((obj: any) => {
         const mutableObj = { ...obj };
-        mutableObj.base = mutableObj.base.replace(/&/g, '%26') //需要以%26取代&避免讀網址時出錯
+        mutableObj.url = mutableObj.url.replace(/&/g, '%26') //需要以%26取代&避免讀網址時出錯
         return mutableObj
       })
       state.layerList = result

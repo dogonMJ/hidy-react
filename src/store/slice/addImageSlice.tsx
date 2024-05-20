@@ -16,7 +16,7 @@ const initList = (queryObject: any, par: string) => {
   if (queryObject && queryObject[par]) {
     return JSON.parse(queryObject[par])
   } else {
-    return undefined
+    return []
   }
 }
 
@@ -27,7 +27,7 @@ export const addImageSlice = createSlice({
     bbox: initList(query, 'bbox'),
     opacity: initNumber(query, 'opacity', 100),
     layerList: initList(query, 'layerList'),
-    layerName: initString(query, 'layerName', 'layer1')
+    layerName: initString(query, 'layerName', 'image 1')
   } as AddImageStates,
   reducers: {
     setUrl: (state, action: PayloadAction<string>) => {

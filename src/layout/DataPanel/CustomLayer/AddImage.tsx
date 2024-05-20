@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next"
 import { OpacitySlider } from "components/OpacitySlider"
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks"
 import { addImageSlice } from "store/slice/addImageSlice"
+import { LayerControlPanel } from "./LayerControlPanel"
 
 interface SWNE {
   [key: string]: number | null;
@@ -51,24 +52,24 @@ export const AddImage = () => {
   const [inputURL, setInputURL] = useState(externalURL)
   const [inputLayerName, setInputLayerName] = useState(layerName)
   const [swne, setSwne] = useState<SWNE>(
-    bounds ?
+    bounds?.length === 4 ?
       { south: bounds[0][0], west: bounds[0][1], north: bounds[1][0], east: bounds[1][1] } :
       { south: null, west: null, north: null, east: null }
   )
-
   const url = `https://service.oc.ntu.edu.tw/data/proxy-image?url=${externalURL}`
   let layeri = layerList ? layerList.length + 1 : 1
-
   const confirm = () => {
     if (layerList && layerList.some(layer => layer.name === inputLayerName)) {
       setMessage(t('CustomLayer.alert.dupName'))
+      setInputLayerName(`image ${layeri}`)
+      dispatch(addImageSlice.actions.setLayerName(`image ${layeri}`))
       layeri += 1
-      setInputLayerName(`layer${layeri}`)
     } else {
-      if (layerList) {
-        dispatch(addImageSlice.actions.setLayerList([{ name: inputLayerName, url, bounds }, ...layerList]))
+      if (url) {
+        dispatch(addImageSlice.actions.setLayerList([{ name: inputLayerName, url, bounds, opacity }, ...layerList]))
+        setInputURL('')
       } else {
-        dispatch(addImageSlice.actions.setLayerList([{ name: inputLayerName, url, bounds }]))
+        setMessage('CustomLayer.alert.noUrl')
       }
     }
   }
@@ -157,27 +158,21 @@ export const AddImage = () => {
           <Button size="small" variant='contained' color='primary' startIcon={<CheckRoundedIcon />} onClick={confirm}>{t('CustomLayer.addLayer')}</Button>
         </Stack>
         <OpacitySlider opacity={opacity} onChange={handleOpacity} />
-        {layerList &&
-          layerList.map((layer, index) => (
-            <Button
-              key={layer.name}
-              onClick={() => dispatch(addImageSlice.actions.setLayerList(layerList.filter((_, i) => i !== index)))}
-              size="small"
-              variant='contained'
-              color='error'
-              startIcon={<ClearRoundedIcon />}
-              sx={{ marginRight: '3px' }}
-            >
-              {layer.name}
-            </Button>
-          ))}
+        {layerList && <LayerControlPanel layerList={layerList} setLayerList={addImageSlice.actions.setLayerList} />}
       </Box >
-      {url && bounds &&
+      {url && bounds && bounds.length > 0 &&
         <ImageOverlay ref={ref} url={url} bounds={bounds} crossOrigin='anonymous' zIndex={405} opacity={opacity / 100} eventHandlers={eventHandlers} />
       }
       {layerList && layerList.length > 0 &&
-        layerList.map(layer =>
-          <ImageOverlay key={layer.name} url={layer.url} bounds={layer.bounds} crossOrigin='anonymous' opacity={opacity / 100} eventHandlers={eventHandlers} />
+        [...layerList].reverse().map(layer =>
+          <ImageOverlay
+            key={layer.name}
+            url={layer.url}
+            bounds={layer.bounds}
+            crossOrigin='anonymous'
+            opacity={layer.opacity / 100}
+            eventHandlers={eventHandlers}
+          />
         )
       }
       <AlertSlide open={openAlert} setOpen={setOpenAlert} severity='error' timeout={3000} > {alertMessage} </AlertSlide>
