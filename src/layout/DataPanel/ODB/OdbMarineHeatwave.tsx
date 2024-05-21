@@ -1,10 +1,12 @@
-import { TileLayer } from "react-leaflet"
+import { TileLayer, useMapEvents } from "react-leaflet";
 import { useAppSelector } from "hooks/reduxHooks";
 import { LegendControl } from "components/LeafletLegend"
 import { Legend } from 'types';
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from 'react'
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
+import { RenderIf } from "components/RenderIf/RenderIf";
+import  OdbMHWTimeSerise  from "./OdbMHWTimeSerise";
 
 export const OdbMarineHeatwave = () => {
   const { t } = useTranslation()
@@ -64,7 +66,17 @@ export const OdbMarineHeatwave = () => {
     const monthsFromStart = (selectDate.getFullYear() - startTime.getFullYear()) * 12 + (selectDate.getMonth() - startTime.getMonth());
     setNotInRange(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
   }, [url, datetime, timespan])
-
+  
+    //added by Yeh
+    const [coords, setCoords] = useState({ lat: 121, lng: 20 });
+    const [open, setOpen] = useState(false)
+    useMapEvents({
+      click(e) {
+        const {lat, lng} = e.latlng;
+        setCoords({ lat: lat, lng: lng })
+        setOpen(true)    
+      },
+    });
   return (
     <>
       <AlertSlide open={notInRange} setOpen={setNotInRange} severity='error' timeout={3000} > {t('alert.notInTime')} </AlertSlide>
@@ -73,6 +85,13 @@ export const OdbMarineHeatwave = () => {
         url={url}
         crossOrigin="anonymous"
       />
+       <RenderIf isTrue={open}>
+        <OdbMHWTimeSerise
+          key={`${coords.lat}-${coords.lng}`}
+          coords={coords}
+          setOpen={setOpen}
+        />     
+      </RenderIf>
       <LegendControl position='bottomleft' legendContent={legnedContents.join('<br>')} legendClassNames={'sedLegend'} />
     </>
   )
