@@ -6,7 +6,7 @@ export const readUrlQuery = (key: string) => {
   const urlParams = new URLSearchParams(window.location.search)
   const options = urlParams.get(key)?.split(';').reduce((acc: any, pair) => {
     const [key, value] = pair.split(/:(.*)/s);
-    acc[key] = value;
+    acc[key] = value.replaceAll('&', '%26')
     return acc;
   }, {});
   return options
@@ -45,7 +45,7 @@ export const findModified = (originalObject: any, modifiedObject: any, ons: stri
         modifiedElements[key] = {};
         for (const k in modifiedObject[key]) {
           // k=第二層key
-          if (originalObject[key][k] !== modifiedObject[key][k] && k !== 'userInfo') {
+          if ((originalObject[key][k] !== modifiedObject[key][k] || (Array.isArray(modifiedObject[key][k]) && modifiedObject[key][k].length > 0)) && k !== 'userInfo') {
             if (isObject(modifiedObject[key][k])) {
               const difference = findDifferences(originalObject[key][k], modifiedObject[key][k])
               //併入網址列預設值，避免修改參數時遺漏 (findDifferences以網址值為基準比較，若沒有網址，default值將和原始無網址query狀態不同)

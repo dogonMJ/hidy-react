@@ -32,7 +32,6 @@ export const ShareControl = memo(() => {
     const states: any = store.getState();
     const { checked, ...radios } = states.switches//已開選項和radio選項
     const modified = findModified(defaultStates, states, checked) //和預設不同選項
-
     //單選選項
     const modKeys = Object.keys(modified)
     const singleOptions = checked.filter((x: string) => !modKeys.includes(x))

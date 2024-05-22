@@ -140,7 +140,7 @@ const InfoList = (props: { dataId: string }) => {
           surface_geostrophic_northward_sea_water_velocity (vgos)<br />
           {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
-          {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 10:00 (UTC+8)<br />
+          {t('DataInfo.temporalRange')}: 1993-01-01 ~ 2024-03-04 <br />
           {t('DataInfo.others')}: <br />
           <a target="_blank" href="https://catalogue.marine.copernicus.eu/documents/PUM/CMEMS-SL-PUM-008-032-068.pdf" rel="noreferrer">{t('Animated.info')}</a><br />
           <i>Generated using E.U. Copernicus Marine Service Information:
@@ -159,7 +159,7 @@ const InfoList = (props: { dataId: string }) => {
           surface_geostrophic_northward_sea_water_velocity_assuming_sea_level_for_geoid (vgosa)<br />
           {t('DataInfo.spatialRes')}: 0.25° × 0.25°<br />
           {t('DataInfo.temporalRes')}: {t('DataInfo.daily')} (12:00 ~ 12:00(+1) UTC)<br />
-          {t('DataInfo.updateFreq')}: {t('DataInfo.daily')}, 10:00 (UTC+8)<br />
+          {t('DataInfo.temporalRange')}: 1993-01-01 ~ 2024-03-04 <br />
           {t('DataInfo.others')}: <br />
           <a target="_blank" href="https://catalogue.marine.copernicus.eu/documents/PUM/CMEMS-SL-PUM-008-032-068.pdf" rel="noreferrer">{t('Animated.info')}</a><br />
           <i>Generated using E.U. Copernicus Marine Service Information:
@@ -610,10 +610,10 @@ const InfoList = (props: { dataId: string }) => {
           {t('CustomLayer.description.addImage3')}
         </Typography >
       )
-    case 'urlType':
+    case 'serviceUrl':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', wordWrap: "break-word" }}>
-          {t('CustomLayer.description.urlType')}
+          {t('CustomLayer.description.serviceUrl')}
         </Typography >
       )
     case 'draw':

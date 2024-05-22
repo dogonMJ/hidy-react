@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import { useMapEvent } from 'react-leaflet'
+import { Polygon, Tooltip, useMapEvent } from 'react-leaflet'
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { CoordinatesInput } from "layout/MouseCoordinates/CoordinatesInput"
 import FormatCoordinate from "components/FormatCoordinate";
@@ -9,10 +9,11 @@ import { IconButton, Paper, Stack, Typography } from '@mui/material';
 import { LocationOff, LocationOn, Sync, SyncAlt, SyncDisabled } from '@mui/icons-material';
 import { useMapDragScroll } from "hooks/useMapDragScroll";
 import { onoffsSlice } from "store/slice/onoffsSlice";
-import { LatLngExpression } from "leaflet";
+import { LatLng, LatLngExpression, LatLngTuple } from "leaflet";
 import { mapSlice } from "store/slice/mapSlice";
 import { ConverCoordinates } from "./ConvertCoordinate";
 import { useTranslation } from "react-i18next";
+import { calPolygon } from "Utils/UtilsDraw";
 
 export const MouseCoordinates = memo(() => {
   const { t } = useTranslation()
@@ -21,6 +22,9 @@ export const MouseCoordinates = memo(() => {
   const checked = useAppSelector(state => state.switches.checked)
   const current = useAppSelector(state => state.coordInput.current)
   const latlonFormat = useAppSelector(state => state.map.latlonformat)
+  const markers = useAppSelector(state => state.coordInput.markers) as LatLngTuple[]
+  const frameOn = useAppSelector(state => state.coordInput.frameOn)
+  const scaleUnit = useAppSelector(state => state.map.scaleUnit);
   const [activeMarker, setActiveMarker] = useState(checked.includes('coordInput'))
   const [activeTransform, setActiveTransform] = useState(false)
   const [coords, setCoords] = useState<LatLngExpression>({ lat: 0, lng: 0 });
@@ -47,6 +51,19 @@ export const MouseCoordinates = memo(() => {
   const handleMouseEnter = () => setDrag(false)
   const handleMouseLeave = () => setDrag(true)
 
+  const getArea = () => {
+    const latlngArray = markers.map((tuple) => ({
+      lat: tuple[0],
+      lng: tuple[1]
+    } as LatLng))
+    const { area, perimeter } = calPolygon(latlngArray, scaleUnit)
+    return (
+      <Typography variant="caption">
+        {t('area')} = {area} <br />
+        {t('perimeter')} = {perimeter}
+      </Typography>
+    )
+  }
   return (
     <Stack
       onMouseOver={handleMouseEnter} //快速移動滑鼠可能會導致mouseenter判定失敗
@@ -82,8 +99,15 @@ export const MouseCoordinates = memo(() => {
       </Paper>
       {activeTransform && <ConverCoordinates activeMarker={activeMarker} />}
       {activeMarker && <CoordinatesInput />}
-      {activeMarker && <PinnedMarker />}
+      {activeMarker && <PinnedMarker openPopup={frameOn} />}
       {activeMarker && <MoveableMarker position={{ lat: current[0], lng: current[1] }} centerLon={121} />}
+      {frameOn && markers.length > 1 &&
+        <Polygon positions={markers} pathOptions={{ color: '#ffe6a8', opacity: 0.9 }}>
+          <Tooltip>
+            {getArea()}
+          </Tooltip>
+        </Polygon>
+      }
     </Stack>
   )
 })

@@ -21,7 +21,7 @@ export const odbPlasticSlice = createSlice({
     levels: initStringArray(query, 'levels', ['Very Low', 'Low', 'Medium', 'High', 'Very High'], isMPLevels),
     lat: initNumberArray(query, 'lat', [10, 40], [-90, 90]),
     lon: initNumberArray(query, 'lon', [109, 135], [-180, 180]),
-    clusterLevel: initNumber(query, 'clusterLevel', 8, [0, 10])
+    clusterLevel: initNumber(query, 'clusterLevel', 8, [3, 12])
   } as OdbMPStates,
   reducers: {
     setDataset: (state, action: PayloadAction<string>) => {
