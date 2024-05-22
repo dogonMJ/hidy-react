@@ -32,7 +32,7 @@ input {
   height: 100vh;
   width: 100%;
   font-family: 'Rubik', sans-serif;
-  display: 'flex'
+  display: 'flex';
 }
 
 .mousePos {
@@ -239,4 +239,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .bioTooltip {
   text-align: right;
+}
+
+.Icon-dot {
+  pointer-events: none !important;
 }

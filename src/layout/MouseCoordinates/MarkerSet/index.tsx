@@ -3,7 +3,7 @@ import { Marker, Popup } from 'react-leaflet'
 import FormatCoordinate from 'components/FormatCoordinate'
 import { useTranslation } from "react-i18next";
 import { Button, Stack, } from '@mui/material';
-import { memo, useRef, useState } from "react";
+import { forwardRef, memo, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { coordInputSlice } from "store/slice/coordInputSlice";
 import blueIconPng from 'assets/images/marker-icon-blue.png';
@@ -14,6 +14,7 @@ interface markerSet {
   markerCoord: (number | null)[],
   id?: number,
   onclick?: (evt: React.MouseEvent<HTMLButtonElement>) => void,
+  openPopup?: boolean
 }
 const greenIcon = new L.Icon({
   iconUrl: greenIconPng,
@@ -35,7 +36,7 @@ const blueIcon = new L.Icon({
 
 const round5 = (n: number) => Math.round(n * 100000) / 100000
 
-export const MarkerSet = memo((props: markerSet) => {
+export const MarkerSet = forwardRef((props: markerSet, fowardRef: any) => {
   const ref = useRef<any>()
   const dispatch = useAppDispatch()
   const { t } = useTranslation();
@@ -70,8 +71,8 @@ export const MarkerSet = memo((props: markerSet) => {
   if (markerLat !== null && markerLon !== null) {
     if (props.id !== undefined) {
       return (
-        <Marker position={[markerLat, markerLon]} icon={greenIcon} eventHandlers={{ popupopen: popupopen }}>
-          <Popup>
+        <Marker ref={fowardRef} position={[markerLat, markerLon]} icon={greenIcon} eventHandlers={{ popupopen: popupopen }}>
+          <Popup autoClose={false}>
             <Stack>
               <FormatCoordinate coords={{ lat: markerLat, lng: markerLon }} format={latlonFormat} />
               {elevation && <div>Elevation: {elevation} m</div>}

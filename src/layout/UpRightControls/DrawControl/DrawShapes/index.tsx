@@ -1,9 +1,9 @@
-import { Polygon as PolygonType, Polyline as PolylineType, Circle as CircleType, layerGroup, LatLngExpression } from 'leaflet';
+import { Polygon as PolygonType, Polyline as PolylineType, Circle as CircleType, layerGroup, LatLngExpression, polyline } from 'leaflet';
 import { useSelector } from "react-redux";
 import { RootState } from "store/store"
 import { LatLng } from "leaflet";
 import { useRef, useState } from "react";
-import { useMap, FeatureGroup, Popup } from "react-leaflet";
+import { useMap, FeatureGroup, Popup, useMapEvents } from "react-leaflet";
 
 import { EditControl } from "react-leaflet-draw"
 import 'leaflet/dist/leaflet.css';
@@ -18,10 +18,10 @@ declare const L: any
 
 const dotIcon = ({ fill = "#3388ff", opacity = 0.7, size = [10, 10], anchor = [10, 10] } = {}) => L.divIcon({
   html: `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20">
-  <circle cx="10" cy="10" r="5" fill=${fill} opacity="${opacity}"/>
+  <circle cx="10" cy="10" r="3" fill=${fill} opacity="${opacity}"/>
   </svg>`,
   className: "Icon-dot",
-  iconSize: size,
+  // iconSize: size,
   iconAnchor: anchor,
 });
 
@@ -57,6 +57,8 @@ export const DrawShapes = () => {
               feet: false,
               metric: scaleUnit === 'metric' ? true : false,
               nautic: scaleUnit === 'nautical' ? true : false,
+              icon: dotIcon(),
+              shapeOptions: { color: '#ffe6a8', opacity: 0.9 },
             },
             rectangle: false,
             polyline: {
@@ -65,12 +67,14 @@ export const DrawShapes = () => {
               metric: scaleUnit === 'metric' ? true : false,
               nautic: scaleUnit === 'nautical' ? true : false,
               icon: dotIcon(),
+              shapeOptions: { color: '#ffe6a8', opacity: 0.9 },
             },
             circle: {
               showRadius: true,
               feet: false,
               metric: scaleUnit === 'metric' ? true : false,
               nautic: scaleUnit === 'nautical' ? true : false,
+              shapeOptions: { color: '#ffe6a8', opacity: 0.9 },
             }
           }}
           onDeleted={(e) => {
@@ -138,6 +142,7 @@ export const DrawShapes = () => {
                 break
               case 'polygon':
                 const polygonLayer = e.layer as PolygonType
+                const pgTooltips = new L.layerGroup();
                 polygonLayer.addTo(allLayerGroup)
                 polygonLayer.on('mouseover', () => {
                   //edit後需要更新，需要放在mouseover內重算
@@ -145,6 +150,14 @@ export const DrawShapes = () => {
                   const { area, perimeter } = calPolygon(pgLatlngs, scaleUnit)
                   const pgContent = `A = ${area}<br>p = ${perimeter}`
                   polygonLayer.bindTooltip(pgContent)
+                  pgLatlngs.forEach((latlng: LatLng, i: number) => {
+                    const content = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`
+                    L.tooltip().setLatLng(latlng).setContent(content).addTo(pgTooltips)
+                  })
+                  pgTooltips.addTo(map)
+                })
+                polygonLayer.on('mouseout', () => {
+                  pgTooltips.clearLayers()
                 })
                 polygonLayer.on('edit', () => {
                   polygonLayer.bringToFront()
@@ -170,9 +183,9 @@ export const DrawShapes = () => {
                   const circumferenceString = readableDistance(circumference, scaleUnit)
                   const areaString = readableArea(ccArea, scaleUnit)
                   const ccContent = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}<br>
-                  r: ${radiusString}<br>
-                  c: ${circumferenceString}<br>
-                  A: ${areaString}`
+              r: ${radiusString}<br>
+              c: ${circumferenceString}<br>
+              A: ${areaString}`
                   circleLayer.bindTooltip(ccContent)
                   center.addTo(featureRef.current)
                 })
