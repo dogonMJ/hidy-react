@@ -259,7 +259,15 @@
       "moderate": "Moderate (threshold~2x)",
       "strong": "Strong (2x~3x)",
       "severe": "Severe (3x~4x)",
-      "extreme": "Extreme (>4x)"
+      "extreme": "Extreme (>4x)",
+      "time":"Time",
+      "sstan":"SST Anomaly (°C)",
+      "mhwlevel":"MHW level",
+      "nodata":"There is no Marine Heatwaves data.",
+      "timerange":"Time Range",
+      "startyear":"Start Year",
+      "endyear":"End Year",
+      "none":"None"
     },
     "chemistryList": {
       "siteName": "ODB Marine Chemistry Database",

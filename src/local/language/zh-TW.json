@@ -259,7 +259,15 @@
       "moderate": "中等 (閾值~2倍閾值)",
       "strong": "強烈 (2倍閾值~3倍閾值)",
       "severe": "嚴重 (3倍閾值~4倍閾值)",
-      "extreme": "極端 (>4倍閾值)"
+      "extreme": "極端 (>4倍閾值)",
+      "time":"時間",
+      "sstan":"海表溫度異常值 SST Anomaly (°C)",
+      "mhwlevel":"海洋熱浪級數",
+      "nodata":"無海洋熱浪資料",
+      "timerange":"時間範圍",
+      "startyear":"起始年份",
+      "endyear":"結束年份",
+      "none":"無"
     },
     "chemistryList": {
       "siteName": "ODB海洋化學資料庫",
