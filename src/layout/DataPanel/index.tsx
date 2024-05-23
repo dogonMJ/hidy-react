@@ -79,6 +79,7 @@ const DataPanel = memo(() => {
   useEffect(() => {
     L.DomEvent.disableScrollPropagation(ref.current);
   }, [])
+
   useEffect(() => {
     /// 展開列表 ///
     const queryString = window.location.search
@@ -110,14 +111,16 @@ const DataPanel = memo(() => {
     }
   }, [])
   return (
-    <div
+    <Box
       ref={ref}
       id='dataPanel'
       onMouseEnter={enterPanel}
       onMouseLeave={leavePanel}
+      sx={{ width: 0 }}
     >
       <Stack sx={{ width: 190 }}>
         <Button
+          id='dataPanelButton'
           onClick={handleDrawerOpen}
           endIcon={<ChevronRight />}
           variant="contained"
@@ -149,7 +152,7 @@ const DataPanel = memo(() => {
           }
         }}
       >
-        <DrawerHeader>
+        <DrawerHeader id='dataPanelheader'>
           <img src={ODBlogo} alt={'ODB'} style={{ width: 35, marginLeft: 10 }} />
           <Stack alignItems={'center'}>
             <Typography
@@ -176,7 +179,7 @@ const DataPanel = memo(() => {
             width: 377
           }}
           component="nav"
-          id='navBar'
+          id='dataPanelList'
           aria-labelledby="nested-list-subheader"
         >
           {
@@ -219,7 +222,7 @@ const DataPanel = memo(() => {
 
         </List>
         <Divider />
-        <Box sx={{ paddingInlineEnd: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <Box id='dataPanelFoot' sx={{ paddingInlineEnd: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <Button variant='text' size='small' href="https://odbgo.oc.ntu.edu.tw/odbargo/" target='_blank' rel="noreferrer noopenner" style={{ color: '#1976D2' }} >{t('hidyOld')}</Button>
           <Button variant='text' size='small' onClick={handleNews} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('news.title')}</Button>
           <Button variant='text' size='small' onClick={handleAbout} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('about.title')}</Button>
@@ -227,7 +230,7 @@ const DataPanel = memo(() => {
         </Box>
       </Drawer>
       <About open={openAbout} setOpen={setOpenAbout} />
-    </div >
+    </Box >
   )
 })
 

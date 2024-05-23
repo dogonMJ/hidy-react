@@ -51,6 +51,7 @@ export const CoordinatesInput = memo(() => {
   return (
     <Paper
       className="mousePos"
+      id='coordinatesInput'
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
       sx={{ bottom: '50px' }}

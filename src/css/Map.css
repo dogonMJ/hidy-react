@@ -146,6 +146,9 @@ input {
   height: 30px;
 }
 
+#mhwtPlot .modebar {
+  top: -95px !important;
+}
 #seafloorProfile .modebar {
   width: 260px;
 }
