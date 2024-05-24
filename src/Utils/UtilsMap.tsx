@@ -1,5 +1,6 @@
 import { LatLonFormat, ScaleUnit } from 'types'
 import proj4 from "proj4"
+import { Map } from 'leaflet';
 
 export const unitSwitch: { [key in ScaleUnit]: ScaleUnit } = {
   'metric': 'nautical',
@@ -73,3 +74,15 @@ proj4.defs([
     "EPSG:32651", "+proj=utm +zone=51 +datum=WGS84 +units=m +no_defs +type=crs"
   ]
 ]);
+
+export const plotLayerOrder = (map: Map, paneName: string, defaultOrder = 800, frontOrder = 801) => {
+  const panes = map.getPanes()
+  const plotPanes = Object.keys(panes).filter(name => name.includes('plot-'))
+  plotPanes.forEach(plotPane => {
+    if (plotPane === paneName) {
+      panes[plotPane].style.zIndex = frontOrder.toString()
+    } else {
+      panes[plotPane].style.zIndex = defaultOrder.toString()
+    }
+  })
+}

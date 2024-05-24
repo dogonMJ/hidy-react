@@ -1,14 +1,14 @@
 import React, { useState, useEffect, SetStateAction, Dispatch, useMemo } from "react";
 import Draggable from 'react-draggable';
 import { useTranslation } from "react-i18next";
-import { Pane, CircleMarker } from 'react-leaflet';
+import { Pane, CircleMarker, useMap } from 'react-leaflet';
 import { Box, FormControl, InputLabel, IconButton, MenuItem, Select, Stack, Typography, SelectChangeEvent } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
 import Plot from 'react-plotly.js';
 import { PlotParams } from "react-plotly.js";
 import { useMapDragScroll } from "hooks/useMapDragScroll";
-
+import { plotLayerOrder } from "Utils/UtilsMap";
 
 interface MarineHeatwaveTimeSeriseProps {
   coords: { lat: number, lng: number };
@@ -32,6 +32,7 @@ type Data = Plotly.Data;
 
 const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPosition }: MarineHeatwaveTimeSeriseProps) => {
   const { t } = useTranslation();
+  const map = useMap()
   const { setDragNScroll } = useMapDragScroll()
   const [disableDrag, setDisableDrag] = useState(false);
   const [apidata, setApidata] = useState<{ lon: number; lat: number; sst_anomaly: number | null; date: string, level: number }[] | undefined | null>(undefined);
@@ -70,6 +71,21 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
       displayModeBar: true,
     }
   })
+
+  const footer = useMemo(() => {
+    return (
+      <Box id='test' sx={{ px: 5, pb: 2, mt: -5, zIndex: 999 }}>
+        <p style={{ fontSize: '13px', color: '#424242', padding: 0 }}><b>{t('OdbData.mhw.mhwlevel')}:</b></p>
+        <Stack direction="row" spacing={2}>
+          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ffffff', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.none')}</p></Stack>
+          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#f5c268', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.moderate')}</p></Stack>
+          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ec6b1a', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.strong')}</p></Stack>
+          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#cb3827', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.severe')}</p></Stack>
+          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#7f1416', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.extreme')}</p></Stack>
+        </Stack>
+      </Box>
+    )
+  }, [t])
   //Time Serise Data Fetching
   useEffect(() => {
     setApidata(undefined);
@@ -97,7 +113,6 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
     })();
 
   }, [coords, startYear, endYear])
-
   useEffect(() => {
     if (apidata) {
 
@@ -175,20 +190,7 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
     }
   }
 
-  const footPrint = useMemo(() => {
-    return (
-      <Box sx={{ px: 5, pb: 2, mt: -5, zIndex: 999 }}>
-        <p style={{ fontSize: '13px', color: '#424242', padding: 0 }}><b>{t('OdbData.mhw.mhwlevel')}:</b></p>
-        <Stack direction="row" spacing={2}>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ffffff', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.none')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#f5c268', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.moderate')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ec6b1a', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.strong')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#cb3827', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.severe')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#7f1416', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.extreme')}</p></Stack>
-        </Stack>
-      </Box>
-    )
-  }, [t])
+
 
   return (
     <>
@@ -202,13 +204,14 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
         fillOpacity={0.5}
       />
       <Pane
-        name='mhwts'
-        style={{ zIndex: 800 }}
+        name='plot-mhwts'
+        style={{ zIndex: 800, width: 0 }}
       >
         <Draggable
           position={plotPosition}
           onStop={(event, dragElement) => setPlotPosition({ x: dragElement.x, y: dragElement.y })}
           disabled={disableDrag}
+          onMouseDown={() => plotLayerOrder(map, 'plot-mhwts')}
         >
           <Box
             id='mhwts'
@@ -235,7 +238,7 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
               </IconButton>
             </Box>
             <Box
-              style={{ backgroundColor: 'rgb(255,255,255)' }}
+              style={{ backgroundColor: 'rgb(255,255,255)', position: 'relative', display: 'inline-block', width: 800 }}
               onMouseEnter={() => {
                 setDisableDrag(true)
                 disableMapAction()
@@ -311,7 +314,7 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
                     }
                   </Box>
                 }
-                {footPrint}
+                {footer}
               </Box>
             </Box>
           </Box>

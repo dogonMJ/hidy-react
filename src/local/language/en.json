@@ -596,6 +596,7 @@
     "noDate": "Please select Date",
     "noData": "No Data",
     "notInTime": "Not in time range",
+    "mhwNotInTime": "Not in time range. Shown data are from the closest month.",
     "checkQueryParameter": "Incorrect parameter, please check URL query string.",
     "noCoords": "Please enter the complete coordinates",
     "checkImage": "Image not found or unauthorized.",

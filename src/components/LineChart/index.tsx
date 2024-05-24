@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IconButton, } from '@mui/material';
 import { PlotParams } from "react-plotly.js";
 import { useMapDragScroll } from 'hooks/useMapDragScroll';
+import { plotLayerOrder } from 'Utils/UtilsMap';
 
 export const LineChart = forwardRef((
   props: {
@@ -38,12 +39,13 @@ export const LineChart = forwardRef((
   }
 
   return (
-    <Pane name={props.paneName} style={{ zIndex: 800 }}>
+    <Pane name={`plot-${props.paneName}`} style={{ zIndex: 800 }}>
       <Draggable
         nodeRef={nodeRef}
         // defaultClassName={'DefaultDraggable'}
         defaultPosition={{ x: layerCenterPoint.x + offset.x, y: layerCenterPoint.y + offset.y }}
         disabled={disableDrag}
+        onMouseDown={() => plotLayerOrder(map, `plot-${props.paneName}`)}
       >
         <div ref={nodeRef} id={props.paneName}>
           <div

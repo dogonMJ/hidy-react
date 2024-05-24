@@ -596,6 +596,7 @@
     "noDate": "請選擇日期",
     "noData": "無資料",
     "notInTime": "不在資料時間範圍內",
+    "mhwNotInTime": "不在資料時間範圍內，顯示為最近月份之資料",
     "checkQueryParameter": "參數錯誤，請檢查網址列參數",
     "noCoords": "請輸入完整座標",
     "checkImage": "圖片不存在、無瀏覽權限或網址錯誤",
