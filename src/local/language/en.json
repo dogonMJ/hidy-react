@@ -266,7 +266,20 @@
       "timerange":"Time Range",
       "startyear":"Start Year",
       "endyear":"End Year",
-      "none":"None"
+      "none":"None",
+      "level_0_text":"-0.047",
+      "level_1_maker0":"0.035",
+      "level_1_maker1":"0.0535",
+      "level_1_text":"0.047",
+      "level_2_maker0":"0.32",
+      "level_2_maker1":"0.3385",
+      "level_2_text":"0.413",
+      "level_3_maker0":"0.51",
+      "level_3_maker1":"0.5285",
+      "level_3_text":"0.605",
+      "level_4_maker0":"0.705",
+      "level_4_maker1":"0.7235",
+      "level_4_text":"0.872"
     },
     "chemistryList": {
       "siteName": "ODB Marine Chemistry Database",

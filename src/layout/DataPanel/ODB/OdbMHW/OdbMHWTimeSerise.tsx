@@ -56,11 +56,8 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
       xaxis: {
         tickformat: "%Y-%m"
       },
-      yaxis: {
-        title: t('OdbData.mhw.sstan'),
-      },
       margin: {
-        t: 65, b: 60, r: 40, l: 80
+        t: 65, b: 100, r: 40, l: 80
       },
       modebar: {
         remove: ["select2d", "lasso2d"]
@@ -72,20 +69,20 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
     }
   })
 
-  const footer = useMemo(() => {
-    return (
-      <Box id='test' sx={{ px: 5, pb: 2, mt: -5, zIndex: 999 }}>
-        <p style={{ fontSize: '13px', color: '#424242', padding: 0 }}><b>{t('OdbData.mhw.mhwlevel')}:</b></p>
-        <Stack direction="row" spacing={2}>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ffffff', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.none')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#f5c268', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.moderate')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ec6b1a', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.strong')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#cb3827', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.severe')}</p></Stack>
-          <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#7f1416', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.extreme')}</p></Stack>
-        </Stack>
-      </Box>
-    )
-  }, [t])
+  //const footer = useMemo(() => {
+  //  return (
+  //    <Box id='test' sx={{ px: 5, pb: 2, mt: -5, zIndex: 999 }}>
+  //      <p style={{ fontSize: '13px', color: '#424242', padding: 0 }}><b>{t('OdbData.mhw.mhwlevel')}:</b></p>
+  //      <Stack direction="row" spacing={2}>
+  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ffffff', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.none')}</p></Stack>
+  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#f5c268', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.moderate')}</p></Stack>
+  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ec6b1a', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.strong')}</p></Stack>
+  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#cb3827', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.severe')}</p></Stack>
+  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#7f1416', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.extreme')}</p></Stack>
+  //      </Stack>
+  //    </Box>
+  //  )
+  //}, [t])
   //Time Serise Data Fetching
   useEffect(() => {
     setApidata(undefined);
@@ -115,7 +112,6 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
   }, [coords, startYear, endYear])
   useEffect(() => {
     if (apidata) {
-
       setPlotProps((prevPlotProps: PlotParams) => ({
         ...prevPlotProps,
         data: [
@@ -158,10 +154,160 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
           title: {
             text: `${apidata[0].lat}, ${apidata[0].lon}`,
           },
+          yaxis: { 
+            title: t('OdbData.mhw.sstan'),
+           },
+           annotations: [
+            {
+              xref: 'paper',
+              yref: 'paper',
+              x: -0.06,
+              y: -0.25,
+              align: 'left',
+              showarrow: false,
+              text: `<span style="color: #424242;">${t('OdbData.mhw.mhwlevel')}:</span>`,
+              font: {
+                  size: 13,
+                }
+            },
+            {
+              xref: 'paper',
+              yref: 'paper',
+              x: `${t('OdbData.mhw.level_0_text')}`,
+              y: -0.35,
+              align: 'left',
+              showarrow: false,
+              text: `<span style="color: #424242;"> ${t('OdbData.mhw.none')}</span>`,
+              font: {
+                  size:11.5,
+                }
+            },
+            {
+              xref: 'paper',
+              yref: 'paper',
+              x: `${t('OdbData.mhw.level_1_text')}`,
+              y: -0.35,
+              align: 'left',
+              showarrow: false,
+              text: `<span style="color: #424242;"> ${t('OdbData.mhw.moderate')}</span>`,
+              font: {
+                  size: 11.5,
+                }
+            },
+            {
+              xref: 'paper',
+              yref: 'paper',
+              x: `${t('OdbData.mhw.level_2_text')}`,
+              y: -0.35,
+              align: 'left',
+              showarrow: false,
+              text: `<span style="color: #424242;"> ${t('OdbData.mhw.strong')}</span>`,
+              font: {
+                  size: 11.5,
+                }
+            },
+            {
+              xref: 'paper',
+              yref: 'paper',
+              x: `${t('OdbData.mhw.level_3_text')}`,
+              y: -0.35,
+              align: 'left',
+              showarrow: false,
+              text: `<span style="color: #424242;"> ${t('OdbData.mhw.severe')}</span>`,
+              font: {
+                  size: 11.5,
+                }
+            },
+            {
+              xref: 'paper',
+              yref: 'paper',
+              x: `${t('OdbData.mhw.level_4_text')}`,
+              y: -0.35,
+              align: 'left',
+              showarrow: false,
+              text: `<span style="color: #424242;"> ${t('OdbData.mhw.extreme')}</span>`,
+              font: {
+                  size: 11.5,
+                }
+            }
+  
+          ],
+          shapes: [
+            {
+              type: 'circle',
+              xref: 'paper',
+              yref: 'paper',
+              x0: -0.06,
+              y0: -0.33,
+              x1: -0.0415,
+              y1: -0.28,
+              fillcolor: '#ffffff',
+              line: {
+                color: '#616161',
+                width:1.1
+              }
+            },
+            {
+              type: 'circle',
+              xref: 'paper',
+              yref: 'paper',
+              x0: `${t('OdbData.mhw.level_1_maker0')}`,
+              y0: -0.33,
+              x1: `${t('OdbData.mhw.level_1_maker1')}`,
+              y1: -0.28,
+              fillcolor: '#f5c268',
+              line: {
+                color: '#616161',
+                width:1.1
+              }
+            },
+            {
+              type: 'circle',
+              xref: 'paper',
+              yref: 'paper',
+              x0:`${t('OdbData.mhw.level_2_maker0')}`,
+              y0: -0.33,
+              x1:`${t('OdbData.mhw.level_2_maker1')}`,
+              y1: -0.28,
+              fillcolor: '#ec6b1a',
+              line: {
+                color: '#616161',
+                width:1.2
+              }
+            },
+            {
+              type: 'circle',
+              xref: 'paper',
+              yref: 'paper',
+              x0: `${t('OdbData.mhw.level_3_maker0')}`,
+              y0: -0.33,
+              x1: `${t('OdbData.mhw.level_3_maker1')}`,
+              y1: -0.28,
+              fillcolor: '#cb3827',
+              line: {
+                color: '#616161',
+                width:1.2
+              }
+            },
+            {
+              type: 'circle',
+              xref: 'paper',
+              yref: 'paper',
+              x0: `${t('OdbData.mhw.level_4_maker0')}`,
+              y0: -0.33,
+              x1: `${t('OdbData.mhw.level_4_maker1')}`,
+              y1: -0.28,
+              fillcolor: '#7f1416',
+              line: {
+                color: '#616161',
+                width:1.2
+              }
+            },
+          ]
         }
       }))
     }
-  }, [apidata])
+  }, [apidata,t])
 
   const disableMapAction = () => {
     setDragNScroll(false)
@@ -314,7 +460,7 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
                     }
                   </Box>
                 }
-                {footer}
+                {/*footer*/}
               </Box>
             </Box>
           </Box>
