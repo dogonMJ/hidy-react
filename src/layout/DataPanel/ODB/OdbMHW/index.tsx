@@ -18,6 +18,8 @@ export const OdbMarineHeatwave = () => {
   const [timespan, setTimespan] = useState([new Date('1985-01-01'), new Date()])
   const mapCenter = map.latLngToLayerPoint(map.getBounds().getCenter())
   const [position, setPosition] = useState({ x: mapCenter.x - 400, y: mapCenter.y - 150 })
+  const [coords, setCoords] = useState<LatLng>({ lat: 121, lng: 20 } as LatLng);
+  const [open, setOpen] = useState(false)
 
   const datetime = useAppSelector(state => state.map.datetime);
   const month = datetime.slice(0, 7) + '-02'
@@ -29,19 +31,19 @@ export const OdbMarineHeatwave = () => {
     },
     'moderate': {
       "color": "#f5c268",
-      "description": t('OdbData.mhw.moderate')
+      "description": t('OdbData.mhw.level_1')
     },
     'strong': {
       "color": "#ec6b1a",
-      "description": t('OdbData.mhw.strong')
+      "description": t('OdbData.mhw.level_2')
     },
     'severe': {
       "color": "#cb3827",
-      "description": t('OdbData.mhw.severe')
+      "description": t('OdbData.mhw.level_3')
     },
     'extreme': {
       "color": "#7f1416",
-      "description": t('OdbData.mhw.extreme')
+      "description": t('OdbData.mhw.level_4')
     },
   }
   const legnedContents: string[] = []
@@ -73,26 +75,27 @@ export const OdbMarineHeatwave = () => {
     const monthsBetween = (endTime.getFullYear() - startTime.getFullYear()) * 12 + endTime.getMonth() - startTime.getMonth()
     const monthsFromStart = (selectDate.getFullYear() - startTime.getFullYear()) * 12 + (selectDate.getMonth() - startTime.getMonth());
     setNotInRange(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
+    setOpenAlert(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
   }, [url, datetime, timespan])
 
-  const [coords, setCoords] = useState<LatLng>({ lat: 121, lng: 20 } as LatLng);
-  const [open, setOpen] = useState(false)
   const forbiddenList = ['CTDProfile', 'ADCPProfile', 'dateTimePicker', 'seafloorProfile']
+
   useMapEvents({
-    preclick: (e) => {
-      const allElements = document.elementsFromPoint(e.layerPoint.x, e.layerPoint.y);
-      if (allElements && allElements.length > 1) {
-        const forbidden = allElements.some(ele => ele.classList.contains("MuiPaper-root") || forbiddenList.includes(ele.id))
-        if (!forbidden) {
-          setCoords(e.latlng)
-          setOpen(true)
+    click: (e) => {
+      if (!notInRange) {
+        const allElements = document.elementsFromPoint(e.layerPoint.x, e.layerPoint.y);
+        if (allElements && allElements.length > 1) {
+          const forbidden = allElements.some(ele => ele.classList.contains("MuiPaper-root") || forbiddenList.includes(ele.id))
+          if (!forbidden) {
+            setCoords(e.latlng)
+            setOpen(true)
+          }
         }
       }
     }
   });
   return (
     <>
-      <AlertSlide open={notInRange} setOpen={setNotInRange} severity='error' timeout={3000} > {t('alert.notInTime')} </AlertSlide>
       <TileLayer
         id='mhw'
         url={url}
@@ -108,7 +111,7 @@ export const OdbMarineHeatwave = () => {
         />
       </RenderIf>
       <LegendControl position='bottomleft' legendContent={legnedContents.join('<br>')} legendClassNames={'sedLegend'} />
-      <AlertSlide open={openAlert} severity="error" setOpen={setOpenAlert}>{alertMessage}</AlertSlide>
+      <AlertSlide open={openAlert} severity="error" setOpen={setOpenAlert}>{t('alert.notInTime')}</AlertSlide>
     </>
   )
 }

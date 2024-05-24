@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SetStateAction, Dispatch, useMemo } from "react";
+import React, { useState, useEffect, SetStateAction, Dispatch, useMemo, useCallback } from "react";
 import Draggable from 'react-draggable';
 import { useTranslation } from "react-i18next";
 import { Pane, CircleMarker, useMap } from 'react-leaflet';
@@ -9,6 +9,7 @@ import Plot from 'react-plotly.js';
 import { PlotParams } from "react-plotly.js";
 import { useMapDragScroll } from "hooks/useMapDragScroll";
 import { plotLayerOrder } from "Utils/UtilsMap";
+import { Annotations, Shape } from "plotly.js";
 
 interface MarineHeatwaveTimeSeriseProps {
   coords: { lat: number, lng: number };
@@ -57,11 +58,17 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
         tickformat: "%Y-%m"
       },
       margin: {
-        t: 65, b: 100, r: 40, l: 80
+        t: 60, b: 100, r: 40, l: 80
       },
       modebar: {
         remove: ["select2d", "lasso2d"]
       },
+      yaxis: {
+        title: t('OdbData.mhw.sstan'),
+      },
+      font: {
+        family: 'Rubik, "Open Sans", verdana, arial, sans-serif'
+      }
     },
     config: {
       scrollZoom: true,
@@ -69,20 +76,58 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
     }
   })
 
-  //const footer = useMemo(() => {
-  //  return (
-  //    <Box id='test' sx={{ px: 5, pb: 2, mt: -5, zIndex: 999 }}>
-  //      <p style={{ fontSize: '13px', color: '#424242', padding: 0 }}><b>{t('OdbData.mhw.mhwlevel')}:</b></p>
-  //      <Stack direction="row" spacing={2}>
-  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ffffff', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.none')}</p></Stack>
-  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#f5c268', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.moderate')}</p></Stack>
-  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#ec6b1a', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.strong')}</p></Stack>
-  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#cb3827', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.severe')}</p></Stack>
-  //        <Stack direction="row" alignItems="center"><span style={{ height: '10px', width: '10px', borderRadius: '50%', backgroundColor: '#7f1416', border: '1px solid #616161' }}></span><p style={{ paddingLeft: '8px', margin: 0, color: '#424242' }}>{t('OdbData.mhw.extreme')}</p></Stack>
-  //      </Stack>
-  //    </Box>
-  //  )
-  //}, [t])
+  const disableMapAction = () => {
+    setDragNScroll(false)
+  }
+
+  const enableMapAction = () => {
+    setDragNScroll(true)
+  }
+
+  const onClose = () => {
+    enableMapAction()
+    setOpen(false);
+  }
+
+  const handleChangeStart = (event: SelectChangeEvent<number>) => {
+    const newStartYear = parseInt(event.target.value as string, 10);
+    setStartYear(newStartYear);
+    if (newStartYear > endYear) {
+      setEndYear(newStartYear);
+    }
+  }
+  const handleChangeEnd = (event: SelectChangeEvent<number>) => {
+    const newEndYear = parseInt(event.target.value as string, 10);
+    if (newEndYear >= startYear) {
+      setEndYear(newEndYear);
+    }
+  }
+
+  const getShape = useMemo(() => {
+    const fillColors = ['#ffffff', '#f5c268', '#ec6b1a', '#cb3827', '#7f1416']
+    const result = [0, 1, 2, 3, 4].map((i) => ({
+      type: 'circle',
+      xref: 'paper',
+      yref: 'paper',
+      x0: `${t(`OdbData.mhw.level_${i}_maker0`)}`,
+      y0: -0.33,
+      x1: Number(`${t(`OdbData.mhw.level_${i}_maker0`)}`) + 0.0185,
+      y1: -0.28,
+      fillcolor: fillColors[i],
+      line: {
+        color: '#616161',
+        width: 1
+      },
+      label: {
+        text: `\n\n\n${t(`OdbData.mhw.level_${i}`)}`,
+        xanchor: 'left',
+        font: { color: '#424242' },
+      },
+    } as Shape)
+    )
+    return [...result]
+  }, [t])
+
   //Time Serise Data Fetching
   useEffect(() => {
     setApidata(undefined);
@@ -110,6 +155,7 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
     })();
 
   }, [coords, startYear, endYear])
+
   useEffect(() => {
     if (apidata) {
       setPlotProps((prevPlotProps: PlotParams) => ({
@@ -144,7 +190,7 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
               const date = new Date(item.date);
               const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
               const formattedAnomaly = item.sst_anomaly !== null ? item.sst_anomaly.toFixed(2) : "N/A";
-              const levelText = item.level === 0 ? t('OdbData.mhw.none') : item.level === 1 ? t('OdbData.mhw.moderate') : item.level === 2 ? t('OdbData.mhw.strong') : item.level === 3 ? t('OdbData.mhw.severe') : item.level === 4 ? t('OdbData.mhw.extreme') : item.level;
+              const levelText = item.level === 0 ? t('OdbData.mhw.level_0') : item.level === 1 ? t('OdbData.mhw.level_1') : item.level === 2 ? t('OdbData.mhw.level_2') : item.level === 3 ? t('OdbData.mhw.level_3') : item.level === 4 ? t('OdbData.mhw.level_4') : item.level;
               return `${t('OdbData.mhw.time')}: ${formattedDate}<br>${t('OdbData.mhw.sstan')}: ${formattedAnomaly}<br>${t('OdbData.mhw.mhwlevel')}: ${levelText}`;
             })
           }
@@ -152,191 +198,18 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
         layout: {
           ...prevPlotProps.layout,
           title: {
+            xref: 'container',
+            xanchor: 'center',
             text: `${apidata[0].lat}, ${apidata[0].lon}`,
+            y: 0.95,
+            x: 0.5
           },
-          yaxis: { 
-            title: t('OdbData.mhw.sstan'),
-           },
-           annotations: [
-            {
-              xref: 'paper',
-              yref: 'paper',
-              x: -0.06,
-              y: -0.25,
-              align: 'left',
-              showarrow: false,
-              text: `<span style="color: #424242;">${t('OdbData.mhw.mhwlevel')}:</span>`,
-              font: {
-                  size: 13,
-                }
-            },
-            {
-              xref: 'paper',
-              yref: 'paper',
-              x: `${t('OdbData.mhw.level_0_text')}`,
-              y: -0.35,
-              align: 'left',
-              showarrow: false,
-              text: `<span style="color: #424242;"> ${t('OdbData.mhw.none')}</span>`,
-              font: {
-                  size:11.5,
-                }
-            },
-            {
-              xref: 'paper',
-              yref: 'paper',
-              x: `${t('OdbData.mhw.level_1_text')}`,
-              y: -0.35,
-              align: 'left',
-              showarrow: false,
-              text: `<span style="color: #424242;"> ${t('OdbData.mhw.moderate')}</span>`,
-              font: {
-                  size: 11.5,
-                }
-            },
-            {
-              xref: 'paper',
-              yref: 'paper',
-              x: `${t('OdbData.mhw.level_2_text')}`,
-              y: -0.35,
-              align: 'left',
-              showarrow: false,
-              text: `<span style="color: #424242;"> ${t('OdbData.mhw.strong')}</span>`,
-              font: {
-                  size: 11.5,
-                }
-            },
-            {
-              xref: 'paper',
-              yref: 'paper',
-              x: `${t('OdbData.mhw.level_3_text')}`,
-              y: -0.35,
-              align: 'left',
-              showarrow: false,
-              text: `<span style="color: #424242;"> ${t('OdbData.mhw.severe')}</span>`,
-              font: {
-                  size: 11.5,
-                }
-            },
-            {
-              xref: 'paper',
-              yref: 'paper',
-              x: `${t('OdbData.mhw.level_4_text')}`,
-              y: -0.35,
-              align: 'left',
-              showarrow: false,
-              text: `<span style="color: #424242;"> ${t('OdbData.mhw.extreme')}</span>`,
-              font: {
-                  size: 11.5,
-                }
-            }
-  
-          ],
-          shapes: [
-            {
-              type: 'circle',
-              xref: 'paper',
-              yref: 'paper',
-              x0: -0.06,
-              y0: -0.33,
-              x1: -0.0415,
-              y1: -0.28,
-              fillcolor: '#ffffff',
-              line: {
-                color: '#616161',
-                width:1.1
-              }
-            },
-            {
-              type: 'circle',
-              xref: 'paper',
-              yref: 'paper',
-              x0: `${t('OdbData.mhw.level_1_maker0')}`,
-              y0: -0.33,
-              x1: `${t('OdbData.mhw.level_1_maker1')}`,
-              y1: -0.28,
-              fillcolor: '#f5c268',
-              line: {
-                color: '#616161',
-                width:1.1
-              }
-            },
-            {
-              type: 'circle',
-              xref: 'paper',
-              yref: 'paper',
-              x0:`${t('OdbData.mhw.level_2_maker0')}`,
-              y0: -0.33,
-              x1:`${t('OdbData.mhw.level_2_maker1')}`,
-              y1: -0.28,
-              fillcolor: '#ec6b1a',
-              line: {
-                color: '#616161',
-                width:1.2
-              }
-            },
-            {
-              type: 'circle',
-              xref: 'paper',
-              yref: 'paper',
-              x0: `${t('OdbData.mhw.level_3_maker0')}`,
-              y0: -0.33,
-              x1: `${t('OdbData.mhw.level_3_maker1')}`,
-              y1: -0.28,
-              fillcolor: '#cb3827',
-              line: {
-                color: '#616161',
-                width:1.2
-              }
-            },
-            {
-              type: 'circle',
-              xref: 'paper',
-              yref: 'paper',
-              x0: `${t('OdbData.mhw.level_4_maker0')}`,
-              y0: -0.33,
-              x1: `${t('OdbData.mhw.level_4_maker1')}`,
-              y1: -0.28,
-              fillcolor: '#7f1416',
-              line: {
-                color: '#616161',
-                width:1.2
-              }
-            },
-          ]
+          // annotations: getAnnotation,
+          shapes: getShape,
         }
       }))
     }
-  }, [apidata,t])
-
-  const disableMapAction = () => {
-    setDragNScroll(false)
-  }
-
-  const enableMapAction = () => {
-    setDragNScroll(true)
-  }
-
-  const onClose = () => {
-    enableMapAction()
-    setOpen(false);
-  }
-
-  const handleChangeStart = (event: SelectChangeEvent<number>) => {
-    const newStartYear = parseInt(event.target.value as string, 10);
-    setStartYear(newStartYear);
-    if (newStartYear > endYear) {
-      setEndYear(newStartYear);
-    }
-  }
-  const handleChangeEnd = (event: SelectChangeEvent<number>) => {
-    const newEndYear = parseInt(event.target.value as string, 10);
-    if (newEndYear >= startYear) {
-      setEndYear(newEndYear);
-    }
-  }
-
-
+  }, [apidata, t])
 
   return (
     <>
@@ -460,7 +333,6 @@ const MarineHeatwaveTimeSerise = ({ coords, setOpen, plotPosition, setPlotPositi
                     }
                   </Box>
                 }
-                {/*footer*/}
               </Box>
             </Box>
           </Box>

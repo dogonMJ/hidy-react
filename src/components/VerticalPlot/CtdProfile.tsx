@@ -78,6 +78,9 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
           standoff: 5,
         },
       },
+      font: {
+        family: 'Rubik, "Open Sans", verdana, arial, sans-serif'
+      }
     },
     config: {
       scrollZoom: true,

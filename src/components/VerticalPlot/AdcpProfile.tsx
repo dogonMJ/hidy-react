@@ -55,6 +55,9 @@ export const AdcpProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, 
           standoff: 5,
         },
       },
+      font: {
+        family: 'Rubik, "Open Sans", verdana, arial, sans-serif'
+      }
     },
     config: {
       scrollZoom: true,
@@ -70,7 +73,7 @@ export const AdcpProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, 
           text: `${lat} \u00B0N, ${lng} \u00B0E`,
           font: {
             size: 12
-          }
+          },
         }
         if (plotProps.layout.yaxis?.title) {
           plotProps.layout.yaxis.title = { text: `${t('OdbData.depth')} (m)`, standoff: 0 }
