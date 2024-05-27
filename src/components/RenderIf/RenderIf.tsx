@@ -1,3 +1,5 @@
+import { memo } from "react"
+
 interface Pars {
     children: any
     isTrue: any

@@ -50,7 +50,7 @@ export const OdbCTD = () => {
     const content = (
       <Box>
         {center[1]}, {center[0]}<br />
-        {t('OdbData.depth')}: {property.depth} m<br />
+        {t('OdbData.depth')} (m): {property.depth}<br />
         {t('OdbData.CTD.temperature')}: {property.temperature}<br />
         {t('OdbData.CTD.salinity')}: {property.salinity}<br />
         {t('OdbData.CTD.density')}: {property.density}<br />

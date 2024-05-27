@@ -5,6 +5,8 @@ import { Pane, useMap } from 'react-leaflet';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton, } from '@mui/material';
 import { PlotParams } from "react-plotly.js";
+import { useMapDragScroll } from 'hooks/useMapDragScroll';
+import { plotLayerOrder } from 'Utils/UtilsMap';
 
 export const LineChart = forwardRef((
   props: {
@@ -18,18 +20,17 @@ export const LineChart = forwardRef((
   , ref: any,) => {
   const nodeRef = useRef(null)
   const map = useMap()
+  const { setDragNScroll } = useMapDragScroll()
   const [disableDrag, setDisableDrag] = useState(false)
   const { data, layout, config } = props.plotProps
   const offset = props.positionOffset ? props.positionOffset : { x: -400, y: 60 }
   const layerCenterPoint = map.latLngToLayerPoint(map.getBounds().getCenter())
 
   const disableMapAction = () => {
-    map.dragging.disable()
-    map.scrollWheelZoom.disable()
+    setDragNScroll(false)
   }
   const enableMapAction = () => {
-    map.dragging.enable()
-    map.scrollWheelZoom.enable()
+    setDragNScroll(true)
   }
 
   const onClose = () => {
@@ -38,12 +39,13 @@ export const LineChart = forwardRef((
   }
 
   return (
-    <Pane name={props.paneName} style={{ zIndex: 800 }}>
+    <Pane name={`plot-${props.paneName}`} style={{ zIndex: 800 }}>
       <Draggable
         nodeRef={nodeRef}
         // defaultClassName={'DefaultDraggable'}
         defaultPosition={{ x: layerCenterPoint.x + offset.x, y: layerCenterPoint.y + offset.y }}
         disabled={disableDrag}
+        onMouseDown={() => plotLayerOrder(map, `plot-${props.paneName}`)}
       >
         <div ref={nodeRef} id={props.paneName}>
           <div

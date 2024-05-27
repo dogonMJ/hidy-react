@@ -11,7 +11,7 @@ import { OdbSedCore } from './OdbSedCore';
 import { OdbChemistry } from './OdbChemistry';
 import { OdbBio } from './OdbBio';
 import { OdbMicroplastics } from './OdbMicroPlastics';
-import { OdbMarineHeatwave } from './OdbMarineHeatwave';
+import { OdbMarineHeatwave } from './OdbMHW';
 import { ComponentList } from 'types';
 import { useToggleListChecks } from "hooks/useToggleListChecks";
 
