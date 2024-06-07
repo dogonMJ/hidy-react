@@ -14,9 +14,6 @@ import { LanguageControl } from 'layout/UpRightControls/LanguageControl'
 import { CPlanControl } from 'layout/UpRightControls/CplanControl';
 import { DragDrop } from 'layout/Map/DragDrop';
 import { DrawControl } from 'layout/UpRightControls/DrawControl';
-// @ts-ignore
-import 'leaflet-measure/'
-import 'leaflet-measure/dist/leaflet-measure.css';
 import { account } from 'Utils/UtilsAccount'
 import { readUrlQuery } from "Utils/UtilsStates";
 import { SignInControl } from 'layout/UpRightControls/SignInControl';

@@ -3,7 +3,7 @@ import { useAppSelector } from "hooks/reduxHooks";
 import { LegendControl } from "components/LeafletLegend"
 import { Legend } from 'types';
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { RenderIf } from "components/RenderIf/RenderIf";
 import OdbMHWTimeSeries from "./OdbMHWTimeSeries";
@@ -13,6 +13,7 @@ import { useAlert } from "hooks/useAlert";
 export const OdbMarineHeatwave = () => {
   const { t } = useTranslation()
   const map = useMap()
+  const ref = useRef<any>()
   const { openAlert, setOpenAlert, alertMessage, setMessage, } = useAlert()
   const [notInRange, setNotInRange] = useState<boolean>(false)
   const [timespan, setTimespan] = useState([new Date('1985-01-01'), new Date()])
@@ -74,8 +75,15 @@ export const OdbMarineHeatwave = () => {
     const selectDate = new Date(datetime)
     const monthsBetween = (endTime.getFullYear() - startTime.getFullYear()) * 12 + endTime.getMonth() - startTime.getMonth()
     const monthsFromStart = (selectDate.getFullYear() - startTime.getFullYear()) * 12 + (selectDate.getMonth() - startTime.getMonth());
-    setNotInRange(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
-    setOpenAlert(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
+    // setNotInRange(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
+    // setOpenAlert(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
+    if (monthsFromStart > monthsBetween || monthsFromStart < 0) {
+      setNotInRange(true)
+      setMessage(t('alert.notInTime'))
+    } else {
+      setNotInRange(false)
+      ref.current.setUrl(url)
+    }
   }, [url, datetime, timespan])
 
   const forbiddenList = ['CTDProfile', 'ADCPProfile', 'dateTimePicker', 'seafloorProfile']
@@ -83,7 +91,8 @@ export const OdbMarineHeatwave = () => {
   useMapEvents({
     click: (e) => {
       if (!notInRange) {
-        const allElements = document.elementsFromPoint(e.layerPoint.x, e.layerPoint.y);
+        // const allElements = document.elementsFromPoint(e.layerPoint.x, e.layerPoint.y);
+        const allElements = document.elementsFromPoint(e.containerPoint.x, e.containerPoint.y);
         if (allElements && allElements.length > 1) {
           const forbidden = allElements.some(ele => ele.classList.contains("MuiPaper-root") || forbiddenList.includes(ele.id))
           if (!forbidden) {
@@ -97,6 +106,7 @@ export const OdbMarineHeatwave = () => {
   return (
     <>
       <TileLayer
+        ref={ref}
         id='mhw'
         url={url}
         crossOrigin="anonymous"
@@ -111,7 +121,7 @@ export const OdbMarineHeatwave = () => {
         />
       </RenderIf>
       <LegendControl position='bottomleft' legendContent={legnedContents.join('<br>')} legendClassNames={'sedLegend'} />
-      <AlertSlide open={openAlert} severity="error" setOpen={setOpenAlert}>{t('alert.notInTime')}</AlertSlide>
+      <AlertSlide open={openAlert} severity="error" setOpen={setOpenAlert}>{alertMessage}</AlertSlide>
     </>
   )
 }
