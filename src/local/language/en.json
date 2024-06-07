@@ -687,5 +687,14 @@
     "refresh": "Update",
     "clear": "Clear browser URL",
     "toDefault": "Defaults"
+  },
+  "dragDrop": {
+    "alert": {
+      "noLayer": "Layer not found or file is corrupted",
+      "wrongFormat": "Format not supported",
+      "diffName": "File names must be the same",
+      "missingFile": "Must include .dbf and .shp",
+      "tooMany": "Only accepts 2 files"
+    }
   }
 }

@@ -4,9 +4,11 @@ export function str2List<T>(str: string, toType: (value: string) => T = String a
 
 export const readUrlQuery = (key: string) => {
   const urlParams = new URLSearchParams(window.location.search)
+  console.log(key, urlParams.get(key))
   const options = urlParams.get(key)?.split(';').reduce((acc: any, pair) => {
     const [key, value] = pair.split(/:(.*)/s);
-    acc[key] = value.replaceAll('&', '%26')
+    console.log(key, value)
+    acc[key] = value ? value.replaceAll('&', '%26') : value
     return acc;
   }, {});
   return options

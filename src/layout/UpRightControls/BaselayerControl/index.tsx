@@ -87,6 +87,14 @@ export const BaselayerControl = memo(() => {
                             }}
                         />
                     </BaseLayer>
+                    {/* <BaseLayer name='Esri World Imagery' checked={layerId === 'ESRI'}>
+                        <TileLayer
+                            id='Esri'
+                            attribution='<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank">Powered by Esri. Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community</a>'
+                            url="https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/WMTS/tile/1.0.0/World_Imagery/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg"
+                            crossOrigin="anonymous"
+                        />
+                    </BaseLayer> */}
                 </Pane>
             </LayerGroup>
         </LayersControl >

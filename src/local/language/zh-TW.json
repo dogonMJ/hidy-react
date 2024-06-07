@@ -687,5 +687,14 @@
     "refresh": "更新網址",
     "clear": "清除瀏覽器網址",
     "toDefault": "回復預設"
+  },
+  "dragDrop":{
+    "alert":{
+      "noLayer":"找不到圖層或檔案毀損",
+      "wrongFormat":"不支援此格式",
+      "diffName":"檔案名稱必須相同",
+      "missingFile":"必須包含.dbf及.shp",
+      "tooMany":"僅接受2個檔案"
+    }
   }
 }

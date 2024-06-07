@@ -3,7 +3,7 @@ import { useAppSelector } from "hooks/reduxHooks";
 import { LegendControl } from "components/LeafletLegend"
 import { Legend } from 'types';
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { RenderIf } from "components/RenderIf/RenderIf";
 import OdbMHWTimeSeries from "./OdbMHWTimeSeries";
@@ -13,6 +13,7 @@ import { useAlert } from "hooks/useAlert";
 export const OdbMarineHeatwave = () => {
   const { t } = useTranslation()
   const map = useMap()
+  const ref = useRef<any>()
   const { openAlert, setOpenAlert, alertMessage, setMessage, } = useAlert()
   const [notInRange, setNotInRange] = useState<boolean>(false)
   const [timespan, setTimespan] = useState([new Date('1985-01-01'), new Date()])
@@ -24,6 +25,7 @@ export const OdbMarineHeatwave = () => {
   const datetime = useAppSelector(state => state.map.datetime);
   const month = datetime.slice(0, 7) + '-02'
   const url = `https://service.oc.ntu.edu.tw/data/odbgeowmts/rest/marineheatwave:mhw/polygon_level/WebMercatorQuad/{z}/{y}/{x}?format=image/png&Time=${month}`
+
   const legned: Legend = {
     'ice': {
       "color": "#c6e0fe",
@@ -76,6 +78,7 @@ export const OdbMarineHeatwave = () => {
     const monthsFromStart = (selectDate.getFullYear() - startTime.getFullYear()) * 12 + (selectDate.getMonth() - startTime.getMonth());
     setNotInRange(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
     setOpenAlert(monthsFromStart > monthsBetween || monthsFromStart < 0 ? true : false)
+    ref.current.setUrl(url)
   }, [url, datetime, timespan])
 
   const forbiddenList = ['CTDProfile', 'ADCPProfile', 'dateTimePicker', 'seafloorProfile']
@@ -97,6 +100,7 @@ export const OdbMarineHeatwave = () => {
   return (
     <>
       <TileLayer
+        ref={ref}
         id='mhw'
         url={url}
         crossOrigin="anonymous"
