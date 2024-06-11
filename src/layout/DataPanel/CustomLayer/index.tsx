@@ -16,7 +16,6 @@ const optionList = ['addWmsLayer', 'addLayerSelector', 'addImage', 'addFile']
 export const CustomLayer = () => {
   const { t } = useTranslation()
   const { checked, handleToggleChecks } = useToggleListChecks()
-
   const itemList: ItemList = {
     addWmsLayer: <DirectAddLayers />,
     addLayerSelector: <LayerSelector />,

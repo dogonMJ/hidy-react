@@ -520,6 +520,7 @@
     "addWmsLayer": "Add WMS/WMTS Layers",
     "addLayerSelector": "Search and add WMS/WMTS Layer",
     "addImage": "Add Images",
+    "addFile":"Add Files",
     "addUrlOption": "Add WMS/WMTS Service URL to Options",
     "add": "Add",
     "urlType": "Access method",
@@ -542,6 +543,7 @@
     "csrsr2": "NCU CSRSR Taiwan false-color",
     "csrsr3": "NCU CSRSR Penghu true-color",
     "csrsr4": "NCU CSRSR Penghu false-color",
+    "selectFile":"Select Files",
     "alert": {
       "dupName": "Duplicate layer name",
       "dupOption": "Duplicate input",
@@ -550,7 +552,9 @@
       "error": "Please check options or contact ODB",
       "zoomLevel": "The layer might not support this zoom level",
       "warnType": "Service type might be incorrect",
-      "noUrl": "Please enter URL"
+      "noUrl": "Please enter URL",
+      "dbfAdd":".dbf added",
+      "dbfNoMatch":".shp with matching file name not found"
     },
     "description": {
       "addUrlOption": "1. Enter the complete OGC WMS/WMTS GetCapabilities URL or the base URL.\n2. Click the 'Add' button on the right to add the URL below.\n*Must support EPSG:3857 projection.\n*Space and tab will be removed.\nExamples:\nKVP: https://gis.sinica.edu.tw/tileserver/wmts\nRESTful: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml",

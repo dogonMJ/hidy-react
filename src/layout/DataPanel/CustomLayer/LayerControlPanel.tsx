@@ -16,8 +16,6 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
   const map = useMap()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [selectedLayer, setSelectedLayer] = useState<string | null>(null)
-  const initColor = layerList[0].getLayers()[0].options.fillColor || layerList[0].getLayers()[0].options.color
-  const [color, setColor] = useState(initColor)
 
   const handlePopover = (event: React.MouseEvent<HTMLButtonElement>, layerName: string) => {
     setAnchorEl(event.currentTarget);
@@ -26,6 +24,20 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
   const handleClosePopover = () => {
     setAnchorEl(null);
     setSelectedLayer(null);
+  };
+  const handleColorChange = (index: number, newColor: string) => {
+    const updatedLayerList = [...layerList];
+    const layer = updatedLayerList[index];
+    const layerOptions = layer.getLayers()[0].options;
+
+    if (layerOptions.fillColor) {
+      layerOptions.fillColor = newColor;
+      layer.setStyle({ fillColor: newColor, })
+    } else {
+      layerOptions.color = newColor;
+      layer.setStyle({ color: newColor, })
+    }
+    setLayerList(updatedLayerList)
   };
   return (
     <>
@@ -76,18 +88,10 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
               />
               }
               {isAddFile &&
-                // <div
-                //   key={index}
-                //   style={{
-                //     backgroundColor: layer.getLayers()[0].options.fillColor || layer.getLayers()[0].options.color,
-                //     width: `100px`,
-                //     height: '15px',
-                //     display: 'flex',
-                //     justifyContent: 'center',
-                //     alignItems: 'center',
-                //   }}
-                //    />
-                <ColorSelect color={color} setColor={setColor} />
+                <ColorSelect
+                  color={layer.getLayers()[0].options.fillColor || layer.getLayers()[0].options.color}
+                  setColor={(newColor: string) => handleColorChange(index, newColor)}
+                />
               }
             </Stack>
           </Box>

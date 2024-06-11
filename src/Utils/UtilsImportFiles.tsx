@@ -90,21 +90,28 @@ export const readFile2 = (file: Blob, readAs: 'arrayBuffer' | 'text' | 'url'): P
   });
 };
 
-const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
+const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
   const name = feature.properties.name
   if (feature.properties.description) {
-    feature.geometry.type === 'Point' ?
-      layer.bindPopup(`${name}<br>${feature.properties.description}`).bindTooltip(`${name}<br>${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}`)
-      : layer.bindPopup(`${name}<br>${feature.properties.description}`).bindTooltip(`${name}`)
+    if (feature.geometry.type === 'Point') {
+      const position = { lat: feature.geometry.coordinates[1], lng: feature.geometry.coordinates[0] }
+      layer.bindPopup(`${name}<br>${feature.properties.description}`)
+        .bindTooltip(`${name}<br>${renderToString(<FormatCoordinate coords={position} format={latlonFormat} />)}`)
+    } else {
+      layer.bindPopup(`${name}<br>${feature.properties.description}`).bindTooltip(`${name}`)
+    }
   } else {
-    feature.geometry.type === 'Point' ?
-      layer.bindPopup(name).bindTooltip(`${name}<br>${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}`)
-      : layer.bindPopup(name).bindTooltip(name)
+    if (feature.geometry.type === 'Point') {
+      const position = { lat: feature.geometry.coordinates[1], lng: feature.geometry.coordinates[0] }
+      layer.bindPopup(name)
+        .bindTooltip(`${name}<br>${renderToString(<FormatCoordinate coords={position} format={latlonFormat} />)}`)
+    } else {
+      layer.bindPopup(name).bindTooltip(name)
+    }
   }
 }
 
-const onEachFeatureJSON = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
-  console.log(feature)
+const onEachFeatureJSON = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
   if (feature.properties) {
     let content = ''
     if (Object.getOwnPropertyNames(feature.properties).length > 0) {
@@ -117,15 +124,23 @@ const onEachFeatureJSON = (feature: geojson.Feature<geojson.GeometryObject, any>
     }
     if (feature.geometry.type === 'Point') {
       const position = { lat: feature.geometry.coordinates[1], lng: feature.geometry.coordinates[0] }
-      layer.bindPopup(content)//.bindTooltip(renderToString(<FormatCoordinate coords={position} format={latlonFormat} />))
+      layer.bindPopup(content).bindTooltip(renderToString(<FormatCoordinate coords={position} format={latlonFormat} />))
     } else {
       layer.bindPopup(content)
     }
   }
 }
 
-export const getLeafletLayer = (files: any, initColorIndex: number) => {
-  // const file = e.dataTransfer.files[0]
+const onEachFeatureGPX = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
+  if (feature.geometry.type === 'Point') {
+    const position = { lat: feature.geometry.coordinates[1], lng: feature.geometry.coordinates[0] }
+    const coords = renderToString(<FormatCoordinate coords={position} format={latlonFormat} />)
+    layer.bindPopup(`${feature.properties.time}<br>${coords}<br>Elevation: ${feature.properties.elevation} m`).bindTooltip(feature.properties.time)
+    // layer.bindPopup(`${feature.properties.time}<br>Elevation: ${feature.properties.elevation} m`).bindTooltip(feature.properties.time)
+  }
+}
+
+export const getLeafletLayer = (files: any, initColorIndex: number, latlonformat: string) => {
   let colorIndex = initColorIndex
   const promises = files.map(async (file: any) => {
     const extension = file.name.substring(file.name.lastIndexOf('.') + 1, file.name.length).toLowerCase()
@@ -133,15 +148,33 @@ export const getLeafletLayer = (files: any, initColorIndex: number) => {
     const currentColorIndex = colorIndex;
     colorIndex += 1
     switch (fileType) {
+      case 'dbf':
+        const filename = file.name.slice(0, file.name.lastIndexOf('.'))
+        const shpFile = files.find((obj: any) => obj.name === `${filename}.shp`)
+        return shpFile ? 'CustomLayer.alert.dbfAdd' : 'CustomLayer.alert.dbfNoMatch'
       case 'shp':
-        const url = await readFile2(file, 'url')
-        const shpData = await shp(url)
-        const shpLayer: DropGeoJSON = L.geoJSON(shpData, {
-          style: (feature) => importStyleFunc(feature, currentColorIndex),
-          pointToLayer: importPointToLayer,
-        })
-        shpLayer.name = file.name
-        return shpLayer
+        try {
+          const filename = file.name.slice(0, file.name.lastIndexOf('.'))
+          const dbfFile = files.find((obj: any) => obj.name === `${filename}.dbf`)
+          let shpData;
+          if (dbfFile) {
+            const shpBuffer = await file.arrayBuffer()
+            const dbfBuffer = await dbfFile.arrayBuffer()
+            shpData = combine([parseShp(shpBuffer), parseDbf(dbfBuffer)])
+          } else {
+            const url = await readFile2(file, 'url')
+            shpData = await shp(url)
+          }
+          const shpLayer: DropGeoJSON = L.geoJSON(shpData, {
+            style: (feature) => importStyleFunc(feature, currentColorIndex),
+            pointToLayer: importPointToLayer,
+            onEachFeature: (feature, layer) => onEachFeatureJSON(feature, layer, latlonformat),
+          })
+          shpLayer.name = file.name
+          return shpLayer
+        } catch (e) {
+          return 'CustomLayer.alert.noLayer'
+        }
       case 'application/x-zip-compressed':
         const arrayBuffer = await readFile2(file, 'arrayBuffer')
         try {
@@ -149,11 +182,12 @@ export const getLeafletLayer = (files: any, initColorIndex: number) => {
           const shpLayer: DropGeoJSON = L.geoJSON(shpData, {
             style: (feature) => importStyleFunc(feature, currentColorIndex),
             pointToLayer: importPointToLayer,
+            onEachFeature: (feature, layer) => onEachFeatureJSON(feature, layer, latlonformat),
           })
           shpLayer.name = file.name
           return shpLayer
         } catch (e) {
-          return null
+          return 'CustomLayer.alert.noLayer'
         }
       case 'application/vnd.google-earth.kml+xml':
         const kml = await readFile2(file, 'text')
@@ -161,13 +195,13 @@ export const getLeafletLayer = (files: any, initColorIndex: number) => {
           const customLayer = L.geoJSON(undefined, {
             style: (feature) => importStyleFunc(feature, currentColorIndex),
             pointToLayer: importPointToLayer,
-            onEachFeature: onEachFeatureKML,
+            onEachFeature: (feature, layer) => onEachFeatureKML(feature, layer, latlonformat),
           });
           const kmlLayer = omnivore.kml.parse(kml, null, customLayer)
           kmlLayer.name = file.name
           return kmlLayer
         } catch (e) {
-          return null
+          return 'CustomLayer.alert.noLayer'
         }
       case 'application/json':
         const json = await readFile2(file, 'text')
@@ -176,15 +210,15 @@ export const getLeafletLayer = (files: any, initColorIndex: number) => {
             const jsonLayer: DropGeoJSON = L.geoJSON(JSON.parse(json), {
               style: (feature) => importStyleFunc(feature, currentColorIndex),
               pointToLayer: importPointToLayer,
-              onEachFeature: onEachFeatureJSON,
+              onEachFeature: (feature, layer) => onEachFeatureJSON(feature, layer, latlonformat),
             })
             jsonLayer.name = file.name
             return jsonLayer
           } else {
-            return null
+            return 'CustomLayer.alert.noLayer'
           }
         } catch (e) {
-          return null
+          return 'CustomLayer.alert.noLayer'
         }
       case 'gpx':
         const gpx = await readFile2(file, 'text')
@@ -234,6 +268,7 @@ export const getLeafletLayer = (files: any, initColorIndex: number) => {
             const gpxLayer: DropGeoJSON = L.geoJSON(geojson, {
               style: (feature) => importStyleFunc(feature, currentColorIndex),
               pointToLayer: importPointToLayer,
+              onEachFeature: (feature, layer) => onEachFeatureGPX(feature, layer, latlonformat),
             })
             gpxLayer.name = file.name
           } else {

@@ -41,7 +41,7 @@ export const CtdProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, p
         // bgcolor: '#4d4d4d'
       },
       modebar: {
-        remove: ['lasso2d']
+        remove: ['lasso2d', 'select2d']
       },
       showlegend: true,
       legend: {

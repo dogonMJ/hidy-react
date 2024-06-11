@@ -6,47 +6,63 @@ import { getLeafletLayer } from "Utils/UtilsImportFiles";
 import { useAlert } from "hooks/useAlert";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { LayerControlPanel } from "./LayerControlPanel";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
+import { addFileSlice } from "store/slice/addFileSlice";
 
 export const AddFile = () => {
   const map = useMap()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const { openAlert, setOpenAlert, alertMessage, setMessage } = useAlert()
+  const { openAlert, setOpenAlert, alertMessage, setMessage, severity, setSeverity } = useAlert()
+  const latlonformat = useAppSelector(state => state.map.latlonformat)
   const [fileNames, setFileNames] = useState<string[]>([])
-  const [uploadedFiles, setUploadedFiles] = useState<any>()
-  const [dataList, setDataList] = useState<any>([])
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([])
+  const [dataList, setDataList] = useState<any[]>([])
+  // const dataList = useAppSelector(state => state.addFile.fileList)
 
-  const handleFileChange = (event: any) => {
+  const handleFileChange = async (event: any) => {
     const files = [...event.target.files]
-    const names = files.map(file => `${file.name}\n`)
-    setUploadedFiles(files)
-    setFileNames(names)
-  };
-
-  const handleUpload = async () => {
-    if (uploadedFiles) {
-      const layers = await getLeafletLayer(uploadedFiles, 0)
+    if (files) {
+      const initColorIndex = dataList.length ?? 0
+      const layers = await getLeafletLayer(files, initColorIndex, latlonformat)
       let availableList: any = []
       layers.forEach((layer, index) => {
-        if (layer) {
-          layer.addTo(map)
-          availableList.push(layer)
-          if (index + 1 === layers.length) {
-            map.fitBounds(layer.getBounds())
+        if (typeof layer === 'string') {
+          if (layer === 'CustomLayer.alert.dbfAdd') {
+            setMessage(t(layer))
+            setSeverity('success')
+          } else {
+            setSeverity('error')
+            setMessage(t(layer))
           }
         } else {
-          setMessage(t('CustomLayer.alert.noLayer'))
+          try {
+            layer.addTo(map)
+            availableList.push(layer)
+            if (index + 1 === layers.length) {
+              map.fitBounds(layer.getBounds())
+            }
+          } catch (e) {
+            setMessage(t('CustomLayer.alert.error'))
+          }
         }
       })
       setDataList([...dataList, ...availableList])
+      // dispatch(addFileSlice.actions.setFileList([...dataList, ...availableList]))
     }
-    setFileNames([])
-  }
+  };
 
   useEffect(() => {
+    dataList.forEach((layer: any) => {
+      if (layer) {
+        layer.addTo(map)
+      }
+    })
     return () => {
       dataList.forEach((layer: any) => map.removeLayer(layer))
     }
-  })
+  }, [dataList, map])
+
   return (
     <>
       <Box
@@ -54,10 +70,10 @@ export const AddFile = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 2,
-          padding: 3,
-          border: '1px dashed grey',
-          borderRadius: 1,
+          // gap: 2,
+          // padding: 3,
+          // border: '1px dashed grey',
+          // borderRadius: 1,
         }}
       >
         <Input
@@ -75,13 +91,13 @@ export const AddFile = () => {
             {t(`CustomLayer.selectFile`)}
           </Button>
         </label>
-        {fileNames && <Typography variant="body1" whiteSpace={'pre-wrap'}>{fileNames}</Typography>}
+        {/* {fileNames && <Typography variant="body1" whiteSpace={'pre-wrap'}>{fileNames}</Typography>} */}
       </Box>
-      <Button variant="contained" color="primary" onClick={handleUpload}>
+      {/* <Button variant="contained" color="primary" onClick={handleUpload}>
         {t(`CustomLayer.upload`)}
-      </Button>
+      </Button> */}
       {dataList && dataList.length > 0 && <LayerControlPanel layerList={dataList} setLayerList={setDataList} isAddFile={true} />}
-      <AlertSlide open={openAlert} setOpen={setOpenAlert} severity="error" >{alertMessage}</AlertSlide>
+      <AlertSlide open={openAlert} setOpen={setOpenAlert} severity={severity} >{alertMessage}</AlertSlide>
     </>
   );
 }
