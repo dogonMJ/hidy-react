@@ -1,5 +1,5 @@
-import L, { LatLng } from 'leaflet';
-import * as geojson from 'geojson';
+import L, { LatLng, Layer } from 'leaflet';
+import { Feature, GeometryObject, Point, FeatureCollection, Geometry } from 'geojson';
 import Spectral_10 from "assets/jsons/Spectral_10.json"
 import { renderToString } from "react-dom/server";
 import FormatCoordinate from 'components/FormatCoordinate';
@@ -7,6 +7,7 @@ import FormatCoordinate from 'components/FormatCoordinate';
 import shp, { combine, parseShp, parseDbf } from 'shpjs'
 //@ts-ignore
 import omnivore from '@mapbox/leaflet-omnivore'
+import { kml as kmlToGeoJson, gpx as gpxToGeoJson } from "@tmcw/togeojson";
 
 interface DropGeoJSON extends L.GeoJSON {
   name?: string
@@ -14,7 +15,7 @@ interface DropGeoJSON extends L.GeoJSON {
 
 const { colors } = Spectral_10
 
-const flattenObj = (obj: any, parent: string | null, res: any = {}) => {
+export const flattenObj = (obj: any, parent: string | null, res: any = {}) => {
   //https://stackoverflow.com/questions/44134212/best-way-to-flatten-js-object-keys-and-values-to-a-single-depth-array
   for (let key in obj) {
     let propName = parent ? `${parent}.${key}` : key;
@@ -37,7 +38,7 @@ export const readFile = (file: Blob, readAs: 'arrayBuffer' | 'text', callback: (
   }
 }
 
-export const importStyleFunc = (feature: geojson.Feature<geojson.Geometry, any> | undefined, colorIndex: number) => {
+export const importStyleFunc = (feature: Feature<Geometry, any> | undefined, colorIndex: number) => {
   const type = feature?.geometry.type
   const number = colorIndex
   const color = colors[number % 10].value
@@ -62,7 +63,7 @@ export const importStyleFunc = (feature: geojson.Feature<geojson.Geometry, any> 
   }
 }
 
-export const importPointToLayer = (feature: geojson.Feature<geojson.Point, any>, latlng: LatLng) => {
+export const importPointToLayer = (feature: Feature<Point, any>, latlng: LatLng) => {
   return new L.CircleMarker(latlng)
 }
 
@@ -90,7 +91,9 @@ export const readFile2 = (file: Blob, readAs: 'arrayBuffer' | 'text' | 'url'): P
   });
 };
 
-const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
+
+
+const onEachFeatureKML = (feature: Feature<GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
   const name = feature.properties.name
   if (feature.properties.description) {
     if (feature.geometry.type === 'Point') {
@@ -111,7 +114,7 @@ const onEachFeatureKML = (feature: geojson.Feature<geojson.GeometryObject, any>,
   }
 }
 
-const onEachFeatureJSON = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
+const onEachFeatureJSON = (feature: Feature<GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
   if (feature.properties) {
     let content = ''
     if (Object.getOwnPropertyNames(feature.properties).length > 0) {
@@ -131,13 +134,125 @@ const onEachFeatureJSON = (feature: geojson.Feature<geojson.GeometryObject, any>
   }
 }
 
-const onEachFeatureGPX = (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
+const onEachFeatureGPX = (feature: Feature<GeometryObject, any>, layer: L.Layer, latlonFormat: string) => {
   if (feature.geometry.type === 'Point') {
     const position = { lat: feature.geometry.coordinates[1], lng: feature.geometry.coordinates[0] }
     const coords = renderToString(<FormatCoordinate coords={position} format={latlonFormat} />)
     layer.bindPopup(`${feature.properties.time}<br>${coords}<br>Elevation: ${feature.properties.elevation} m`).bindTooltip(feature.properties.time)
     // layer.bindPopup(`${feature.properties.time}<br>Elevation: ${feature.properties.elevation} m`).bindTooltip(feature.properties.time)
   }
+}
+
+const jsonLine2Points = (feature: Feature<GeometryObject, any>) => {
+  const coordinateProperties = feature.properties.coordinateProperties
+  const points: Feature<GeometryObject, any>[] = []
+  if (feature.geometry.type === "LineString") {
+    feature.geometry.coordinates.forEach((coordinate, i) => {
+      const point_properties: { [key: string]: any } = {}
+      point_properties.name = feature.properties.name
+      Object.entries(coordinateProperties).forEach((pair: [string, any]) => point_properties[pair[0]] = pair[1][i])
+      points.push({
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [...coordinate]
+        },
+        "properties": point_properties
+      })
+    }
+    )
+  } else if (feature.geometry.type === "MultiLineString") {
+    feature.geometry.coordinates.forEach((coordinate1, i) => {
+      coordinate1.forEach((coordinate, j) => {
+        const point_properties: { [key: string]: any } = {}
+        point_properties.name = feature.properties.name
+        Object.entries(coordinateProperties).forEach((pair: [string, any]) => point_properties[pair[0]] = pair[1][i][j])
+        points.push({
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [...coordinate]
+          },
+          "properties": point_properties
+        })
+      })
+    })
+  }
+  return points
+}
+
+interface FeatureCollectionWithName extends FeatureCollection {
+  name: string;
+}
+
+export const getLayerData = (files: any) => {
+  const promises = files.map(async (file: any) => {
+    const extension = file.name.substring(file.name.lastIndexOf('.') + 1, file.name.length).toLowerCase()
+    const fileType = file.type ? file.type : extension
+    switch (fileType) {
+      case 'dbf':
+        const filename = file.name.slice(0, file.name.lastIndexOf('.'))
+        const shpFile = files.find((obj: any) => obj.name === `${filename}.shp`)
+        return shpFile ? 'CustomLayer.alert.dbfAdd' : 'CustomLayer.alert.dbfNoMatch'
+      case 'shp':
+        try {
+          const filename = file.name.slice(0, file.name.lastIndexOf('.'))
+          const dbfFile = files.find((obj: any) => obj.name === `${filename}.dbf`)
+          let shpData;
+          if (dbfFile) {
+            const shpBuffer = await file.arrayBuffer()
+            const dbfBuffer = await dbfFile.arrayBuffer()
+            shpData = combine([parseShp(shpBuffer), parseDbf(dbfBuffer)])
+          } else {
+            const url = await readFile2(file, 'url')
+            shpData = await shp(url)
+          }
+          shpData.name = file.name
+          return { type: 'shp', name: file.name, data: shpData }
+        } catch (e) {
+          return 'CustomLayer.alert.noLayer'
+        }
+      case 'application/x-zip-compressed':
+        const arrayBuffer = await readFile2(file, 'arrayBuffer')
+        try {
+          const shpData = await shp(arrayBuffer)
+          shpData.name = file.name
+          return { type: 'zip', name: file.name, data: shpData }
+        } catch (e) {
+          return 'CustomLayer.alert.noLayer'
+        }
+      case 'application/vnd.google-earth.kml+xml':
+        try {
+          const kml = await readFile2(file, 'text') as string
+          const dom = new DOMParser().parseFromString(kml, "text/xml");
+          const kmlData = kmlToGeoJson(dom) as FeatureCollectionWithName
+          kmlData.name = file.name
+          return { type: 'kml', name: file.name, data: kmlData }
+        } catch (e) {
+          return 'CustomLayer.alert.noLayer'
+        }
+      case 'application/json':
+        try {
+          const json = await readFile2(file, 'text') as string
+          return { type: 'json', name: file.name, data: JSON.parse(json) }
+        } catch (e) {
+          return 'CustomLayer.alert.noLayer'
+        }
+      case 'gpx':
+        try {
+          const gpx = await readFile2(file, 'text') as string
+          const dom = new DOMParser().parseFromString(gpx, "text/xml");
+          const gpxData = gpxToGeoJson(dom) as FeatureCollectionWithName
+          const points = gpxData.features.map(feature => jsonLine2Points(feature))
+          gpxData.features = [...gpxData.features, ...points].flat()
+          gpxData.name = file.name
+          return { type: 'gpx', name: file.name, data: gpxData }
+        } catch (e) {
+          return 'CustomLayer.alert.noLayer'
+        }
+    }
+  })
+  return Promise.all(promises)
 }
 
 export const getLeafletLayer = (files: any, initColorIndex: number, latlonformat: string) => {
@@ -226,7 +341,7 @@ export const getLeafletLayer = (files: any, initColorIndex: number, latlonformat
           if (typeof (gpx) === 'string') {
             const pointFeatures: any = []
             const customLayer = L.geoJSON(undefined, {
-              onEachFeature: (feature: geojson.Feature<geojson.GeometryObject, any>, layer: L.Layer) => {
+              onEachFeature: (feature: Feature<GeometryObject, any>, layer: L.Layer) => {
                 if (feature.geometry.type === "LineString") {
                   feature.geometry.coordinates.forEach((coordinate, i) => {
                     pointFeatures.push({
@@ -271,6 +386,7 @@ export const getLeafletLayer = (files: any, initColorIndex: number, latlonformat
               onEachFeature: (feature, layer) => onEachFeatureGPX(feature, layer, latlonformat),
             })
             gpxLayer.name = file.name
+            return gpxLayer
           } else {
             return null
           }

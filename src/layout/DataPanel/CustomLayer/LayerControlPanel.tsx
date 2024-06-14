@@ -44,7 +44,7 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
       {layerList.map((layer, index) => {
         const layerIndex = layerList.findIndex(item => item.name === layer.name);
         return (
-          <Box key={`${layer.name}_${index}`} sx={{ border: 1, padding: 1, borderRadius: 1, borderColor: '#C0C0C0' }}>
+          <Box key={`${layer.name}_${index}`} sx={{ border: 1, padding: 1, marginTop: 1, borderRadius: 1, borderColor: '#C0C0C0' }}>
             <Button
               size="small"
               sx={{ maxWidth: '100%', textTransform: 'none', justifyContent: 'flex-start' }}

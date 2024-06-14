@@ -48,6 +48,7 @@
   "clusterLevel": "資料疊合等級",
   "hidyOld": "Hidy舊站",
   "depth": "深度 (m)",
+  "elevation":"高程",
   "CWAsites": {
     "title": "臺灣周遭海氣象",
     "subheader": "最新資料",

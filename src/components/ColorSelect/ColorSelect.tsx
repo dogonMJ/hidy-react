@@ -1,9 +1,9 @@
 import { Box, TextField } from "@mui/material";
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 
 export const ColorSelect = (props: { color: string, setColor: any }) => {
   const { color, setColor } = props
-  const [inputValue, setInputValue] = useState(color);
+  const [inputValue, setInputValue] = useState(color ?? '#ffef62');
 
   const handleInputChange = (e: any) => {
     const value = e.target.value;
@@ -25,6 +25,10 @@ export const ColorSelect = (props: { color: string, setColor: any }) => {
     const rgbaRegex = /^rgba?\((\d{1,3}),\s?(\d{1,3}),\s?(\d{1,3})(,\s?(0|1|0?\.\d+))?\)$/i;
     return hexRegex.test(value) || rgbaRegex.test(value);
   };
+
+  useEffect(() => {
+    setInputValue(color ?? '#ffef62')
+  }, [color])
 
   return (
     <Box display="flex" flexDirection="row" alignItems="center" gap={2}>

@@ -3,7 +3,6 @@ import { readUrlQuery } from "Utils/UtilsStates";
 import { cmemsList, gibsList } from "layout/DataPanel/WebMapLayers/WMTSList";
 
 const query: any = readUrlQuery('webmap')
-console.log(query)
 
 export interface WmProps {
   opacity?: number

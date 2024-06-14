@@ -12,7 +12,7 @@ export const addFileSlice = createSlice({
   } as AddFileStates,
   reducers: {
     setFileList: (state, action: PayloadAction<any[]>) => {
-      state.fileList = [...action.payload]
+      state.fileList = action.payload
     },
   }
 });

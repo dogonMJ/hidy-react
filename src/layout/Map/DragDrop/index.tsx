@@ -12,11 +12,14 @@ import shp, { combine, parseShp, parseDbf } from 'shpjs'
 import omnivore from '@mapbox/leaflet-omnivore'
 //@ts-ignore
 import Spectral_10 from "assets/jsons/Spectral_10.json"
-import { useAppSelector } from "hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { useAlert } from "hooks/useAlert";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { useTranslation } from "react-i18next";
-import { readFile, importStyleFunc, importPointToLayer, readFile2 } from "Utils/UtilsImportFiles";
+import { readFile, importStyleFunc, importPointToLayer, readFile2, getLayerData } from "Utils/UtilsImportFiles";
+import { addFileSlice } from "store/slice/addFileSlice";
+import { useToggleListChecks } from "hooks/useToggleListChecks";
+import { onoffsSlice } from "store/slice/onoffsSlice";
 
 interface DropGeoJSON extends L.GeoJSON {
   filename?: string
@@ -40,6 +43,7 @@ function flattenObj(obj: any, parent: string | null, res: any = {}) {
 export const DragDrop = () => {
   const map = useMap()
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { openAlert, setOpenAlert, alertMessage, setMessage, } = useAlert()
   const [dataList, setDataList] = useState<any>([])
   const [dropCount, setDropCount] = useState(0)
@@ -312,8 +316,19 @@ export const DragDrop = () => {
       }
     }
   };
+  const checked = useAppSelector(state => state.switches.checked)
+  const handleDrop2 = async (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.files) {
+      const data = await getLayerData([...e.dataTransfer.files])
+      dispatch(onoffsSlice.actions.setChecked([...checked, 'addFile']))
+      dispatch(addFileSlice.actions.setFileList(data))
+    }
+  }
+
   if (mapContainer) {
-    mapContainer.ondrop = handleDrop
+    mapContainer.ondrop = handleDrop2
     mapContainer.ondragover = handleDrag //must for drop
   }
 
