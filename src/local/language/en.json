@@ -516,7 +516,7 @@
   },
   "CustomLayer": {
     "title": "Add Layers",
-    "disclaimer": "Data formats varies, therfore connection is not guranteed.",
+    "disclaimer": "Data formats varies, therfore connection and display is not guranteed.",
     "addWmsLayer": "Add WMS/WMTS Layers",
     "addLayerSelector": "Search and add WMS/WMTS Layer",
     "addImage": "Add Images",
@@ -554,7 +554,8 @@
       "warnType": "Service type might be incorrect",
       "noUrl": "Please enter URL",
       "dbfAdd":".dbf added",
-      "dbfNoMatch":".shp with matching file name not found"
+      "noPropertyJson":"No matching properties or a .dbf file with the same name as the .shp file.",
+      "noProperty":"No matching properties"
     },
     "description": {
       "addUrlOption": "1. Enter the complete OGC WMS/WMTS GetCapabilities URL or the base URL.\n2. Click the 'Add' button on the right to add the URL below.\n*Must support EPSG:3857 projection.\n*Space and tab will be removed.\nExamples:\nKVP: https://gis.sinica.edu.tw/tileserver/wmts\nRESTful: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml",
@@ -566,7 +567,8 @@
       "addLayerSelector": "Add layers by searching through the dataset.\nNote that some layers require datetime parameters, please set them using the datetime selector above (local time).",
       "addImage1": "Enter the image URL to add a single image (short URLs not supported), and set the latitude and longitude bounding box .\n\nExample:\nIn the example tab of ",
       "addImage2": "(CWA Integrated Radar Reflectivity Map) find the URL: ",
-      "addImage3": " and the bounding box coordinates 118-124\u00baE, 20.5-26.5\u00baN. Enter them and click 'ADD LAYER' button."
+      "addImage3": " and the bounding box coordinates 118-124\u00baE, 20.5-26.5\u00baN. Enter them and click 'ADD LAYER' button.",
+      "addFile":"Click the button below to select a file or drag and drop it onto the map. Supported formats include GPX, GeoJSON, KML, SHP, and DBF, with SHP and corresponding DBF files needing the SAME NAME (eg., test.shp and test.dbf) and to be uploaded TOGETHER.\n\nColors can be specified using hexadecimal codes or rgba format. Hex codes must start with # and can be 6 or 8 digits long. Rgba values must start with rgba or rgb, followed by parentheses containing three or four numbers. The first three numbers range from 0 to 255, and the fourth number, representing alpha channel (opacity), ranges from 0 to 1..\n\nClick on a layer name (i.e., file name) to move the map view to that layer.\n\nUse the red button next to each layer to hide it, or close the menu to clear all files."
     }
   },
   "draw": {

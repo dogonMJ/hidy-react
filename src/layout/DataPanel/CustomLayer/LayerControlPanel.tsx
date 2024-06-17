@@ -1,6 +1,6 @@
 import { Stack, Box, Typography, IconButton, Button, Popover } from "@mui/material"
 import LayersClearIcon from '@mui/icons-material/LayersClear';
-import { useState } from "react";
+import { memo, useState } from "react";
 import { OpacitySlider } from "components/OpacitySlider";
 import { useAppDispatch } from "hooks/reduxHooks";
 import { useMap } from "react-leaflet";
@@ -9,9 +9,21 @@ import { ColorSelect } from "components/ColorSelect/ColorSelect";
 interface LayerControlPanelProp {
   layerList: any[]
   setLayerList: any
-  isAddFile?: boolean
+  isDispatch?: boolean
+  isOpacity?: boolean
+  isColorSelect?: boolean
+  clickName?: 'popOverUrl' | 'fitBounds' | 'text'
+  fitBoundLayers?: any[]
 }
-export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, setLayerList, isAddFile = false }) => {
+export const LayerControlPanel: React.FC<LayerControlPanelProp> = memo(({
+  layerList,
+  setLayerList,
+  isDispatch = true,
+  isOpacity = true,
+  isColorSelect = false,
+  clickName = 'popOverUrl',
+  fitBoundLayers
+}) => {
   const dispatch = useAppDispatch()
   const map = useMap()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -26,18 +38,16 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
     setSelectedLayer(null);
   };
   const handleColorChange = (index: number, newColor: string) => {
-    const updatedLayerList = [...layerList];
-    const layer = updatedLayerList[index];
-    const layerOptions = layer.getLayers()[0].options;
-
-    if (layerOptions.fillColor) {
-      layerOptions.fillColor = newColor;
-      layer.setStyle({ fillColor: newColor, })
-    } else {
-      layerOptions.color = newColor;
-      layer.setStyle({ color: newColor, })
-    }
-    setLayerList(updatedLayerList)
+    const updatedLayerList = layerList.map((layer, i) => {
+      if (i === index) {
+        return {
+          ...layer,
+          color: newColor
+        };
+      }
+      return layer;
+    });
+    isDispatch ? dispatch(setLayerList(updatedLayerList)) : setLayerList(updatedLayerList)
   };
   return (
     <>
@@ -48,7 +58,20 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
             <Button
               size="small"
               sx={{ maxWidth: '100%', textTransform: 'none', justifyContent: 'flex-start' }}
-              onClick={isAddFile ? undefined : (event) => handlePopover(event, layer.name)}
+              // onClick={isColorSelect ? undefined : (event) => handlePopover(event, layer.name)}
+              onClick={(event) => {
+                switch (clickName) {
+                  case 'popOverUrl':
+                    return handlePopover(event, layer.name)
+                  case 'text':
+                    return undefined
+                  case 'fitBounds':
+                    if (fitBoundLayers && fitBoundLayers.length > 0) {
+                      map.fitBounds(fitBoundLayers[index].getBounds())
+                    }
+                    break
+                }
+              }}
             >
               <Typography sx={{ maxWidth: '100%', wordWrap: 'break-word', textAlign: 'left' }}>{layer.name}</Typography>
             </Button>
@@ -66,30 +89,25 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
               <IconButton
                 color={'error'}
                 onClick={() => {
-                  if (isAddFile) {
-                    map.removeLayer(layerList[index])
-                    setLayerList(layerList.filter((_, i) => i !== index))
-                  } else {
-                    dispatch(setLayerList(layerList.filter((_, i) => i !== index)))
-                  }
+                  isDispatch ? dispatch(setLayerList(layerList.filter((_, i) => i !== index))) : setLayerList(layerList.filter((_, i) => i !== index))
                 }}
               >
                 <LayersClearIcon />
               </IconButton>
-              {!isAddFile && <OpacitySlider
+              {isOpacity && <OpacitySlider
                 opacity={layer.opacity}
                 onChange={(e, value) => {
                   const updatedLayerList = [...layerList];
                   updatedLayerList[layerIndex] = { ...updatedLayerList[layerIndex], opacity: value as number };
-                  dispatch(setLayerList(updatedLayerList))
+                  isDispatch ? dispatch(setLayerList(updatedLayerList)) : setLayerList(updatedLayerList)
                 }}
                 componentSx={{ width: '80%' }}
                 sx={{ width: '56%' }}
               />
               }
-              {isAddFile &&
+              {isColorSelect &&
                 <ColorSelect
-                  color={layer.getLayers()[0].options.fillColor || layer.getLayers()[0].options.color}
+                  color={layer.color}
                   setColor={(newColor: string) => handleColorChange(index, newColor)}
                 />
               }
@@ -100,4 +118,4 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = ({ layerList, 
       }
     </>
   )
-}
+})

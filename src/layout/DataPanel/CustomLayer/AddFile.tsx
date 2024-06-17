@@ -1,8 +1,8 @@
-import { Box, Button, IconButton, Input, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography, styled } from "@mui/material";
+import { Box, Button, Input, Table, TableBody, TableCell, TableRow, styled } from "@mui/material";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useMap, GeoJSON, Tooltip, Popup } from "react-leaflet";
-import { flattenObj, getLayerData, getLeafletLayer, importPointToLayer } from "Utils/UtilsImportFiles";
+import { GeoJSON, Tooltip, Popup } from "react-leaflet";
+import { flattenObj, getLayerData, importPointToLayer } from "Utils/UtilsImportFiles";
 import { useAlert } from "hooks/useAlert";
 import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { LayerControlPanel } from "./LayerControlPanel";
@@ -11,10 +11,8 @@ import { addFileSlice } from "store/slice/addFileSlice";
 import FormatCoordinate from "components/FormatCoordinate";
 import parse from 'html-react-parser'
 import DOMPurify from "dompurify";
-import LayersClearIcon from '@mui/icons-material/LayersClear';
-import { ColorSelect } from "components/ColorSelect/ColorSelect";
 import Spectral_10 from "assets/jsons/Spectral_10.json"
-import { Feature, GeometryObject, Point, FeatureCollection, Geometry } from 'geojson';
+import { Feature, Geometry } from 'geojson';
 
 
 const { colors } = Spectral_10
@@ -24,65 +22,24 @@ const CustomTabelCell = styled(TableCell)({
   paddingBlock: 0
 })
 
-const renderDefaultPopupContent = (properties: any) => {
-  if (Object.getOwnPropertyNames(properties).length === 0) {
-    return parse('<i>empty properties or .dbf not provided with .shp</i>');
-  }
-  const flattenedProperties = flattenObj(properties, null);
-  return (
-    <Table size="small">
-      <TableBody>
-        {
-          Object.keys(flattenedProperties).map((key) => (
-            <TableRow key={key}>
-              <CustomTabelCell>{key}</CustomTabelCell>
-              <CustomTabelCell>{flattenedProperties[key]}</CustomTabelCell>
-            </TableRow>
-          ))
-        }
-      </TableBody>
-    </Table>
-  )
-}
-
-const renderKMLPopupContent = (properties: any) => {
-  if (!properties) {
-    return parse('<i>empty properties</i>');
-  }
-  const { name, description } = properties;
-  return (
-    <div>
-      {name && !description && <div>{name}</div>}
-      {description &&
-        <div>
-          {parse(DOMPurify.sanitize(properties.description.value))}
-        </div>
-      }
-    </div>
-  );
-}
-
 export const AddFile = () => {
   const ref = useRef<any[]>([])
   const inputRef = useRef<any>()
-  const map = useMap()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { openAlert, setOpenAlert, alertMessage, setMessage, severity, setSeverity } = useAlert()
   const latlonFormat = useAppSelector(state => state.map.latlonformat)
-  // const [dataList, setDataList] = useState<any[]>([])
+  const [dataList, setDataList] = useState<any[]>([])
   const [initColorIndex, setInitColorIndex] = useState(0)
   const [mouseoverData, setMouseoverData] = useState<any>()
   const [popupData, setPopupData] = useState<any>()
   const [layerColors, setLayerColors] = useState<any[]>([]);
-  const dataList = useAppSelector(state => state.addFile.fileList)
+  const fileList = useAppSelector(state => state.addFile.fileList)
 
   const handleFileChange = async (event: any) => {
     const files = [...event.target.files]
-    if (files) {
-      const data = await getLayerData(files)
-      dispatch(addFileSlice.actions.setFileList(data))
-    }
+    const data = await getLayerData(files)
+    dispatch(addFileSlice.actions.setFileList(data))
   };
 
   const handleButtonClick = () => {
@@ -90,15 +47,6 @@ export const AddFile = () => {
     if (inputRef.current) {
       inputRef.current.value = null;
     }
-  };
-
-  const handleColorChange = (index: number, newColor: string) => {
-    const layer = ref.current[index]
-    layerColors[index] = newColor
-    setLayerColors([...layerColors])
-    layer.setStyle({
-      color: newColor,
-    })
   };
 
   const importStyleFunc = (feature: Feature<Geometry, any> | undefined, index: number) => {
@@ -123,6 +71,50 @@ export const AddFile = () => {
         weight: 2,
       }
     }
+  }
+
+  const renderDefaultPopupContent = (properties: any) => {
+    if (Object.getOwnPropertyNames(properties).length === 0) {
+      return parse(`<i>${t('CustomLayer.alert.noPropertyJson')}</i>`);
+    }
+    const flattenedProperties = flattenObj(properties, null);
+
+    if (Object.keys(flattenedProperties).length === 0) {
+      return parse(`<i>${t('CustomLayer.alert.noProperty')}</i>`)
+    } else {
+      return (
+        <Table size="small">
+          <TableBody>
+            {
+              Object.keys(flattenedProperties).map((key) => (
+                <TableRow key={key}>
+                  <CustomTabelCell>{key}</CustomTabelCell>
+                  <CustomTabelCell>{flattenedProperties[key]}</CustomTabelCell>
+                </TableRow>
+              ))
+            }
+          </TableBody>
+        </Table>
+      )
+    }
+  }
+
+  const renderKMLPopupContent = (properties: any) => {
+    if (!properties) {
+      return parse(`<i>${t('CustomLayer.alert.noProperty')}</i>`);
+    }
+    const { name, description } = properties;
+
+    return (
+      <div>
+        {name && !description && <div>{name}</div>}
+        {description &&
+          <div>
+            {parse(DOMPurify.sanitize(description.value))}
+          </div>
+        }
+      </div>
+    );
   }
 
   const renderGPXPopupContent = useCallback((feature: any) => {
@@ -181,18 +173,34 @@ export const AddFile = () => {
 
   useEffect(() => {
     if (ref.current.length > 0 && dataList.length > 0) {
-      const lastLayer = ref.current[ref.current.length - 1];
-      if (lastLayer) {
-        map.fitBounds(lastLayer.getBounds())
-      }
+      setLayerColors(dataList.map(data => data.color))
     }
-    if (ref.current.length > 0 && dataList.length > 0) {
-      const firstColorIndex = initColorIndex + dataList.length ?? initColorIndex + 1
-      const color = Array.from({ length: dataList.length }, (_, i) => firstColorIndex + i).map(i => colors[i % 10].value)
-      setLayerColors([...layerColors, ...color])
-      setInitColorIndex(firstColorIndex)
+  }, [dataList]);
+
+  useEffect(() => {
+    //配合drag drop, 分開file list(geojson)和data list(加入顏色選項)
+    if (fileList.length > 0) {
+      const firstColorIndex = initColorIndex + dataList.length ?? initColorIndex + 1;
+      const color = Array.from({ length: fileList.length + dataList.length }, (_, i) => firstColorIndex + i)
+        .map(i => colors[i % 10].value);
+
+      setLayerColors([...layerColors, ...color]);
+      setInitColorIndex(firstColorIndex);
+      const dataObject = fileList.filter(file => typeof file !== 'string').map((data, i) => {
+        return {
+          ...data,
+          color: color[i]
+        }
+      })
+      setDataList([...dataList, ...dataObject])
     }
-  }, [dataList])
+  }, [fileList])
+
+  useEffect(() => {
+    return () => {
+      dispatch(addFileSlice.actions.setFileList([]))
+    }
+  }, [])
 
   return (
     <>
@@ -222,42 +230,23 @@ export const AddFile = () => {
       </Box>
       <AlertSlide open={openAlert} setOpen={setOpenAlert} severity={severity} >{alertMessage}</AlertSlide>
       {dataList &&
+        <LayerControlPanel
+          layerList={dataList}
+          setLayerList={setDataList}
+          isOpacity={false}
+          isColorSelect={true}
+          isDispatch={false}
+          clickName='fitBounds'
+          fitBoundLayers={ref.current}
+        />}
+      {dataList &&
         dataList.map((data, index) => {
-          if (typeof data === 'string') {
+          if (typeof data.data === 'string') {
             return null
           }
           else {
             return (
               <Fragment key={`${data.name}_${index}`}>
-                <Box sx={{ border: 1, padding: 1, marginTop: 1, borderRadius: 1, borderColor: '#C0C0C0' }}>
-                  <Button
-                    style={{ textTransform: 'none' }}
-                    onClick={() => {
-                      const thisLayer = ref.current[index];
-                      if (thisLayer) {
-                        map.fitBounds(thisLayer.getBounds())
-                      }
-                    }}>
-                    <Typography sx={{ maxWidth: '100%', wordWrap: 'break-word', textAlign: 'left', }}>{data.name}</Typography>
-                  </Button>
-                  <Stack direction={'row'} alignItems={'center'} sx={{ paddingTop: 1 }}>
-                    <IconButton
-                      color={'error'}
-                      onClick={() => {
-                        // setDataList(dataList.filter((_, i) => i !== index))
-                        dispatch(addFileSlice.actions.setFileList(dataList.filter((_, i) => i !== index)))
-                        setLayerColors(layerColors.filter((_, i) => i !== index))
-                        ref.current = ref.current.filter((_, i) => i !== index)
-                      }}
-                    >
-                      <LayersClearIcon />
-                    </IconButton>
-                    <ColorSelect
-                      color={layerColors[index]}
-                      setColor={(newColor: string) => handleColorChange(index, newColor)}
-                    />
-                  </Stack>
-                </Box>
                 <GeoJSON
                   ref={(layer) => {
                     if (layer) {

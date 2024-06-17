@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { initStringArray, readUrlQuery } from "Utils/UtilsStates";
 
 interface AddFileStates {
   fileList: any[]

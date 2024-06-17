@@ -517,7 +517,7 @@
   },
   "CustomLayer": {
     "title": "加入圖層",
-    "disclaimer": "各資料提供者格式略有差異，不保證能夠連接",
+    "disclaimer": "各資料提供者格式略有差異，不保證能夠連接及顯示",
     "addWmsLayer": "加入WMS/WMTS圖層",
     "addLayerSelector": "搜尋並加入WMS/WMTS圖層",
     "addImage": "加入圖片",
@@ -555,7 +555,8 @@
       "warnType": "服務類型可能有誤",
       "noUrl": "請輸入網址",
       "dbfAdd":"加入dbf檔",
-      "dbfNoMatch":"沒有與dbf檔案名稱相同的shp檔"
+      "noPropertyJson":"沒有對應屬性或與shp檔案名稱相同的dbf檔",
+      "noProperty":"沒有對應屬性"
     },
     "description": {
       "addUrlOption": "1. 輸入完整OGC WMS/WMTS之GetCapabilities網址，或是根網址(base URL)。\n2. 按下右方「新增」鍵在下方選項新增網址。\n*需支援EPSG:3857投影。\n*空白與tab會自動移除。\n範例：\nKVP格式: https://gis.sinica.edu.tw/tileserver/wmts\nRESTful格式: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml",
@@ -567,7 +568,8 @@
       "addLayerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。",
       "addImage1": "輸入圖片網址加入單張圖片(不適用短網址)，須設定圖片範圍經緯度。\n\n範例:\n",
       "addImage2": "的資料範例中找到圖片網址",
-      "addImage3": "及座標東經118-124度、北緯20.5-26.5度，分別輸入後按下加入圖層按鍵。"
+      "addImage3": "及座標東經118-124度、北緯20.5-26.5度，分別輸入後按下加入圖層按鍵。",
+      "addFile":"點選下方按鈕選擇檔案或拖曳檔案至地圖上。\n支援GPX、GeoJSON、KML、SHP、DBF格式，其中SHP和其對應之DBF必須「同檔名」且「同時」加入(如test.shp和test.dbf)。\n\n顏色可使用十六進位代碼(hex)或rgba格式，前者需以#開頭，支援六碼及八碼；後者須以rgba或rgb開頭，後接括號包含三或四碼數字，前三碼範圍0~255，第四碼不透明度範圍0~1。\n\n 點按圖層名稱(即檔案名稱)可將畫面移至該圖層範圍。\n\n可使用各圖層紅色按鈕關閉圖層，或是關閉選單清除全部檔案。"
     }
   },
   "draw": {
