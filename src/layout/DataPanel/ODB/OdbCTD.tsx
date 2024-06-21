@@ -124,7 +124,7 @@ export const OdbCTD = () => {
   const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCtdSlice.actions.setPeriod(event.target.value as CtdPeriods))
   const handleMask = () => dispatch(odbCtdSlice.actions.setMask(!mask))
   useEffect(() => {
-    fetch(`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&mode=${mode}&format=geojson&append=temperature,salinity,density,fluorescence,transmission,oxygen,count`)
+    fetch(`https://ecodata.odb.ntu.edu.tw/api/ctd?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth * -1}&dep_mode=exact&mode=${mode}&format=geojson&append=temperature,salinity,density,fluorescence,transmission,oxygen,count`)
       .then((response) => response.json())
       .then((json: FeatureCollection) => {
         json.features.forEach((feature) => {

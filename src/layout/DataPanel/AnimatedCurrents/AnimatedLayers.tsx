@@ -32,7 +32,8 @@ const AnimatedLayers = (props: { identifier: string, time: string }) => {
   const [toolTip, setToolTip] = useState<ToolTip>({ lat: null, lng: null, north: null, east: null, composite: null })
 
   const date = changeDate(time)
-  const url = `https://odbgo.oc.ntu.edu.tw/odbargo/static/data/json/${identifier}/${date}.json`
+  // const url = `https://odbgo.oc.ntu.edu.tw/odbargo/static/data/json/${identifier}/${date}.json`
+  const url = `${process.env.REACT_APP_PROXY_BASE}/data/odbdata/json/${identifier}/${date}.json`
   const loadWindy = async (jsonUrl: string) => {
     if (windy.current) {
       windy.current.stop()

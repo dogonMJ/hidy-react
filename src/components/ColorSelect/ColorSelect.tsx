@@ -41,7 +41,7 @@ export const ColorSelect = (props: { color: string, setColor: any }) => {
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         sx={{
-          width: '205px'
+          width: '215px'
         }}
       />
       <Box

@@ -34,6 +34,7 @@ export const AddFile = () => {
   const [mouseoverData, setMouseoverData] = useState<any>()
   const [popupData, setPopupData] = useState<any>()
   const [layerColors, setLayerColors] = useState<any[]>([]);
+  const [layerOpacities, setLayerOpacities] = useState<any[]>([]);
   const fileList = useAppSelector(state => state.addFile.fileList)
 
   const handleFileChange = async (event: any) => {
@@ -52,20 +53,21 @@ export const AddFile = () => {
   const importStyleFunc = (feature: Feature<Geometry, any> | undefined, index: number) => {
     const type = feature?.geometry.type
     const color = layerColors[index]
+    const opacity = layerOpacities[index] / 100 ?? 1
     if (type === 'Point' || type === 'MultiPoint') {
       return {
         radius: 5,
-        opacity: 1,
+        opacity: opacity,
         color: '#000000',
         stroke: true,
         weight: 0.2,
         fillColor: color,
-        fillOpacity: 1,
+        fillOpacity: opacity,
       };
     } else {
       return {
         radius: 5,
-        opacity: 1,
+        opacity: opacity,
         color: color,
         stroke: true,
         weight: 2,
@@ -174,6 +176,7 @@ export const AddFile = () => {
   useEffect(() => {
     if (ref.current.length > 0 && dataList.length > 0) {
       setLayerColors(dataList.map(data => data.color))
+      setLayerOpacities(dataList.map(data => data.opacity))
     }
   }, [dataList]);
 
@@ -189,7 +192,8 @@ export const AddFile = () => {
       const dataObject = fileList.filter(file => typeof file !== 'string').map((data, i) => {
         return {
           ...data,
-          color: color[i]
+          color: color[i],
+          opacity: 100
         }
       })
       setDataList([...dataList, ...dataObject])
@@ -233,7 +237,7 @@ export const AddFile = () => {
         <LayerControlPanel
           layerList={dataList}
           setLayerList={setDataList}
-          isOpacity={false}
+          isOpacity={true}
           isColorSelect={true}
           isDispatch={false}
           clickName='fitBounds'
