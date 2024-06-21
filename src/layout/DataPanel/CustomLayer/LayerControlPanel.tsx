@@ -54,7 +54,7 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = memo(({
       const rgbaMatch = newColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
       if (rgbaMatch) {
         const [_, r, g, b, a] = rgbaMatch;
-        opacity = Number(a) * 100
+        opacity = Math.round(Number(a) * 100)
       }
     }
     const updatedLayerList = layerList.map((layer, i) => {

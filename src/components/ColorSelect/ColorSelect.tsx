@@ -1,9 +1,50 @@
-import { Box, TextField } from "@mui/material";
-import { KeyboardEvent, useEffect, useState } from "react";
+import { Box, Button, Unstable_Grid2 as Grid, Popover, TextField } from "@mui/material";
+import { KeyboardEvent, MouseEventHandler, ReactNode, useEffect, useState } from "react";
+import Spectral_10 from "assets/jsons/Spectral_10.json"
+
+interface ColoredSquareButtonProp {
+  color: string
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined
+  children?: ReactNode
+}
+const ColoredSquareButton = ({ color, onClick, children }: ColoredSquareButtonProp) => {
+  return (
+    <Box
+      sx={{
+        backgroundColor: color,
+        width: '30px',
+        height: '30px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 1
+      }}
+    >
+      <Button
+        disableElevation
+        disableRipple
+        onClick={onClick}
+        sx={{
+          backgroundColor: 'transparent',
+          minWidth: 0,
+          width: '30px',
+          height: '30px',
+          "&.MuiButtonBase-root:hover": {
+            bgcolor: 'transparent'
+          }
+        }}
+      />
+      {children}
+    </Box>
+  )
+}
+
+const defaultColors = Spectral_10.colors.map(color => color.value)
 
 export const ColorSelect = (props: { color: string, setColor: any }) => {
   const { color, setColor } = props
   const [inputValue, setInputValue] = useState(color ?? '#ffef62');
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleInputChange = (e: any) => {
     const value = e.target.value;
@@ -26,6 +67,21 @@ export const ColorSelect = (props: { color: string, setColor: any }) => {
     return hexRegex.test(value) || rgbaRegex.test(value);
   };
 
+  const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSelect = (color: string) => {
+    setInputValue(color)
+    setColor(color)
+    setAnchorEl(null);
+  }
+  const open = Boolean(anchorEl);
+
   useEffect(() => {
     setInputValue(color ?? '#ffef62')
   }, [color])
@@ -44,16 +100,27 @@ export const ColorSelect = (props: { color: string, setColor: any }) => {
           width: '215px'
         }}
       />
-      <Box
-        sx={{
-          backgroundColor: inputValue,
-          width: '30px',
-          height: '30px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      />
+      <ColoredSquareButton
+        color={inputValue}
+        onClick={handleOpen}
+      >
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          sx={{ color: 'red' }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <Box padding={1}>
+            <Grid container>
+              {defaultColors.map(color => <Grid key={color}><ColoredSquareButton color={color} onClick={() => handleSelect(color)} /></Grid>)}
+            </Grid>
+          </Box>
+        </Popover>
+      </ColoredSquareButton>
     </Box>
   );
 };
