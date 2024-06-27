@@ -306,9 +306,7 @@ export const MoiSubstrate = () => {
 //     .then((json) => {
 //       const feature = json.features[0]
 //       if (feature) {
-//         console.log(feature.properties.substrate)
 //       } else {
-//         console.log('dfaishof')
 //       }
 //     })
 // }

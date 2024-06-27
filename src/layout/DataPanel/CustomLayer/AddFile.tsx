@@ -1,10 +1,8 @@
 import { Box, Button, Input, Table, TableBody, TableCell, TableRow, styled } from "@mui/material";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { GeoJSON, Tooltip, Popup } from "react-leaflet";
+import { GeoJSON, Tooltip, Popup, } from "react-leaflet";
 import { flattenObj, getLayerData, importPointToLayer } from "Utils/UtilsImportFiles";
-import { useAlert } from "hooks/useAlert";
-import { AlertSlide } from "components/AlertSlide/AlertSlide";
 import { LayerControlPanel } from "./LayerControlPanel";
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { addFileSlice } from "store/slice/addFileSlice";
@@ -27,7 +25,6 @@ export const AddFile = () => {
   const inputRef = useRef<any>()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const { openAlert, setOpenAlert, alertMessage, setMessage, severity, setSeverity } = useAlert()
   const latlonFormat = useAppSelector(state => state.map.latlonformat)
   const [dataList, setDataList] = useState<any[]>([])
   const [initColorIndex, setInitColorIndex] = useState(0)
@@ -38,7 +35,7 @@ export const AddFile = () => {
   const fileList = useAppSelector(state => state.addFile.fileList)
 
   const handleFileChange = async (event: any) => {
-    const files = [...event.target.files]
+    const files = [...event.target.files].reverse() //後進在上
     const data = await getLayerData(files)
     dispatch(addFileSlice.actions.setFileList(data))
   };
@@ -187,7 +184,7 @@ export const AddFile = () => {
       const color = Array.from({ length: fileList.length + dataList.length }, (_, i) => firstColorIndex + i)
         .map(i => colors[i % 10].value);
 
-      setLayerColors([...layerColors, ...color]);
+      setLayerColors([...layerColors, ...color]); //初始顏色
       setInitColorIndex(firstColorIndex);
       const dataObject = fileList.filter(file => typeof file !== 'string').map((data, i) => {
         return {
@@ -196,7 +193,7 @@ export const AddFile = () => {
           opacity: 100
         }
       })
-      setDataList([...dataList, ...dataObject])
+      setDataList([...dataObject, ...dataList,]) //後進在上
     }
   }, [fileList])
 
@@ -232,7 +229,6 @@ export const AddFile = () => {
           </Button>
         </label>
       </Box>
-      <AlertSlide open={openAlert} setOpen={setOpenAlert} severity={severity} >{alertMessage}</AlertSlide>
       {dataList &&
         <LayerControlPanel
           layerList={dataList}
@@ -275,6 +271,8 @@ export const AddFile = () => {
                 >
                   {mouseoverData &&
                     <Tooltip >
+                      {data.name ?? null}
+                      <br />
                       {mouseoverData.properties.name ?? null}
                       {mouseoverData.properties.name && <br />}
                       {(mouseoverData.properties.times || mouseoverData.properties.time) ?? null}
@@ -293,7 +291,9 @@ export const AddFile = () => {
                   }
                   {
                     data.type === 'gpx' && popupData &&
-                    <Popup>{renderGPXPopupContent(popupData)}</Popup>
+                    <Popup>
+                      {renderGPXPopupContent(popupData)}
+                    </Popup>
                   }
                   {
                     data.type === 'kml' && popupData &&

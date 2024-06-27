@@ -41,20 +41,20 @@ export const ProcUrl = (props: { parameter: LongtermPar, depth: number, monthly:
     const dir = handelDirection(coord)
     switch (true) {
       case monthly === true && profile === false:
-        setUrl(`https://odbpo.oc.ntu.edu.tw/clim/xygeo/${parameter}/${year}${month}00/${depth}/geojson`)
+        setUrl(`${process.env.REACT_APP_PROXY_BASE}/data/clim/xygeo/${parameter}/${year}${month}00/${depth}/geojson`)
         break
       case monthly === false && profile === false:
-        setUrl(`https://odbpo.oc.ntu.edu.tw/clim/xygeo/${parameter}/1000${avgTimeList[timePeriod].code}00/${depth}/geojson`)
+        setUrl(`${process.env.REACT_APP_PROXY_BASE}/data/clim/xygeo/${parameter}/1000${avgTimeList[timePeriod].code}00/${depth}/geojson`)
         break
       case monthly === true && profile === true:
-        setUrl(`https://odbpo.oc.ntu.edu.tw/clim/zsect/${parameter}/${year}${month}00/${coord}/json`)
+        setUrl(`${process.env.REACT_APP_PROXY_BASE}/data/clim/zsect/${parameter}/${year}${month}00/${coord}/json`)
         textObj.unit = varList[parameter].unit
         textObj.xLabel = dir[0]
         textObj.title = `${t(varList[parameter].name)} @ ${coord.slice(0, -2)}.${coord.slice(-2)}${dir[1]} <br>${year}/${month}`
         setText(textObj)
         break
       case monthly === false && profile === true:
-        setUrl(`https://odbpo.oc.ntu.edu.tw/clim/zsect/${parameter}/1000${avgTimeList[timePeriod].code}00/${coord}/json`)
+        setUrl(`${process.env.REACT_APP_PROXY_BASE}/data/clim/zsect/${parameter}/1000${avgTimeList[timePeriod].code}00/${coord}/json`)
         textObj.unit = varList[parameter].unit
         textObj.xLabel = dir[0]
         textObj.title = `${t(varList[parameter].name)} @ ${coord.slice(0, -2)}.${coord.slice(-2)}${dir[1]}<br>1955-2017 ${t(avgTimeList[timePeriod].text)}`

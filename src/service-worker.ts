@@ -15,7 +15,6 @@ const expirationPlugin = new ExpirationPlugin({
 clientsClaim();
 
 // const filteredManifest: (string | PrecacheEntry)[] = self.__WB_MANIFEST.filter((entry: string | PrecacheEntry) => {
-//   console.log(entry)
 //   if (typeof entry === 'string') {
 //     return true;
 //   }

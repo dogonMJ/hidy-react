@@ -223,7 +223,7 @@ const DataPanel = memo(() => {
         </List>
         <Divider />
         <Box id='dataPanelFoot' sx={{ paddingInlineEnd: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant='text' size='small' href="https://odbgo.oc.ntu.edu.tw/odbargo/" target='_blank' rel="noreferrer noopenner" style={{ color: '#1976D2' }} >{t('hidyOld')}</Button>
+          {/* <Button variant='text' size='small' href="https://odbgo.oc.ntu.edu.tw/odbargo/" target='_blank' rel="noreferrer noopenner" style={{ color: '#1976D2' }} >{t('hidyOld')}</Button> */}
           <Button variant='text' size='small' onClick={handleNews} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('news.title')}</Button>
           <Button variant='text' size='small' onClick={handleAbout} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('about.title')}</Button>
           <Button variant='text' size='small' onClick={handleContact} sx={{ ':hover': { backgroundColor: 'transparent', textDecoration: 'underline' } }}>{t('contact.title')}</Button>

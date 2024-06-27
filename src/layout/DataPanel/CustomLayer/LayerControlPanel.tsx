@@ -5,6 +5,9 @@ import { OpacitySlider } from "components/OpacitySlider";
 import { useAppDispatch } from "hooks/reduxHooks";
 import { useMap } from "react-leaflet";
 import { ColorSelect } from "components/ColorSelect/ColorSelect";
+import { useAlert } from "hooks/useAlert";
+import { AlertSlide } from "components/AlertSlide/AlertSlide";
+import { t } from "i18next";
 
 interface LayerControlPanelProp {
   layerList: any[]
@@ -33,6 +36,7 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = memo(({
 }) => {
   const dispatch = useAppDispatch()
   const map = useMap()
+  const { openAlert, setOpenAlert } = useAlert()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [selectedLayer, setSelectedLayer] = useState<string | null>(null)
   const [layerColors, setLayerColors] = useState<string[]>([''])
@@ -92,7 +96,13 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = memo(({
                     return undefined
                   case 'fitBounds':
                     if (fitBoundLayers && fitBoundLayers.length > 0) {
-                      map.fitBounds(fitBoundLayers[index].getBounds())
+                      try {
+                        map.fitBounds(fitBoundLayers[index].getBounds())
+                      } catch (e) {
+                        if (fitBoundLayers[index].getLayers().length === 0) {
+                          setOpenAlert(true)
+                        }
+                      }
                     }
                     break
                 }
@@ -165,6 +175,7 @@ export const LayerControlPanel: React.FC<LayerControlPanelProp> = memo(({
         )
       })
       }
+      <AlertSlide open={openAlert} setOpen={setOpenAlert} severity={'error'} >{t('CustomLayer.alert.noLayer')}</AlertSlide>
     </>
   )
 })

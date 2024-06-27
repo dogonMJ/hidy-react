@@ -63,7 +63,7 @@ export const StatisticMean = () => {
   }
 
   useEffect(() => {
-    fetch('https://odbpo.oc.ntu.edu.tw/static/figs/clim/climgridxy4s.topojson')
+    fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/clim/climgridxy4s.topojson`)
       .then((response) => response.json())
       .then((json) => setGridLines(json))
   }, [])

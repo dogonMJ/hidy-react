@@ -9,7 +9,7 @@ interface AboutType {
   setOpen: Dispatch<SetStateAction<{ about: boolean, contact: boolean, news: boolean }>>
 }
 const links: { [key: string]: string } = {
-  old: 'https://odbgo.oc.ntu.edu.tw/odbargo/',
+  // old: 'https://odbgo.oc.ntu.edu.tw/odbargo/',
   nor1: 'https://newor1.oc.ntu.edu.tw/',
   nor1inst: 'https://ntuio.oc.ntu.edu.tw/',
   nor2: 'https://nor2.ntou.edu.tw/',

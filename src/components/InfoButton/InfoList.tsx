@@ -617,7 +617,8 @@ const InfoList = (props: { dataId: string }) => {
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', width: '35vw' }}>
           <b>{t(`CustomLayer.${props.dataId}`)}</b><br />
-          {t('CustomLayer.description.addFile')}
+          {t('CustomLayer.description.addFile')}<br /><br />
+          <i><b>{t('CustomLayer.description.addFileDisclaimer')}</b></i>
         </Typography >
       )
     case 'serviceUrl':
