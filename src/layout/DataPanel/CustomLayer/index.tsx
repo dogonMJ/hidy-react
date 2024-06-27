@@ -6,20 +6,21 @@ import { useTranslation } from "react-i18next"
 import { RenderIf } from "components/RenderIf/RenderIf"
 import { AddImage } from "./AddImage"
 import { useToggleListChecks } from "hooks/useToggleListChecks"
+import { AddFile } from "./AddFile"
 
 interface ItemList {
   [key: string]: JSX.Element
 }
-const optionList = ['addWmsLayer', 'addLayerSelector', 'addImage']
+const optionList = ['addWmsLayer', 'addLayerSelector', 'addImage', 'addFile']
 
 export const CustomLayer = () => {
   const { t } = useTranslation()
   const { checked, handleToggleChecks } = useToggleListChecks()
-
   const itemList: ItemList = {
     addWmsLayer: <DirectAddLayers />,
     addLayerSelector: <LayerSelector />,
-    addImage: <AddImage />
+    addImage: <AddImage />,
+    addFile: <AddFile />
   }
 
   return (

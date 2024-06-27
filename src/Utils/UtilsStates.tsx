@@ -41,7 +41,7 @@ export const findModified = (originalObject: any, modifiedObject: any, ons: stri
   const modifiedElements: any = {};
   for (const key in modifiedObject) {
     if (ons.includes(key)) {
-      if ((originalObject[key] !== modifiedObject[key] || ons.includes(key)) && key !== 'switches') {
+      if ((originalObject[key] !== modifiedObject[key] || ons.includes(key))) {
         modifiedElements[key] = {};
         for (const k in modifiedObject[key]) {
           // k=第二層key

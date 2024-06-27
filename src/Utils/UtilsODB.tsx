@@ -65,13 +65,13 @@ export const sortXY = (pairs: { x: number, y: number }[]) => {
 }
 
 export const ctdDepthMeterProps = () => {
-  const ctdDepths = [...Array(101)].map((e, i) => i * 10).reverse()
+  const ctdDepths = [...Array(101)].map((e, i) => -i * 10).reverse()
   const marks: SliderMarks[] = []
   ctdDepths.forEach((depth, i) => {
     if (depth % 100 === 0 || depth === 0) {
       marks.push({
         value: i,
-        label: depth === 0 ? `${depth.toString()}` : `-${depth.toString()}`
+        label: `${depth.toString()}`
       })
     } else {
       marks.push({
@@ -84,14 +84,14 @@ export const ctdDepthMeterProps = () => {
 }
 
 export const adcpDepthMeterProps = () => {
-  const adcpDepths = [...Array(51)].map((e, i) => i * 10).reverse()
+  const adcpDepths = [...Array(51)].map((e, i) => -i * 10).reverse()
   adcpDepths.pop()
   const marks: SliderMarks[] = []
   adcpDepths.forEach((depth, i) => {
-    if (depth % 50 === 0 || depth === 10) {
+    if (depth % 50 === 0 || depth === -10) {
       marks.push({
         value: i,
-        label: `-${depth.toString()}`
+        label: `${depth.toString()}`
       })
     } else {
       marks.push({

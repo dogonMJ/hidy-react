@@ -63,7 +63,7 @@ export const StatisticMean = () => {
   }
 
   useEffect(() => {
-    fetch('https://odbpo.oc.ntu.edu.tw/static/figs/clim/climgridxy4s.topojson')
+    fetch(`${process.env.REACT_APP_PROXY_BASE}/data/figs/clim/climgridxy4s.topojson`)
       .then((response) => response.json())
       .then((json) => setGridLines(json))
   }, [])
@@ -75,9 +75,10 @@ export const StatisticMean = () => {
           <InputLabel id="statmean-para-label">{t('StatMean.parameter')}</InputLabel>
           <Select
             labelId="statmean-para-label"
+            id="statmean-para-select"
             name="statmean-parameter"
             value={parameter}
-            label="Parameters"
+            label={t('StatMean.parameter')}
             onChange={handleParameter}
           >
             {Object.keys(varList).map((par: string, id: number) => {
@@ -94,7 +95,7 @@ export const StatisticMean = () => {
           <Typography>{t('StatMean.monthly')}</Typography>
           <InfoButton dataId="StatMeanMonthly" />
         </Stack>
-      </Box>
+      </Box >
       <RenderIf isTrue={varList[parameter].name !== 'StatMean.close'}>
         <ProcUrl parameter={parameter} depth={depth} monthly={monthly} profile={profile} coord={gridCoord} />
       </RenderIf>

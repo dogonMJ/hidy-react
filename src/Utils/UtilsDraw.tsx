@@ -1,12 +1,22 @@
 import { Circle, LatLng, LayerGroup, Polygon, Polyline } from "leaflet";
 import { ScaleUnit } from "types";
 import geodesic from "geographiclib-geodesic"
+import { LatLngExpression } from "leaflet";
 
 declare const L: any
 
-export const calGeodesic = (latlng1: LatLng, latlng2: LatLng) => {
+export const calGeodesic = (latlng1: LatLngExpression, latlng2: LatLngExpression) => {
   const geod = geodesic.Geodesic.WGS84
-  return geod.Inverse(latlng1.lat, latlng1.lng, latlng2.lat, latlng2.lng).s12!
+  const getCoords = (latlng: LatLngExpression): [number, number] => {
+    if (Array.isArray(latlng)) {
+      return [latlng[1], latlng[0]];
+    } else {
+      return [latlng.lng, latlng.lat];
+    }
+  }
+  const [lng1, lat1] = getCoords(latlng1);
+  const [lng2, lat2] = getCoords(latlng2);
+  return geod.Inverse(lat1, lng1, lat2, lng2).s12!;
 }
 
 export const readableDistance = (distanceInMeters: number, scaleUnit: ScaleUnit) => L.GeometryUtil.readableDistance(
@@ -21,9 +31,9 @@ export const readableArea = (areaInSqMeters: number, scaleUnit: ScaleUnit) => L.
   scaleUnit === 'imperial' ? true : false,
 )
 
-export const calPolygon = (pgLatlngs: LatLng[], scaleUnit: ScaleUnit = 'metric') => {
+export const calPolygon = (pgLatlngs: LatLngExpression[], scaleUnit: ScaleUnit = 'metric') => {
   const accDist: number[] = []
-  pgLatlngs.forEach((latlng: LatLng, i: number) => {
+  pgLatlngs.forEach((latlng: LatLngExpression, i: number) => {
     if (i > 0) {
       const distance = calGeodesic(pgLatlngs[i - 1], latlng)
       accDist.push(distance)

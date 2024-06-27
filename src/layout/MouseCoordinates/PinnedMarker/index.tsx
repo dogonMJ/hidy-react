@@ -19,7 +19,7 @@ export const PinnedMarker = memo((props: { openPopup?: boolean }) => {
   useEffect(() => {
     if (ref.current && props.openPopup) {
       ref.current.forEach((marker: any) => {
-        marker.openPopup()
+        if (marker) marker.openPopup()
       })
     }
   }, [props.openPopup])

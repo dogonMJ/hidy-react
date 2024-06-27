@@ -1,5 +1,5 @@
-import { memo, useState } from "react";
-import { Polygon, Tooltip, useMapEvent } from 'react-leaflet'
+import { memo, useMemo, useState } from "react";
+import { Polygon, Polyline, Tooltip, useMapEvent } from 'react-leaflet'
 import { useAppDispatch, useAppSelector } from "hooks/reduxHooks";
 import { CoordinatesInput } from "layout/MouseCoordinates/CoordinatesInput"
 import FormatCoordinate from "components/FormatCoordinate";
@@ -13,7 +13,7 @@ import { LatLng, LatLngExpression, LatLngTuple } from "leaflet";
 import { mapSlice } from "store/slice/mapSlice";
 import { ConverCoordinates } from "./ConvertCoordinate";
 import { useTranslation } from "react-i18next";
-import { calPolygon } from "Utils/UtilsDraw";
+import { calGeodesic, calPolygon, readableDistance } from "Utils/UtilsDraw";
 
 export const MouseCoordinates = memo(() => {
   const { t } = useTranslation()
@@ -51,19 +51,34 @@ export const MouseCoordinates = memo(() => {
   const handleMouseEnter = () => setDrag(false)
   const handleMouseLeave = () => setDrag(true)
 
-  const getArea = () => {
+  const getArea = useMemo(() => {
     const latlngArray = markers.map((tuple) => ({
       lat: tuple[0],
       lng: tuple[1]
     } as LatLng))
-    const { area, perimeter } = calPolygon(latlngArray, scaleUnit)
-    return (
-      <Typography variant="caption">
-        {t('area')} = {area} <br />
-        {t('perimeter')} = {perimeter}
-      </Typography>
-    )
-  }
+    if (latlngArray.length > 0) {
+      const { area, perimeter } = calPolygon(latlngArray, scaleUnit)
+      return (
+        <Typography variant="caption">
+          {t('area')} = {area} <br />
+          {t('perimeter')} = {perimeter}
+        </Typography>
+      )
+    } else {
+      return null
+    }
+  }, [markers, scaleUnit, t])
+
+  const getPolyline = useMemo(() => {
+    if (markers.length === 2) {
+      const distance = calGeodesic(markers[0], markers[1])
+      return (
+        <Typography variant="caption">
+          {t('pathDistance')} = {readableDistance(distance, scaleUnit)}
+        </Typography>
+      )
+    }
+  }, [markers, scaleUnit, t])
   return (
     <Stack
       onMouseOver={handleMouseEnter} //快速移動滑鼠可能會導致mouseenter判定失敗
@@ -101,12 +116,19 @@ export const MouseCoordinates = memo(() => {
       {activeMarker && <CoordinatesInput />}
       {activeMarker && <PinnedMarker openPopup={frameOn} />}
       {activeMarker && <MoveableMarker position={{ lat: current[0], lng: current[1] }} centerLon={121} />}
-      {frameOn && markers.length > 1 &&
+      {frameOn && activeMarker && markers.length > 2 &&
         <Polygon positions={markers} pathOptions={{ color: '#ffe6a8', opacity: 0.9 }}>
           <Tooltip>
-            {getArea()}
+            {getArea}
           </Tooltip>
         </Polygon>
+      }
+      {frameOn && activeMarker && markers.length === 2 &&
+        <Polyline positions={markers} pathOptions={{ color: '#ffe6a8', opacity: 0.9 }}>
+          <Tooltip>
+            {getPolyline}
+          </Tooltip>
+        </Polyline>
       }
     </Stack>
   )

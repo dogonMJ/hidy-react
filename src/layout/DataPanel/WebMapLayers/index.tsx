@@ -32,7 +32,7 @@ export const WebMapLayers = () => {
   const wmProps = useAppSelector(state => state.webmap[identifier])
   const depthMeterValue = useAppSelector(state => state.map.depthMeterValue['cmems'])
   const capabilities = useFetchData('https://api.odb.ntu.edu.tw/ogcquery/capability?type=WMTS&url=https://wmts.marine.copernicus.eu/teroWmts/GLOBAL_ANALYSISFORECAST_PHY_001_024/cmems_mod_glo_phy-thetao_anfc_0.083deg_PT6H-i_202211?request=GetCapabilities&service=WMS')
-  const depths = capabilities.data ? [...capabilities.data.capability[0].dimension.elevation.value] : [-0.49402499198913574]
+  const depths = capabilities && capabilities.data ? [...capabilities.data.capability[0].dimension.elevation.value] : [-0.49402499198913574]
   const depth = depthMeterValue ? (depths[depthMeterValue] && is3D(identifier)) ? depths[depthMeterValue] : -0.49402499198913574 : -0.49402499198913574
 
   const handleToggle = (value: any) => {

@@ -281,11 +281,11 @@ export const SamplingEvents = (props: { dataset: BioDataset, filter: BioFilter }
             options={taxaList.map((taxon) => taxon)}
             onChange={handleTaxaChange}
             onFocus={() => {
-              const panel = document.getElementById("navBar")
+              const panel = document.getElementById("dataPanelList")
               panel!.style.overflow = 'hidden'
             }}
             onBlur={() => {
-              const panel = document.getElementById("navBar")
+              const panel = document.getElementById("dataPanelList")
               panel!.style.overflow = 'auto'
             }}
             PopperComponent={StyledPopper}

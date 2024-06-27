@@ -86,7 +86,7 @@ export const OdbCurrent = () => {
   const handlePeriodChange = (event: SelectChangeEvent) => dispatch(odbCurrentSlice.actions.setPeriod(event.target.value as CtdPeriods))
 
   useEffect(() => {
-    const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth}&dep_mode=exact&format=geojson&mode=${mode}&append=u,v,count&mean_threshold=10`
+    const url = `https://ecodata.odb.ntu.edu.tw/api/sadcp?lon0=100&lon1=140&lat0=2&lat1=35&dep0=${depth * -1}&dep_mode=exact&format=geojson&mode=${mode}&append=u,v,count&mean_threshold=10`
     fetch(url)
       .then((response) => response.json())
       .then((json) => {

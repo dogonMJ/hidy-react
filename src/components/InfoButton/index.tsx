@@ -58,7 +58,6 @@ useEffect(() => {
         return xmlDoc
       })
     const zzz = result.getElementsByTagName("gco:DateTime")[0].innerHTML
-    console.log()
     setData(zzz);
   };
   fetchData();

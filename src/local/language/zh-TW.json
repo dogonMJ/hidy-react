@@ -48,6 +48,7 @@
   "clusterLevel": "資料疊合等級",
   "hidyOld": "Hidy舊站",
   "depth": "深度 (m)",
+  "elevation":"高程",
   "CWAsites": {
     "title": "臺灣周遭海氣象",
     "subheader": "最新資料",
@@ -516,10 +517,11 @@
   },
   "CustomLayer": {
     "title": "加入圖層",
-    "disclaimer": "各資料提供者格式略有差異，不保證能夠連接",
+    "disclaimer": "各資料提供者格式略有差異，不保證能夠連接及顯示",
     "addWmsLayer": "加入WMS/WMTS圖層",
     "addLayerSelector": "搜尋並加入WMS/WMTS圖層",
     "addImage": "加入圖片",
+    "addFile":"加入檔案",
     "addUrlOption": "加入WMS/WMTS網址至選項",
     "add": "新增",
     "urlType": "網址格式",
@@ -542,6 +544,7 @@
     "csrsr2": "國立中央大學太空及遙測中心全島假色",
     "csrsr3": "國立中央大學太空及遙測中心澎湖自然色",
     "csrsr4": "國立中央大學太空及遙測中心澎湖假色",
+    "selectFile":"選取檔案",
     "alert": {
       "dupName": "重複圖層名稱",
       "dupOption": "重複輸入",
@@ -550,7 +553,10 @@
       "error": "請檢查所有選項，或聯絡ODB管理員",
       "zoomLevel": "這個圖層可能不支援此縮放比例",
       "warnType": "服務類型可能有誤",
-      "noUrl": "請輸入網址"
+      "noUrl": "請輸入網址",
+      "dbfAdd":"加入dbf檔",
+      "noPropertyJson":"沒有對應屬性或與shp檔案名稱相同的dbf檔",
+      "noProperty":"沒有對應屬性"
     },
     "description": {
       "addUrlOption": "1. 輸入完整OGC WMS/WMTS之GetCapabilities網址，或是根網址(base URL)。\n2. 按下右方「新增」鍵在下方選項新增網址。\n*需支援EPSG:3857投影。\n*空白與tab會自動移除。\n範例：\nKVP格式: https://gis.sinica.edu.tw/tileserver/wmts\nRESTful格式: https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/1.0.0/WMTSCapabilities.xml",
@@ -562,7 +568,9 @@
       "addLayerSelector": "由資料集搜尋圖層後加入。\n某些圖層需要設定時間及日期參數，請由上方時間欄位設定(請注意此為本地時間)。",
       "addImage1": "輸入圖片網址加入單張圖片(不適用短網址)，須設定圖片範圍經緯度。\n\n範例:\n",
       "addImage2": "的資料範例中找到圖片網址",
-      "addImage3": "及座標東經118-124度、北緯20.5-26.5度，分別輸入後按下加入圖層按鍵。"
+      "addImage3": "及座標東經118-124度、北緯20.5-26.5度，分別輸入後按下加入圖層按鍵。",
+      "addFile":"點選下方按鈕選擇檔案或拖曳檔案至地圖上。\n支援GPX、GeoJSON、KML、SHP、DBF格式，其中SHP和其對應之DBF必須「同檔名」且「同時」加入(如test.shp和test.dbf)。\n\n顏色可使用十六進位代碼(hex)或rgba格式，前者需以#開頭，支援六碼(#RRGGBB)及八碼(#RRGGBBAA)；後者須以rgba或rgb開頭，後接括號包含三或四碼數字，前三碼範圍0~255，第四碼不透明度範圍0~1。\n\n 點按圖層名稱(即檔案名稱)可將畫面移至該圖層範圍。\n\n可使用各圖層紅色按鈕關閉圖層，或是關閉選單清除全部檔案。",
+      "addFileDisclaimer":"由於檔案格式及內容多樣，因此很有可能發生錯誤無法加入圖層，或是缺少部分資料。\n本站不會也無法蒐集加入之檔案及資料。"
     }
   },
   "draw": {
@@ -687,5 +695,14 @@
     "refresh": "更新網址",
     "clear": "清除瀏覽器網址",
     "toDefault": "回復預設"
+  },
+  "dragDrop":{
+    "alert":{
+      "noLayer":"找不到圖層或檔案毀損",
+      "wrongFormat":"不支援此格式",
+      "diffName":"檔案名稱必須相同",
+      "missingFile":"必須包含.dbf及.shp",
+      "tooMany":"僅接受2個檔案"
+    }
   }
 }

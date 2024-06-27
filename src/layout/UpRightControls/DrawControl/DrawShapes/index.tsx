@@ -90,7 +90,7 @@ export const DrawShapes = () => {
                 circlemarkerLayer.on('mouseover', async () => {
                   //edit後需要更新，需要放在mouseover內重算
                   const markerLatlng = circlemarkerLayer.getLatLng()
-                  const json = await fetch(`https://ecodata.odb.ntu.edu.tw/gebco?lon=${markerLatlng.lng}&lat=${markerLatlng.lat}`)
+                  const json = await fetch(`${process.env.REACT_APP_PROXY_BASE}/data/gebco?lon=${markerLatlng.lng}&lat=${markerLatlng.lat}`)
                     .then(res => res.json())
                   const z = scaleUnit === 'imperial' ? `${Math.round(json.z[0] / 0.3048)} ft` : `${json.z[0]} m`
                   const cmContent = `${markerLatlng.lat.toFixed(4)}, ${markerLatlng.lng.toFixed(4)}<br>ele: ${z}`

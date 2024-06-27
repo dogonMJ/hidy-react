@@ -591,23 +591,34 @@ const InfoList = (props: { dataId: string }) => {
     case 'addWmsLayer':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`CustomLayer.${props.dataId}`)}</b><br />
           {t('CustomLayer.description.addWmsLayer')}
         </Typography >
       )
     case 'addLayerSelector':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`CustomLayer.${props.dataId}`)}</b><br />
           {t('CustomLayer.description.addLayerSelector')}
         </Typography >
       )
     case 'addImage':
       return (
         <Typography sx={{ p: 2, whiteSpace: 'pre-wrap' }}>
+          <b>{t(`CustomLayer.${props.dataId}`)}</b><br />
           {t('CustomLayer.description.addImage1')}
           <a target="_blank" href="https://opendata.cwa.gov.tw/dataset/observation/O-A0058-003" rel="noreferrer">中央氣象署資料開放平台雷達整合回波圖-臺灣(鄰近區域)_無地形</a>
           {t('CustomLayer.description.addImage2')}
           <i>https://cwaopendata.s3.ap-northeast-1.amazonaws.com/Observation/O-A0058-003.png</i>
           {t('CustomLayer.description.addImage3')}
+        </Typography >
+      )
+    case 'addFile':
+      return (
+        <Typography sx={{ p: 2, whiteSpace: 'pre-wrap', width: '35vw' }}>
+          <b>{t(`CustomLayer.${props.dataId}`)}</b><br />
+          {t('CustomLayer.description.addFile')}<br /><br />
+          <i><b>{t('CustomLayer.description.addFileDisclaimer')}</b></i>
         </Typography >
       )
     case 'serviceUrl':

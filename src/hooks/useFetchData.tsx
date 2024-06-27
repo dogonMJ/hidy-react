@@ -14,8 +14,10 @@ export const useFetchData = (input: RequestInfo | URL, init?: RequestInit | unde
     const fetchData = async () => {
       try {
         const response = await fetch(input, init);
-        const result = type === 'text' ? await response.text() : await response.json();
-        setData(result);
+        if (response.status === 200) {
+          const result = type === 'text' ? await response.text() : await response.json();
+          setData(result);
+        }
       } catch (error) {
         console.error('API request failed', error);
       } finally {

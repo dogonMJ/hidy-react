@@ -13,6 +13,7 @@ import { addImageSlice } from './slice/addImageSlice';
 import { cplanSlice } from './slice/cplanSlice';
 import { longtermSlice } from './slice/longtermSlice';
 import { webmapSlice } from './slice/webmapSlice';
+import { addFileSlice } from './slice/addFileSlice';
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     [cplanSlice.name]: cplanSlice.reducer,
     [longtermSlice.name]: longtermSlice.reducer,
     [webmapSlice.name]: webmapSlice.reducer,
+    [addFileSlice.name]: addFileSlice.reducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>

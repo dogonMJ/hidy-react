@@ -25,6 +25,7 @@ export const OdbMarineHeatwave = () => {
   const datetime = useAppSelector(state => state.map.datetime);
   const month = datetime.slice(0, 7) + '-02'
   const url = `https://service.oc.ntu.edu.tw/data/odbgeowmts/rest/marineheatwave:mhw/polygon_level/WebMercatorQuad/{z}/{y}/{x}?format=image/png&Time=${month}`
+
   const legned: Legend = {
     'ice': {
       "color": "#c6e0fe",
@@ -84,6 +85,7 @@ export const OdbMarineHeatwave = () => {
       setNotInRange(false)
       ref.current.setUrl(url)
     }
+    ref.current.setUrl(url)
   }, [url, datetime, timespan])
 
   const forbiddenList = ['CTDProfile', 'ADCPProfile', 'dateTimePicker', 'seafloorProfile']

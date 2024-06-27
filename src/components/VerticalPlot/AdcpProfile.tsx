@@ -22,7 +22,7 @@ export const AdcpProfile: React.FC<VerticalPlotProps> = memo(({ lat, lng, mode, 
         // bgcolor: '#4d4d4d'
       },
       modebar: {
-        remove: ['lasso2d']
+        remove: ['lasso2d', 'select2d']
       },
       legend: {
         orientation: "h",
