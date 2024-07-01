@@ -4,7 +4,7 @@ import { memo, useEffect } from "react";
 import { AlertSlideType } from "types";
 
 export const AlertSlide = memo((props: AlertSlideType) => {
-  const { open, setOpen, severity, timeout = 3000, children, icon } = { ...props }
+  const { open, setOpen, severity, timeout = 3000, children, icon } = props
   useEffect(() => {
     if (open && timeout) {
       const timer = setTimeout(() => setOpen(false), timeout)

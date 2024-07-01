@@ -2,15 +2,15 @@ import { Position } from 'geojson';
 import { LatLngExpression } from 'leaflet';
 const sign = (degree: number, direction: string) => degree < 0 ? direction[0] : direction[1]
 
-const formatLonLat = (degree: number) => {
-  const deg = Number(degree)
+export const formatLonLat = (degree: number) => {
+  const deg = Math.round(Number(degree) * 100000000) / 100000000
   const d = Math.trunc(deg);
   const minfloat = Math.abs(deg - d) * 60;
   const m = Math.floor(minfloat);
   const s = Math.round((minfloat - m) * 60);
   const m4 = minfloat.toFixed(2).padStart(5, '0')
-  const min = m.toString().padStart(2, '0')
-  const sec = s.toString().padStart(2, '0')
+  const min = s === 60 ? (m + 1).toString().padStart(2, '0') : m.toString().padStart(2, '0')
+  const sec = s === 60 ? '00' : s.toString().padStart(2, '0')
   return [m4, Math.abs(d).toString(), min, sec]
 }
 
